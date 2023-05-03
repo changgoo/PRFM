@@ -9,8 +9,8 @@ surf_cgs = ac.M_sun.cgs.value/pc_cgs**2
 kms_cgs = 1.e5
 
 sigma_eff_models = dict()
-sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=10)
-sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=10)
+sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=5)
+sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=5)
 
 def get_weight_gas(Sigma_gas):
     """weight due to gas self-gravity
@@ -238,7 +238,6 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
                                  sigma_eff='tigress_mid',
                                  zeta_d=1/3.,
                                  method='analytic',
-                                 L1_norm = np.inf,
                                  tol = 1.e-5,
                                  niter = 16
                                 ):
@@ -252,24 +251,23 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
         sigma0 = 15.e5
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma0)
     kwargs = dict(zeta_d=zeta_d, method=method)
-    H, wgas, wstar, wdm = get_weights(*args, **kwargs)
+    Hprev, wgas, wstar, wdm = get_weights(*args, **kwargs)
     wtot_prev = wgas + wstar + wdm
 
     # return if velocity diseprsion is a constant
-    if type(sigma_eff) != str: return wtot_prev, H, sigma0*np.ones_like(H)
+    if type(sigma_eff) != str: return wtot_prev, Hprev, sigma0*np.ones_like(Hprev)
 
     # iterative solve
-    new_sigma_eff = get_sigma_eff(wtot_prev, model=sigma_eff)
-
     for i in range(niter):
-        args = (Sigma_gas, Sigma_star, Omega_d, H_star, new_sigma_eff)
-        H, wgas, wstar, wdm = get_weights(*args, **kwargs)
-        wtot_next = wgas + wstar + wdm
-        L1_norm = np.sum(np.abs(wtot_next/wtot_prev - 1))
         new_sigma_eff = get_sigma_eff(wtot_prev, model=sigma_eff)
+        args = (Sigma_gas, Sigma_star, Omega_d, H_star, new_sigma_eff)
+        Hnext, wgas, wstar, wdm = get_weights(*args, **kwargs)
+        wtot_next = wgas + wstar + wdm
+        # L1_norm = np.sum(np.abs(wtot_next/wtot_prev - 1))
+        L1_norm = np.sum(np.abs(Hnext/Hprev - 1))
         if (L1_norm < tol): break
-
         wtot_prev = np.copy(wtot_next)
+        Hprev = np.copy(Hnext)
 
-    return wtot_next, H, new_sigma_eff
+    return wtot_next, Hnext, get_sigma_eff(wtot_next, model=sigma_eff)
 
