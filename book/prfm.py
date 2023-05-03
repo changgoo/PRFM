@@ -11,77 +11,99 @@ kms_cgs = 1.e5
 sigma_eff_models = dict()
 sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=10)
 sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=10)
+
 def get_weight_gas(Sigma_gas):
+    """weight due to gas self-gravity
+    """
     return 0.5*np.pi*Gconst_cgs*Sigma_gas**2
 
 def get_weight_star(Sigma_gas,H_gas,Sigma_star,H_star):
+    """weight due to stellar gravity
+    """
     return np.pi*Gconst_cgs*Sigma_gas*Sigma_star*H_gas/(H_gas+H_star)
 
 def get_weight_dm(Sigma_gas,H_gas,Omega_d,zeta_d=1/3.):
+    """weight due to dark matter gravity
+    """
     return zeta_d*Sigma_gas*H_gas*Omega_d**2
 
 def get_pressure(Sigma_gas,H_gas,sigma_eff):
+    """total pressure
+    """
     return 0.5*Sigma_gas/H_gas*sigma_eff**2
-
-from scipy.optimize import root, brentq
-@np.vectorize
-def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star,
-                               sigma_eff=15.e5, zeta_d=1/3.,
-                               wgas=1, wstar=1, wdm=1):
-    fun = lambda x: (get_pressure(Sigma_gas, x, sigma_eff)
-                    - wgas*get_weight_gas(Sigma_gas)
-                    - wstar*get_weight_star(Sigma_gas,x,Sigma_star,H_star)
-                    - wdm*get_weight_dm(Sigma_gas, x, Omega_d, zeta_d=zeta_d))
-    # soln=root(fun,H_gas_init)
-    # return soln.x
-    return brentq(fun,pc_cgs,1.e6*pc_cgs)
 
 @np.vectorize
 def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
-                sigma_eff=15.e5, zeta_d=1/3.):
+                sigma_eff, zeta_d=1/3., method='analytic'):
+    """calculate gas scale height and then each weight term
+
+    ==========
+    Parameters
+    ==========
+    method: str [analytic, numerical]
+        how to calculate scale height
+
+    =======
+    returns
+    =======
+    H_gas:
+        gas scale height
+    W_gas:
+        weight by gas
+    W_star:
+        weight by star
+    W_dm:
+        weight by dark matter
+    """
     H_gas = get_scale_height(Sigma_gas,Sigma_star,Omega_d,H_star,
-                             sigma_eff=sigma_eff, zeta_d=zeta_d)
+                             sigma_eff, zeta_d=zeta_d, method=method)
 
-    wgas = get_weight_gas(Sigma_gas)
-    wstar = get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)
-    wdm = get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=zeta_d)
+    W_gas = get_weight_gas(Sigma_gas)
+    W_star = get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)
+    W_dm = get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=zeta_d)
 
-    return H_gas, wgas,wstar,wdm
+    return H_gas, W_gas, W_star, W_dm
 
 @np.vectorize
 def get_weight_contribution(Sigma_gas, Sigma_star, Omega_d, H_star,
-                            sigma_eff=15.e5, zeta_d=1/3.):
-    H, wgas,wstar,wdm = get_weights(Sigma_gas,Sigma_star,Omega_d,H_star,
-                                    sigma_eff=sigma_eff, zeta_d=zeta_d)
+                            sigma_eff, zeta_d=1/3., method='analytic'):
+    """Wrapper function to calculate the ratio of each weight term to the total weight
+    """
+    H,wgas,wstar,wdm = get_weights(Sigma_gas,Sigma_star,Omega_d,H_star,
+                                   sigma_eff, zeta_d=zeta_d, method=method)
     wtot = wgas+wstar+wdm
 
     return wgas/wtot,wstar/wtot,wdm/wtot
 
 @np.vectorize
 def get_scale_height_gas_only(*args,**kwargs):
-    Sigma_gas, Sigma_star, Omega_d, H_star = args
-    sigma_eff = kwargs['sigma_eff']
+    """analytic solution for gas only case
+    """
+    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     return sigma_eff**2/(np.pi*Gconst_cgs*Sigma_gas)
 
 @np.vectorize
 def get_scale_height_star_only(*args,**kwargs):
-    Sigma_gas, Sigma_star, Omega_d, H_star = args
-    sigma_eff = kwargs['sigma_eff']
-
+    """analytic solution for star only case
+    """
+    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     h = sigma_eff**2/(4*np.pi*Gconst_cgs*Sigma_star)
     h_star = H_star/h
     return h*(1+np.sqrt(1+2*h_star))
 
 @np.vectorize
 def get_scale_height_dm_only(*args,**kwargs):
-    Sigma_gas, Sigma_star, Omega_d, H_star = args
-    sigma_eff = kwargs['sigma_eff']
+    """analytic solution for dark matter only case
+    """
+    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     zeta_d = kwargs['zeta_d']
     return sigma_eff/np.sqrt(2*zeta_d)/Omega_d
 
 @np.vectorize
 def get_scale_height_star_gas(*args,**kwargs):
-    Sigma_gas, Sigma_star, Omega_d, H_star = args
+    """analytic solution neglecting dark matter
+    """
+    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     H_gas_only = get_scale_height_gas_only(*args,**kwargs)
     eta_star = H_star/H_gas_only
     s_star = Sigma_star/Sigma_gas
@@ -90,6 +112,8 @@ def get_scale_height_star_gas(*args,**kwargs):
 
 @np.vectorize
 def get_scale_height_dm_gas(*args,**kwargs):
+    """analytic solution neglectic star
+    """
     H_gas_only = get_scale_height_gas_only(*args,**kwargs)
     H_dm_only = get_scale_height_dm_only(*args,**kwargs)
     eta_D = H_dm_only/H_gas_only
@@ -98,6 +122,8 @@ def get_scale_height_dm_gas(*args,**kwargs):
 
 @np.vectorize
 def get_sigma_eff(P, model='tigress_mid'):
+    """pressure-dependent velocity dispersion model
+    """
     sigma_eff_model = sigma_eff_models[model]
     sigma_0 = sigma_eff_model['sigma_0']
     expo = sigma_eff_model['expo']
@@ -107,28 +133,74 @@ def get_sigma_eff(P, model='tigress_mid'):
 
     return np.clip(veld,sigma_min,None)*1.e5
 
-@np.vectorize
-def get_scale_height(*args,**kwargs):
-    """ Function to calculate gas scale height in vertical dynamical equilibrium
+def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
+                     zeta_d=1/3., wgas=1, wstar=1, wdm=1, method='analytic'):
+    """wrapper function to calculate gas scale height either numerically or analytically
 
     ===========
     Parameters
     ===========
     Sigma_gas: float
-
+        gas surface density
     Sigma_star: float
-
+        stellar surface density
     Omega_d: float
-
+        galactic rotation speed
     H_star: float
-
+        stellar scale height
     sigma_eff: str or float
+        velocity dispersion
 
+    zeta_d: float [1/3.]
+        parameter for dm and gas distribution
+    wgas: int [0 or 1]
+        toggle weight term from gas
+    wstar: int [0 or 1]
+        toggle weight term from stars
+    wdm: int [0 or 1]
+        toggle weight term from dark matter
+    method: str [analytic or numerical]
+        calculate scale height either analytically or numerically
     """
-    Sigma_gas, Sigma_star, Omega_d, H_star = args
+    args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
+    kwargs = dict(zeta_d=zeta_d, wgas=wgas, wstar=wstar, wdm=wdm)
+    w=(wgas<<2)+(wstar<<1)+(wdm<<0)
 
+    if method == 'numerical':
+        return get_scale_height_numerical(*args, **kwargs)
+    else:
+        if w == 7: # 111
+            return get_scale_height_analytic(*args, zeta_d=zeta_d)
+        elif w == 6: # 110
+            return get_scale_height_star_gas(*args, zeta_d=zeta_d)
+        elif w == 5: # 101
+            return get_scale_height_dm_gas(*args, zeta_d=zeta_d)
+        elif w == 4: # 100
+            return get_scale_height_gas_only(*args, zeta_d=zeta_d)
+        elif w == 3: # 011
+            # no analytic solution provided
+            return
+        elif w == 2: # 010
+            return get_scale_height_star_only(*args, zeta_d=zeta_d)
+        elif w == 1: # 001
+            return get_scale_height_dm_only(*args, zeta_d=zeta_d)
+        else:
+            # no such gas is expected
+            raise("at least one term must be considered")
+
+@np.vectorize
+def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
+                              zeta_d=1/3.):
+    """Analytic solution of the cubic equation for the vertical dynamical equilibirum
+    including all three weight terms.
+
+    All inputs must be in c.g.s. units
+    """
+    args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
+    kwargs = dict(zeta_d=zeta_d)
     H_gas_only = get_scale_height_gas_only(*args,**kwargs)
     H_dm_only = get_scale_height_dm_only(*args,**kwargs)
+
     s_star = Sigma_star/Sigma_gas
     eta_star = H_star/H_gas_only
     eta_dm_sq = (H_dm_only/H_gas_only)**2
@@ -145,8 +217,27 @@ def get_scale_height(*args,**kwargs):
 
     return h*H_gas_only
 
-def get_self_consistent_solution(*args, zeta_d=1/3.,
+from scipy.optimize import root, brentq
+@np.vectorize
+def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
+                               zeta_d=1/3., wgas=1, wstar=1, wdm=1):
+    """Numerical solution of the vertical dynamical equilibrium equation
+    including all weight terms.
+
+    All inputs must be in c.g.s. units
+    """
+    fun = lambda x: (get_pressure(Sigma_gas, x, sigma_eff)
+                    - wgas*get_weight_gas(Sigma_gas)
+                    - wstar*get_weight_star(Sigma_gas,x,Sigma_star,H_star)
+                    - wdm*get_weight_dm(Sigma_gas, x, Omega_d, zeta_d=zeta_d))
+    # soln=root(fun,H_gas_init)
+    # return soln.x
+    return brentq(fun,1.e-3*pc_cgs,1.e6*pc_cgs)
+
+def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
                                  sigma_eff='tigress_mid',
+                                 zeta_d=1/3.,
+                                 method='analytic',
                                  L1_norm = np.inf,
                                  tol = 1.e-5,
                                  niter = 16
@@ -159,8 +250,9 @@ def get_self_consistent_solution(*args, zeta_d=1/3.,
             raise IndexError("sigma_eff models: ",
                              list(sigma_eff_models.keys()))
         sigma0 = 15.e5
-    H, wgas, wstar, wdm = get_weights(*args, zeta_d=zeta_d,
-                                      sigma_eff=sigma0)
+    args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma0)
+    kwargs = dict(zeta_d=zeta_d, method=method)
+    H, wgas, wstar, wdm = get_weights(*args, **kwargs)
     wtot_prev = wgas + wstar + wdm
 
     # return if velocity diseprsion is a constant
@@ -169,10 +261,9 @@ def get_self_consistent_solution(*args, zeta_d=1/3.,
     # iterative solve
     new_sigma_eff = get_sigma_eff(wtot_prev, model=sigma_eff)
 
-
     for i in range(niter):
-        H, wgas, wstar, wdm = get_weights(*args, zeta_d=zeta_d,
-                                          sigma_eff=new_sigma_eff)
+        args = (Sigma_gas, Sigma_star, Omega_d, H_star, new_sigma_eff)
+        H, wgas, wstar, wdm = get_weights(*args, **kwargs)
         wtot_next = wgas + wstar + wdm
         L1_norm = np.sum(np.abs(wtot_next/wtot_prev - 1))
         new_sigma_eff = get_sigma_eff(wtot_prev, model=sigma_eff)
