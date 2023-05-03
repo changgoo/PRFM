@@ -73,7 +73,7 @@ $$
 \sigma_{\rm eff} = 12{\rm km/s} P_4^{0.22}
 $$
 
-Either case, we can first solve the cubic equation for a contant $\sigma_{\rm eff}$ to get $H_{\rm gas}$ and $P_{\rm tot}=W_{\rm tot}$. We update $\sigma_{\rm eff}$ with new $P_{\rm tot}$ and then solve for $H_{\rm gas}$ and $P_{\rm tot}$ again. We iteratively solve until $P_{\rm tot}$ is converged.
+Either case, we can first solve the cubic equation for a contant $\sigma_{\rm eff}$ to get $H_{\rm gas}$ and $P_{\rm tot}=W_{\rm tot}$. We update $\sigma_{\rm eff}$ with new $P_{\rm tot}$ and then solve for $H_{\rm gas}$ and $P_{\rm tot}$ again. We iteratively solve until $H_{\rm gas}$ is converged.
 
 ## References
 
