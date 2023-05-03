@@ -1,5 +1,7 @@
 # Vertical Dynamical Equilibrium
 
+## Basic fomulation
+
 The vertical dynamical equilibrium in a disk consisting of gas, star, and dark matter can be written as
 
 $$
@@ -24,7 +26,7 @@ $$
 Given $\Sigma_{\rm gas}$, $\Sigma_*$, $H_*$, and $\Omega_d$, we solve for $H_{\rm gas}$ with an assumption of $\sigma_{\rm eff}$.
 We use a constant $\sigma_{\rm eff}$ or a model calibarted by numerical simulations.
 
-## constant velocity dispersion
+## Constant velocity dispersion
 For a constant $\sigma_{\rm eff}$, the equation becomes a cubic to $H_{\rm gas}$. Using
 
 $$
@@ -53,7 +55,7 @@ $$
 where
 $Q = (3a_1-a_2^2)/9$ and $R=(9a_2a_1-27a_0-2a_2^3)/54$ with $a_i$ for the coefficients of $h^i$ for $i=0$, 1, 2.
 
-## Tota pressure dependent velocity dispersion
+## Pressure-dependent velocity dispersion
 We obtained $\sigma_{\rm eff}$ as a function of the total pressure calibrated in the TIGRESS-classic suite {cite}`2022ApJ...936..137O`.
 
 From the effective equation of state determined by the midplane pressure and density directly, we obtain
@@ -73,7 +75,7 @@ $$
 
 Either case, we can first solve the cubic equation for a contant $\sigma_{\rm eff}$ to get $H_{\rm gas}$ and $P_{\rm tot}=W_{\rm tot}$. We update $\sigma_{\rm eff}$ with new $P_{\rm tot}$ and then solve for $H_{\rm gas}$ and $P_{\rm tot}$ again. We iteratively solve until $P_{\rm tot}$ is converged.
 
-# References
+## References
 
 The most general form of the vertical dynamical equilibrium used here is derived in {cite}`Hassan_et_al`.
 See also {cite}`2022ApJ...936..137O`, {cite}`2015ApJ...815...67K`, {cite}`2013ApJ...776....1K`,
