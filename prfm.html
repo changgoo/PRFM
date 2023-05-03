@@ -60,6 +60,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'prfm';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -321,7 +323,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -337,6 +341,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-vertical-equilibrium-solutions">Test vertical equilibrium solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-solutions-for-different-velocity-dispersion-models">Self-consistent solutions for different velocity dispersion models</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -346,23 +360,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-</div>
-</div>
-</div>
-<section class="tex2jax_ignore mathjax_ignore" id="prfm-cookbook">
+  <section class="tex2jax_ignore mathjax_ignore" id="prfm-cookbook">
 <h1>PRFM cookbook<a class="headerlink" href="#prfm-cookbook" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prfm</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">#</a></h2>
+<p>We set a simple model between R=2-16kpc. The gas and stellar surface densities are decreasing linearly and exponetially with radius, respectively. The stellar scale height is held fixed. The flat rotation curve is assumed so that <span class="math notranslate nohighlight">\(\Omega_d\propto R^{-1}\)</span>.</p>
+<p><strong>The parameters must be in c.g.s. units.</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># default parameters</span>
@@ -388,32 +399,18 @@ document.write(`
 <span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">R0</span><span class="o">/</span><span class="n">Re</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span><span class="o">-</span><span class="n">re</span><span class="p">)</span>
 <span class="n">Omega_d</span> <span class="o">=</span> <span class="n">Omega_d</span><span class="o">/</span><span class="n">r0</span> <span class="c1"># flat rotation</span>
 <span class="n">H_star</span> <span class="o">=</span> <span class="n">H_star</span> <span class="c1"># no flaring</span>
-<span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="mf">15.e5</span><span class="p">)</span>
 
 <span class="c1"># default keywords</span>
-<span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sigma_eff</span><span class="o">=</span><span class="mf">15.e5</span><span class="p">,</span>
-              <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gas&#39;</span><span class="p">,</span> <span class="s1">&#39;star&#39;</span><span class="p">,</span> <span class="s1">&#39;dm&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># model profiles</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;gas&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">)</span>
@@ -436,11 +433,26 @@ document.write(`
 <img alt="_images/6dc3ec4746ea1d537cec59b00cd6473d35fb442f737a3c2386d723d5022bdc6a.png" src="_images/6dc3ec4746ea1d537cec59b00cd6473d35fb442f737a3c2386d723d5022bdc6a.png" />
 </div>
 </div>
+</section>
+<section id="test-vertical-equilibrium-solutions">
+<h2>Test vertical equilibrium solutions<a class="headerlink" href="#test-vertical-equilibrium-solutions" title="Permalink to this headline">#</a></h2>
+<p>The gas scale heights can be calculated either anlytically or numerically. <code class="docutils literal notranslate"><span class="pre">gas_scale_height</span></code> provides a convenient wrapper for either case simply call different function depending on <code class="docutils literal notranslate"><span class="pre">method=[&quot;analytic&quot;,</span> <span class="pre">&quot;numerical&quot;]</span></code>. Internally, functions below will be called.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_analytic</span></code> provides an anlytic solution of the cubic equation for a given parameter set.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_[gas,star,dm]_only</span></code> provides an anlytic solution when only weight from the selected component is considered.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_star_gas</span></code> provides an anlytic solution when dark matter contribution is neglected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_dm_gas</span></code> provides an anlytic solution when stellar contribution is neglected.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_numerical</span></code> provides a numerical solution for a given parameter set. Each weight term can be turned on and off by setting e.g., <code class="docutils literal notranslate"><span class="pre">wgas=1</span></code> or <code class="docutils literal notranslate"><span class="pre">wgas=0</span></code>.</p></li>
+</ul>
+<p>Below, we assume a constant <code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> and show validity of different functions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">200</span>
 <span class="c1"># sanity checks</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 
 <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gas&#39;</span><span class="p">,</span> <span class="s1">&#39;star&#39;</span><span class="p">,</span> <span class="s1">&#39;dm&#39;</span><span class="p">]</span>
 <span class="c1"># gas, star, dm only scale heights</span>
@@ -449,71 +461,83 @@ document.write(`
                     <span class="n">get_scale_height_star_only</span><span class="p">,</span>
                     <span class="n">get_scale_height_dm_only</span><span class="p">],</span> 
                     <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]):</span>
-  <span class="n">H_ana</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  <span class="n">H_num</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+  <span class="c1"># H_ana = func(*args,**kwargs)</span>
+  <span class="c1"># H_num = get_scale_height_numerical(*args,**kwargs,wgas=w[0],wstar=w[1],wdm=w[2])</span>
+  <span class="n">H_ana</span><span class="o">=</span><span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+  <span class="n">H_num</span><span class="o">=</span><span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
   <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">labels</span><span class="p">)])</span>
   <span class="n">l</span><span class="p">,</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_ana</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}\,[{\rm pc}]$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
 <span class="c1"># star-gas, dm-gas, and full scale heights</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">get_scale_height_star_gas</span><span class="p">,</span>
                     <span class="n">get_scale_height_dm_gas</span><span class="p">,</span>
-                    <span class="n">get_scale_height</span><span class="p">],</span> 
+                    <span class="n">get_scale_height_analytic</span><span class="p">],</span> 
                     <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]]):</span>
-  <span class="n">H_ana</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  <span class="n">H_num</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-  <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">labels</span><span class="p">)])</span>
+  <span class="c1"># H_ana=func(*args,**kwargs)</span>
+  <span class="c1"># H_num = get_scale_height_numerical(*args,**kwargs,wgas=w[0],wstar=w[1],wdm=w[2])</span>
+  <span class="n">H_ana</span><span class="o">=</span><span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+  <span class="n">H_num</span><span class="o">=</span><span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">wstar</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">wdm</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">labels</span><span class="p">)])</span>
 
   <span class="n">l</span><span class="p">,</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_ana</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}\,[{\rm pc}]$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x159095ed0&gt;
-</pre></div>
-</div>
-<img alt="_images/78966a844d8ce95425d1c0b7ad4c833ece1dcaa3061d7c53f8fe163d3776f7bd.png" src="_images/78966a844d8ce95425d1c0b7ad4c833ece1dcaa3061d7c53f8fe163d3776f7bd.png" />
+<img alt="_images/48582a2dc253126e3125ebc2e12b9aa8f44e18488295f0704f67e3a3a4418539.png" src="_images/48582a2dc253126e3125ebc2e12b9aa8f44e18488295f0704f67e3a3a4418539.png" />
 </div>
 </div>
+<p>There are additional convenient function wrappers (internally using <code class="docutils literal notranslate"><span class="pre">get_scale_height</span></code> to find gas scale height):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_weights</span></code>: returns <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\cal{W}_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\cal{W}_*\)</span>, and <span class="math notranslate nohighlight">\(\cal{W}_{\rm dm}\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_weight_contribution</span></code>: returns <span class="math notranslate nohighlight">\(\cal{W}_{\rm gas}/\cal{W}_{\rm tot}\)</span>, <span class="math notranslate nohighlight">\(\cal{W}_*/\cal{W}_{\rm tot}\)</span>, and <span class="math notranslate nohighlight">\(\cal{W}_{\rm dm}/\cal{W}_{\rm tot}\)</span></p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wfrac</span><span class="o">=</span><span class="n">get_weight_contribution</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;gas&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;dm&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$W_i/W_{\rm tot}$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\mathcal</span><span class="si">{W}</span><span class="s1">_i/\mathcal</span><span class="si">{W}</span><span class="s1">_{\rm tot}$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x159142150&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x162817cd0&gt;
 </pre></div>
 </div>
-<img alt="_images/08f7d0efae9ca2bf6111fc3746d4e076cc51198f9521fb111d5de63297dca9b0.png" src="_images/08f7d0efae9ca2bf6111fc3746d4e076cc51198f9521fb111d5de63297dca9b0.png" />
+<img alt="_images/dd8a1f9d985a764ec883d04e75f66aedbb776886a9fea2195e28db38bb79b98b.png" src="_images/dd8a1f9d985a764ec883d04e75f66aedbb776886a9fea2195e28db38bb79b98b.png" />
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prfm</span> <span class="kn">import</span> <span class="o">*</span>
+</section>
+<section id="self-consistent-solutions-for-different-velocity-dispersion-models">
+<h2>Self-consistent solutions for different velocity dispersion models<a class="headerlink" href="#self-consistent-solutions-for-different-velocity-dispersion-models" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">get_self_consistent_solution</span></code> function will calculate the scale height, weight, and velocity dispersion iteratively for a given velocity dispersion model.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress_mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress_avg</span></code>. Additional calibration results will be updated. For user-specfic velocity dispersion models using the same functional form, one can specify coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_eff_models</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">expo</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">sigma_eff=&quot;custom&quot;</span></code> can be passed as a keyword for  the function <code class="docutils literal notranslate"><span class="pre">get_self_consistent_solution</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">axes_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">axes_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
 <span class="k">for</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">15.e5</span><span class="p">,</span> <span class="s1">&#39;tigress_mid&#39;</span><span class="p">,</span> <span class="s1">&#39;tigress_avg&#39;</span><span class="p">]:</span>
-    <span class="n">Wtot</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">seff</span> <span class="o">=</span> <span class="n">get_self_consistent_solution</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="n">Wtot</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">seff</span> <span class="o">=</span> <span class="n">get_self_consistent_solution</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span>
     <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sigma</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="k">else</span> <span class="n">sigma</span><span class="o">/</span><span class="mf">1.e5</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">seff</span><span class="o">/</span><span class="n">kms_cgs</span><span class="p">,</span> <span class="n">H</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span> <span class="n">Wtot</span><span class="o">/</span><span class="n">kbol_cgs</span><span class="p">],</span><span class="n">axes</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -529,7 +553,8 @@ document.write(`
 
 <span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
 <span class="k">for</span> <span class="n">sigma</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">15.e5</span><span class="p">,</span> <span class="s1">&#39;tigress_mid&#39;</span><span class="p">,</span> <span class="s1">&#39;tigress_avg&#39;</span><span class="p">]:</span>
-    <span class="n">Wtot</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">seff</span> <span class="o">=</span> <span class="n">get_self_consistent_solution</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="n">Wtot</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">seff</span> <span class="o">=</span> <span class="n">get_self_consistent_solution</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">)</span>
     <span class="n">label</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sigma</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="k">else</span> <span class="n">sigma</span><span class="o">/</span><span class="mf">1.e5</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">seff</span><span class="o">/</span><span class="n">kms_cgs</span><span class="p">,</span> <span class="n">H</span><span class="o">/</span><span class="n">pc_cgs</span><span class="p">,</span> <span class="n">Wtot</span><span class="o">/</span><span class="n">kbol_cgs</span><span class="p">],</span><span class="n">axes</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -542,16 +567,15 @@ document.write(`
 <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
 <span class="c1"># plt.xscale(&#39;log&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1593c8dd0&gt;
-</pre></div>
-</div>
-<img alt="_images/507fe6a7be3b656a1ffc4df6d085babff9209daf0bef05c840ebfdd0806548c4.png" src="_images/507fe6a7be3b656a1ffc4df6d085babff9209daf0bef05c840ebfdd0806548c4.png" />
+<img alt="_images/b5fc12db91213a3cfef9f2d83be145d7796300b449d29ef07253170869c6fdb4.png" src="_images/b5fc12db91213a3cfef9f2d83be145d7796300b449d29ef07253170869c6fdb4.png" />
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -603,6 +627,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-vertical-equilibrium-solutions">Test vertical equilibrium solutions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-solutions-for-different-velocity-dispersion-models">Self-consistent solutions for different velocity dispersion models</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
