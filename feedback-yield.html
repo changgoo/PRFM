@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to the PRFM cookbook &#8212; PRFM tutorial</title>
+    <title>Feedback Yields &#8212; PRFM tutorial</title>
   
   
   
@@ -60,10 +60,13 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'feedback-yield';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Vertical Dynamical Equilibrium" href="vertical-de.html" />
+    <link rel="next" title="PRFM cookbook 1: Vertical dynamical equilibrium" href="prfm.html" />
+    <link rel="prev" title="Vertical Dynamical Equilibrium" href="vertical-de.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -129,7 +132,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="sidebar-primary-item">
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -142,15 +145,15 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     Welcome to the PRFM cookbook
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
-<li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Feedback Yields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">PRFM cookbook 1: Vertical dynamical equilibrium</a></li>
 </ul>
 
@@ -223,7 +226,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2Ffeedback-yield.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -253,7 +256,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/feedback-yield.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -322,7 +325,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -333,11 +338,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Welcome to the PRFM cookbook</h1>
+    <h1>Feedback Yields</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -347,16 +360,38 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-the-prfm-cookbook">
-<h1>Welcome to the PRFM cookbook<a class="headerlink" href="#welcome-to-the-prfm-cookbook" title="Permalink to this headline">#</a></h1>
-<p>This is a small cookbook to guide you how to apply the PRFM theory.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
-<li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm.html">PRFM cookbook 1: Vertical dynamical equilibrium</a></li>
-</ul>
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="feedback-yields">
+<h1>Feedback Yields<a class="headerlink" href="#feedback-yields" title="Permalink to this headline">#</a></h1>
+<section id="basic-fomulation">
+<h2>Basic fomulation<a class="headerlink" href="#basic-fomulation" title="Permalink to this headline">#</a></h2>
+<p>In the ISM, turbulent and thermal pressure support quickly goes away due to turbulence dissipation and cooling.
+In order to maintain the vertical dynamical equilibrium, there must exist efficent recovery of pressure support.
+Stellar feedback (esp. from massive young stars) is the major source of energy.
+Turbulence is mainly driven by SN feedback, and heating is dominated by the photoelectric effect of FUV radiation on grains.
+Assuming balance between gain and loss processes, one can define the feedback yield for each pressure component as a ratio between pressure and SFR surface density:</p>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm th, turb, mag} = \frac{P_{\rm th, turb, mag}}{\Sigma_{\rm SFR}}
+\]</div>
+<p>We can then obtain SFR surface density from the total pressure <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span>
+which is assumed to be in balance with the total weight <span class="math notranslate nohighlight">\(\cal W_{\rm tot}\)</span>
+and expressed as an analytic form per vertical dynamical equilibrium <span class="math notranslate nohighlight">\(P_{\rm DE}\)</span>.</p>
+<p>The numerically calibrated total feedback yield from the TIGRESS-classic suite (<span id="id1">[<a class="reference internal" href="vertical-de.html#id10" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>; see Eqs (25)) is either</p>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm tot} = 1030{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.212}
+\]</div>
+<p>or the sum of thermal and kinetic+magnetic</p>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm th} = 267{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.506}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm kin+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
+\]</div>
+<p>where we assume that the magnetic contribution is 50% of the kinetic.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -390,12 +425,21 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="right-next"
+    <a class="left-prev"
        href="vertical-de.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Vertical Dynamical Equilibrium</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="prfm.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Vertical Dynamical Equilibrium</p>
+        <p class="prev-next-title">PRFM cookbook 1: Vertical dynamical equilibrium</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -408,6 +452,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
