@@ -6,12 +6,17 @@ Gconst_cgs = ac.G.cgs.value
 pc_cgs = ac.pc.cgs.value
 kbol_cgs = ac.k_B.cgs.value
 surf_cgs = ac.M_sun.cgs.value/pc_cgs**2
+sfr_cgs = (ac.M_sun/ac.kpc**2/au.yr).cgs.value
 kms_cgs = 1.e5
 
 sigma_eff_models = dict()
 sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=5)
 sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=5)
 
+yield_models = dict()
+yield_models['tigress-classic'] = dict(Y0 = 10**3.86, expo=-0.212)
+yield_models['tigress-classic-decomp'] = dict(Yth0 = 10**4.45, expo_th=-0.506,
+                                              Ytrb0 = 1.5*10**2.81, expo_trb=-0.06)
 def get_weight_gas(Sigma_gas):
     """weight due to gas self-gravity
     """
@@ -132,6 +137,54 @@ def get_sigma_eff(P, model='tigress_mid'):
     veld = sigma_0*(1.e-4*P/kbol_cgs)**expo
 
     return np.clip(veld,sigma_min,None)*1.e5
+
+@np.vectorize
+def get_feedback_yield(P, model='tigress-classic'):
+    """total feedback yield as a function of weight
+
+    ===========
+    Paramerters
+    ===========
+    P : float
+        midplane pressure or weight
+    model : str
+        tigress-classic for OK22
+        tigress-NCR for K23
+    """
+    yield_model = yield_models[model]
+    if 'Y0' in yield_model:
+        Y0 = yield_model['Y0']
+        slope = yield_model['expo']
+        Ytot = Y0*(P/kbol_cgs)**slope
+    elif 'Yth0' in yield_model:
+        Yth0 = yield_model['Yth0']
+        expo_th = yield_model['expo_th']
+        Ytrb0 = yield_model['Ytrb0']
+        expo_trb = yield_model['expo_trb']
+        Ytot = Yth0*(P/kbol_cgs)**expo_th + Ytrb0*(P/kbol_cgs)**expo_trb
+    return Ytot
+
+@np.vectorize
+def get_feedback_yield_comp(P, comp='th', model='tigress-classic-decomp'):
+    """total feedback yield as a function of weight
+
+    ===========
+    Paramerters
+    ===========
+    P : float
+        midplane pressure or weight
+    model : str
+        tigress-classic for OK22
+        tigress-NCR for K23
+    """
+    yield_model = yield_models[model]
+    Yth0 = yield_model['Y{}0'.format(comp)]
+    expo_th = yield_model['expo_{}'.format(comp)]
+    return Yth0*(P/kbol_cgs)**expo_th
+
+def get_sfr(P, Ytot='tigress-classic'):
+    Ytot = get_feedback_yield(P,model=Ytot) if type(Ytot) == str else Ytot
+    return P/(Ytot*1.e5)
 
 def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                      zeta_d=1/3., wgas=1, wstar=1, wdm=1, method='analytic'):
@@ -270,4 +323,3 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
         Hprev = np.copy(Hnext)
 
     return wtot_next, Hnext, get_sigma_eff(wtot_next, model=sigma_eff)
-

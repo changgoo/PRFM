@@ -8,4 +8,5 @@ chapters:
 # - file: notebooks
 # - file: markdown-notebooks
 - file: vertical-de
+- file: feedback-yield
 - file: prfm
