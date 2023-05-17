@@ -103,6 +103,33 @@ class PRFM_data(object):
             setattr(self,f'log_Y_{f}',np.log10(Y))
             setattr(self,f'log_Ystd_{f}',Yerr/Y/np.log(10))
 
+# plotting utilities
+import matplotlib.pyplot as plt
+from .prfm import *
+
+def add_one_sim(data):
+    c = data.color
+    m = '*' if data.paper == 'TIGRESS-GC' else 'o'
+    x = data.log_Ptot
+    y = data.log_SFR
+    xerr = data.log_Ptot_std
+    yerr = data.log_SFR_std
+    p=plt.errorbar(x,y,yerr=yerr,xerr=xerr,
+                    marker=m,ls='',mew=1,mec='k',
+                    lw=1,color=c,ms=5*(1.5 if m == '*' else 1),
+                    label=data.paper)#,clip_on=False)
+    return p
+
+def add_PSFR_model_lines(Wmin=2,Wmax=8):
+    Wtmp = np.logspace(Wmin,Wmax)
+    for y,ls in zip([1.e3,'tigress-classic','tigress-classic-decomp'],['-',':','--']):
+        plt.plot(np.log10(Wtmp),
+                np.log10(get_sfr(Wtmp*kbol_cgs,Ytot=y)/sfr_cgs),
+                color='k',ls=ls,
+                label=r'$\Upsilon:$' + '{}'.format(y))
+    plt.xlabel(r'$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$')
+    plt.ylabel(r'$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$')
+
 # loading Kim & Ostriker 2014
 PRFM_KO15 = PRFM_data('KO15')
 data = PRFM_KO15
@@ -270,6 +297,10 @@ data.get_Ptotal()
 data.get_yield()
 
 data = dict()
+colors = {'KKO11':'tab:gray','KOK13':'tab:pink','KO15':'tab:olive',
+          'TIGRESS-classic':'tab:blue','TIGRESS-GC':'tab:orange',
+          'TIGRESS-NCR':'tab:cyan','TIGRESS-NCR-lowZ':'tab:red'}
 for d in [PRFM_KKO11,PRFM_KOK13,PRFM_KO15,PRFM_OK22,PRFM_M21,
-            PRFM_NCR_Z1,PRFM_NCR_lowZ]:
+          PRFM_NCR_Z1,PRFM_NCR_lowZ]:
+    d.color = colors[d.paper]
     data[d.paper] = d

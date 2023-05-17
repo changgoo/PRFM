@@ -116,6 +116,18 @@ def get_scale_height_star_gas(*args,**kwargs):
     return h*H_gas_only
 
 @np.vectorize
+def get_scale_height_star_gas_approx(*args,**kwargs):
+    """analytic solution neglecting dark matter
+    """
+    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
+    H_gas_only = get_scale_height_gas_only(*args,**kwargs)
+    eta_star = H_star/H_gas_only
+    s_star = Sigma_star/Sigma_gas
+    h = 2/(1+np.sqrt(1+8*s_star/eta_star))
+    return h*H_gas_only
+
+
+@np.vectorize
 def get_scale_height_dm_gas(*args,**kwargs):
     """analytic solution neglectic star
     """
