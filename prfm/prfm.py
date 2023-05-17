@@ -1,35 +1,33 @@
 import astropy.constants as ac
 import astropy.units as au
 import numpy as np
+from scipy.optimize import brentq
 
-Gconst_cgs = ac.G.cgs.value
-pc_cgs = ac.pc.cgs.value
-kbol_cgs = ac.k_B.cgs.value
-surf_cgs = ac.M_sun.cgs.value/pc_cgs**2
-sfr_cgs = (ac.M_sun/ac.kpc**2/au.yr).cgs.value
-kms_cgs = 1.e5
+_Gconst_cgs = ac.G.cgs.value
+_pc_cgs = ac.pc.cgs.value
+_kbol_cgs = ac.k_B.cgs.value
 
-sigma_eff_models = dict()
-sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=5)
-sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=5)
+_sigma_eff_models = dict()
+_sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=5)
+_sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=5)
 
-yield_models = dict()
-yield_models['tigress-classic'] = dict(Y0 = 10**3.86, expo=-0.212)
-yield_models['tigress-classic-decomp'] = dict(Yth0 = 10**4.45, expo_th=-0.506,
+_yield_models = dict()
+_yield_models['tigress-classic'] = dict(Y0 = 10**3.86, expo=-0.212)
+_yield_models['tigress-classic-decomp'] = dict(Yth0 = 10**4.45, expo_th=-0.506,
                                               Ytrb0 = 1.5*10**2.81, expo_trb=-0.06)
-yield_models['tigress-ncr-decomp'] = dict(Yth0 = 10**4.7, expo_th=-0.5,
+_yield_models['tigress-ncr-decomp'] = dict(Yth0 = 10**4.7, expo_th=-0.5,
                                           Ytrb0 = 10**3.3, expo_trb=-0.1)
-yield_models['tigress-ncr-decomp-Z01'] = dict(Yth0 = 10**5.2, expo_th=-0.5,
+_yield_models['tigress-ncr-decomp-Z01'] = dict(Yth0 = 10**5.2, expo_th=-0.5,
                                           Ytrb0 = 10**3.3, expo_trb=-0.1)
 def get_weight_gas(Sigma_gas):
     """weight due to gas self-gravity
     """
-    return 0.5*np.pi*Gconst_cgs*Sigma_gas**2
+    return 0.5*np.pi*_Gconst_cgs*Sigma_gas**2
 
 def get_weight_star(Sigma_gas,H_gas,Sigma_star,H_star):
     """weight due to stellar gravity
     """
-    return np.pi*Gconst_cgs*Sigma_gas*Sigma_star*H_gas/(H_gas+H_star)
+    return np.pi*_Gconst_cgs*Sigma_gas*Sigma_star*H_gas/(H_gas+H_star)
 
 def get_weight_dm(Sigma_gas,H_gas,Omega_d,zeta_d=1/3.):
     """weight due to dark matter gravity
@@ -46,22 +44,32 @@ def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
                 sigma_eff, zeta_d=1/3., method='analytic'):
     """calculate gas scale height and then each weight term
 
-    ==========
     Parameters
     ==========
-    method: str [analytic, numerical]
-        how to calculate scale height
+    Sigma_gas: float or array-like
+        gas surface density
+    Sigma_star: float or array-like
+        stellar surface density
+    Omega_d: float or array-like
+        galactic rotation speed
+    H_star: float or array-like
+        stellar scale height
+    sigma_eff: str or float or array-like
+        velocity dispersion
+    zeta_d: float [1/3.]
+        parameter for dm and gas distribution
+    method: str [analytic or numerical]
+        calculate scale height either analytically or numerically
 
+    Returns
     =======
-    returns
-    =======
-    H_gas:
+    H_gas: float or array-like
         gas scale height
-    W_gas:
+    W_gas: float or array-like
         weight by gas
-    W_star:
+    W_star: float or array-like
         weight by star
-    W_dm:
+    W_dm: float or array-like
         weight by dark matter
     """
     H_gas = get_scale_height(Sigma_gas,Sigma_star,Omega_d,H_star,
@@ -89,14 +97,14 @@ def get_scale_height_gas_only(*args,**kwargs):
     """analytic solution for gas only case
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
-    return sigma_eff**2/(np.pi*Gconst_cgs*Sigma_gas)
+    return sigma_eff**2/(np.pi*_Gconst_cgs*Sigma_gas)
 
 @np.vectorize
 def get_scale_height_star_only(*args,**kwargs):
     """analytic solution for star only case
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
-    h = sigma_eff**2/(4*np.pi*Gconst_cgs*Sigma_star)
+    h = sigma_eff**2/(4*np.pi*_Gconst_cgs*Sigma_star)
     h_star = H_star/h
     return h*(1+np.sqrt(1+2*h_star))
 
@@ -145,12 +153,12 @@ def get_scale_height_dm_gas(*args,**kwargs):
 def get_sigma_eff(P, model='tigress_mid'):
     """pressure-dependent velocity dispersion model
     """
-    sigma_eff_model = sigma_eff_models[model]
+    sigma_eff_model = _sigma_eff_models[model]
     sigma_0 = sigma_eff_model['sigma_0']
     expo = sigma_eff_model['expo']
     sigma_min = sigma_eff_model['sigma_min']
 
-    veld = sigma_0*(1.e-4*P/kbol_cgs)**expo
+    veld = sigma_0*(1.e-4*P/_kbol_cgs)**expo
 
     return np.clip(veld,sigma_min,None)*1.e5
 
@@ -158,7 +166,6 @@ def get_sigma_eff(P, model='tigress_mid'):
 def get_feedback_yield(P, model='tigress-classic'):
     """total feedback yield as a function of weight
 
-    ===========
     Paramerters
     ===========
     P : float
@@ -167,24 +174,23 @@ def get_feedback_yield(P, model='tigress-classic'):
         tigress-classic for OK22
         tigress-NCR for K23
     """
-    yield_model = yield_models[model]
+    yield_model = _yield_models[model]
     if 'Y0' in yield_model:
         Y0 = yield_model['Y0']
         slope = yield_model['expo']
-        Ytot = Y0*(P/kbol_cgs)**slope
+        Ytot = Y0*(P/_kbol_cgs)**slope
     elif 'Yth0' in yield_model:
         Yth0 = yield_model['Yth0']
         expo_th = yield_model['expo_th']
         Ytrb0 = yield_model['Ytrb0']
         expo_trb = yield_model['expo_trb']
-        Ytot = Yth0*(P/kbol_cgs)**expo_th + Ytrb0*(P/kbol_cgs)**expo_trb
+        Ytot = Yth0*(P/_kbol_cgs)**expo_th + Ytrb0*(P/_kbol_cgs)**expo_trb
     return Ytot
 
 @np.vectorize
 def get_feedback_yield_comp(P, comp='th', model='tigress-classic-decomp'):
     """total feedback yield as a function of weight
 
-    ===========
     Paramerters
     ===========
     P : float
@@ -193,43 +199,43 @@ def get_feedback_yield_comp(P, comp='th', model='tigress-classic-decomp'):
         tigress-classic for OK22
         tigress-NCR for K23
     """
-    yield_model = yield_models[model]
+    yield_model = _yield_models[model]
     Yth0 = yield_model['Y{}0'.format(comp)]
     expo_th = yield_model['expo_{}'.format(comp)]
-    return Yth0*(P/kbol_cgs)**expo_th
+    return Yth0*(P/_kbol_cgs)**expo_th
 
 def get_sfr(P, Ytot='tigress-classic'):
     Ytot = get_feedback_yield(P,model=Ytot) if type(Ytot) == str else Ytot
     return P/(Ytot*1.e5)
 
 def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
-                     zeta_d=1/3., wgas=1, wstar=1, wdm=1, method='analytic'):
+                     zeta_d=1/3., method='analytic', wgas=1, wstar=1, wdm=1):
     """wrapper function to calculate gas scale height either numerically or analytically
 
-    ===========
     Parameters
     ===========
-    Sigma_gas: float
+    Sigma_gas: float or array-like
         gas surface density
-    Sigma_star: float
+    Sigma_star: float or array-like
         stellar surface density
-    Omega_d: float
+    Omega_d: float or array-like
         galactic rotation speed
-    H_star: float
+    H_star: float or array-like
         stellar scale height
-    sigma_eff: str or float
+    sigma_eff: str or float or array-like
         velocity dispersion
-
     zeta_d: float [1/3.]
         parameter for dm and gas distribution
+    method: str [analytic or numerical]
+        calculate scale height either analytically or numerically
+
     wgas: int [0 or 1]
         toggle weight term from gas
     wstar: int [0 or 1]
         toggle weight term from stars
     wdm: int [0 or 1]
         toggle weight term from dark matter
-    method: str [analytic or numerical]
-        calculate scale height either analytically or numerically
+
     """
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
     kwargs = dict(zeta_d=zeta_d, wgas=wgas, wstar=wstar, wdm=wdm)
@@ -286,7 +292,7 @@ def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
 
     return h*H_gas_only
 
-from scipy.optimize import root, brentq
+
 @np.vectorize
 def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                                zeta_d=1/3., wgas=1, wstar=1, wdm=1):
@@ -301,7 +307,7 @@ def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff
                     - wdm*get_weight_dm(Sigma_gas, x, Omega_d, zeta_d=zeta_d))
     # soln=root(fun,H_gas_init)
     # return soln.x
-    return brentq(fun,1.e-3*pc_cgs,1.e6*pc_cgs)
+    return brentq(fun,1.e-3*_pc_cgs,1.e6*_pc_cgs)
 
 def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
                                  sigma_eff='tigress_mid',
@@ -310,13 +316,38 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
                                  tol = 1.e-5,
                                  niter = 16
                                 ):
+    """Iteratively solve for sigma_eff(P) to get converged weight, H, and sigma_eff
+
+    Parameters
+    ==========
+    Sigma_gas: float or array-like
+        gas surface density
+    Sigma_star: float or array-like
+        stellar surface density
+    Omega_d: float or array-like
+        galactic rotation speed
+    H_star: float or array-like
+        stellar scale height
+    sigma_eff : float or str
+        effective vertical velocity dispersion
+    zeta_d: float [1/3.]
+        parameter for dm and gas distribution
+    method: str [analytic or numerical]
+        calculate scale height either analytically or numerically
+
+    Returns
+    =======
+    Wtot : float or array
+    H : float or array
+    sigma_eff: float or array
+    """
     # make initial guess
     if type(sigma_eff) != str:
         sigma0 = sigma_eff
     else:
-        if not (sigma_eff in sigma_eff_models):
+        if not (sigma_eff in _sigma_eff_models):
             raise IndexError("sigma_eff models: ",
-                             list(sigma_eff_models.keys()))
+                             list(_sigma_eff_models.keys()))
         sigma0 = 15.e5
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma0)
     kwargs = dict(zeta_d=zeta_d, method=method)

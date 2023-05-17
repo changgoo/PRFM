@@ -3,18 +3,27 @@ import astropy.units as au
 import astropy.constants as ac
 import pandas as pd
 import os
-
+from prfm import get_sfr, get_feedback_yield_comp
 dirpath = os.path.dirname(__file__)
-conv = ((ac.k_B*au.K/au.cm**3)/(ac.M_sun/ac.kpc**2/au.yr)).to('km/s').value
 
+# setting up some convenient conversion factors
+_yield_conv = ((ac.k_B*au.K/au.cm**3)/(ac.M_sun/ac.kpc**2/au.yr)).to('km/s').value
+_kbol_cgs = ac.k_B.cgs.value
+_surf_cgs = (ac.M_sun/ac.pc**2).cgs.value
+_sfr_cgs = (ac.M_sun/ac.kpc**2/au.yr).cgs.value
+_kms_cgs = (1*au.km/au.s).cgs.value
 #=========================================================================================
 # data container class
 class PRFM_data(object):
+    """Simulation data conatiner class.
+    """
     def __init__(self,paper):
         self.paper = paper
         self.field_list = ['SFR','Pturb','Pth','oPimag','dPimag']
 
     def convert_log_linear(self):
+        """convert data in log10 into linear
+        """
         for f in self.field_list:
             logf=f'log_{f}'
             ferr=f'{f}_std'
@@ -27,6 +36,8 @@ class PRFM_data(object):
                     setattr(self,ferr,10**v*np.log(10)*verr)
 
     def convert_linear_log(self):
+        """convert data in linear into log10
+        """
         for f in self.field_list:
             logf=f'log_{f}'
             ferr=f'{f}_std'
@@ -38,7 +49,9 @@ class PRFM_data(object):
                     verr = getattr(self,ferr)
                     setattr(self,logferr,verr/v/np.log(10))
 
-    def get_Ptotal(self,log=False):
+    def get_Ptotal(self):
+        """calculate *Ptot*, *Pnonth*, *Pimag* given `Pturb`, `Pth`, `oPimag`, `dPimag`
+        """
         self.Ptot = np.zeros_like(self.Pturb)
         self.Ptot_std = np.zeros_like(self.Pturb)
         self.Pnonth = np.zeros_like(self.Pturb)
@@ -90,16 +103,17 @@ class PRFM_data(object):
             if not ('Pimag' in self.field_list): self.field_list += ['Pimag']
 
     def get_yield(self):
+        """calculate feedback yield P/SFR in km/s
+        """
         SFR = self.SFR
         SFRerr = self.SFR_std
-        conv = ((ac.k_B*au.K/au.cm**3)/(ac.M_sun/ac.kpc**2/au.yr)).to('km/s').value
         for f in self.field_list:
             if f in ['SFR']: continue
             if not hasattr(self,f): continue
             P = getattr(self,f)
             Perr = getattr(self,f'{f}_std')
-            Y = P/SFR*conv
-            Yerr = np.sqrt((Perr/P)**2+(SFRerr/SFR)**2)*Y*conv
+            Y = P/SFR*_yield_conv
+            Yerr = np.sqrt((Perr/P)**2+(SFRerr/SFR)**2)*Y*_yield_conv
             setattr(self,f'Y_{f}',Y)
             setattr(self,f'Y_{f}_std',Yerr)
             setattr(self,f'log_Y_{f}',np.log10(Y))
@@ -108,7 +122,6 @@ class PRFM_data(object):
 #=========================================================================================
 # plotting utilities
 import matplotlib.pyplot as plt
-from .prfm import *
 
 def add_one_sim(data,xf='Ptot',yf='SFR',ms=5):
     c = data.color
@@ -126,7 +139,7 @@ def add_one_sim(data,xf='Ptot',yf='SFR',ms=5):
 def add_PSFR_model_line(Wmin=2,Wmax=8,labels=True,model='tigress-classic',**kwargs):
     Wtmp = np.logspace(Wmin,Wmax)
     plt.plot(np.log10(Wtmp),
-            np.log10(get_sfr(Wtmp*kbol_cgs,Ytot=model)/sfr_cgs),**kwargs)
+            np.log10(get_sfr(Wtmp*_kbol_cgs,Ytot=model)/_sfr_cgs),**kwargs)
     if labels:
         plt.xlabel(r'$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$')
         plt.ylabel(r'$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$')
@@ -141,7 +154,7 @@ def add_yield_model_line(Wmin=2,Wmax=8,labels=True,
                          comp='th',model='tigress-classic',**kwargs):
     Wtmp = np.logspace(Wmin,Wmax)
     plt.plot(np.log10(Wtmp),
-             np.log10(get_feedback_yield_comp(Wtmp*kbol_cgs,
+             np.log10(get_feedback_yield_comp(Wtmp*_kbol_cgs,
              comp=comp,model=model)),**kwargs)
 
 def add_yield_model_lines(Wmin=2,Wmax=8,comp='th'):
@@ -160,7 +173,15 @@ def setup_axes(nrow=3,figsize=(12, 6.75),width_ratios=(2,1)):
 
 #=========================================================================================
 # loader
-def load_allsims():
+def load_sim_data():
+    """loading all simulation data as a dictionary
+
+    Returns
+    -------
+    data : dict
+        Dictionary containing all simulation data.
+        PRFM class.
+    """
     # loading Kim & Ostriker 2014
     PRFM_KO15 = PRFM_data('KO15')
     data = PRFM_KO15
@@ -336,6 +357,3 @@ def load_allsims():
         d.color = colors[d.paper]
         data[d.paper] = d
     return data
-
-# load all simulation data by default
-data = load_allsims()
