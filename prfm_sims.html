@@ -375,39 +375,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">prfm.simulations</span> <span class="k">as</span> <span class="nn">sims</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">200</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">book</span><span class="o">/../</span><span class="n">prfm</span><span class="o">/</span><span class="n">simulations</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">111</span>
-<span class="g g-Whitespace">    </span><span class="mi">108</span> <span class="c1">#=========================================================================================</span>
-<span class="g g-Whitespace">    </span><span class="mi">109</span> <span class="c1"># plotting utilities</span>
-<span class="g g-Whitespace">    </span><span class="mi">110</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="ne">--&gt; </span><span class="mi">111</span> <span class="kn">from</span> <span class="nn">.prfm</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">def</span> <span class="nf">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">color</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">book</span><span class="o">/../</span><span class="n">prfm</span><span class="o">/</span><span class="n">prfm</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">289</span>
-<span class="g g-Whitespace">    </span><span class="mi">285</span>     <span class="n">h</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">Q</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="n">a2</span><span class="o">/</span><span class="mf">3.</span>
-<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="k">return</span> <span class="n">h</span><span class="o">*</span><span class="n">H_gas_only</span>
-<span class="ne">--&gt; </span><span class="mi">289</span> <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root</span><span class="p">,</span> <span class="n">brentq</span>
-<span class="g g-Whitespace">    </span><span class="mi">290</span> <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span>                                <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Numerical solution of the vertical dynamical equilibrium equation</span>
-<span class="g g-Whitespace">    </span><span class="mi">294</span><span class="sd">     including all weight terms.</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span><span class="sd">     All inputs must be in c.g.s. units</span>
-<span class="g g-Whitespace">    </span><span class="mi">297</span><span class="sd">     &quot;&quot;&quot;</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;scipy&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -422,10 +389,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x183717a10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5713f39e50&gt;
 </pre></div>
 </div>
-<img alt="_images/00641d0729032048c40e5483d1830a7517ad0e8295332591e29b8db4ec736650.png" src="_images/00641d0729032048c40e5483d1830a7517ad0e8295332591e29b8db4ec736650.png" />
+<img alt="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" src="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -444,7 +411,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/07b3ac7b2cee3ec49e740e719f22e789451774697553a870cbc36524a67afe17.png" src="_images/07b3ac7b2cee3ec49e740e719f22e789451774697553a870cbc36524a67afe17.png" />
+<img alt="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" src="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -470,10 +437,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x18feff650&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f570925df40&gt;
 </pre></div>
 </div>
-<img alt="_images/cd728d8fc02c9e1bb84588f93e36fb0617c49581e2168e246dc9cb5973de148e.png" src="_images/cd728d8fc02c9e1bb84588f93e36fb0617c49581e2168e246dc9cb5973de148e.png" />
+<img alt="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" src="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -511,7 +478,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e47098bacdeb7b70a36175c54548f98e1f800677f2e2ff8eda093db6ca69deef.png" src="_images/e47098bacdeb7b70a36175c54548f98e1f800677f2e2ff8eda093db6ca69deef.png" />
+<img alt="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" src="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" />
 </div>
 </div>
 </section>
