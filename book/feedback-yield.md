@@ -1,7 +1,5 @@
 # Feedback Yields
 
-## Basic fomulation
-
 In the ISM, turbulent and thermal pressure support quickly goes away due to turbulence dissipation and cooling.
 In order to maintain the vertical dynamical equilibrium, there must exist efficent recovery of pressure support.
 Stellar feedback (esp. from massive young stars) is the major source of energy.
