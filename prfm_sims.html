@@ -64,6 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'prfm_sims';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
     <link rel="prev" title="Notebook: Vertical dynamical equilibrium and SFR surface density" href="prfm.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -155,6 +156,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Notebook: Simulation Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+
+
+
 </ul>
 
     </div>
@@ -350,28 +355,40 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
 </pre></div>
 </div>
 </div>
+</details>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="notebook-simulation-results">
 <h1>Notebook: Simulation Results<a class="headerlink" href="#notebook-simulation-results" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">prfm.simulations</span> <span class="k">as</span> <span class="nn">sims</span>
+<span class="kn">import</span> <span class="nn">prfm</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">200</span>
 </pre></div>
 </div>
@@ -379,18 +396,25 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">load_sim_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># all simulations</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
 <span class="c1"># P_SFR</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f0f9795e6d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa0715c49a0&gt;
 </pre></div>
 </div>
 <img alt="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" src="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" />
@@ -404,41 +428,41 @@ document.write(`
                            <span class="p">[</span><span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">]]):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mlist</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
-    <span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" src="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" />
+<img alt="_images/085e777f066223be495d6ea291b305c63df3e23a7d5d478dc21216202297d161.png" src="_images/085e777f066223be495d6ea291b305c63df3e23a7d5d478dc21216202297d161.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">]:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-    <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,[</span><span class="s1">&#39;Y_Pturb&#39;</span><span class="p">,</span><span class="s1">&#39;Y_Pth&#39;</span><span class="p">,</span><span class="s1">&#39;Y_Pimag&#39;</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+        <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log \Upsilon_{{\rm </span><span class="si">{}</span><span class="s1">}}\,[{{\rm km/s}}]$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Pi&#39;</span><span class="p">,</span><span class="s1">&#39;P&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log\,P_{\rm tot}\,[{\rm cm^{-3}\,K}]$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;classic &#39;</span><span class="p">)</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=1&#39;</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;classic &#39;</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=1&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f0f90edddc0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa066768700&gt;
 </pre></div>
 </div>
 <img alt="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" src="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" />
@@ -446,40 +470,33 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm.prfm</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">]:</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-    <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,[</span><span class="s1">&#39;Y_Pnonth&#39;</span><span class="p">,</span><span class="s1">&#39;Y_Pth&#39;</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+        <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log \Upsilon_{{\rm </span><span class="si">{}</span><span class="s1">}}\,[{{\rm km/s}}]$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Pi&#39;</span><span class="p">,</span><span class="s1">&#39;P&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\log\,P_{\rm tot}\,[{\rm cm^{-3}\,K}]$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;classic &#39;</span><span class="p">)</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=1&#39;</span><span class="p">)</span>
-<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp-Z01&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=0.1&#39;</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;classic &#39;</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=1&#39;</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-ncr-decomp-Z01&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;NCR Z=0.1&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,[</span><span class="s1">&#39;trb&#39;</span><span class="p">,</span><span class="s1">&#39;th&#39;</span><span class="p">]):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-    <span class="n">sims</span><span class="o">.</span><span class="n">add_yield_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">comp</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_yield_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">comp</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" src="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" />
+<img alt="_images/0f812cf5b555f1005aa74638809acca340a13fd8ca21b50a4fda3605bc41dd20.png" src="_images/0f812cf5b555f1005aa74638809acca340a13fd8ca21b50a4fda3605bc41dd20.png" />
 </div>
 </div>
 </section>
@@ -523,6 +540,15 @@ document.write(`
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Notebook: Vertical dynamical equilibrium and SFR surface density</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div></div>
   

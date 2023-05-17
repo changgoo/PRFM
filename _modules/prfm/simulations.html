@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prfm.simulations &#8212; PRFM tutorial</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/prfm/simulations';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">PRFM tutorial</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Welcome to the PRFM cookbook
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../vertical-de.html">Vertical Dynamical Equilibrium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback-yield.html">Feedback Yields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">Notebook: Simulation Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/changgoo/PRFM" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2F_modules/prfm/simulations.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for prfm.simulations</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">au</span>
+<span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">ac</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">prfm</span> <span class="kn">import</span> <span class="n">get_sfr</span><span class="p">,</span> <span class="n">get_feedback_yield_comp</span>
+<span class="n">dirpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="c1"># setting up some convenient conversion factors</span>
+<span class="n">_yield_conv</span> <span class="o">=</span> <span class="p">((</span><span class="n">ac</span><span class="o">.</span><span class="n">k_B</span><span class="o">*</span><span class="n">au</span><span class="o">.</span><span class="n">K</span><span class="o">/</span><span class="n">au</span><span class="o">.</span><span class="n">cm</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span><span class="o">/</span><span class="n">ac</span><span class="o">.</span><span class="n">kpc</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">au</span><span class="o">.</span><span class="n">yr</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;km/s&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="n">_kbol_cgs</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">k_B</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">_surf_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span><span class="o">/</span><span class="n">ac</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">_sfr_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span><span class="o">/</span><span class="n">ac</span><span class="o">.</span><span class="n">kpc</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">au</span><span class="o">.</span><span class="n">yr</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">_kms_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">au</span><span class="o">.</span><span class="n">km</span><span class="o">/</span><span class="n">au</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="c1">#=========================================================================================</span>
+<span class="c1"># data container class</span>
+<div class="viewcode-block" id="PRFM_data"><a class="viewcode-back" href="../../api.html#prfm.simulations.PRFM_data">[docs]</a><span class="k">class</span> <span class="nc">PRFM_data</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulation data conatiner class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">paper</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paper</span> <span class="o">=</span> <span class="n">paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SFR&#39;</span><span class="p">,</span><span class="s1">&#39;Pturb&#39;</span><span class="p">,</span><span class="s1">&#39;Pth&#39;</span><span class="p">,</span><span class="s1">&#39;oPimag&#39;</span><span class="p">,</span><span class="s1">&#39;dPimag&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="PRFM_data.convert_log_linear"><a class="viewcode-back" href="../../api.html#prfm.simulations.PRFM_data.convert_log_linear">[docs]</a>    <span class="k">def</span> <span class="nf">convert_log_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;convert data in log10 into linear</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+            <span class="n">logf</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;log_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">ferr</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span>
+            <span class="n">logferr</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">logf</span><span class="si">}</span><span class="s1">_std&#39;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logf</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logf</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logferr</span><span class="p">):</span>
+                    <span class="n">verr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logferr</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ferr</span><span class="p">,</span><span class="mi">10</span><span class="o">**</span><span class="n">v</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">verr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PRFM_data.convert_linear_log"><a class="viewcode-back" href="../../api.html#prfm.simulations.PRFM_data.convert_linear_log">[docs]</a>    <span class="k">def</span> <span class="nf">convert_linear_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;convert data in linear into log10</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+            <span class="n">logf</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;log_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">ferr</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span>
+            <span class="n">logferr</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">logf</span><span class="si">}</span><span class="s1">_std&#39;</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logf</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ferr</span><span class="p">):</span>
+                    <span class="n">verr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ferr</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">logferr</span><span class="p">,</span><span class="n">verr</span><span class="o">/</span><span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="PRFM_data.get_Ptotal"><a class="viewcode-back" href="../../api.html#prfm.simulations.PRFM_data.get_Ptotal">[docs]</a>    <span class="k">def</span> <span class="nf">get_Ptotal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate *Ptot*, *Pnonth*, *Pimag* given `Pturb`, `Pth`, `oPimag`, `dPimag`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ptot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pturb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pturb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pturb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pturb</span><span class="p">)</span>
+
+        <span class="c1"># add thermal and turbulent</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Pturb&#39;</span><span class="p">,</span><span class="s1">&#39;Pth&#39;</span><span class="p">]:</span>
+            <span class="n">ferr</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ptot</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ferr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="s1">&#39;Pth&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span> <span class="o">+=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ferr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="c1"># get total mag first</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;oPimag&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oPimag</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dPimag</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oPimag_std</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dPimag_std</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pimag</span>
+            <span class="n">verr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pimag_std</span>
+        <span class="c1"># add magnetic term</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ptot</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag_std&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag_std&#39;</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span><span class="p">)</span>
+
+        <span class="c1"># get log</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ptot</span>
+        <span class="n">verr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ptot_std</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_Ptot</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_Ptot_std</span><span class="o">=</span><span class="n">verr</span><span class="o">/</span><span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Ptot&#39;</span><span class="p">]</span>
+
+        <span class="c1"># non thermal</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth</span>
+        <span class="n">verr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pnonth_std</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_Pnonth</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_Pnonth_std</span><span class="o">=</span><span class="n">verr</span><span class="o">/</span><span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Pnonth&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Pimag&#39;</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pimag</span>
+            <span class="n">verr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Pimag_std</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_Pimag</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_Pimag_std</span><span class="o">=</span><span class="n">verr</span><span class="o">/</span><span class="n">v</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;Pimag&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;Pimag&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="PRFM_data.get_yield"><a class="viewcode-back" href="../../api.html#prfm.simulations.PRFM_data.get_yield">[docs]</a>    <span class="k">def</span> <span class="nf">get_yield</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate feedback yield P/SFR in km/s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">SFR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SFR</span>
+        <span class="n">SFRerr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SFR_std</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;SFR&#39;</span><span class="p">]:</span> <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">):</span> <span class="k">continue</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">Perr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span><span class="p">)</span>
+            <span class="n">Y</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="n">SFR</span><span class="o">*</span><span class="n">_yield_conv</span>
+            <span class="n">Yerr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">Perr</span><span class="o">/</span><span class="n">P</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">SFRerr</span><span class="o">/</span><span class="n">SFR</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">Y</span><span class="o">*</span><span class="n">_yield_conv</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;Y_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;Y_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span><span class="p">,</span><span class="n">Yerr</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;log_Y_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;log_Y_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span><span class="p">,</span><span class="n">Yerr</span><span class="o">/</span><span class="n">Y</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span></div></div>
+
+<span class="c1">#=========================================================================================</span>
+<span class="c1"># plotting utilities</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">xf</span><span class="o">=</span><span class="s1">&#39;Ptot&#39;</span><span class="p">,</span><span class="n">yf</span><span class="o">=</span><span class="s1">&#39;SFR&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">color</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">paper</span> <span class="o">==</span> <span class="s1">&#39;TIGRESS-GC&#39;</span> <span class="k">else</span> <span class="s1">&#39;o&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;log_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xf</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;log_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">))</span>
+    <span class="n">xerr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;log_</span><span class="si">{}</span><span class="s1">_std&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xf</span><span class="p">))</span>
+    <span class="n">yerr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;log_</span><span class="si">{}</span><span class="s1">_std&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">))</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="n">xerr</span><span class="p">,</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                    <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="n">ms</span><span class="o">*</span><span class="p">(</span><span class="mf">1.5</span> <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">paper</span><span class="p">)</span><span class="c1">#,clip_on=False)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="k">def</span> <span class="nf">add_PSFR_model_line</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">Wtmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">Wmin</span><span class="p">,</span><span class="n">Wmax</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Wtmp</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">get_sfr</span><span class="p">(</span><span class="n">Wtmp</span><span class="o">*</span><span class="n">_kbol_cgs</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">_sfr_cgs</span><span class="p">),</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">labels</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ls</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="mf">1.e3</span><span class="p">,</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">],[</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">]):</span>
+        <span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="n">Wmin</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="n">Wmax</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                            <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Upsilon:$&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">add_yield_model_line</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">comp</span><span class="o">=</span><span class="s1">&#39;th&#39;</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">Wtmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">Wmin</span><span class="p">,</span><span class="n">Wmax</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Wtmp</span><span class="p">),</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">get_feedback_yield_comp</span><span class="p">(</span><span class="n">Wtmp</span><span class="o">*</span><span class="n">_kbol_cgs</span><span class="p">,</span>
+             <span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)),</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">add_yield_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">comp</span><span class="o">=</span><span class="s1">&#39;th&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ls</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-ncr-decomp&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-ncr-decomp-Z01&#39;</span><span class="p">],[</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">]):</span>
+        <span class="n">add_yield_model_line</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="n">Wmin</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="n">Wmax</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">y</span><span class="p">,</span><span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">setup_axes</span><span class="p">(</span><span class="n">nrow</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">6.75</span><span class="p">),</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span><span class="n">nrow</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">)</span>
+
+    <span class="n">main_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">side_axes</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrow</span><span class="p">):</span>
+        <span class="n">side_axes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">spec</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span>
+
+<span class="c1">#=========================================================================================</span>
+<span class="c1"># loader</span>
+<div class="viewcode-block" id="load_sim_data"><a class="viewcode-back" href="../../api.html#prfm.simulations.load_sim_data">[docs]</a><span class="k">def</span> <span class="nf">load_sim_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;loading all simulation data as a dictionary</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data : dict</span>
+<span class="sd">        Dictionary containing all simulation data.</span>
+<span class="sd">        PRFM class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># loading Kim &amp; Ostriker 2014</span>
+    <span class="n">PRFM_KO15</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;KO15&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_KO15</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.59</span><span class="p">,</span><span class="mf">1.46</span><span class="p">,</span><span class="mf">0.91</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">0.74</span><span class="p">,</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">0.56</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e-3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.24</span><span class="p">,</span><span class="mf">5.15</span><span class="p">,</span><span class="mf">3.4</span><span class="p">,</span><span class="mf">3.38</span><span class="p">,</span><span class="mf">2.85</span><span class="p">,</span><span class="mf">3.02</span><span class="p">,</span><span class="mf">2.18</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.78</span><span class="p">,</span><span class="mf">1.61</span><span class="p">,</span><span class="mf">1.24</span><span class="p">,</span><span class="mf">1.14</span><span class="p">,</span><span class="mf">1.04</span><span class="p">,</span><span class="mf">1.05</span><span class="p">,</span><span class="mf">0.83</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="mf">0.94</span><span class="p">,</span><span class="mf">1.04</span><span class="p">,</span><span class="mf">1.03</span><span class="p">,</span><span class="mf">1.10</span><span class="p">,</span><span class="mf">1.16</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="mf">0.46</span><span class="p">,</span><span class="mf">0.73</span><span class="p">,</span><span class="mf">0.87</span><span class="p">,</span><span class="mf">0.91</span><span class="p">,</span><span class="mf">1.83</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.38</span><span class="p">,</span><span class="mf">0.28</span><span class="p">,</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.14</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e-3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.05</span><span class="p">,</span><span class="mf">2.61</span><span class="p">,</span><span class="mf">2.42</span><span class="p">,</span><span class="mf">2.66</span><span class="p">,</span><span class="mf">1.46</span><span class="p">,</span><span class="mf">2.11</span><span class="p">,</span><span class="mf">1.12</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.40</span><span class="p">,</span><span class="mf">0.29</span><span class="p">,</span><span class="mf">0.18</span><span class="p">,</span><span class="mf">0.20</span><span class="p">,</span><span class="mf">0.18</span><span class="p">,</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.16</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.18</span><span class="p">,</span><span class="mf">0.17</span><span class="p">,</span><span class="mf">0.22</span><span class="p">,</span><span class="mf">0.18</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.18</span><span class="p">,</span><span class="mf">0.23</span><span class="p">,</span><span class="mf">0.29</span><span class="p">,</span><span class="mf">0.45</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># KOK13</span>
+    <span class="n">PRFM_KOK13</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;KOK13&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_KOK13</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">4.11</span><span class="p">,</span><span class="o">-</span><span class="mf">3.43</span><span class="p">,</span><span class="o">-</span><span class="mf">2.82</span><span class="p">,</span><span class="o">-</span><span class="mf">2.18</span><span class="p">,</span><span class="o">-</span><span class="mf">3.02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.52</span><span class="p">,</span><span class="mf">3.19</span><span class="p">,</span><span class="mf">3.69</span><span class="p">,</span><span class="mf">4.20</span><span class="p">,</span><span class="mf">3.60</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.23</span><span class="p">,</span><span class="mf">2.70</span><span class="p">,</span><span class="mf">3.23</span><span class="p">,</span><span class="mf">3.79</span><span class="p">,</span><span class="mf">3.64</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.32</span><span class="p">,</span><span class="mf">0.27</span><span class="p">,</span><span class="mf">0.12</span><span class="p">,</span><span class="mf">0.06</span><span class="p">,</span><span class="mf">0.30</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.35</span><span class="p">,</span><span class="mf">0.35</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.09</span><span class="p">,</span><span class="mf">0.49</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.10</span><span class="p">,</span><span class="mf">0.04</span><span class="p">,</span><span class="mf">0.19</span><span class="p">])</span>
+
+    <span class="c1"># cutout R-series</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">field_list</span><span class="p">:</span>
+        <span class="n">logf</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;log_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">logferr</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;log_</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">_std&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logf</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logf</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logf</span><span class="p">,</span><span class="n">v</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logferr</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logferr</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">logferr</span><span class="p">,</span><span class="n">v</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_log_linear</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># KKO11</span>
+    <span class="n">PRFM_KKO11</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;KKO11&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_KKO11</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">4.20</span><span class="p">,</span><span class="o">-</span><span class="mf">3.52</span><span class="p">,</span><span class="o">-</span><span class="mf">3.03</span><span class="p">,</span><span class="o">-</span><span class="mf">2.74</span><span class="p">,</span><span class="o">-</span><span class="mf">2.72</span><span class="p">,</span><span class="o">-</span><span class="mf">2.38</span><span class="p">,</span><span class="o">-</span><span class="mf">2.06</span><span class="p">,</span>
+                            <span class="o">-</span><span class="mf">3.85</span><span class="p">,</span><span class="o">-</span><span class="mf">3.15</span><span class="p">,</span><span class="o">-</span><span class="mf">2.79</span><span class="p">,</span><span class="o">-</span><span class="mf">2.58</span><span class="p">,</span><span class="o">-</span><span class="mf">2.24</span><span class="p">,</span>
+                            <span class="o">-</span><span class="mf">3.45</span><span class="p">,</span><span class="o">-</span><span class="mf">2.93</span><span class="p">,</span><span class="o">-</span><span class="mf">2.43</span><span class="p">,</span><span class="o">-</span><span class="mf">2.31</span><span class="p">,</span><span class="o">-</span><span class="mf">2.82</span><span class="p">,</span><span class="o">-</span><span class="mf">2.66</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.61</span><span class="p">,</span><span class="mf">3.03</span><span class="p">,</span><span class="mf">3.57</span><span class="p">,</span><span class="mf">3.85</span><span class="p">,</span><span class="mf">3.74</span><span class="p">,</span><span class="mf">4.08</span><span class="p">,</span><span class="mf">4.19</span><span class="p">,</span>
+                            <span class="mf">2.71</span><span class="p">,</span><span class="mf">3.45</span><span class="p">,</span><span class="mf">3.75</span><span class="p">,</span><span class="mf">3.90</span><span class="p">,</span><span class="mf">4.27</span><span class="p">,</span>
+                            <span class="mf">3.25</span><span class="p">,</span><span class="mf">3.62</span><span class="p">,</span><span class="mf">3.96</span><span class="p">,</span><span class="mf">4.08</span><span class="p">,</span><span class="mf">3.66</span><span class="p">,</span><span class="mf">3.86</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.94</span><span class="p">,</span><span class="mf">2.53</span><span class="p">,</span><span class="mf">2.95</span><span class="p">,</span><span class="mf">3.24</span><span class="p">,</span><span class="mf">3.22</span><span class="p">,</span><span class="mf">3.50</span><span class="p">,</span><span class="mf">3.86</span><span class="p">,</span>
+                            <span class="mf">2.29</span><span class="p">,</span><span class="mf">2.81</span><span class="p">,</span><span class="mf">3.19</span><span class="p">,</span><span class="mf">3.43</span><span class="p">,</span><span class="mf">3.72</span><span class="p">,</span>
+                            <span class="mf">2.60</span><span class="p">,</span><span class="mf">3.08</span><span class="p">,</span><span class="mf">3.44</span><span class="p">,</span><span class="mf">3.64</span><span class="p">,</span><span class="mf">3.13</span><span class="p">,</span><span class="mf">3.31</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.23</span><span class="p">,</span><span class="mf">0.12</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.09</span><span class="p">,</span><span class="mf">0.10</span><span class="p">,</span><span class="mf">0.10</span><span class="p">,</span>
+                                <span class="mf">0.15</span><span class="p">,</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.12</span><span class="p">,</span><span class="mf">0.09</span><span class="p">,</span><span class="mf">0.05</span><span class="p">,</span>
+                                <span class="mf">0.07</span><span class="p">,</span><span class="mf">0.07</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.10</span><span class="p">,</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.06</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.51</span><span class="p">,</span><span class="mf">0.72</span><span class="p">,</span><span class="mf">0.73</span><span class="p">,</span><span class="mf">0.60</span><span class="p">,</span><span class="mf">0.52</span><span class="p">,</span><span class="mf">0.51</span><span class="p">,</span><span class="mf">0.63</span><span class="p">,</span>
+                                <span class="mf">0.63</span><span class="p">,</span><span class="mf">0.61</span><span class="p">,</span><span class="mf">0.71</span><span class="p">,</span><span class="mf">0.62</span><span class="p">,</span><span class="mf">0.55</span><span class="p">,</span>
+                                <span class="mf">0.56</span><span class="p">,</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.70</span><span class="p">,</span><span class="mf">0.53</span><span class="p">,</span><span class="mf">0.77</span><span class="p">,</span><span class="mf">0.60</span><span class="p">])</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.35</span><span class="p">,</span><span class="mf">0.22</span><span class="p">,</span><span class="mf">0.16</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.11</span><span class="p">,</span><span class="mf">0.07</span><span class="p">,</span>
+                                <span class="mf">0.23</span><span class="p">,</span><span class="mf">0.21</span><span class="p">,</span><span class="mf">0.13</span><span class="p">,</span><span class="mf">0.13</span><span class="p">,</span><span class="mf">0.09</span><span class="p">,</span>
+                                <span class="mf">0.23</span><span class="p">,</span><span class="mf">0.12</span><span class="p">,</span><span class="mf">0.12</span><span class="p">,</span><span class="mf">0.07</span><span class="p">,</span><span class="mf">0.20</span><span class="p">,</span><span class="mf">0.14</span><span class="p">])</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_log_linear</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># OK22: TIGRESS-classic</span>
+    <span class="n">PRFM_OK22</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;TIGRESS-classic&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_OK22</span>
+    <span class="c1"># from table</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">5.37e-2</span><span class="p">,</span><span class="mf">2.67e-3</span><span class="p">,</span><span class="mf">6.21e-5</span><span class="p">,</span><span class="mf">5.17e-1</span><span class="p">,</span><span class="mf">5.41e-2</span><span class="p">,</span><span class="mf">2.16e-3</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.26e6</span><span class="p">,</span><span class="mf">1.95e5</span><span class="p">,</span><span class="mf">5.71e3</span><span class="p">,</span><span class="mf">1.88e2</span><span class="p">,</span><span class="mf">6.41e5</span><span class="p">,</span><span class="mf">1.01e5</span><span class="p">,</span><span class="mf">4.78e3</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.13e5</span><span class="p">,</span><span class="mf">1.76e4</span><span class="p">,</span><span class="mf">5.02e3</span><span class="p">,</span><span class="mf">3.39e2</span><span class="p">,</span><span class="mf">6.60e4</span><span class="p">,</span><span class="mf">1.34e4</span><span class="p">,</span><span class="mf">2.36e3</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.37e5</span><span class="p">,</span><span class="mf">2.22e4</span><span class="p">,</span><span class="mf">7.86e3</span><span class="p">,</span><span class="mf">1.67e2</span><span class="p">,</span><span class="mf">2.77e5</span><span class="p">,</span><span class="mf">1.92e4</span><span class="p">,</span><span class="mf">1.91e3</span><span class="p">])</span>
+
+    <span class="c1"># ad hoc value</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">SFR</span><span class="o">*</span><span class="mf">0.3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pth</span><span class="o">*</span><span class="mf">0.3</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pimag_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pimag</span><span class="o">*</span><span class="mf">0.8</span>
+
+    <span class="c1"># my re caclulation</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">9.55e-01</span><span class="p">,</span> <span class="mf">6.18e-01</span><span class="p">,</span> <span class="mf">7.81e-02</span><span class="p">,</span> <span class="mf">7.39e-02</span><span class="p">,</span> <span class="mf">3.60e-03</span><span class="p">,</span> <span class="mf">3.11e-03</span><span class="p">,</span> <span class="mf">6.69e-05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.74e+06</span><span class="p">,</span> <span class="mf">6.16e+05</span><span class="p">,</span> <span class="mf">3.09e+05</span><span class="p">,</span> <span class="mf">1.68e+05</span><span class="p">,</span> <span class="mf">6.01e+03</span><span class="p">,</span> <span class="mf">5.15e+03</span><span class="p">,</span> <span class="mf">1.42e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.09e+05</span><span class="p">,</span> <span class="mf">7.00e+04</span><span class="p">,</span> <span class="mf">1.63e+04</span><span class="p">,</span> <span class="mf">1.35e+04</span><span class="p">,</span> <span class="mf">4.92e+03</span><span class="p">,</span> <span class="mf">2.32e+03</span><span class="p">,</span> <span class="mf">2.58e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.44e+05</span><span class="p">,</span> <span class="mf">1.24e+05</span><span class="p">,</span> <span class="mf">8.77e+03</span><span class="p">,</span> <span class="mf">7.55e+03</span><span class="p">,</span> <span class="mf">4.37e+03</span><span class="p">,</span> <span class="mf">7.99e+02</span><span class="p">,</span> <span class="mf">1.88e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.17e+05</span><span class="p">,</span> <span class="mf">1.65e+05</span><span class="p">,</span> <span class="mf">1.14e+04</span><span class="p">,</span> <span class="mf">1.06e+04</span><span class="p">,</span> <span class="mf">3.42e+03</span><span class="p">,</span> <span class="mf">1.13e+03</span><span class="p">,</span> <span class="mf">7.34e+01</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.76e-01</span><span class="p">,</span> <span class="mf">9.17e-02</span><span class="p">,</span> <span class="mf">1.06e-02</span><span class="p">,</span> <span class="mf">2.59e-02</span><span class="p">,</span> <span class="mf">1.47e-03</span><span class="p">,</span> <span class="mf">2.14e-03</span><span class="p">,</span> <span class="mf">7.04e-05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.57e+06</span><span class="p">,</span> <span class="mf">2.47e+05</span><span class="p">,</span> <span class="mf">3.83e+05</span><span class="p">,</span> <span class="mf">1.43e+05</span><span class="p">,</span> <span class="mf">2.23e+03</span><span class="p">,</span> <span class="mf">2.77e+03</span><span class="p">,</span> <span class="mf">1.09e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">6.85e+04</span><span class="p">,</span> <span class="mf">1.54e+04</span><span class="p">,</span> <span class="mf">9.60e+03</span><span class="p">,</span> <span class="mf">3.80e+03</span><span class="p">,</span> <span class="mf">1.44e+03</span><span class="p">,</span> <span class="mf">1.30e+03</span><span class="p">,</span> <span class="mf">1.73e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.60e+05</span><span class="p">,</span> <span class="mf">7.36e+04</span><span class="p">,</span> <span class="mf">1.21e+04</span><span class="p">,</span> <span class="mf">6.88e+03</span><span class="p">,</span> <span class="mf">1.25e+03</span><span class="p">,</span> <span class="mf">8.13e+02</span><span class="p">,</span> <span class="mf">2.08e+02</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.51e+05</span><span class="p">,</span> <span class="mf">7.71e+04</span><span class="p">,</span> <span class="mf">1.37e+04</span><span class="p">,</span> <span class="mf">1.09e+04</span><span class="p">,</span> <span class="mf">1.41e+03</span><span class="p">,</span> <span class="mf">7.40e+02</span><span class="p">,</span> <span class="mf">3.97e+01</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># Galactic center from M21 and M23</span>
+    <span class="n">PRFM_M21</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;TIGRESS-GC&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_M21</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">field_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SFR&#39;</span><span class="p">,</span><span class="s1">&#39;Pturb&#39;</span><span class="p">,</span><span class="s1">&#39;Pth&#39;</span><span class="p">,</span><span class="s1">&#39;Pimag&#39;</span><span class="p">]</span>
+    <span class="c1"># from paper table</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.148</span><span class="p">,</span><span class="mf">0.648</span><span class="p">,</span><span class="mf">2.07</span><span class="p">,</span><span class="mf">7.94</span><span class="p">,</span><span class="mf">1.88</span><span class="p">,</span><span class="mf">6.67</span><span class="p">,</span><span class="mf">27.1</span><span class="p">,</span><span class="mf">94.8</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.137</span><span class="p">,</span><span class="mf">0.512</span><span class="p">,</span><span class="mf">1.49</span><span class="p">,</span><span class="mf">4.49</span><span class="p">,</span><span class="mf">1.44</span><span class="p">,</span><span class="mf">4.26</span><span class="p">,</span><span class="mf">12.7</span><span class="p">,</span><span class="mf">57.4</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e6</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.128</span><span class="p">,</span><span class="mf">0.424</span><span class="p">,</span><span class="mf">0.966</span><span class="p">,</span><span class="mf">1.99</span><span class="p">,</span><span class="mf">1.01</span><span class="p">,</span><span class="mf">2.32</span><span class="p">,</span><span class="mf">3.82</span><span class="p">,</span><span class="mf">9.51</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e6</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.027</span><span class="p">,</span><span class="mf">0.099</span><span class="p">,</span><span class="mf">0.37</span><span class="p">,</span><span class="mf">0.86</span><span class="p">,</span><span class="mf">0.24</span><span class="p">,</span><span class="mf">0.98</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">7.4</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0022</span><span class="p">,</span><span class="mf">0.079</span><span class="p">,</span><span class="mf">0.19</span><span class="p">,</span><span class="mf">0.78</span><span class="p">,</span><span class="mf">0.33</span><span class="p">,</span><span class="mf">0.82</span><span class="p">,</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">19.7</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e6</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0022</span><span class="p">,</span><span class="mf">0.051</span><span class="p">,</span><span class="mf">0.106</span><span class="p">,</span><span class="mf">0.32</span><span class="p">,</span><span class="mf">0.30</span><span class="p">,</span><span class="mf">0.42</span><span class="p">,</span><span class="mf">0.78</span><span class="p">,</span><span class="mf">2.06</span><span class="p">])</span><span class="o">*</span><span class="mf">1.e6</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+
+    <span class="c1"># from recalculation for warm/cold</span>
+    <span class="c1"># Read csv file</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span><span class="s2">&quot;prfm_ring.csv&quot;</span><span class="p">),</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sigsfr_mean&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ptrb_mean&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pthm_mean&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pmag_mean&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sigsfr_std&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ptrb_std&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pthm_std&#39;</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">log_Pimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pmag_std&#39;</span><span class="p">])</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_log_linear</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># NCR</span>
+    <span class="n">PRFM_NCR_Z1</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_NCR_Z1</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.14e-02</span><span class="p">,</span> <span class="mf">2.60e-03</span><span class="p">,</span> <span class="mf">2.97e-03</span><span class="p">,</span> <span class="mf">1.13e-04</span><span class="p">,</span> <span class="mf">1.27e-01</span><span class="p">,</span> <span class="mf">8.60e-02</span><span class="p">,</span> <span class="mf">2.78e-02</span><span class="p">,</span> <span class="mf">3.43e-02</span><span class="p">,</span> <span class="mf">2.47e-01</span><span class="p">,</span> <span class="mf">1.33e-01</span><span class="p">,</span> <span class="mf">2.78e-01</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.86e+04</span><span class="p">,</span> <span class="mf">5.58e+03</span><span class="p">,</span> <span class="mf">8.35e+03</span><span class="p">,</span> <span class="mf">5.87e+02</span><span class="p">,</span> <span class="mf">1.96e+05</span><span class="p">,</span> <span class="mf">2.78e+05</span><span class="p">,</span> <span class="mf">4.23e+04</span><span class="p">,</span> <span class="mf">5.00e+04</span><span class="p">,</span> <span class="mf">1.59e+05</span><span class="p">,</span> <span class="mf">8.78e+04</span><span class="p">,</span> <span class="mf">9.87e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.07e+04</span><span class="p">,</span> <span class="mf">4.02e+03</span><span class="p">,</span> <span class="mf">4.39e+03</span><span class="p">,</span> <span class="mf">4.00e+02</span><span class="p">,</span> <span class="mf">5.70e+04</span><span class="p">,</span> <span class="mf">3.93e+04</span><span class="p">,</span> <span class="mf">2.00e+04</span><span class="p">,</span> <span class="mf">2.43e+04</span><span class="p">,</span> <span class="mf">8.81e+04</span><span class="p">,</span> <span class="mf">3.82e+04</span><span class="p">,</span> <span class="mf">1.06e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">8.09e+03</span><span class="p">,</span> <span class="mf">4.74e+03</span><span class="p">,</span> <span class="mf">4.63e+03</span><span class="p">,</span> <span class="mf">3.02e+02</span><span class="p">,</span> <span class="mf">4.23e+04</span><span class="p">,</span> <span class="mf">1.93e+04</span><span class="p">,</span> <span class="mf">2.48e+04</span><span class="p">,</span> <span class="mf">2.45e+04</span><span class="p">,</span> <span class="mf">3.32e+05</span><span class="p">,</span> <span class="mf">3.86e+05</span><span class="p">,</span> <span class="mf">5.66e+03</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">9.48e+03</span><span class="p">,</span> <span class="mf">3.33e+03</span><span class="p">,</span> <span class="mf">3.22e+03</span><span class="p">,</span> <span class="mf">1.20e+02</span><span class="p">,</span> <span class="mf">3.20e+04</span><span class="p">,</span> <span class="mf">1.74e+04</span><span class="p">,</span> <span class="mf">1.34e+04</span><span class="p">,</span> <span class="mf">1.86e+04</span><span class="p">,</span> <span class="mf">1.43e+05</span><span class="p">,</span> <span class="mf">6.21e+04</span><span class="p">,</span> <span class="mf">2.48e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.05e-03</span><span class="p">,</span> <span class="mf">7.88e-04</span><span class="p">,</span> <span class="mf">1.20e-03</span><span class="p">,</span> <span class="mf">6.11e-05</span><span class="p">,</span> <span class="mf">6.07e-02</span><span class="p">,</span> <span class="mf">4.91e-02</span><span class="p">,</span> <span class="mf">8.16e-03</span><span class="p">,</span> <span class="mf">6.11e-03</span><span class="p">,</span> <span class="mf">7.50e-02</span><span class="p">,</span> <span class="mf">5.23e-02</span><span class="p">,</span> <span class="mf">1.15e-01</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">6.63e+03</span><span class="p">,</span> <span class="mf">2.09e+03</span><span class="p">,</span> <span class="mf">5.22e+03</span><span class="p">,</span> <span class="mf">4.73e+02</span><span class="p">,</span> <span class="mf">1.38e+05</span><span class="p">,</span> <span class="mf">2.62e+05</span><span class="p">,</span> <span class="mf">2.38e+04</span><span class="p">,</span> <span class="mf">2.54e+04</span><span class="p">,</span> <span class="mf">7.14e+04</span><span class="p">,</span> <span class="mf">4.55e+04</span><span class="p">,</span> <span class="mf">4.78e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.15e+03</span><span class="p">,</span> <span class="mf">1.10e+03</span><span class="p">,</span> <span class="mf">1.61e+03</span><span class="p">,</span> <span class="mf">2.08e+02</span><span class="p">,</span> <span class="mf">3.25e+04</span><span class="p">,</span> <span class="mf">2.23e+04</span><span class="p">,</span> <span class="mf">6.36e+03</span><span class="p">,</span> <span class="mf">6.32e+03</span><span class="p">,</span> <span class="mf">3.46e+04</span><span class="p">,</span> <span class="mf">1.15e+04</span><span class="p">,</span> <span class="mf">6.88e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">4.42e+03</span><span class="p">,</span> <span class="mf">2.27e+03</span><span class="p">,</span> <span class="mf">2.21e+03</span><span class="p">,</span> <span class="mf">2.36e+02</span><span class="p">,</span> <span class="mf">5.46e+04</span><span class="p">,</span> <span class="mf">2.51e+04</span><span class="p">,</span> <span class="mf">2.27e+04</span><span class="p">,</span> <span class="mf">2.37e+04</span><span class="p">,</span> <span class="mf">1.04e+05</span><span class="p">,</span> <span class="mf">6.99e+04</span><span class="p">,</span> <span class="mf">9.28e+03</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.61e+03</span><span class="p">,</span> <span class="mf">1.22e+03</span><span class="p">,</span> <span class="mf">1.46e+03</span><span class="p">,</span> <span class="mf">7.17e+01</span><span class="p">,</span> <span class="mf">3.72e+04</span><span class="p">,</span> <span class="mf">1.95e+04</span><span class="p">,</span> <span class="mf">6.32e+03</span><span class="p">,</span> <span class="mf">1.04e+04</span><span class="p">,</span> <span class="mf">5.93e+04</span><span class="p">,</span> <span class="mf">3.79e+04</span><span class="p">,</span> <span class="mf">3.26e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="c1"># NCR-lowZ</span>
+    <span class="n">PRFM_NCR_lowZ</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_NCR_lowZ</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">7.92e-03</span><span class="p">,</span> <span class="mf">1.90e-03</span><span class="p">,</span> <span class="mf">1.27e-03</span><span class="p">,</span> <span class="mf">1.17e-03</span><span class="p">,</span> <span class="mf">1.92e-03</span><span class="p">,</span> <span class="mf">1.29e-03</span><span class="p">,</span> <span class="mf">1.32e-03</span><span class="p">,</span> <span class="mf">4.08e-05</span><span class="p">,</span> <span class="mf">8.85e-02</span><span class="p">,</span> <span class="mf">1.69e-02</span><span class="p">,</span> <span class="mf">2.52e-02</span><span class="p">,</span> <span class="mf">1.86e-02</span><span class="p">,</span> <span class="mf">2.02e-02</span><span class="p">,</span> <span class="mf">1.08e-01</span><span class="p">,</span> <span class="mf">2.61e-01</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.03e+04</span><span class="p">,</span> <span class="mf">4.65e+03</span><span class="p">,</span> <span class="mf">3.09e+03</span><span class="p">,</span> <span class="mf">3.15e+03</span><span class="p">,</span> <span class="mf">5.71e+03</span><span class="p">,</span> <span class="mf">3.36e+03</span><span class="p">,</span> <span class="mf">3.22e+03</span><span class="p">,</span> <span class="mf">1.49e+02</span><span class="p">,</span> <span class="mf">1.27e+05</span><span class="p">,</span> <span class="mf">3.44e+04</span><span class="p">,</span> <span class="mf">3.88e+04</span><span class="p">,</span> <span class="mf">3.37e+04</span><span class="p">,</span> <span class="mf">5.00e+04</span><span class="p">,</span> <span class="mf">8.66e+04</span><span class="p">,</span> <span class="mf">3.20e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.04e+04</span><span class="p">,</span> <span class="mf">5.89e+03</span><span class="p">,</span> <span class="mf">6.80e+03</span><span class="p">,</span> <span class="mf">5.74e+03</span><span class="p">,</span> <span class="mf">5.75e+03</span><span class="p">,</span> <span class="mf">6.96e+03</span><span class="p">,</span> <span class="mf">6.53e+03</span><span class="p">,</span> <span class="mf">9.37e+02</span><span class="p">,</span> <span class="mf">8.53e+04</span><span class="p">,</span> <span class="mf">3.41e+04</span><span class="p">,</span> <span class="mf">3.18e+04</span><span class="p">,</span> <span class="mf">3.97e+04</span><span class="p">,</span> <span class="mf">3.24e+04</span><span class="p">,</span> <span class="mf">1.24e+05</span><span class="p">,</span> <span class="mf">1.62e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">1.18e+04</span><span class="p">,</span> <span class="mf">4.87e+03</span><span class="p">,</span> <span class="mf">6.35e+03</span><span class="p">,</span> <span class="mf">7.95e+03</span><span class="p">,</span> <span class="mf">5.35e+03</span><span class="p">,</span> <span class="mf">6.12e+03</span><span class="p">,</span> <span class="mf">6.05e+03</span><span class="p">,</span> <span class="mf">1.77e+02</span><span class="p">,</span> <span class="mf">5.13e+04</span><span class="p">,</span> <span class="mf">2.96e+04</span><span class="p">,</span> <span class="mf">3.82e+04</span><span class="p">,</span> <span class="mf">3.83e+04</span><span class="p">,</span> <span class="mf">3.18e+04</span><span class="p">,</span> <span class="mf">4.14e+05</span><span class="p">,</span> <span class="mf">1.08e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">9.59e+03</span><span class="p">,</span> <span class="mf">3.03e+03</span><span class="p">,</span> <span class="mf">2.46e+03</span><span class="p">,</span> <span class="mf">2.51e+03</span><span class="p">,</span> <span class="mf">3.27e+03</span><span class="p">,</span> <span class="mf">2.38e+03</span><span class="p">,</span> <span class="mf">2.71e+03</span><span class="p">,</span> <span class="mf">1.04e+02</span><span class="p">,</span> <span class="mf">5.24e+04</span><span class="p">,</span> <span class="mf">1.66e+04</span><span class="p">,</span> <span class="mf">1.83e+04</span><span class="p">,</span> <span class="mf">2.07e+04</span><span class="p">,</span> <span class="mf">1.89e+04</span><span class="p">,</span> <span class="mf">9.55e+04</span><span class="p">,</span> <span class="mf">3.79e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">2.90e-03</span><span class="p">,</span> <span class="mf">8.53e-04</span><span class="p">,</span> <span class="mf">7.95e-04</span><span class="p">,</span> <span class="mf">9.17e-04</span><span class="p">,</span> <span class="mf">5.18e-04</span><span class="p">,</span> <span class="mf">8.13e-04</span><span class="p">,</span> <span class="mf">7.20e-04</span><span class="p">,</span> <span class="mf">3.62e-05</span><span class="p">,</span> <span class="mf">3.26e-02</span><span class="p">,</span> <span class="mf">5.95e-03</span><span class="p">,</span> <span class="mf">6.39e-03</span><span class="p">,</span> <span class="mf">7.73e-03</span><span class="p">,</span> <span class="mf">4.48e-03</span><span class="p">,</span> <span class="mf">2.47e-02</span><span class="p">,</span> <span class="mf">1.12e-01</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">9.36e+03</span><span class="p">,</span> <span class="mf">1.77e+03</span><span class="p">,</span> <span class="mf">1.04e+03</span><span class="p">,</span> <span class="mf">1.50e+03</span><span class="p">,</span> <span class="mf">2.64e+03</span><span class="p">,</span> <span class="mf">1.13e+03</span><span class="p">,</span> <span class="mf">1.12e+03</span><span class="p">,</span> <span class="mf">6.05e+01</span><span class="p">,</span> <span class="mf">6.38e+04</span><span class="p">,</span> <span class="mf">1.97e+04</span><span class="p">,</span> <span class="mf">2.06e+04</span><span class="p">,</span> <span class="mf">1.63e+04</span><span class="p">,</span> <span class="mf">2.68e+04</span><span class="p">,</span> <span class="mf">2.15e+04</span><span class="p">,</span> <span class="mf">1.71e+05</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">5.11e+03</span><span class="p">,</span> <span class="mf">1.72e+03</span><span class="p">,</span> <span class="mf">1.74e+03</span><span class="p">,</span> <span class="mf">2.12e+03</span><span class="p">,</span> <span class="mf">1.14e+03</span><span class="p">,</span> <span class="mf">2.04e+03</span><span class="p">,</span> <span class="mf">1.39e+03</span><span class="p">,</span> <span class="mf">2.95e+02</span><span class="p">,</span> <span class="mf">3.26e+04</span><span class="p">,</span> <span class="mf">8.52e+03</span><span class="p">,</span> <span class="mf">6.56e+03</span><span class="p">,</span> <span class="mf">1.31e+04</span><span class="p">,</span> <span class="mf">9.48e+03</span><span class="p">,</span> <span class="mf">2.10e+04</span><span class="p">,</span> <span class="mf">5.55e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">oPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">5.44e+03</span><span class="p">,</span> <span class="mf">2.36e+03</span><span class="p">,</span> <span class="mf">2.25e+03</span><span class="p">,</span> <span class="mf">3.32e+03</span><span class="p">,</span> <span class="mf">1.39e+03</span><span class="p">,</span> <span class="mf">2.38e+03</span><span class="p">,</span> <span class="mf">2.51e+03</span><span class="p">,</span> <span class="mf">1.22e+02</span><span class="p">,</span> <span class="mf">4.10e+04</span><span class="p">,</span> <span class="mf">2.03e+04</span><span class="p">,</span> <span class="mf">3.42e+04</span><span class="p">,</span> <span class="mf">3.70e+04</span><span class="p">,</span> <span class="mf">2.33e+04</span><span class="p">,</span> <span class="mf">4.80e+04</span><span class="p">,</span> <span class="mf">1.10e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">dPimag_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">3.49e+03</span><span class="p">,</span> <span class="mf">1.29e+03</span><span class="p">,</span> <span class="mf">1.05e+03</span><span class="p">,</span> <span class="mf">1.56e+03</span><span class="p">,</span> <span class="mf">1.51e+03</span><span class="p">,</span> <span class="mf">1.16e+03</span><span class="p">,</span> <span class="mf">1.28e+03</span><span class="p">,</span> <span class="mf">4.13e+01</span><span class="p">,</span> <span class="mf">3.23e+04</span><span class="p">,</span> <span class="mf">9.10e+03</span><span class="p">,</span> <span class="mf">8.52e+03</span><span class="p">,</span> <span class="mf">1.40e+04</span><span class="p">,</span> <span class="mf">9.68e+03</span><span class="p">,</span> <span class="mf">3.06e+04</span><span class="p">,</span> <span class="mf">2.57e+04</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;KKO11&#39;</span><span class="p">:</span><span class="s1">&#39;tab:gray&#39;</span><span class="p">,</span><span class="s1">&#39;KOK13&#39;</span><span class="p">:</span><span class="s1">&#39;tab:pink&#39;</span><span class="p">,</span><span class="s1">&#39;KO15&#39;</span><span class="p">:</span><span class="s1">&#39;tab:olive&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;TIGRESS-classic&#39;</span><span class="p">:</span><span class="s1">&#39;tab:blue&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-GC&#39;</span><span class="p">:</span><span class="s1">&#39;tab:orange&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">:</span><span class="s1">&#39;tab:cyan&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">:</span><span class="s1">&#39;tab:red&#39;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PRFM_KKO11</span><span class="p">,</span><span class="n">PRFM_KOK13</span><span class="p">,</span><span class="n">PRFM_KO15</span><span class="p">,</span><span class="n">PRFM_OK22</span><span class="p">,</span><span class="n">PRFM_M21</span><span class="p">,</span>
+            <span class="n">PRFM_NCR_Z1</span><span class="p">,</span><span class="n">PRFM_NCR_lowZ</span><span class="p">]:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">paper</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">paper</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chang-Goo Kim
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
