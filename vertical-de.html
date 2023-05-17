@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Vertical Dynamical Equilibrium &#8212; PRFM tutorial</title>
   
@@ -44,6 +44,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -68,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="next" title="Feedback Yields" href="feedback-yield.html" />
     <link rel="prev" title="Welcome to the PRFM cookbook" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -154,7 +155,8 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm.html">PRFM cookbook 1: Vertical dynamical equilibrium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm.html">PRFM cookbook: Vertical dynamical equilibrium and SFR surface density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">PRFM cookbook: Simulation Results</a></li>
 </ul>
 
     </div>
@@ -364,9 +366,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="vertical-dynamical-equilibrium">
-<h1>Vertical Dynamical Equilibrium<a class="headerlink" href="#vertical-dynamical-equilibrium" title="Permalink to this headline">#</a></h1>
+<h1>Vertical Dynamical Equilibrium<a class="headerlink" href="#vertical-dynamical-equilibrium" title="Permalink to this heading">#</a></h1>
 <section id="basic-fomulation">
-<h2>Basic fomulation<a class="headerlink" href="#basic-fomulation" title="Permalink to this headline">#</a></h2>
+<h2>Basic fomulation<a class="headerlink" href="#basic-fomulation" title="Permalink to this heading">#</a></h2>
 <p>The vertical dynamical equilibrium in a disk consisting of gas, star, and dark matter can be written as</p>
 <div class="math notranslate nohighlight">
 \[
@@ -390,7 +392,7 @@ document.write(`
 We use a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> or a model calibarted by numerical simulations.</p>
 </section>
 <section id="constant-velocity-dispersion">
-<h2>Constant velocity dispersion<a class="headerlink" href="#constant-velocity-dispersion" title="Permalink to this headline">#</a></h2>
+<h2>Constant velocity dispersion<a class="headerlink" href="#constant-velocity-dispersion" title="Permalink to this heading">#</a></h2>
 <p>For a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>, the equation becomes a cubic to <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span>. Using</p>
 <div class="math notranslate nohighlight">
 \[
@@ -417,7 +419,7 @@ H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\le
 <span class="math notranslate nohighlight">\(Q = (3a_1-a_2^2)/9\)</span> and <span class="math notranslate nohighlight">\(R=(9a_2a_1-27a_0-2a_2^3)/54\)</span> with <span class="math notranslate nohighlight">\(a_i\)</span> for the coefficients of <span class="math notranslate nohighlight">\(h^i\)</span> for <span class="math notranslate nohighlight">\(i=0\)</span>, 1, 2.</p>
 </section>
 <section id="pressure-dependent-velocity-dispersion">
-<h2>Pressure-dependent velocity dispersion<a class="headerlink" href="#pressure-dependent-velocity-dispersion" title="Permalink to this headline">#</a></h2>
+<h2>Pressure-dependent velocity dispersion<a class="headerlink" href="#pressure-dependent-velocity-dispersion" title="Permalink to this heading">#</a></h2>
 <p>We obtained <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> as a function of the total pressure calibrated in the TIGRESS-classic suite <span id="id1">[<a class="reference internal" href="#id10" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>.</p>
 <p>From the effective equation of state determined by the midplane pressure and density directly, we obtain</p>
 <div class="math notranslate nohighlight">
@@ -434,34 +436,41 @@ H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\le
 <p>Either case, we can first solve the cubic equation for a contant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> to get <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>. We update <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> with new <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> and then solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> again. We iteratively solve until <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> is converged.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <p>The most general form of the vertical dynamical equilibrium used here is derived in <span id="id2">[<a class="reference internal" href="#id16" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span>.
 See also <span id="id3">[<a class="reference internal" href="#id10" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, <span id="id4">[<a class="reference internal" href="#id11" title="Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. \apj , 815(1):67, December 2015. arXiv:1511.00010, doi:10.1088/0004-637X/815/1/67.">KimOstriker15</a>]</span>, <span id="id5">[<a class="reference internal" href="#id12" title="Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. \apj , 776(1):1, October 2013. arXiv:1308.3231, doi:10.1088/0004-637X/776/1/1.">KimOstrikerKim13</a>]</span>,
 <span id="id6">[<a class="reference internal" href="#id13" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">KimKimOstriker11</a>]</span>, <span id="id7">[<a class="reference internal" href="#id14" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">OstrikerShetty11</a>]</span>, <span id="id8">[<a class="reference internal" href="#id15" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">OstrikerMcKeeLeroy10</a>]</span>.</p>
 <div class="docutils container" id="id9">
-<dl class="citation">
-<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id2">HassanOstrikerKim23</a></span></dt>
-<dd><p>Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. <em>in prep.</em>, 2023.</p>
-</dd>
-<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id6">KimKimOstriker11</a></span></dt>
-<dd><p>Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 743(1):25, December 2011. <a class="reference external" href="https://arxiv.org/abs/1109.0028">arXiv:1109.0028</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/743/1/25">doi:10.1088/0004-637X/743/1/25</a>.</p>
-</dd>
-<dt class="label" id="id11"><span class="brackets"><a class="fn-backref" href="#id4">KimOstriker15</a></span></dt>
-<dd><p>Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. <em>\apj </em>, 815(1):67, December 2015. <a class="reference external" href="https://arxiv.org/abs/1511.00010">arXiv:1511.00010</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/815/1/67">doi:10.1088/0004-637X/815/1/67</a>.</p>
-</dd>
-<dt class="label" id="id12"><span class="brackets"><a class="fn-backref" href="#id5">KimOstrikerKim13</a></span></dt>
-<dd><p>Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. <em>\apj </em>, 776(1):1, October 2013. <a class="reference external" href="https://arxiv.org/abs/1308.3231">arXiv:1308.3231</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/776/1/1">doi:10.1088/0004-637X/776/1/1</a>.</p>
-</dd>
-<dt class="label" id="id10"><span class="brackets">OstrikerKim22</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id3">2</a>)</span></dt>
-<dd><p>Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. <em>\apj </em>, 936(2):137, September 2022. <a class="reference external" href="https://arxiv.org/abs/2206.00681">arXiv:2206.00681</a>, <a class="reference external" href="https://doi.org/10.3847/1538-4357/ac7de2">doi:10.3847/1538-4357/ac7de2</a>.</p>
-</dd>
-<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id8">OstrikerMcKeeLeroy10</a></span></dt>
-<dd><p>Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 721(2):975–994, October 2010. <a class="reference external" href="https://arxiv.org/abs/1008.0410">arXiv:1008.0410</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/721/2/975">doi:10.1088/0004-637X/721/2/975</a>.</p>
-</dd>
-<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id7">OstrikerShetty11</a></span></dt>
-<dd><p>Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. <em>\apj </em>, 731(1):41, April 2011. <a class="reference external" href="https://arxiv.org/abs/1102.1446">arXiv:1102.1446</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/731/1/41">doi:10.1088/0004-637X/731/1/41</a>.</p>
-</dd>
-</dl>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">HassanOstrikerKim23</a><span class="fn-bracket">]</span></span>
+<p>Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. <em>in prep.</em>, 2023.</p>
+</div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">KimKimOstriker11</a><span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 743(1):25, December 2011. <a class="reference external" href="https://arxiv.org/abs/1109.0028">arXiv:1109.0028</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/743/1/25">doi:10.1088/0004-637X/743/1/25</a>.</p>
+</div>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">KimOstriker15</a><span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. <em>\apj </em>, 815(1):67, December 2015. <a class="reference external" href="https://arxiv.org/abs/1511.00010">arXiv:1511.00010</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/815/1/67">doi:10.1088/0004-637X/815/1/67</a>.</p>
+</div>
+<div class="citation" id="id12" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">KimOstrikerKim13</a><span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. <em>\apj </em>, 776(1):1, October 2013. <a class="reference external" href="https://arxiv.org/abs/1308.3231">arXiv:1308.3231</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/776/1/1">doi:10.1088/0004-637X/776/1/1</a>.</p>
+</div>
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OstrikerKim22<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p>Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. <em>\apj </em>, 936(2):137, September 2022. <a class="reference external" href="https://arxiv.org/abs/2206.00681">arXiv:2206.00681</a>, <a class="reference external" href="https://doi.org/10.3847/1538-4357/ac7de2">doi:10.3847/1538-4357/ac7de2</a>.</p>
+</div>
+<div class="citation" id="id15" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">OstrikerMcKeeLeroy10</a><span class="fn-bracket">]</span></span>
+<p>Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 721(2):975–994, October 2010. <a class="reference external" href="https://arxiv.org/abs/1008.0410">arXiv:1008.0410</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/721/2/975">doi:10.1088/0004-637X/721/2/975</a>.</p>
+</div>
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">OstrikerShetty11</a><span class="fn-bracket">]</span></span>
+<p>Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. <em>\apj </em>, 731(1):41, April 2011. <a class="reference external" href="https://arxiv.org/abs/1102.1446">arXiv:1102.1446</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/731/1/41">doi:10.1088/0004-637X/731/1/41</a>.</p>
+</div>
+</div>
 </div>
 </section>
 </section>

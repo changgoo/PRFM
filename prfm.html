@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 
 
-<html >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>PRFM cookbook: Vertical dynamical equilibrium &#8212; PRFM tutorial</title>
+    <title>PRFM cookbook: Vertical dynamical equilibrium and SFR surface density &#8212; PRFM tutorial</title>
   
   
   
@@ -44,6 +44,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -65,9 +66,10 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'prfm';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PRFM cookbook: Simulation Results" href="prfm_sims.html" />
     <link rel="prev" title="Feedback Yields" href="feedback-yield.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
@@ -153,7 +155,8 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">PRFM cookbook: Vertical dynamical equilibrium</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">PRFM cookbook: Vertical dynamical equilibrium and SFR surface density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">PRFM cookbook: Simulation Results</a></li>
 </ul>
 
     </div>
@@ -337,7 +340,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>PRFM cookbook: Vertical dynamical equilibrium</h1>
+    <h1>PRFM cookbook: Vertical dynamical equilibrium and SFR surface density</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,8 +373,8 @@ document.write(`
 </div>
 </div>
 </div>
-<section class="tex2jax_ignore mathjax_ignore" id="prfm-cookbook-vertical-dynamical-equilibrium">
-<h1>PRFM cookbook: Vertical dynamical equilibrium<a class="headerlink" href="#prfm-cookbook-vertical-dynamical-equilibrium" title="Permalink to this headline">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="prfm-cookbook-vertical-dynamical-equilibrium-and-sfr-surface-density">
+<h1>PRFM cookbook: Vertical dynamical equilibrium and SFR surface density<a class="headerlink" href="#prfm-cookbook-vertical-dynamical-equilibrium-and-sfr-surface-density" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">prfm.prfm</span> <span class="kn">import</span> <span class="o">*</span>
@@ -379,9 +382,33 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">prfm.prfm</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">book</span><span class="o">/../</span><span class="n">prfm</span><span class="o">/</span><span class="n">prfm</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">289</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span>     <span class="n">h</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">Q</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">-</span><span class="n">a2</span><span class="o">/</span><span class="mf">3.</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="k">return</span> <span class="n">h</span><span class="o">*</span><span class="n">H_gas_only</span>
+<span class="ne">--&gt; </span><span class="mi">289</span> <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">root</span><span class="p">,</span> <span class="n">brentq</span>
+<span class="g g-Whitespace">    </span><span class="mi">290</span> <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">292</span>                                <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Numerical solution of the vertical dynamical equilibrium equation</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span><span class="sd">     including all weight terms.</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">296</span><span class="sd">     All inputs must be in c.g.s. units</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span><span class="sd">     &quot;&quot;&quot;</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;scipy&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <section id="model">
-<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">#</a></h2>
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
 <p>We set a simple model between R=2-16kpc. The gas and stellar surface densities are decreasing linearly and exponetially with radius, respectively. The stellar scale height is held fixed. The flat rotation curve is assumed so that <span class="math notranslate nohighlight">\(\Omega_d\propto R^{-1}\)</span>.</p>
 <p><strong>The parameters must be in c.g.s. units.</strong></p>
 <div class="cell docutils container">
@@ -445,7 +472,7 @@ document.write(`
 </div>
 </section>
 <section id="test-vertical-equilibrium-solutions">
-<h2>Test vertical equilibrium solutions<a class="headerlink" href="#test-vertical-equilibrium-solutions" title="Permalink to this headline">#</a></h2>
+<h2>Test vertical equilibrium solutions<a class="headerlink" href="#test-vertical-equilibrium-solutions" title="Permalink to this heading">#</a></h2>
 <p>The gas scale heights can be calculated either anlytically or numerically. <code class="docutils literal notranslate"><span class="pre">gas_scale_height</span></code> provides a convenient wrapper for either case simply call different function depending on <code class="docutils literal notranslate"><span class="pre">method=[&quot;analytic&quot;,</span> <span class="pre">&quot;numerical&quot;]</span></code>. Internally, functions below will be called.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_analytic</span></code> provides an anlytic solution of the cubic equation for a given parameter set.</p>
@@ -526,7 +553,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x15b4b1190&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x18c44cc50&gt;
 </pre></div>
 </div>
 <img alt="_images/dd8a1f9d985a764ec883d04e75f66aedbb776886a9fea2195e28db38bb79b98b.png" src="_images/dd8a1f9d985a764ec883d04e75f66aedbb776886a9fea2195e28db38bb79b98b.png" />
@@ -534,7 +561,7 @@ document.write(`
 </div>
 </section>
 <section id="self-consistent-solutions-for-different-velocity-dispersion-models">
-<h2>Self-consistent solutions for different velocity dispersion models<a class="headerlink" href="#self-consistent-solutions-for-different-velocity-dispersion-models" title="Permalink to this headline">#</a></h2>
+<h2>Self-consistent solutions for different velocity dispersion models<a class="headerlink" href="#self-consistent-solutions-for-different-velocity-dispersion-models" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">get_self_consistent_solution</span></code> function will calculate the scale height, weight, and velocity dispersion iteratively for a given velocity dispersion model.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress_mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress_avg</span></code>. Additional calibration results will be updated. For user-specfic velocity dispersion models using the same functional form, one can specify coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_eff_models</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">expo</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -617,36 +644,10 @@ document.write(`
 </div>
 </section>
 <section id="sfr-surface-density">
-<h2>SFR surface density<a class="headerlink" href="#sfr-surface-density" title="Permalink to this headline">#</a></h2>
+<h2>SFR surface density<a class="headerlink" href="#sfr-surface-density" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># KS-law-like plot</span>
-<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.e3</span><span class="p">,</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">]:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">,</span><span class="n">get_sfr</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">sfr_cgs</span><span class="p">,</span>
-                 <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Upsilon:$&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">,(</span><span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">)</span><span class="o">**</span><span class="mf">1.54</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">3.95</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span>
-         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;K+dlR (2021) MW XCO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">,(</span><span class="n">Sigma_gas</span><span class="o">/</span><span class="n">surf_cgs</span><span class="p">)</span><span class="o">**</span><span class="mf">1.93</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">4.34</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span>
-         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;K+dlR (2021) B13 XCO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm gas}\, [M_\odot\,{\rm pc^{-2}}]$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
-</pre></div>
-</div>
-<img alt="_images/2f6275c3122ea0a82a6130d485258efbeb4299a7f2a401f2aa2a80bd579511b4.png" src="_images/2f6275c3122ea0a82a6130d485258efbeb4299a7f2a401f2aa2a80bd579511b4.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># KS-law-like plot</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pressure-Sigma_SFR relation</span>
 <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.e3</span><span class="p">,</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">]:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Wtot</span><span class="o">/</span><span class="n">kbol_cgs</span><span class="p">,</span><span class="n">get_sfr</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">sfr_cgs</span><span class="p">,</span> 
              <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Upsilon:$&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
@@ -662,7 +663,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/f56cc34f691eb355273636200c9b5843acec7c256a0361ca4918b05592570d86.png" src="_images/f56cc34f691eb355273636200c9b5843acec7c256a0361ca4918b05592570d86.png" />
+<img alt="_images/3e683f27f48db6b94004b7b8083c40d7c7a940abba078d2fdff3f3eaeb90969e.png" src="_images/3e683f27f48db6b94004b7b8083c40d7c7a940abba078d2fdff3f3eaeb90969e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -675,11 +676,89 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
-                            <span class="p">[</span><span class="s1">&#39;C5&#39;</span><span class="p">,</span><span class="s1">&#39;C4&#39;</span><span class="p">,</span><span class="s1">&#39;C3&#39;</span><span class="p">,</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span><span class="s1">&#39;C1&#39;</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">],</span>
-                            <span class="p">)</span>
-                            <span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># all simulations</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">color</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">paper</span> <span class="o">==</span> <span class="s1">&#39;TIGRESS-GC&#39;</span> <span class="k">else</span> <span class="s1">&#39;o&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span>
+    <span class="n">xerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot_std</span>
+    <span class="n">yerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="n">xerr</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.5</span> <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">paper</span><span class="p">)</span><span class="c1">#,clip_on=False)</span>
+
+<span class="c1"># P_SFR</span>
+<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">41</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># all simulations</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="n">c</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">color</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">m</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">paper</span> <span class="o">==</span> <span class="s1">&#39;TIGRESS-GC&#39;</span> <span class="k">else</span> <span class="s1">&#39;o&#39;</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot</span>
+
+<span class="ne">AttributeError</span>: &#39;PRFM_data&#39; object has no attribute &#39;color&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1"># tigress-classic only</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;TIGRESS-classic&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-GC&#39;</span><span class="p">],[</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span><span class="s1">&#39;C4&#39;</span><span class="p">],[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;*&#39;</span><span class="p">])):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>   
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span>
+    <span class="n">xerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot_std</span>
+    <span class="n">yerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="n">xerr</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.5</span> <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">paper</span><span class="p">)</span><span class="c1">#,clip_on=False)</span>
+
+<span class="c1"># P_SFR</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># tigress-classic only</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;TIGRESS-classic&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-GC&#39;</span><span class="p">],[</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span><span class="s1">&#39;C4&#39;</span><span class="p">],[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;*&#39;</span><span class="p">])):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>   
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span>
+    <span class="n">xerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot_std</span>
+    <span class="n">yerr</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR_std</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="n">xerr</span><span class="o">=</span><span class="n">xerr</span><span class="p">,</span>
+                <span class="n">marker</span><span class="o">=</span><span class="n">m</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="mf">1.5</span> <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">paper</span><span class="p">)</span><span class="c1">#,clip_on=False)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
+</pre></div>
+</div>
+<img alt="_images/a5edfb49eb285f122899539d81fa8495ea21a6cd485f4a62ff092bf135c08fde.png" src="_images/a5edfb49eb285f122899539d81fa8495ea21a6cd485f4a62ff092bf135c08fde.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># tigress-NCR only</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;TIGRESS-NCR&#39;</span><span class="p">,</span><span class="s1">&#39;TIGRESS-NCR-lowZ&#39;</span><span class="p">],[</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span><span class="s1">&#39;C3&#39;</span><span class="p">],[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">])):</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>   
     <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_Ptot</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">log_SFR</span>
@@ -707,7 +786,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/fadd79f507667ae112cebf3401a338dbbd1c4c10c5c65d3f8c98df3b6129ab26.png" src="_images/fadd79f507667ae112cebf3401a338dbbd1c4c10c5c65d3f8c98df3b6129ab26.png" />
+<img alt="_images/e9e4d7b391b6eb38e7579cfe3455b8446d5302a15530de78c98572293c90cb86.png" src="_images/e9e4d7b391b6eb38e7579cfe3455b8446d5302a15530de78c98572293c90cb86.png" />
 </div>
 </div>
 </section>
@@ -752,6 +831,15 @@ document.write(`
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Feedback Yields</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="prfm_sims.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">PRFM cookbook: Simulation Results</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div></div>
   
