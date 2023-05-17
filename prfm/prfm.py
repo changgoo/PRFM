@@ -17,6 +17,10 @@ yield_models = dict()
 yield_models['tigress-classic'] = dict(Y0 = 10**3.86, expo=-0.212)
 yield_models['tigress-classic-decomp'] = dict(Yth0 = 10**4.45, expo_th=-0.506,
                                               Ytrb0 = 1.5*10**2.81, expo_trb=-0.06)
+yield_models['tigress-ncr-decomp'] = dict(Yth0 = 10**4.7, expo_th=-0.5,
+                                          Ytrb0 = 10**3.3, expo_trb=-0.1)
+yield_models['tigress-ncr-decomp-Z01'] = dict(Yth0 = 10**5.2, expo_th=-0.5,
+                                          Ytrb0 = 10**3.3, expo_trb=-0.1)
 def get_weight_gas(Sigma_gas):
     """weight due to gas self-gravity
     """
