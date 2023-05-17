@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'feedback-yield';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PRFM cookbook: Vertical dynamical equilibrium and SFR surface density" href="prfm.html" />
+    <link rel="next" title="References" href="reference.html" />
     <link rel="prev" title="Vertical Dynamical Equilibrium" href="vertical-de.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -155,8 +155,9 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Feedback Yields</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm.html">PRFM cookbook: Vertical dynamical equilibrium and SFR surface density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">PRFM cookbook: Simulation Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Notebook: Simulation Results</a></li>
 </ul>
 
     </div>
@@ -327,9 +328,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -345,14 +344,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -364,8 +355,6 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="feedback-yields">
 <h1>Feedback Yields<a class="headerlink" href="#feedback-yields" title="Permalink to this heading">#</a></h1>
-<section id="basic-fomulation">
-<h2>Basic fomulation<a class="headerlink" href="#basic-fomulation" title="Permalink to this heading">#</a></h2>
 <p>In the ISM, turbulent and thermal pressure support quickly goes away due to turbulence dissipation and cooling.
 In order to maintain the vertical dynamical equilibrium, there must exist efficent recovery of pressure support.
 Stellar feedback (esp. from massive young stars) is the major source of energy.
@@ -378,7 +367,7 @@ Assuming balance between gain and loss processes, one can define the feedback yi
 <p>We can then obtain SFR surface density from the total pressure <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span>
 which is assumed to be in balance with the total weight <span class="math notranslate nohighlight">\(\cal W_{\rm tot}\)</span>
 and expressed as an analytic form per vertical dynamical equilibrium <span class="math notranslate nohighlight">\(P_{\rm DE}\)</span>.</p>
-<p>The numerically calibrated total feedback yield from the TIGRESS-classic suite (<span id="id1">[<a class="reference internal" href="vertical-de.html#id10" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>; see Eqs (25)) is either</p>
+<p>The numerically calibrated total feedback yield from the TIGRESS-classic suite (<span id="id1">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>; see Eqs (25)) is either</p>
 <div class="math notranslate nohighlight">
 \[
   \Upsilon_{\rm tot} = 1030{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.212}
@@ -393,7 +382,6 @@ and expressed as an analytic form per vertical dynamical equilibrium <span class
   \Upsilon_{\rm kin+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
 \]</div>
 <p>where we assume that the magnetic contribution is 50% of the kinetic.</p>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -437,11 +425,11 @@ and expressed as an analytic form per vertical dynamical equilibrium <span class
       </div>
     </a>
     <a class="right-next"
-       href="prfm.html"
+       href="reference.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">PRFM cookbook: Vertical dynamical equilibrium and SFR surface density</p>
+        <p class="prev-next-title">References</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -454,20 +442,6 @@ and expressed as an analytic form per vertical dynamical equilibrium <span class
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

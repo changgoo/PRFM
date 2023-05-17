@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Vertical Dynamical Equilibrium &#8212; PRFM tutorial</title>
+    <title>References &#8212; PRFM tutorial</title>
   
   
   
@@ -61,13 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'vertical-de';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Feedback Yields" href="feedback-yield.html" />
-    <link rel="prev" title="Welcome to the PRFM cookbook" href="intro.html" />
+    <link rel="next" title="Notebook: Vertical dynamical equilibrium and SFR surface density" href="prfm.html" />
+    <link rel="prev" title="Feedback Yields" href="feedback-yield.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -153,9 +151,9 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Vertical Dynamical Equilibrium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Notebook: Simulation Results</a></li>
 </ul>
@@ -229,7 +227,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2Fvertical-de.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2Freference.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -259,7 +257,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/vertical-de.md" target="_blank"
+      <li><a href="_sources/reference.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -328,9 +326,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -341,22 +337,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Vertical Dynamical Equilibrium</h1>
+    <h1>References</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure-dependent-velocity-dispersion">Pressure-dependent velocity dispersion</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -366,82 +351,39 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="vertical-dynamical-equilibrium">
-<h1>Vertical Dynamical Equilibrium<a class="headerlink" href="#vertical-dynamical-equilibrium" title="Permalink to this heading">#</a></h1>
-<section id="basic-fomulation">
-<h2>Basic fomulation<a class="headerlink" href="#basic-fomulation" title="Permalink to this heading">#</a></h2>
-<p>The vertical dynamical equilibrium in a disk consisting of gas, star, and dark matter can be written as</p>
-<div class="math notranslate nohighlight">
-\[
-  P_{\rm tot} = \frac{\Sigma_{\rm gas}}{2 H_{\rm gas}} \sigma_{\rm eff}^2
-  = {\cal W}_\mathrm{g} + {\cal W}_* + {\cal W}_\mathrm{d}.
-\]</div>
-<p>where</p>
-<div class="math notranslate nohighlight">
-\[
-{\cal W}_\mathrm{g}= \frac{\pi G \Sigma_{\rm gas}^2}{2}
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-{\cal W}_* \approx \pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*},
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-{\cal W}_\mathrm{d}  = \zeta_\mathrm{d} \Sigma_{\rm gas} \Omega_d^2 H_{\rm gas}
-\]</div>
-<p>Given <span class="math notranslate nohighlight">\(\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\Sigma_*\)</span>, <span class="math notranslate nohighlight">\(H_*\)</span>, and <span class="math notranslate nohighlight">\(\Omega_d\)</span>, we solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> with an assumption of <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>.
-We use a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> or a model calibarted by numerical simulations.</p>
-</section>
-<section id="constant-velocity-dispersion">
-<h2>Constant velocity dispersion<a class="headerlink" href="#constant-velocity-dispersion" title="Permalink to this heading">#</a></h2>
-<p>For a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>, the equation becomes a cubic to <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span>. Using</p>
-<div class="math notranslate nohighlight">
-\[
-H_{\rm gas-only} = \frac{\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}}
-\]</div>
-<p>and</p>
-<div class="math notranslate nohighlight">
-\[
-H_{\rm dm-only} = \frac{\sigma_{\rm eff}}{(2\zeta_d)^{1/2}\Omega_d},
-\]</div>
-<p>the dimensionless form of the equation can be written as</p>
-<div class="math notranslate nohighlight">
-\[
-h^3 + [(1+2 s_*)\eta_d^2+\eta_*]h^2 + (\eta_*-1)\eta_d^2h -\eta_*\eta_d^2 = 0
-\]</div>
-<p>with
-<span class="math notranslate nohighlight">\(s_* = \Sigma_*/\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\eta_* = H_*/H_{\rm gas-only}\)</span>, and <span class="math notranslate nohighlight">\(\eta_d = H_{\rm dm-only}/H_{\rm gas-only}\)</span>.
-The only postive real solution of the cubic equation is</p>
-<div class="math notranslate nohighlight">
-\[
-H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\left(\frac{R}{\sqrt{-Q}}\right)
-\]</div>
-<p>where
-<span class="math notranslate nohighlight">\(Q = (3a_1-a_2^2)/9\)</span> and <span class="math notranslate nohighlight">\(R=(9a_2a_1-27a_0-2a_2^3)/54\)</span> with <span class="math notranslate nohighlight">\(a_i\)</span> for the coefficients of <span class="math notranslate nohighlight">\(h^i\)</span> for <span class="math notranslate nohighlight">\(i=0\)</span>, 1, 2.</p>
-</section>
-<section id="pressure-dependent-velocity-dispersion">
-<h2>Pressure-dependent velocity dispersion<a class="headerlink" href="#pressure-dependent-velocity-dispersion" title="Permalink to this heading">#</a></h2>
-<p>We obtained <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> as a function of the total pressure calibrated in the TIGRESS-classic suite <span id="id1">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>.</p>
-<p>From the effective equation of state determined by the midplane pressure and density directly, we obtain</p>
-<div class="math notranslate nohighlight">
-\[
-\sigma_{\rm eff} = 9.8{\rm km/s} P_4^{0.15}
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(P_4\equiv(P_{\rm tot}/k_B\,10^4{\rm\,cm^{-3}\,K})\)</span>. Note that under the assumption of the vertical dynamical equilibrium,
-<span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>.</p>
-<p>From the mass-weighted mean velocity dispersion, we have</p>
-<div class="math notranslate nohighlight">
-\[
-\sigma_{\rm eff} = 12{\rm km/s} P_4^{0.22}
-\]</div>
-<p>Either case, we can first solve the cubic equation for a contant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> to get <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>. We update <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> with new <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> and then solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> again. We iteratively solve until <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> is converged.</p>
-</section>
-<section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<p>The most general form of the vertical dynamical equilibrium used here is derived in <span id="id2">[<a class="reference internal" href="reference.html#id8" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span>.
-See also <span id="id3">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, <span id="id4">[<a class="reference internal" href="reference.html#id3" title="Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. \apj , 815(1):67, December 2015. arXiv:1511.00010, doi:10.1088/0004-637X/815/1/67.">KimOstriker15</a>]</span>, <span id="id5">[<a class="reference internal" href="reference.html#id4" title="Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. \apj , 776(1):1, October 2013. arXiv:1308.3231, doi:10.1088/0004-637X/776/1/1.">KimOstrikerKim13</a>]</span>,
-<span id="id6">[<a class="reference internal" href="reference.html#id5" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">KimKimOstriker11</a>]</span>, <span id="id7">[<a class="reference internal" href="reference.html#id6" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">OstrikerShetty11</a>]</span>, <span id="id8">[<a class="reference internal" href="reference.html#id7" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">OstrikerMcKeeLeroy10</a>]</span>.</p>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="references">
+<h1>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h1>
+<div class="docutils container" id="id1">
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HassanOstrikerKim23<span class="fn-bracket">]</span></span>
+<p>Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. <em>in prep.</em>, 2023.</p>
+</div>
+<div class="citation" id="id5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KimKimOstriker11<span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 743(1):25, December 2011. <a class="reference external" href="https://arxiv.org/abs/1109.0028">arXiv:1109.0028</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/743/1/25">doi:10.1088/0004-637X/743/1/25</a>.</p>
+</div>
+<div class="citation" id="id3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KimOstriker15<span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. <em>\apj </em>, 815(1):67, December 2015. <a class="reference external" href="https://arxiv.org/abs/1511.00010">arXiv:1511.00010</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/815/1/67">doi:10.1088/0004-637X/815/1/67</a>.</p>
+</div>
+<div class="citation" id="id4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KimOstrikerKim13<span class="fn-bracket">]</span></span>
+<p>Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. <em>\apj </em>, 776(1):1, October 2013. <a class="reference external" href="https://arxiv.org/abs/1308.3231">arXiv:1308.3231</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/776/1/1">doi:10.1088/0004-637X/776/1/1</a>.</p>
+</div>
+<div class="citation" id="id2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OstrikerKim22<span class="fn-bracket">]</span></span>
+<p>Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. <em>\apj </em>, 936(2):137, September 2022. <a class="reference external" href="https://arxiv.org/abs/2206.00681">arXiv:2206.00681</a>, <a class="reference external" href="https://doi.org/10.3847/1538-4357/ac7de2">doi:10.3847/1538-4357/ac7de2</a>.</p>
+</div>
+<div class="citation" id="id7" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OstrikerMcKeeLeroy10<span class="fn-bracket">]</span></span>
+<p>Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. <em>\apj </em>, 721(2):975–994, October 2010. <a class="reference external" href="https://arxiv.org/abs/1008.0410">arXiv:1008.0410</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/721/2/975">doi:10.1088/0004-637X/721/2/975</a>.</p>
+</div>
+<div class="citation" id="id6" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OstrikerShetty11<span class="fn-bracket">]</span></span>
+<p>Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. <em>\apj </em>, 731(1):41, April 2011. <a class="reference external" href="https://arxiv.org/abs/1102.1446">arXiv:1102.1446</a>, <a class="reference external" href="https://doi.org/10.1088/0004-637X/731/1/41">doi:10.1088/0004-637X/731/1/41</a>.</p>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -476,20 +418,20 @@ See also <span id="id3">[<a class="reference internal" href="reference.html#id2"
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="intro.html"
+       href="feedback-yield.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Welcome to the PRFM cookbook</p>
+        <p class="prev-next-title">Feedback Yields</p>
       </div>
     </a>
     <a class="right-next"
-       href="feedback-yield.html"
+       href="prfm.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Feedback Yields</p>
+        <p class="prev-next-title">Notebook: Vertical dynamical equilibrium and SFR surface density</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -502,23 +444,6 @@ See also <span id="id3">[<a class="reference internal" href="reference.html#id2"
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fomulation">Basic fomulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure-dependent-velocity-dispersion">Pressure-dependent velocity dispersion</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

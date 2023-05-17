@@ -80,6 +80,3 @@ Either case, we can first solve the cubic equation for a contant $\sigma_{\rm ef
 The most general form of the vertical dynamical equilibrium used here is derived in {cite}`Hassan_et_al`.
 See also {cite}`2022ApJ...936..137O`, {cite}`2015ApJ...815...67K`, {cite}`2013ApJ...776....1K`,
 {cite}`2011ApJ...743...25K`, {cite}`2011ApJ...731...41O`, {cite}`2010ApJ...721..975O`.
-
-```{bibliography}
-```
