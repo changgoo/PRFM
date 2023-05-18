@@ -408,7 +408,7 @@ document.write(`
 </div>
 <section id="model">
 <h2>Model<a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
-<p>We set up a simple galaxy model between R=2-16kpc. The gas and stellar surface densities are decreasing linearly and exponetially with radius, respectively. The stellar scale height is held fixed. A flat rotation curve is assumed so that <span class="math notranslate nohighlight">\(\Omega_d\propto R^{-1}\)</span>.</p>
+<p>As an example, we set up a simple galaxy model between R=2-16kpc. The gas and stellar surface densities are decreasing linearly and exponetially with radius, respectively. The stellar scale height is held fixed. A flat rotation curve is assumed so that <span class="math notranslate nohighlight">\(\Omega_d\propto R^{-1}\)</span>.</p>
 <p><strong>The parameters must be in c.g.s. units.</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -482,13 +482,13 @@ document.write(`
 </section>
 <section id="test-vertical-equilibrium-solutions">
 <h2>Test vertical equilibrium solutions<a class="headerlink" href="#test-vertical-equilibrium-solutions" title="Permalink to this heading">#</a></h2>
-<p>The gas scale heights can be calculated either anlytically or numerically. <code class="docutils literal notranslate"><span class="pre">gas_scale_height</span></code> provides a convenient wrapper for either case simply call different function depending on <code class="docutils literal notranslate"><span class="pre">method=[&quot;analytic&quot;,</span> <span class="pre">&quot;numerical&quot;]</span></code>. Internally, functions below will be called.</p>
+<p>The gas scale heights can be calculated either analytically or numerically. <code class="docutils literal notranslate"><span class="pre">gas_scale_height</span></code> provides a convenient wrapper for either case; simply call different function depending on <code class="docutils literal notranslate"><span class="pre">method=[&quot;analytic&quot;,</span> <span class="pre">&quot;numerical&quot;]</span></code>. Internally, functions below will be called.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_analytic</span></code> provides an anlytic solution of the cubic equation for a given parameter set.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_analytic</span></code> provides an analytic solution of the cubic equation for a given parameter set.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_[gas,star,dm]_only</span></code> provides an anlytic solution when only weight from the selected component is considered.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_star_gas</span></code> provides an anlytic solution when dark matter contribution is neglected.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_dm_gas</span></code> provides an anlytic solution when stellar contribution is neglected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_star_gas</span></code> provides an analytic solution when the dark matter contribution is neglected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_dm_gas</span></code> provides an analytic solution when the stellar contribution is neglected.</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gas_scale_height_numerical</span></code> provides a numerical solution for a given parameter set. Each weight term can be turned on and off by setting e.g., <code class="docutils literal notranslate"><span class="pre">wgas=1</span></code> or <code class="docutils literal notranslate"><span class="pre">wgas=0</span></code>.</p></li>
@@ -555,7 +555,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f67d8885d60&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f0a84a4a7c0&gt;
 </pre></div>
 </div>
 <img alt="_images/e17598bc3ed2602ff1f182762b6669d776aa857a98e2653a6c4f3a26d7478c45.png" src="_images/e17598bc3ed2602ff1f182762b6669d776aa857a98e2653a6c4f3a26d7478c45.png" />
@@ -565,7 +565,7 @@ document.write(`
 <section id="self-consistent-solutions-for-different-velocity-dispersion-models">
 <h2>Self-consistent solutions for different velocity dispersion models<a class="headerlink" href="#self-consistent-solutions-for-different-velocity-dispersion-models" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">get_self_consistent_solution</span></code> function will calculate the scale height, weight, and velocity dispersion iteratively for a given velocity dispersion model.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress_mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress_avg</span></code>. Additional calibration results will be updated. For user-specfic velocity dispersion models using the same functional form, one can specify coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress_mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress_avg</span></code>. Additional calibration results will be updated. For user-specfic velocity dispersion models using the same functional form, one can specify a coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and a power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_eff_models</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">expo</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
