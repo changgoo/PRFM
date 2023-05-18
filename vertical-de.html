@@ -374,8 +374,8 @@ document.write(`
 <p>The vertical dynamical equilibrium in a disk consisting of gas, star, and dark matter can be written as</p>
 <div class="math notranslate nohighlight">
 \[
-  P_{\rm tot} = \frac{\Sigma_{\rm gas}}{2 H_{\rm gas}} \sigma_{\rm eff}^2
-  = {\cal W}_\mathrm{g} + {\cal W}_* + {\cal W}_\mathrm{d}.
+  P_{\rm tot} = \rho_{\rm gas} \sigma_{\rm eff}^2=\frac{\Sigma_{\rm gas}}{2 H_{\rm gas}} \sigma_{\rm eff}^2
+  = {\cal W}_\mathrm{tot}={\cal W}_\mathrm{g} + {\cal W}_* + {\cal W}_\mathrm{d}.
 \]</div>
 <p>where</p>
 <div class="math notranslate nohighlight">
@@ -390,12 +390,13 @@ document.write(`
 \[
 {\cal W}_\mathrm{d}  = \zeta_\mathrm{d} \Sigma_{\rm gas} \Omega_d^2 H_{\rm gas}
 \]</div>
-<p>Given <span class="math notranslate nohighlight">\(\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\Sigma_*\)</span>, <span class="math notranslate nohighlight">\(H_*\)</span>, and <span class="math notranslate nohighlight">\(\Omega_d\)</span>, we solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> with an assumption of <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>.
-We use a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> or a model calibarted by numerical simulations.</p>
+<p>are the weights (per unit area) of the gas in the disk within the gravitational potential of gas, stars, and dark matter, respectively.</p>
+<p>Given <span class="math notranslate nohighlight">\(\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\Sigma_*\)</span>, <span class="math notranslate nohighlight">\(H_*\)</span>, and <span class="math notranslate nohighlight">\(\Omega_d\)</span>, together with an assumption for <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>, we solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span>.
+We use a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> or a model for <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> calibrated from numerical simulations.</p>
 </section>
 <section id="constant-velocity-dispersion">
 <h2>Constant velocity dispersion<a class="headerlink" href="#constant-velocity-dispersion" title="Permalink to this heading">#</a></h2>
-<p>For a constant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>, the equation becomes a cubic to <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span>. Using</p>
+<p>For given <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span>, the equation for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> becomes a cubic. Using</p>
 <div class="math notranslate nohighlight">
 \[
 H_{\rm gas-only} = \frac{\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}}
@@ -412,7 +413,7 @@ h^3 + [(1+2 s_*)\eta_d^2+\eta_*]h^2 + (\eta_*-1)\eta_d^2h -\eta_*\eta_d^2 = 0
 \]</div>
 <p>with
 <span class="math notranslate nohighlight">\(s_* = \Sigma_*/\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\eta_* = H_*/H_{\rm gas-only}\)</span>, and <span class="math notranslate nohighlight">\(\eta_d = H_{\rm dm-only}/H_{\rm gas-only}\)</span>.
-The only postive real solution of the cubic equation is</p>
+The only positive real solution of the cubic equation is</p>
 <div class="math notranslate nohighlight">
 \[
 H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\left(\frac{R}{\sqrt{-Q}}\right)
@@ -423,19 +424,19 @@ H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\le
 <section id="pressure-dependent-velocity-dispersion">
 <h2>Pressure-dependent velocity dispersion<a class="headerlink" href="#pressure-dependent-velocity-dispersion" title="Permalink to this heading">#</a></h2>
 <p>We obtained <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> as a function of the total pressure calibrated in the TIGRESS-classic suite <span id="id1">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>.</p>
-<p>From the effective equation of state determined by the midplane pressure and density directly, we obtain</p>
+<p>From the effective equation of state in which a fit is obtained between measured midplane pressure and density, one can solve to obtain</p>
 <div class="math notranslate nohighlight">
 \[
 \sigma_{\rm eff} = 9.8{\rm km/s} P_4^{0.15}
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(P_4\equiv(P_{\rm tot}/k_B\,10^4{\rm\,cm^{-3}\,K})\)</span>. Note that under the assumption of the vertical dynamical equilibrium,
 <span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>.</p>
-<p>From the mass-weighted mean velocity dispersion, we have</p>
+<p>Alternatively, from the fit for the mass-weighted mean velocity dispersion in terms of pressure, we have</p>
 <div class="math notranslate nohighlight">
 \[
 \sigma_{\rm eff} = 12{\rm km/s} P_4^{0.22}
 \]</div>
-<p>Either case, we can first solve the cubic equation for a contant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> to get <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>. We update <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> with new <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> and then solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> again. We iteratively solve until <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> is converged.</p>
+<p>In either case, we can first solve the cubic equation for a contant <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> to get <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}=W_{\rm tot}\)</span>. For the non-constant case, we then update <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> based on the new <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> and then solve for <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> and <span class="math notranslate nohighlight">\(P_{\rm tot}\)</span> again. We iteratively solve until <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> is converged.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
