@@ -2,7 +2,7 @@
 
 ## Basic fomulation
 
-The vertical dynamical equilibrium in a disk consisting of gas, star, and dark matter can be written as
+The vertical dynamical equilibrium in a disk consisting of gas, stars, and dark matter can be written as
 
 $$
   P_{\rm tot} = \rho_{\rm gas} \sigma_{\rm eff}^2=\frac{\Sigma_{\rm gas}}{2 H_{\rm gas}} \sigma_{\rm eff}^2
@@ -58,9 +58,9 @@ where
 $Q = (3a_1-a_2^2)/9$ and $R=(9a_2a_1-27a_0-2a_2^3)/54$ with $a_i$ for the coefficients of $h^i$ for $i=0$, 1, 2.
 
 ## Pressure-dependent velocity dispersion
-We obtained $\sigma_{\rm eff}$ as a function of the total pressure calibrated in the TIGRESS-classic suite {cite}`2022ApJ...936..137O`.
+Using the TIGRESS-classic suite {cite}`2022ApJ...936..137O`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
 
-From the effective equation of state in which a fit is obtained between measured midplane pressure and density, one can solve to obtain
+From the effective equation of state, in which a power-law fit is obtained between measured midplane pressure and density, one can solve to obtain
 
 $$
 \sigma_{\rm eff} = 9.8{\rm km/s} P_4^{0.15}
@@ -69,7 +69,7 @@ $$
 where $P_4\equiv(P_{\rm tot}/k_B\,10^4{\rm\,cm^{-3}\,K})$. Note that under the assumption of the vertical dynamical equilibrium,
 $P_{\rm tot}=W_{\rm tot}$.
 
-Alternatively, from the fit for the mass-weighted mean velocity dispersion in terms of pressure, we have
+Alternatively, from the direct power-law fit for the mass-weighted mean velocity dispersion in terms of pressure, we have
 
 $$
 \sigma_{\rm eff} = 12{\rm km/s} P_4^{0.22}
