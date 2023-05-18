@@ -4,3 +4,4 @@ numpy
 scipy
 astropy
 pandas
+docutils==0.17.1
