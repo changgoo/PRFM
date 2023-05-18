@@ -480,6 +480,9 @@ class PRFM(object):
         # initialize method attribute
         self._method=method
 
+        # set model name based on sigma_eff
+        self.name = sigma_eff if type(sigma_eff) == str else 'constant'
+
         # initialize unit conversion factors
         self.units = self._set_units()
 
@@ -558,13 +561,34 @@ class PRFM(object):
         else:
             self._sigma_eff_model = sigma_eff
 
+        # set arguments that will be passed to the functions
+        self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
+                      self._H_star,sigma_eff)
+
+        # store parameters in astro-friendly units
+        self._cgs_to_astro()
+
+    def reset_arg_list(self,sigma_eff):
+        # reset arguments with new velocity dispersion
+        self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
+                      self._H_star,sigma_eff)
+
     def _astro_to_cgs(self):
         for var in ['Sigma_gas','Sigma_star','H_star','rho_star',
-                    'rho_dm','Omega_d']:
+                    'rho_dm','Omega_d','sigma_eff']:
             if hasattr(self,'_'+var):
                 u_cgs = self.units[var].cgs.value
                 v = getattr(self,'_'+var)*u_cgs
                 setattr(self,'_'+var,v)
+
+    def _cgs_to_astro(self):
+        for var in ['Sigma_gas','Sigma_star','H_star','rho_star',
+                    'rho_dm','Omega_d','sigma_eff']:
+            if hasattr(self,'_'+var):
+                u_cgs = self.units[var].cgs.value
+                v = getattr(self,'_'+var)/u_cgs
+                setattr(self,var,v)
+
 
     def _set_units(self):
         units = dict()
@@ -585,10 +609,99 @@ class PRFM(object):
         for var in ['Sigma_gas','Sigma_star','rho_star',
                     'Omega_d','rho_dm','sigma_eff']:
             if not hasattr(self,'_'+var): continue
-            u_cgs = self.units[var].cgs.value
-            v = np.atleast_1d(getattr(self,'_'+var)/u_cgs)
+            v = np.atleast_1d(getattr(self,var))
             args += "  {}[0]: {}, N={}\n".format(var,v[0],len(v))
         if hasattr(self,'_sigma_eff_model'):
             args += "  sigma_eff_model: {}\n".format(self._sigma_eff_model)
         return args
+
+    def get_scale_height(self,method=None,wgas=1,wstar=1,wdm=1):
+        """Wrapper function to get the gas scale height
+
+        Parameters
+        ----------
+        method : str
+            override method if provided
+        """
+
+        if method is None: method=self._method
+
+        H_gas = get_scale_height(*self._args,zeta_d=self._zeta_d,
+                                 method=method,
+                                 wgas=wgas,wstar=wstar,wdm=wdm)
+        return H_gas/self.units['H_gas'].cgs.value
+
+    def get_weight_contribution(self):
+        """Wrapper function to get weight contribution
+        """
+        if not hasattr(self,'Wtot'): self.calc_weights()
+        return self.Wgas/self.Wtot,self.Wstar/self.Wtot,self.Wdm/self.Wtot
+
+    def calc_weights(self,method=None):
+        """Wrapper function to calculate scale height and all weights
+
+        Parameters
+        ----------
+        method : str
+            override method if provided
+        """
+
+        if method is None: method=self._method
+
+        results = get_weights(*self._args,zeta_d=self._zeta_d,method=method)
+
+        for var,v in zip(['H_gas','Wgas','Wstar','Wdm'],results):
+            u_cgs = self.units[var].cgs.value
+            setattr(self,'_'+var,v) # results in cgs
+            setattr(self,var,v/u_cgs) # results in astro units
+
+        # total weight
+        Wtot = results[1]+results[2]+results[3]
+        u_cgs = self.units['Wtot'].cgs.value
+        self._Wtot = Wtot
+        self.Wtot = Wtot/u_cgs
+
+        if hasattr(self,'_sigma_eff_model'):
+            self._sigma_eff = get_sigma_eff(Wtot, model=self._sigma_eff_model)
+            self.sigma_eff = self._sigma_eff/self.units['sigma_eff'].cgs.value
+
+    def calc_self_consistent_solution(self,method=None,
+                                      niter=16,tol=1.e-6):
+        if method is None: method=self._method
+
+        # for model sigma, need to give an initial guess
+        if hasattr(self,'_sigma_eff_model'):
+            self.reset_arg_list(15.e5)
+        self.calc_weights(method=method)
+
+        # that's it for constant sigma_eff
+        # iterative solve for model sigma
+        if hasattr(self,'_sigma_eff_model'):
+            # iterative solve
+            for i in range(niter):
+                Hprev = np.copy(self._H_gas)
+                self.reset_arg_list(self._sigma_eff)
+                self.calc_weights(method=method)
+                L1_norm = np.sum(np.abs(self._H_gas/Hprev - 1))
+                if (L1_norm < tol): break
+
+    def calc_sfr(self,Ytot=1.e3):
+        if not hasattr(self,'_Wtot'):
+            self.calc_self_consistent_solution()
+
+        # results in c.g.s.
+        Sigma_SFR = get_sfr(self._Wtot,Ytot=Ytot)
+        u_cgs = self.units['Sigma_SFR'].cgs.value
+        self._Sigma_SFR = Sigma_SFR
+        self.Sigma_SFR = Sigma_SFR/u_cgs
+
+    def check_solutions(self):
+        self.calc_self_consistent_solution(method='analytic')
+        sola = np.copy(self.Wtot)
+        self.calc_self_consistent_solution(method='numerical')
+        soln = np.copy(self.Wtot)
+
+        L1 = np.mean(np.abs(sola-soln))
+        print("difference between analytic and numerical solutions: {}".format(L1))
+        return sola,soln
 
