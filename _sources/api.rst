@@ -1,7 +1,13 @@
 API Reference
 =============
 
-PRFM module
+PRFM class
+-----------
+
+.. autoclass:: prfm.prfm.PRFM
+    :members:
+
+PRFM functions
 -----------
 
 .. autofunction:: prfm.prfm.get_weights

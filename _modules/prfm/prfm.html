@@ -750,7 +750,7 @@ document.write(`
 
     <span class="k">return</span> <span class="n">wtot_next</span><span class="p">,</span> <span class="n">Hnext</span><span class="p">,</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">wtot_next</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">)</span></div>
 
-<span class="k">class</span> <span class="nc">PRFM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM">[docs]</a><span class="k">class</span> <span class="nc">PRFM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a wrapper class for scale height, weight, SFR calculations</span>
 
 <span class="sd">    Parameters</span>
@@ -783,6 +783,9 @@ document.write(`
                  <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">):</span>
         <span class="c1"># initialize method attribute</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_method</span><span class="o">=</span><span class="n">method</span>
+
+        <span class="c1"># set model name based on sigma_eff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">sigma_eff</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span> <span class="k">else</span> <span class="s1">&#39;constant&#39;</span>
 
         <span class="c1"># initialize unit conversion factors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_units</span><span class="p">()</span>
@@ -862,13 +865,34 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">=</span> <span class="n">sigma_eff</span>
 
+        <span class="c1"># set arguments that will be passed to the functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+
+        <span class="c1"># store parameters in astro-friendly units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cgs_to_astro</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">):</span>
+        <span class="c1"># reset arguments with new velocity dispersion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_astro_to_cgs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Sigma_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Sigma_star&#39;</span><span class="p">,</span><span class="s1">&#39;H_star&#39;</span><span class="p">,</span><span class="s1">&#39;rho_star&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;rho_dm&#39;</span><span class="p">,</span><span class="s1">&#39;Omega_d&#39;</span><span class="p">]:</span>
+                    <span class="s1">&#39;rho_dm&#39;</span><span class="p">,</span><span class="s1">&#39;Omega_d&#39;</span><span class="p">,</span><span class="s1">&#39;sigma_eff&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">):</span>
                 <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">)</span><span class="o">*</span><span class="n">u_cgs</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_cgs_to_astro</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Sigma_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Sigma_star&#39;</span><span class="p">,</span><span class="s1">&#39;H_star&#39;</span><span class="p">,</span><span class="s1">&#39;rho_star&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;rho_dm&#39;</span><span class="p">,</span><span class="s1">&#39;Omega_d&#39;</span><span class="p">,</span><span class="s1">&#39;sigma_eff&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">):</span>
+                <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">)</span><span class="o">/</span><span class="n">u_cgs</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
 
     <span class="k">def</span> <span class="nf">_set_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">units</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -889,12 +913,101 @@ document.write(`
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Sigma_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Sigma_star&#39;</span><span class="p">,</span><span class="s1">&#39;rho_star&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;Omega_d&#39;</span><span class="p">,</span><span class="s1">&#39;rho_dm&#39;</span><span class="p">,</span><span class="s1">&#39;sigma_eff&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">):</span> <span class="k">continue</span>
-            <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
-            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">)</span><span class="o">/</span><span class="n">u_cgs</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="p">))</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  </span><span class="si">{}</span><span class="s2">[0]: </span><span class="si">{}</span><span class="s2">, N=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_sigma_eff_model&#39;</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  sigma_eff_model: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">args</span>
+
+<div class="viewcode-block" id="PRFM.get_scale_height"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_scale_height">[docs]</a>    <span class="k">def</span> <span class="nf">get_scale_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to get the gas scale height</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method : str</span>
+<span class="sd">            override method if provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+
+        <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span>
+                                 <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">H_gas</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;H_gas&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
+
+<div class="viewcode-block" id="PRFM.get_weight_contribution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_weight_contribution">[docs]</a>    <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to get weight contribution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;Wtot&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wgas</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Wstar</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Wdm</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span></div>
+
+<div class="viewcode-block" id="PRFM.calc_weights"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_weights">[docs]</a>    <span class="k">def</span> <span class="nf">calc_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate scale height and all weights</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method : str</span>
+<span class="sd">            override method if provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">get_weights</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;H_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Wgas&#39;</span><span class="p">,</span><span class="s1">&#39;Wstar&#39;</span><span class="p">,</span><span class="s1">&#39;Wdm&#39;</span><span class="p">],</span><span class="n">results</span><span class="p">):</span>
+            <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="c1"># results in cgs</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="o">/</span><span class="n">u_cgs</span><span class="p">)</span> <span class="c1"># results in astro units</span>
+
+        <span class="c1"># total weight</span>
+        <span class="n">Wtot</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">results</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;Wtot&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span> <span class="o">=</span> <span class="n">Wtot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span> <span class="o">=</span> <span class="n">Wtot</span><span class="o">/</span><span class="n">u_cgs</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_sigma_eff_model&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;sigma_eff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
+
+    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                      <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1.e-6</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+
+        <span class="c1"># for model sigma, need to give an initial guess</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_sigma_eff_model&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="mf">15.e5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="c1"># that&#39;s it for constant sigma_eff</span>
+        <span class="c1"># iterative solve for model sigma</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_sigma_eff_model&#39;</span><span class="p">):</span>
+            <span class="c1"># iterative solve</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">niter</span><span class="p">):</span>
+                <span class="n">Hprev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+                <span class="n">L1_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span><span class="o">/</span><span class="n">Hprev</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">L1_norm</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span> <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="mf">1.e3</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_Wtot&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
+
+        <span class="c1"># results in c.g.s.</span>
+        <span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="n">Ytot</span><span class="p">)</span>
+        <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;Sigma_SFR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span><span class="o">/</span><span class="n">u_cgs</span>
+
+    <span class="k">def</span> <span class="nf">check_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">)</span>
+        <span class="n">sola</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span>
+        <span class="n">soln</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">)</span>
+
+        <span class="n">L1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sola</span><span class="o">-</span><span class="n">soln</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;difference between analytic and numerical solutions: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">sola</span><span class="p">,</span><span class="n">soln</span></div>
 
 </pre></div>
 
