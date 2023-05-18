@@ -1,6 +1,6 @@
 # Feedback Yields
 
-In the ISM, turbulent and thermal pressure support quickly goes away due to turbulence dissipation and cooling.
+In the ISM, turbulent and thermal pressure support is quickly lost due to turbulence dissipation and cooling.
 In order to maintain the vertical dynamical equilibrium, there must exist efficent recovery of pressure support.
 Stellar feedback (esp. from massive young stars) is the major source of energy.
 Turbulence is mainly driven by SN feedback, and heating is dominated by the photoelectric effect of FUV radiation on grains.
@@ -10,9 +10,23 @@ $$
   \Upsilon_{\rm th, turb, mag} = \frac{P_{\rm th, turb, mag}}{\Sigma_{\rm SFR}}
 $$
 
-We can then obtain SFR surface density from the total pressure $P_{\rm tot}$
-which is assumed to be in balance with the total weight $\cal W_{\rm tot}$
-and expressed as an analytic form per vertical dynamical equilibrium $P_{\rm DE}$.
+Taking the sum of pressures, 
+
+$$
+  P_{\rm tot} = P_{\rm th} + P_{\rm turb} + P_{\rm mag} =  (\Upsilon_{\rm th} + \Upsilon_{\rm turb} + \Upsilon_{\rm mag})\Sigma_{\rm SFR}.
+$$
+
+We can then obtain the SFR surface density from the total weight $\cal W_{\rm tot}$ and the calibrated values of $\Upsilon$, under the assumption 
+that the total pressure $P_{\rm tot}$ is in balance with the total weight $\cal W_{\rm tot}$.
+
+An analytic form of the weight in vertical dynamical equilibrium is 
+
+$$
+P_{\rm DE} = \frac{\pi G}{2}\Sigma_g^2 + [2 G (\rho_{sd})]^{1/2} \sigma_\mathrm{eff} 
+$$
+
+for $\Sigma_g$ the gas surface density, $\rho_{sd}$ the midplane star+dark matter midplane density, and  $\sigma_\mathrm{eff}$ the effective vertical 
+velocity dispersion. 
 
 The numerically calibrated total feedback yield from the TIGRESS-classic suite ({cite}`2022ApJ...936..137O`; see Eqs (25)) is either
 
