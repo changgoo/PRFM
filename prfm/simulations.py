@@ -15,7 +15,7 @@ _kms_cgs = (1*au.km/au.s).cgs.value
 #=========================================================================================
 # data container class
 class PRFM_data(object):
-    """Simulation data conatiner class.
+    """Simulation data container class.
     """
     def __init__(self,paper):
         self.paper = paper

@@ -11,6 +11,7 @@ from prfm.prfm import get_scale_height, get_weights, \
     get_sfr, \
     get_pressure, \
     get_self_consistent_solution, \
-    get_sigma_eff
+    get_sigma_eff, \
+    PRFM
 
 from prfm import simulations as sims
