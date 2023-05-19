@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>prfm.prfm &#8212; PRFM tutorial</title>
+    <title>prfm.prfm &#8212; PRFM</title>
   
   
   
@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">PRFM tutorial</p>
+    <p class="title logo__title">PRFM</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -147,12 +147,19 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">PRFM primer</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../feedback-yield.html">Feedback Yields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">Notebook: Simulation Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../prfm.html">Toy Galaxy Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">Simulation Results and PRFM Theory</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
 </ul>
 
@@ -969,8 +976,12 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;sigma_eff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="PRFM.calc_self_consistent_solution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_self_consistent_solution">[docs]</a>    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                       <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1.e-6</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate self-consistent solutions</span>
+
+<span class="sd">        Update H_gas, W_tot (and all components), sigma_eff</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
 
         <span class="c1"># for model sigma, need to give an initial guess</span>
@@ -987,9 +998,13 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
                 <span class="n">L1_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span><span class="o">/</span><span class="n">Hprev</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">L1_norm</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span> <span class="k">break</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">L1_norm</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span> <span class="k">break</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="mf">1.e3</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_sfr"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_sfr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="mf">1.e3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate SFR surface density</span>
+
+<span class="sd">        Update Sigma_SFR (astro units) and _Sigma_SFR (cgs)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_Wtot&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
 
@@ -997,7 +1012,7 @@ document.write(`
         <span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span><span class="n">Ytot</span><span class="o">=</span><span class="n">Ytot</span><span class="p">)</span>
         <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;Sigma_SFR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span><span class="o">/</span><span class="n">u_cgs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span><span class="o">/</span><span class="n">u_cgs</span></div>
 
     <span class="k">def</span> <span class="nf">check_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">)</span>
@@ -1041,7 +1056,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Chang-Goo Kim
+By Chang-Goo Kim and Eve Ostriker
 </p>
 
   </div>

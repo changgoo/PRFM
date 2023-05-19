@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Notebook: Simulation Results &#8212; PRFM tutorial</title>
+    <title>Simulation Results and PRFM Theory &#8212; PRFM</title>
   
   
   
@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API Reference" href="api.html" />
-    <link rel="prev" title="Notebook: Vertical dynamical equilibrium and SFR surface density" href="prfm.html" />
+    <link rel="prev" title="Toy Galaxy Model" href="prfm.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -137,7 +137,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">PRFM tutorial</p>
+    <p class="title logo__title">PRFM</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -150,12 +150,19 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">PRFM primer</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Notebook: Simulation Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Simulation Results and PRFM Theory</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
@@ -198,6 +205,37 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/changgoo/PRFM/blob/main/book/prfm_sims.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -338,7 +376,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Notebook: Simulation Results</h1>
+    <h1>Simulation Results and PRFM Theory</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -380,8 +418,8 @@ document.write(`
 </div>
 </details>
 </div>
-<section class="tex2jax_ignore mathjax_ignore" id="notebook-simulation-results">
-<h1>Notebook: Simulation Results<a class="headerlink" href="#notebook-simulation-results" title="Permalink to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="simulation-results-and-prfm-theory">
+<h1>Simulation Results and PRFM Theory<a class="headerlink" href="#simulation-results-and-prfm-theory" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -411,7 +449,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5b07d45d60&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f3a976d0a30&gt;
 </pre></div>
 </div>
 <img alt="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" src="_images/bbb544c8fee006c79121c9b6f51dd378d133b456d621ed992f27e381a50b686f.png" />
@@ -433,7 +471,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" src="_images/ec8a724f33cf7ac49f710e62102ca0785662d83cb8f154f27553d045cfe9aa2d.png" />
+<img alt="_images/085e777f066223be495d6ea291b305c63df3e23a7d5d478dc21216202297d161.png" src="_images/085e777f066223be495d6ea291b305c63df3e23a7d5d478dc21216202297d161.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -459,7 +497,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5afde3ee80&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f3a918465b0&gt;
 </pre></div>
 </div>
 <img alt="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" src="_images/6516c49e02cebca6dfec11b91a9982475a73fe9153ea36fcf6aea0ca2220b3aa.png" />
@@ -493,7 +531,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" src="_images/6d9015c8062fe1f60a4749d6ab61ff18761a52836db566ae9f5ea4c25358e647.png" />
+<img alt="_images/0f812cf5b555f1005aa74638809acca340a13fd8ca21b50a4fda3605bc41dd20.png" src="_images/0f812cf5b555f1005aa74638809acca340a13fd8ca21b50a4fda3605bc41dd20.png" />
 </div>
 </div>
 </section>
@@ -535,7 +573,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Notebook: Vertical dynamical equilibrium and SFR surface density</p>
+        <p class="prev-next-title">Toy Galaxy Model</p>
       </div>
     </a>
     <a class="right-next"
@@ -566,7 +604,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Chang-Goo Kim
+By Chang-Goo Kim and Eve Ostriker
 </p>
 
   </div>

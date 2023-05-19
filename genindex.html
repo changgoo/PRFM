@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; PRFM tutorial</title>
+    <title>Index &#8212; PRFM</title>
   
   
   
@@ -134,7 +134,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">PRFM tutorial</p>
+    <p class="title logo__title">PRFM</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -147,12 +147,19 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">PRFM primer</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm.html">Notebook: Vertical dynamical equilibrium and SFR surface density</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Notebook: Simulation Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 
@@ -314,10 +321,14 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#prfm.prfm.PRFM.calc_weights">calc_weights() (prfm.prfm.PRFM method)</a>
+      <li><a href="api.html#prfm.prfm.PRFM.calc_self_consistent_solution">calc_self_consistent_solution() (prfm.prfm.PRFM method)</a>
+</li>
+      <li><a href="api.html#prfm.prfm.PRFM.calc_sfr">calc_sfr() (prfm.prfm.PRFM method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#prfm.prfm.PRFM.calc_weights">calc_weights() (prfm.prfm.PRFM method)</a>
+</li>
       <li><a href="api.html#prfm.simulations.PRFM_data.convert_linear_log">convert_linear_log() (prfm.simulations.PRFM_data method)</a>
 </li>
       <li><a href="api.html#prfm.simulations.PRFM_data.convert_log_linear">convert_log_linear() (prfm.simulations.PRFM_data method)</a>
@@ -401,7 +412,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Chang-Goo Kim
+By Chang-Goo Kim and Eve Ostriker
 </p>
 
   </div>
