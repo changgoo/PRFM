@@ -1,8 +1,8 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: PRFM tutorial
-author: Chang-Goo Kim
+title: PRFM
+author: Chang-Goo Kim and Eve Ostriker
 # logo: logo.png
 
 # Force re-execution of notebooks on each build.
@@ -30,6 +30,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+launch_buttons:
+  colab_url: "https://colab.research.google.com"
 
 sphinx:
   extra_extensions:

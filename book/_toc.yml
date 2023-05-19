@@ -3,10 +3,16 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: vertical-de
-- file: feedback-yield
-- file: reference
-- file: prfm
-- file: prfm_sims
-- file: api
+parts:
+  - caption: PRFM primer
+    chapters:
+    - file: vertical-de
+    - file: feedback-yield
+    - file: reference
+  - caption: Example Notebooks
+    chapters:
+    - file: prfm
+    - file: prfm_sims
+  - caption: Code package
+    chapters:
+    - file: api

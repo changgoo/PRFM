@@ -667,6 +667,10 @@ class PRFM(object):
 
     def calc_self_consistent_solution(self,method=None,
                                       niter=16,tol=1.e-6):
+        """Wrapper function to calculate self-consistent solutions
+
+        Update H_gas, W_tot (and all components), sigma_eff
+        """
         if method is None: method=self._method
 
         # for model sigma, need to give an initial guess
@@ -686,6 +690,10 @@ class PRFM(object):
                 if (L1_norm < tol): break
 
     def calc_sfr(self,Ytot=1.e3):
+        """Wrapper function to calculate SFR surface density
+
+        Update Sigma_SFR (astro units) and _Sigma_SFR (cgs)
+        """
         if not hasattr(self,'_Wtot'):
             self.calc_self_consistent_solution()
 
