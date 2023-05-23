@@ -405,6 +405,77 @@ document.write(`
 
     <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
 
+<span class="k">def</span> <span class="nf">get_weights_thick</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">rho_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate gas scale height and then each weight term for H_*&gt;&gt;H_gas</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sigma_gas: float or array-like</span>
+<span class="sd">        gas surface density</span>
+<span class="sd">    rho_star: float or array-like</span>
+<span class="sd">        stellar volume density</span>
+<span class="sd">    sigma_eff: str or float or array-like</span>
+<span class="sd">        velocity dispersion</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H_gas: float or array-like</span>
+<span class="sd">        gas scale height</span>
+<span class="sd">    W_gas: float or array-like</span>
+<span class="sd">        weight by gas</span>
+<span class="sd">    W_star: float or array-like</span>
+<span class="sd">        weight by star</span>
+<span class="sd">    W_dm: float or array-like</span>
+<span class="sd">        weight by dark matter</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Used approximate formula Equation (7) in Ostriker and Kim (2022)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_thick</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span><span class="n">rho_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+
+    <span class="n">W_gas</span> <span class="o">=</span> <span class="n">get_weight_gas</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">)</span>
+    <span class="n">W_star</span> <span class="o">=</span> <span class="n">Sigma_gas</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">rho_star</span><span class="p">)</span><span class="o">*</span><span class="n">sigma_eff</span>
+    <span class="n">W_dm</span> <span class="o">=</span> <span class="mf">0.</span><span class="o">*</span><span class="n">H_gas</span><span class="o">/</span><span class="n">H_gas</span>
+
+    <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
+
+
+<span class="k">def</span> <span class="nf">get_weights_thin</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate gas scale height and then each weight term for H_*&gt;&gt;H_gas</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sigma_gas: float or array-like</span>
+<span class="sd">        gas surface density</span>
+<span class="sd">    Sigma_star: float or array-like</span>
+<span class="sd">        stellar surface density</span>
+<span class="sd">    sigma_eff: str or float or array-like</span>
+<span class="sd">        velocity dispersion</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H_gas: float or array-like</span>
+<span class="sd">        gas scale height</span>
+<span class="sd">    W_gas: float or array-like</span>
+<span class="sd">        weight by gas</span>
+<span class="sd">    W_star: float or array-like</span>
+<span class="sd">        weight by star</span>
+<span class="sd">    W_dm: float or array-like</span>
+<span class="sd">        weight by dark matter</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Used approximate formula Equation (7) in Ostriker and Kim (2022)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_thick</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span><span class="n">rho_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+
+    <span class="n">W_gas</span> <span class="o">=</span> <span class="n">get_weight_gas</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">)</span>
+    <span class="n">W_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">Sigma_gas</span><span class="o">*</span><span class="n">Sigma_star</span>
+    <span class="n">W_dm</span> <span class="o">=</span> <span class="mf">0.</span><span class="o">*</span><span class="n">H_gas</span><span class="o">/</span><span class="n">H_gas</span>
+
+    <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
+
 <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
 <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span>
                             <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">):</span>
@@ -649,6 +720,56 @@ document.write(`
             <span class="c1"># no such gas is expected</span>
             <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;at least one term must be considered&quot;</span><span class="p">)</span></div>
 
+<span class="k">def</span> <span class="nf">get_scale_height_thick</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">rho_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;approximate solution for H_* &gt;&gt; H_gas without explicitly defining H_*</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sigma_gas : float or array-like</span>
+<span class="sd">        gas surface density</span>
+<span class="sd">    rho_star : float or array-like</span>
+<span class="sd">        stellar(+dark matter) volume density</span>
+<span class="sd">    sigma_eff : str or float or array-like</span>
+<span class="sd">        velocity dispersion</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : float or array-like</span>
+<span class="sd">        scale height in cm</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Ostriker &amp; Kim (2022) Equation (5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">Sigma_gas</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="mi">32</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">zeta_d</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">rho_star</span><span class="o">*</span><span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">*</span><span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">g1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">g2</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">get_scale_height_thin</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;approximate solution for H_* &lt;&lt; H_gas without explicitly defining H_*</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Sigma_gas : float or array-like</span>
+<span class="sd">        gas surface density</span>
+<span class="sd">    Sigma_star : float or array-like</span>
+<span class="sd">        stellar surface density</span>
+<span class="sd">    sigma_eff : str or float or array-like</span>
+<span class="sd">        velocity dispersion</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : float or array-like</span>
+<span class="sd">        scale height in cm</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Ostriker &amp; Kim (2022) Equation (5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">Sigma_gas</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">_Gconst_cgs</span><span class="o">*</span><span class="n">Sigma_star</span>
+    <span class="k">return</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">g1</span><span class="o">+</span><span class="n">g2</span><span class="p">)</span>
+
 <span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_analytic</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span>
                               <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">):</span>
@@ -810,12 +931,12 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">H_star</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">rho_star</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="c1"># this is limit for H_star &gt;&gt; H_gas</span>
+                    <span class="c1"># this is limit for H_star &lt;&lt; H_gas</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">=</span> <span class="s2">&quot;thick&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span>
                 <span class="k">elif</span> <span class="n">Sigma_star</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="c1"># this is limit for H_star &lt;&lt; H_gas</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">=</span> <span class="s2">&quot;thin&quot;</span>
+                    <span class="c1"># this is limit for H_star &gt;&gt; H_gas</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">=</span> <span class="s2">&quot;thick&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_rho_star</span> <span class="o">=</span> <span class="n">rho_star</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># both given</span>
@@ -873,16 +994,25 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">=</span> <span class="n">sigma_eff</span>
 
         <span class="c1"># set arguments that will be passed to the functions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
-                      <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;general&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thick&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_rho_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thin&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
         <span class="c1"># store parameters in astro-friendly units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cgs_to_astro</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">):</span>
         <span class="c1"># reset arguments with new velocity dispersion</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
-                      <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;general&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thick&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_rho_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thin&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span><span class="n">sigma_eff</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_astro_to_cgs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Sigma_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Sigma_star&#39;</span><span class="p">,</span><span class="s1">&#39;H_star&#39;</span><span class="p">,</span><span class="s1">&#39;rho_star&#39;</span><span class="p">,</span>
@@ -899,7 +1029,6 @@ document.write(`
                 <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">var</span><span class="p">)</span><span class="o">/</span><span class="n">u_cgs</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
-
 
     <span class="k">def</span> <span class="nf">_set_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">units</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -936,10 +1065,15 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;general&#39;</span><span class="p">:</span>
+            <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span>
+                                    <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                                    <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thick&#39;</span><span class="p">:</span>
+            <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_thick</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thin&#39;</span><span class="p">:</span>
+            <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_thin</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">)</span>
 
-        <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span>
-                                 <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
-                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">H_gas</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;H_gas&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
 <div class="viewcode-block" id="PRFM.get_weight_contribution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_weight_contribution">[docs]</a>    <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -959,7 +1093,12 @@ document.write(`
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="n">get_weights</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;general&#39;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">get_weights</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span><span class="n">zeta_d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_zeta_d</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thick&#39;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">get_weights_thick</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s1">&#39;thin&#39;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">get_weights_thin</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">var</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;H_gas&#39;</span><span class="p">,</span><span class="s1">&#39;Wgas&#39;</span><span class="p">,</span><span class="s1">&#39;Wstar&#39;</span><span class="p">,</span><span class="s1">&#39;Wdm&#39;</span><span class="p">],</span><span class="n">results</span><span class="p">):</span>
             <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
