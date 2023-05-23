@@ -94,6 +94,77 @@ def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
 
     return H_gas, W_gas, W_star, W_dm
 
+def get_weights_thick(Sigma_gas, rho_star, sigma_eff):
+    """calculate gas scale height and then each weight term for H_*>>H_gas
+
+    Parameters
+    ----------
+    Sigma_gas: float or array-like
+        gas surface density
+    rho_star: float or array-like
+        stellar volume density
+    sigma_eff: str or float or array-like
+        velocity dispersion
+
+    Returns
+    -------
+    H_gas: float or array-like
+        gas scale height
+    W_gas: float or array-like
+        weight by gas
+    W_star: float or array-like
+        weight by star
+    W_dm: float or array-like
+        weight by dark matter
+
+    Note
+    ----
+    Used approximate formula Equation (7) in Ostriker and Kim (2022)
+    """
+    H_gas = get_scale_height_thick(Sigma_gas,rho_star,sigma_eff)
+
+    W_gas = get_weight_gas(Sigma_gas)
+    W_star = Sigma_gas*np.sqrt(2*_Gconst_cgs*rho_star)*sigma_eff
+    W_dm = 0.*H_gas/H_gas
+
+    return H_gas, W_gas, W_star, W_dm
+
+
+def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
+    """calculate gas scale height and then each weight term for H_*>>H_gas
+
+    Parameters
+    ----------
+    Sigma_gas: float or array-like
+        gas surface density
+    Sigma_star: float or array-like
+        stellar surface density
+    sigma_eff: str or float or array-like
+        velocity dispersion
+
+    Returns
+    -------
+    H_gas: float or array-like
+        gas scale height
+    W_gas: float or array-like
+        weight by gas
+    W_star: float or array-like
+        weight by star
+    W_dm: float or array-like
+        weight by dark matter
+
+    Note
+    ----
+    Used approximate formula Equation (7) in Ostriker and Kim (2022)
+    """
+    H_gas = get_scale_height_thick(Sigma_gas,rho_star,sigma_eff)
+
+    W_gas = get_weight_gas(Sigma_gas)
+    W_star = np.pi*_Gconst_cgs*Sigma_gas*Sigma_star
+    W_dm = 0.*H_gas/H_gas
+
+    return H_gas, W_gas, W_star, W_dm
+
 @np.vectorize
 def get_weight_contribution(Sigma_gas, Sigma_star, Omega_d, H_star,
                             sigma_eff, zeta_d=1/3., method='analytic'):
@@ -338,6 +409,56 @@ def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
             # no such gas is expected
             raise("at least one term must be considered")
 
+def get_scale_height_thick(Sigma_gas, rho_star, sigma_eff, zeta_d=1/np.pi):
+    """approximate solution for H_* >> H_gas without explicitly defining H_*
+
+    Parameters
+    ----------
+    Sigma_gas : float or array-like
+        gas surface density
+    rho_star : float or array-like
+        stellar(+dark matter) volume density
+    sigma_eff : str or float or array-like
+        velocity dispersion
+
+    Returns
+    -------
+    H : float or array-like
+        scale height in cm
+
+    Notes
+    -----
+    Ostriker & Kim (2022) Equation (5)
+    """
+    g1 = np.pi*_Gconst_cgs*Sigma_gas
+    g2 = 32*np.pi*zeta_d*_Gconst_cgs*rho_star*sigma_eff**2
+    return 2*sigma_eff**2/(g1+np.sqrt(g1**2+g2))
+
+def get_scale_height_thin(Sigma_gas, Sigma_star, sigma_eff):
+    """approximate solution for H_* << H_gas without explicitly defining H_*
+
+    Parameters
+    ----------
+    Sigma_gas : float or array-like
+        gas surface density
+    Sigma_star : float or array-like
+        stellar surface density
+    sigma_eff : str or float or array-like
+        velocity dispersion
+
+    Returns
+    -------
+    H : float or array-like
+        scale height in cm
+
+    Notes
+    -----
+    Ostriker & Kim (2022) Equation (5)
+    """
+    g1 = np.pi*_Gconst_cgs*Sigma_gas
+    g2 = 2*np.pi*_Gconst_cgs*Sigma_star
+    return sigma_eff**2/(g1+g2)
+
 @np.vectorize
 def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                               zeta_d=1/3.):
@@ -499,12 +620,12 @@ class PRFM(object):
         else:
             if H_star is None:
                 if rho_star is None:
-                    # this is limit for H_star >> H_gas
+                    # this is limit for H_star << H_gas
                     self._stellar_disk = "thick"
                     self._Sigma_star = Sigma_star
                 elif Sigma_star is None:
-                    # this is limit for H_star << H_gas
-                    self._stellar_disk = "thin"
+                    # this is limit for H_star >> H_gas
+                    self._stellar_disk = "thick"
                     self._rho_star = rho_star
                 else:
                     # both given
@@ -562,16 +683,25 @@ class PRFM(object):
             self._sigma_eff_model = sigma_eff
 
         # set arguments that will be passed to the functions
-        self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
-                      self._H_star,sigma_eff)
-
+        if self._stellar_disk == 'general':
+            self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
+                        self._H_star,sigma_eff)
+        elif self._stellar_disk == 'thick':
+            self._args = (self._Sigma_gas,self._rho_star,sigma_eff)
+        elif self._stellar_disk == 'thin':
+            self._args = (self._Sigma_gas,self._Sigma_star,sigma_eff)
         # store parameters in astro-friendly units
         self._cgs_to_astro()
 
     def reset_arg_list(self,sigma_eff):
         # reset arguments with new velocity dispersion
-        self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
-                      self._H_star,sigma_eff)
+        if self._stellar_disk == 'general':
+            self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
+                          self._H_star,sigma_eff)
+        elif self._stellar_disk == 'thick':
+            self._args = (self._Sigma_gas,self._rho_star,sigma_eff)
+        elif self._stellar_disk == 'thin':
+            self._args = (self._Sigma_gas,self._Sigma_star,sigma_eff)
 
     def _astro_to_cgs(self):
         for var in ['Sigma_gas','Sigma_star','H_star','rho_star',
@@ -588,7 +718,6 @@ class PRFM(object):
                 u_cgs = self.units[var].cgs.value
                 v = getattr(self,'_'+var)/u_cgs
                 setattr(self,var,v)
-
 
     def _set_units(self):
         units = dict()
@@ -625,10 +754,15 @@ class PRFM(object):
         """
 
         if method is None: method=self._method
+        if self._stellar_disk == 'general':
+            H_gas = get_scale_height(*self._args,zeta_d=self._zeta_d,
+                                    method=method,
+                                    wgas=wgas,wstar=wstar,wdm=wdm)
+        elif self._stellar_disk == 'thick':
+            H_gas = get_scale_height_thick(*self._args)
+        elif self._stellar_disk == 'thin':
+            H_gas = get_scale_height_thin(*self._args)
 
-        H_gas = get_scale_height(*self._args,zeta_d=self._zeta_d,
-                                 method=method,
-                                 wgas=wgas,wstar=wstar,wdm=wdm)
         return H_gas/self.units['H_gas'].cgs.value
 
     def get_weight_contribution(self):
@@ -648,7 +782,12 @@ class PRFM(object):
 
         if method is None: method=self._method
 
-        results = get_weights(*self._args,zeta_d=self._zeta_d,method=method)
+        if self._stellar_disk == 'general':
+            results = get_weights(*self._args,zeta_d=self._zeta_d,method=method)
+        elif self._stellar_disk == 'thick':
+            results = get_weights_thick(*self._args)
+        elif self._stellar_disk == 'thin':
+            results = get_weights_thin(*self._args)
 
         for var,v in zip(['H_gas','Wgas','Wstar','Wdm'],results):
             u_cgs = self.units[var].cgs.value
