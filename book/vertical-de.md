@@ -1,6 +1,6 @@
 # Vertical Dynamical Equilibrium
 
-## Basic fomulation
+## Basic formulation
 
 The vertical dynamical equilibrium in a disk consisting of gas, stars, and dark matter can be written as
 
@@ -23,7 +23,7 @@ $$
 {\cal W}_\mathrm{d}  = \zeta_\mathrm{d} \Sigma_{\rm gas} \Omega_d^2 H_{\rm gas}
 $$
 
-are the weights (per unit area) of the gas in the disk within the gravitational potential of gas, stars, and dark matter, respectively.  
+are the weights (per unit area) of the gas in the disk within the gravitational potential of gas, stars, and dark matter, respectively.
 
 Given $\Sigma_{\rm gas}$, $\Sigma_*$, $H_*$, and $\Omega_d$, together with an assumption for $\sigma_{\rm eff}$, we solve for $H_{\rm gas}$.
 We use a constant $\sigma_{\rm eff}$ or a model for $\sigma_{\rm eff}$ calibrated from numerical simulations.
@@ -75,7 +75,7 @@ $$
 \sigma_{\rm eff} = 12{\rm km/s} P_4^{0.22}
 $$
 
-In either case, we can first solve the cubic equation for a contant $\sigma_{\rm eff}$ to get $H_{\rm gas}$ and $P_{\rm tot}=W_{\rm tot}$. For the non-constant case, we then update $\sigma_{\rm eff}$ based on the new $P_{\rm tot}$ and then solve for $H_{\rm gas}$ and $P_{\rm tot}$ again. We iteratively solve until $H_{\rm gas}$ is converged.
+In either case, we can first solve the cubic equation for a constant $\sigma_{\rm eff}$ to get $H_{\rm gas}$ and $P_{\rm tot}=W_{\rm tot}$. For the non-constant case, we then update $\sigma_{\rm eff}$ based on the new $P_{\rm tot}$ and then solve for $H_{\rm gas}$ and $P_{\rm tot}$ again. We iteratively solve until $H_{\rm gas}$ is converged.
 
 ## References
 
