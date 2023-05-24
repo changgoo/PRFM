@@ -377,7 +377,7 @@ document.write(`
 <h2>PRFM class<a class="headerlink" href="#prfm-class" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="prfm.prfm.PRFM">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">prfm.prfm.</span></span><span class="sig-name descname"><span class="pre">PRFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sigma_gas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sigma_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega_d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_dm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_eff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tigress-mid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astro_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta_d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3333333333333333</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analytic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">prfm.prfm.</span></span><span class="sig-name descname"><span class="pre">PRFM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sigma_gas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Sigma_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Omega_d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho_dm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_eff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tigress-mid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">astro_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM" title="Permalink to this definition">#</a></dt>
 <dd><p>a wrapper class for scale height, weight, SFR calculations</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -429,9 +429,33 @@ document.write(`
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="prfm.prfm.PRFM.get_scale_height_numerical">
+<span class="sig-name descname"><span class="pre">get_scale_height_numerical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM.get_scale_height_numerical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM.get_scale_height_numerical" title="Permalink to this definition">#</a></dt>
+<dd><p>Wrapper function to get the gas scale height for generic weight functions</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="prfm.prfm.PRFM.get_weight_contribution">
 <span class="sig-name descname"><span class="pre">get_weight_contribution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM.get_weight_contribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM.get_weight_contribution" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper function to get weight contribution</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="prfm.prfm.PRFM.set_weight_function_dm">
+<span class="sig-name descname"><span class="pre">set_weight_function_dm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM.set_weight_function_dm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM.set_weight_function_dm" title="Permalink to this definition">#</a></dt>
+<dd><p>Update weight function for star</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="prfm.prfm.PRFM.set_weight_function_gas">
+<span class="sig-name descname"><span class="pre">set_weight_function_gas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM.set_weight_function_gas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM.set_weight_function_gas" title="Permalink to this definition">#</a></dt>
+<dd><p>Update weight function for gas</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="prfm.prfm.PRFM.set_weight_function_star">
+<span class="sig-name descname"><span class="pre">set_weight_function_star</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/prfm.html#PRFM.set_weight_function_star"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.prfm.PRFM.set_weight_function_star" title="Permalink to this definition">#</a></dt>
+<dd><p>Update weight function for star</p>
 </dd></dl>
 
 </dd></dl>
