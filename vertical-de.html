@@ -360,7 +360,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-formulation">Basic formulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analytic-solutions-for-star-gas-disks">Analytic solutions for star-gas disks</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure-dependent-velocity-dispersion">Pressure-dependent velocity dispersion</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
@@ -387,12 +390,13 @@ document.write(`
 <p>where</p>
 <div class="math notranslate nohighlight">
 \[
-{\cal W}_\mathrm{g}= \frac{\pi G \Sigma_{\rm gas}^2}{2}
+{\cal W}_\mathrm{g}= \frac{\pi G \Sigma_{\rm gas}^2}{2},
 \]</div>
 <div class="math notranslate nohighlight">
 \[
 {\cal W}_* \approx \pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*},
 \]</div>
+<p>and</p>
 <div class="math notranslate nohighlight">
 \[
 {\cal W}_\mathrm{d}  = \zeta_\mathrm{d} \Sigma_{\rm gas} \Omega_d^2 H_{\rm gas}
@@ -419,6 +423,7 @@ H_{\rm dm-only} = \frac{\sigma_{\rm eff}}{(2\zeta_d)^{1/2}\Omega_d},
 h^3 + [(1+2 s_*)\eta_d^2+\eta_*]h^2 + (\eta_*-1)\eta_d^2h -\eta_*\eta_d^2 = 0
 \]</div>
 <p>with
+<span class="math notranslate nohighlight">\(h = H_{\rm gas}/H_{\rm gas-only}\)</span>,
 <span class="math notranslate nohighlight">\(s_* = \Sigma_*/\Sigma_{\rm gas}\)</span>, <span class="math notranslate nohighlight">\(\eta_* = H_*/H_{\rm gas-only}\)</span>, and <span class="math notranslate nohighlight">\(\eta_d = H_{\rm dm-only}/H_{\rm gas-only}\)</span>.
 The only positive real solution of the cubic equation is</p>
 <div class="math notranslate nohighlight">
@@ -427,10 +432,39 @@ H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\le
 \]</div>
 <p>where
 <span class="math notranslate nohighlight">\(Q = (3a_1-a_2^2)/9\)</span> and <span class="math notranslate nohighlight">\(R=(9a_2a_1-27a_0-2a_2^3)/54\)</span> with <span class="math notranslate nohighlight">\(a_i\)</span> for the coefficients of <span class="math notranslate nohighlight">\(h^i\)</span> for <span class="math notranslate nohighlight">\(i=0\)</span>, 1, 2.</p>
+<section id="analytic-solutions-for-star-gas-disks">
+<h3>Analytic solutions for star-gas disks<a class="headerlink" href="#analytic-solutions-for-star-gas-disks" title="Permalink to this heading">#</a></h3>
+<p>By ignoring the dark mater contribution, one can obtain</p>
+<div class="math notranslate nohighlight">
+\[ h = \frac{2\eta_*}{\eta_*-1+[(\eta_*+1)^2+8s_*\eta_*]^{1/2}} \]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[ H_{\rm gas} = \frac{2\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas} - \frac{\sigma_{\rm eff}^2}{H_*} +\left[\left(\pi G \Sigma_{\rm gas} + \frac{\sigma_{\rm eff}^2}{H_*}\right)^2+8\pi G \Sigma_*\frac{\sigma_{\rm eff}^2}{H_*}\right]^{1/2}} \]</div>
+<p>The weight by stars is then</p>
+<div class="math notranslate nohighlight">
+\[ \cal{W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} = \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. \]</div>
+<p>Or, the total weight is</p>
+<div class="math notranslate nohighlight">
+\[ \cal{W}_{\rm tot} = \cal{W}_{\rm gas}+\cal{W}_* = \cal{W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). \]</div>
+<p>This is slightly different from Equation (12) in <span id="id1">[<a class="reference internal" href="reference.html#id8" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span> as the first two terms in the denominator of <span class="math notranslate nohighlight">\(\cal{W}_*\)</span> has <span class="math notranslate nohighlight">\(1+\eta_*\)</span> rather than 1. Equation (12) in <span id="id2">[<a class="reference internal" href="reference.html#id8" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span> is obtained by using <span class="math notranslate nohighlight">\(H_{\rm gas}\)</span> in the star only limit (i.e., <span class="math notranslate nohighlight">\(\pi G \Sigma \rightarrow0\)</span> or <span class="math notranslate nohighlight">\(\eta_*\rightarrow0\)</span>), which yields</p>
+<div class="math notranslate nohighlight">
+\[ h\rightarrow \frac{2\eta_*}{-1+(1+8s_*\eta_*)^{1/2}} =
+ \frac{1}{4s_*}(1+(1+8s_*\eta_*)^{1/2}) \]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[ H_{\rm gas} = \frac{\sigma_{\rm eff}^2}{4\pi G \Sigma_*}\left(1+\left[1+8\pi G\Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}\right) \]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\cal{W}_*\approx \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\left[1+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. \]</div>
+<p>In the limit of thick stellar disk (<span class="math notranslate nohighlight">\(H_*\gg H_{\rm gas},H_{\rm gas-only}\)</span> or <span class="math notranslate nohighlight">\(\eta_*\gg1\)</span>), a more formal approximation for the weight by stars is</p>
+<div class="math notranslate nohighlight">
+\[ \cal{W}_* \rightarrow \pi G \Sigma_{\rm gas} \Sigma_*\frac{h}{\eta_*} = \frac{4\rho_*\sigma_{\rm eff}^2}{1+\left(1+\frac{16\rho_*\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}^2}\right)^{1/2}}\rightarrow\Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{\pi G\rho_*}\]</div>
+<p>The last limit assumes an overall dominance of stellar gravity.</p>
+</section>
 </section>
 <section id="pressure-dependent-velocity-dispersion">
 <h2>Pressure-dependent velocity dispersion<a class="headerlink" href="#pressure-dependent-velocity-dispersion" title="Permalink to this heading">#</a></h2>
-<p>Using the TIGRESS-classic suite <span id="id1">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, we  obtained a calibration for <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> as a function of the total pressure.</p>
+<p>Using the TIGRESS-classic suite <span id="id3">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, we  obtained a calibration for <span class="math notranslate nohighlight">\(\sigma_{\rm eff}\)</span> as a function of the total pressure.</p>
 <p>From the effective equation of state, in which a power-law fit is obtained between measured midplane pressure and density, one can solve to obtain</p>
 <div class="math notranslate nohighlight">
 \[
@@ -447,9 +481,9 @@ H_{\rm gas} = 2\sqrt{-Q}\cos\left(\frac{\theta}{3}\right), \theta = \cos^{-1}\le
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
-<p>The most general form of the vertical dynamical equilibrium used here is derived in <span id="id2">[<a class="reference internal" href="reference.html#id8" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span>.
-See also <span id="id3">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, <span id="id4">[<a class="reference internal" href="reference.html#id3" title="Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. \apj , 815(1):67, December 2015. arXiv:1511.00010, doi:10.1088/0004-637X/815/1/67.">KimOstriker15</a>]</span>, <span id="id5">[<a class="reference internal" href="reference.html#id4" title="Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. \apj , 776(1):1, October 2013. arXiv:1308.3231, doi:10.1088/0004-637X/776/1/1.">KimOstrikerKim13</a>]</span>,
-<span id="id6">[<a class="reference internal" href="reference.html#id5" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">KimKimOstriker11</a>]</span>, <span id="id7">[<a class="reference internal" href="reference.html#id6" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">OstrikerShetty11</a>]</span>, <span id="id8">[<a class="reference internal" href="reference.html#id7" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">OstrikerMcKeeLeroy10</a>]</span>.</p>
+<p>The most general form of the vertical dynamical equilibrium used here is derived in <span id="id4">[<a class="reference internal" href="reference.html#id8" title="Sultan Hassan, Eve C. Ostriker, and Chang-Goo Kim. Comparing Star Formation in Illustris TNG50 with the Pressure-Regulated, Feedback-Modulated Equilibrium Model. in prep., 2023.">HassanOstrikerKim23</a>]</span>.
+See also <span id="id5">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>, <span id="id6">[<a class="reference internal" href="reference.html#id3" title="Chang-Goo Kim and Eve C. Ostriker. Vertical Equilibrium, Energetics, and Star Formation Rates in Magnetized Galactic Disks Regulated by Momentum Feedback from Supernovae. \apj , 815(1):67, December 2015. arXiv:1511.00010, doi:10.1088/0004-637X/815/1/67.">KimOstriker15</a>]</span>, <span id="id7">[<a class="reference internal" href="reference.html#id4" title="Chang-Goo Kim, Eve C. Ostriker, and Woong-Tae Kim. Three-dimensional Hydrodynamic Simulations of Multiphase Galactic Disks with Star Formation Feedback. I. Regulation of Star Formation Rates. \apj , 776(1):1, October 2013. arXiv:1308.3231, doi:10.1088/0004-637X/776/1/1.">KimOstrikerKim13</a>]</span>,
+<span id="id8">[<a class="reference internal" href="reference.html#id5" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">KimKimOstriker11</a>]</span>, <span id="id9">[<a class="reference internal" href="reference.html#id6" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">OstrikerShetty11</a>]</span>, <span id="id10">[<a class="reference internal" href="reference.html#id7" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">OstrikerMcKeeLeroy10</a>]</span>.</p>
 </section>
 </section>
 
@@ -521,7 +555,10 @@ See also <span id="id3">[<a class="reference internal" href="reference.html#id2"
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-formulation">Basic formulation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-velocity-dispersion">Constant velocity dispersion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analytic-solutions-for-star-gas-disks">Analytic solutions for star-gas disks</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pressure-dependent-velocity-dispersion">Pressure-dependent velocity dispersion</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
