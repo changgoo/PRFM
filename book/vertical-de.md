@@ -71,13 +71,13 @@ $$ H_{\rm gas} = \frac{2\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas} - \frac{\sigm
 
 The weight by stars is then
 
-$$ \cal{W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} = \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
+$$ {\cal W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} = \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
 
 Or, the total weight is
 
-$$ \cal{W}_{\rm tot} = \cal{W}_{\rm gas}+\cal{W}_* = \cal{W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). $$
+$$ {\cal W}_{\rm tot} = {\cal W}_{\rm g}+{\cal W}_* = {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). $$
 
-This is slightly different from Equation (12) in {cite}`Hassan_et_al` as the first two terms in the denominator of $\cal{W}_*$ has $1+\eta_*$ rather than 1. Equation (12) in {cite}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma \rightarrow0$ or $\eta_*\rightarrow0$), which yields
+This is slightly different from Equation (12) in {cite}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1. Equation (12) in {cite}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma \rightarrow0$ or $\eta_*\rightarrow0$), which yields
 
 $$ h\rightarrow \frac{2\eta_*}{-1+(1+8s_*\eta_*)^{1/2}} =
  \frac{1}{4s_*}(1+(1+8s_*\eta_*)^{1/2}) $$
@@ -88,11 +88,11 @@ $$ H_{\rm gas} = \frac{\sigma_{\rm eff}^2}{4\pi G \Sigma_*}\left(1+\left[1+8\pi 
 
 and
 
-$$\cal{W}_*\approx \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\left[1+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
+$${\cal W}_*\approx \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\left[1+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
 
 In the limit of thick stellar disk ($H_*\gg H_{\rm gas},H_{\rm gas-only}$ or $\eta_*\gg1$), a more formal approximation for the weight by stars is
 
-$$ \cal{W}_* \rightarrow \pi G \Sigma_{\rm gas} \Sigma_*\frac{h}{\eta_*} = \frac{4\rho_*\sigma_{\rm eff}^2}{1+\left(1+\frac{16\rho_*\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}^2}\right)^{1/2}}\rightarrow\Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{\pi G\rho_*}$$
+$$ {\cal W}_* \rightarrow \pi G \Sigma_{\rm gas} \Sigma_*\frac{h}{\eta_*} = \frac{4\rho_*\sigma_{\rm eff}^2}{1+\left(1+\frac{16\rho_*\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}^2}\right)^{1/2}}\rightarrow\Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{\pi G\rho_*}$$
 
 The last limit assumes an overall dominance of stellar gravity.
 
