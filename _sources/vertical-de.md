@@ -61,6 +61,7 @@ where
 $Q = (3a_1-a_2^2)/9$ and $R=(9a_2a_1-27a_0-2a_2^3)/54$ with $a_i$ for the coefficients of $h^i$ for $i=0$, 1, 2.
 
 ### Analytic solutions for star-gas disks
+
 By ignoring the dark mater contribution, one can obtain
 
 $$ h = \frac{2\eta_*}{\eta_*-1+[(\eta_*+1)^2+8s_*\eta_*]^{1/2}} $$
@@ -71,7 +72,12 @@ $$ H_{\rm gas} = \frac{2\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas} - \frac{\sigm
 
 The weight by stars is then
 
+<<<<<<< HEAD
 $$ {\cal W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} = \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
+=======
+$$ {\cal W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} =
+\frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
+>>>>>>> 2f5d475 (Added a comment on the scale height)
 
 Or, the total weight is
 
@@ -94,7 +100,24 @@ In the limit of thick stellar disk ($H_*\gg H_{\rm gas},H_{\rm gas-only}$ or $\e
 
 $$ {\cal W}_* \rightarrow \pi G \Sigma_{\rm gas} \Sigma_*\frac{h}{\eta_*} = \frac{4\rho_*\sigma_{\rm eff}^2}{1+\left(1+\frac{16\rho_*\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas}^2}\right)^{1/2}}\rightarrow\Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{\pi G\rho_*}$$
 
-The last limit assumes an overall dominance of stellar gravity.
+The last limit assumes an general dominance of stellar component ($\Sigma_*>\Sigma_{\rm gas}$).
+
+Here, the conversion between $\Sigma_*$, $H_*$, and $\rho_*$ is from the definition of $H_*$:
+
+$$ H_* \equiv \frac{\Sigma_*}{2\rho_*}. $$
+
+```{important}
+In observations, a simplified weight formula has been widely used (e.g., {cite}`2020ApJ...892..148S`, {cite}`2021MNRAS.503.3643B`):
+
+$$ {\cal W}_{\rm tot}\approx \frac{\pi G \Sigma_{\rm gas}^2}{2} + \Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{2 G\rho_{\rm sd}}$$
+
+where $\rho_{\rm sd} = \rho_* + \rho_{\rm dm}$.
+This is equivalent to the limit of $H_*\gg H_{\rm gas}$ with $\Sigma_*>\Sigma_{\rm gas}$ discussed above.
+
+In practical applications, often the relation between stellar disk scale length $l_*$ and scale height $z_*$; $z_*=l_*/7.3$ or $\rho_* = \Sigma_*/(4 z_*) = \Sigma_*/(0.54 l_*)$, which is based on the assumption of the isothermal (or ${\rm sech}^2$) stellar density profile. It is important to note that our definition of the stellar scale height yields $H_*=2z_*$. Therefore, when one wants to switch to the more general formula using $H_*$, it is important to use the correct empirical relation for
+
+$$H_* = (2/7.3) l_*$$
+```
 
 ## Pressure-dependent velocity dispersion
 Using the TIGRESS-classic suite {cite}`2022ApJ...936..137O`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
