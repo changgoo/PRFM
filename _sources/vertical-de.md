@@ -72,12 +72,8 @@ $$ H_{\rm gas} = \frac{2\sigma_{\rm eff}^2}{\pi G \Sigma_{\rm gas} - \frac{\sigm
 
 The weight by stars is then
 
-<<<<<<< HEAD
-$$ {\cal W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} = \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
-=======
 $$ {\cal W}_*\approx\pi G \Sigma_{\rm gas} \Sigma_* \frac{H_{\rm gas}}{H_{\rm gas} + H_*} =
 \frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}+\left[\left(1+\pi G\Sigma_{\rm gas}\frac{H_*}{\sigma_{\rm eff}^2}\right)^2+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
->>>>>>> 2f5d475 (Added a comment on the scale height)
 
 Or, the total weight is
 
