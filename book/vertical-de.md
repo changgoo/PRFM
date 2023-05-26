@@ -79,7 +79,7 @@ Or, the total weight is
 
 $$ {\cal W}_{\rm tot} = {\cal W}_{\rm g}+{\cal W}_* = {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). $$
 
-This is slightly different from Equation (12) in {cite}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1. Equation (12) in {cite}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
+This is slightly different from Equation (12) in {cite:t}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1. Equation (12) in {cite:t}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
 
 $$ h\rightarrow \frac{2\eta_*}{-1+(1+8s_*\eta_*)^{1/2}} =
  \frac{1}{4s_*}(1+(1+8s_*\eta_*)^{1/2}) $$
@@ -103,7 +103,7 @@ Here, the conversion between $\Sigma_*$, $H_*$, and $\rho_*$ is from the definit
 $$ H_* \equiv \frac{\Sigma_*}{2\rho_*}. $$
 
 ```{important}
-In observations, a simplified weight formula has been widely used (e.g., {cite}`2020ApJ...892..148S`, {cite}`2021MNRAS.503.3643B`):
+In observations, a simplified weight formula has been widely used (e.g., {cite:t}`2020ApJ...892..148S`, {cite:t}`2021MNRAS.503.3643B`):
 
 $$ {\cal W}_{\rm tot}\approx \frac{\pi G \Sigma_{\rm gas}^2}{2} + \Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{2 G\rho_{\rm sd}}$$
 
@@ -116,7 +116,7 @@ $$H_* = (2/7.3) l_*$$
 ```
 
 ## Pressure-dependent velocity dispersion
-Using the TIGRESS-classic suite {cite}`2022ApJ...936..137O`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
+Using the TIGRESS-classic suite {cite:p}`2022ApJ...936..137O`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
 
 From the effective equation of state, in which a power-law fit is obtained between measured midplane pressure and density, one can solve to obtain
 
@@ -137,6 +137,6 @@ In either case, we can first solve the cubic equation for a constant $\sigma_{\r
 
 ## References
 
-The most general form of the vertical dynamical equilibrium used here is derived in {cite}`Hassan_et_al`.
-See also {cite}`2022ApJ...936..137O`, {cite}`2015ApJ...815...67K`, {cite}`2013ApJ...776....1K`,
-{cite}`2011ApJ...743...25K`, {cite}`2011ApJ...731...41O`, {cite}`2010ApJ...721..975O`.
+The most general form of the vertical dynamical equilibrium used here is derived in {cite:t}`Hassan_et_al`.
+See also {cite:t}`2022ApJ...936..137O`, {cite:t}`2015ApJ...815...67K`, {cite:t}`2013ApJ...776....1K`,
+{cite:t}`2011ApJ...743...25K`, {cite:t}`2011ApJ...731...41O`, {cite:t}`2010ApJ...721..975O`.
