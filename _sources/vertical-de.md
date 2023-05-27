@@ -95,7 +95,7 @@ and
 $${\cal W}_*\approx {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+ [1+8s_*\eta_*]^{1/2}}\right)
 =\frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\left[1+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
 
-Note that the terms dropped in the equation in {cite:t}`Hassan_et_al` make a difference to ${\cal W}_*$ only when ${\cal W}_*$ is smaller than ${\cal W}_{\rm gas}$, i.e. ${\cal W}_* < {\cal W}_{\rm gas}/2$ when $4s_*<\eta_*$.
+Note that the terms dropped in Equation (12) of {cite:t}`Hassan_et_al` make a difference to ${\cal W}_*$ only when ${\cal W}_*$ is subdominant, i.e. ${\cal W}_* < {\cal W}_{\rm gas}/2$ when $4s_*<\eta_*$.
 
 In the limit of thick stellar disk ($H_*\gg H_{\rm gas},H_{\rm gas-only}$ or $\eta_*\gg1$), a more formal approximation for the weight by stars is
 
