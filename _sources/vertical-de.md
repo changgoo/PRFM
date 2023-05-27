@@ -79,7 +79,11 @@ Or, the total weight is
 
 $$ {\cal W}_{\rm tot} = {\cal W}_{\rm g}+{\cal W}_* = {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). $$
 
-This is slightly different from Equation (12) in {cite:t}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1. Equation (12) in {cite:t}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
+This is slightly different from Equation (12) in {cite:t}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1. 
+
+<!-- Note that the terms dropped in the equation in Hassan et al make a difference to W_* only when W_* is smaller than W_g -->
+
+Equation (12) in {cite:t}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
 
 $$ h\rightarrow \frac{2\eta_*}{-1+(1+8s_*\eta_*)^{1/2}} =
  \frac{1}{4s_*}(1+(1+8s_*\eta_*)^{1/2}) $$
