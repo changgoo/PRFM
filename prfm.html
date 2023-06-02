@@ -427,7 +427,8 @@ document.write(`
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -440,7 +441,8 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">prfm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">100</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 </pre></div>
 </div>
 </div>
@@ -461,25 +463,25 @@ document.write(`
 <span class="c1"># [v] = km/s</span>
 
 <span class="c1"># reference values at solar circle</span>
-<span class="n">Sigma_gas</span> <span class="o">=</span> <span class="mi">10</span> 
+<span class="n">Sigma_gas</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">Sigma_star</span> <span class="o">=</span> <span class="mi">42</span>
 <span class="n">Omega_d</span> <span class="o">=</span> <span class="mi">28</span>
 <span class="n">H_star</span> <span class="o">=</span> <span class="mi">245</span>
 
 <span class="c1"># radius array</span>
-<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">R0</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">Re</span> <span class="o">=</span> <span class="mf">3.5</span>
 
-<span class="n">r0</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span><span class="o">/</span><span class="n">R0</span><span class="p">)</span>
-<span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span><span class="o">/</span><span class="n">Re</span><span class="p">)</span>
+<span class="n">r0</span> <span class="o">=</span> <span class="n">R</span> <span class="o">/</span> <span class="n">R0</span>
+<span class="n">re</span> <span class="o">=</span> <span class="n">R</span> <span class="o">/</span> <span class="n">Re</span>
 
 <span class="c1"># construct radial profile array</span>
-<span class="n">Sigma_gas</span> <span class="o">=</span> <span class="n">Sigma_gas</span><span class="o">/</span><span class="n">r0</span>                    <span class="c1"># linear in R</span>
-<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">R0</span><span class="o">/</span><span class="n">Re</span><span class="p">)</span><span class="o">-</span><span class="n">re</span><span class="p">)</span>  <span class="c1"># exponeital disk</span>
-<span class="n">Omega_d</span> <span class="o">=</span> <span class="n">Omega_d</span><span class="o">/</span><span class="n">r0</span>                        <span class="c1"># flat rotation curve</span>
-<span class="n">H_star</span> <span class="o">=</span> <span class="n">H_star</span>                             <span class="c1"># no flaring</span>
-<span class="n">sigma_eff</span> <span class="o">=</span> <span class="mi">15</span>                              <span class="c1"># constant sigma_eff=15km/s</span>
+<span class="n">Sigma_gas</span> <span class="o">=</span> <span class="n">Sigma_gas</span> <span class="o">/</span> <span class="n">r0</span>  <span class="c1"># linear in R</span>
+<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">R0</span> <span class="o">/</span> <span class="n">Re</span><span class="p">)</span> <span class="o">-</span> <span class="n">re</span><span class="p">)</span>  <span class="c1"># exponeital disk</span>
+<span class="n">Omega_d</span> <span class="o">=</span> <span class="n">Omega_d</span> <span class="o">/</span> <span class="n">r0</span>  <span class="c1"># flat rotation curve</span>
+<span class="n">H_star</span> <span class="o">=</span> <span class="n">H_star</span>  <span class="c1"># no flaring</span>
+<span class="n">sigma_eff</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># constant sigma_eff=15km/s</span>
 </pre></div>
 </div>
 </div>
@@ -488,12 +490,14 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># construct model</span>
 <span class="c1"># parameters are given in astro-friendly units</span>
-<span class="n">mymodel</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
-                    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
-                    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
-                    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-                    <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">,</span>
-                    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mymodel</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+    <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
+    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
+    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
+    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">,</span>
+    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -537,22 +541,22 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># model profiles</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">Sigma_gas</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;gas&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">Sigma_star</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;gas&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">Sigma_star</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;star&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$R/R_0$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">rho_star</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">rho_dm</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;dm&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\rho$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">rho_star</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;star&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">rho_dm</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;dm&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\rho$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$R/R_0$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -578,36 +582,40 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sanity checks</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gas&#39;</span><span class="p">,</span> <span class="s1">&#39;star&#39;</span><span class="p">,</span> <span class="s1">&#39;dm&#39;</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;star&quot;</span><span class="p">,</span> <span class="s2">&quot;dm&quot;</span><span class="p">]</span>
 <span class="c1"># gas, star, dm only scale heights</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]:</span>
-  <span class="n">H_ana</span><span class="o">=</span><span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">,</span>
-                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
-  <span class="n">H_num</span><span class="o">=</span><span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
-                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
-  <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="p">),</span><span class="n">labels</span><span class="p">)])</span>
-  <span class="n">l</span><span class="p">,</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_ana</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}\,[{\rm pc}]$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span> <span class="ow">in</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]:</span>
+    <span class="n">H_ana</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
+    <span class="n">H_num</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;numerical&quot;</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span>
+    <span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="p">),</span> <span class="n">labels</span><span class="p">)]</span>
+    <span class="p">)</span>
+    <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">H_ana</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">H_num</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$H_{\rm gas}\,[{\rm pc}]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$R/R_0$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="c1"># star-gas, dm-gas, and full scale heights</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]]:</span>
-  <span class="n">H_ana</span><span class="o">=</span><span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;analytic&#39;</span><span class="p">,</span>
-                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
-  <span class="n">H_num</span><span class="o">=</span><span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
-                                 <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
-  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span><span class="o">==</span><span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="n">wgas</span><span class="p">,</span><span class="n">wstar</span><span class="p">,</span><span class="n">wdm</span><span class="p">),</span><span class="n">labels</span><span class="p">)])</span>
+<span class="k">for</span> <span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span> <span class="ow">in</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]:</span>
+    <span class="n">H_ana</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span><span class="p">)</span>
+    <span class="n">H_num</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_scale_height</span><span class="p">(</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;numerical&quot;</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="n">wdm</span>
+    <span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">l</span> <span class="k">if</span> <span class="n">w_</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="n">w_</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="n">wgas</span><span class="p">,</span> <span class="n">wstar</span><span class="p">,</span> <span class="n">wdm</span><span class="p">),</span> <span class="n">labels</span><span class="p">)]</span>
+    <span class="p">)</span>
 
-  <span class="n">l</span><span class="p">,</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_ana</span><span class="p">,</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span><span class="n">H_num</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}\,[{\rm pc}]$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">H_ana</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">H_num</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$H_{\rm gas}\,[{\rm pc}]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$R/R_0$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
@@ -626,19 +634,19 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mymodel</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">()</span>
 <span class="n">wfrac</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_weight_contribution</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;gas&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="n">wfrac</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;dm&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\mathcal</span><span class="si">{W}</span><span class="s1">_i/\mathcal</span><span class="si">{W}</span><span class="s1">_{\rm tot}$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\mathcal</span><span class="si">{W}</span><span class="s1">_{\rm tot}$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">wfrac</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;gas&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">wfrac</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;star&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mymodel</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">wfrac</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;dm&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{W}</span><span class="s2">_i/\mathcal</span><span class="si">{W}</span><span class="s2">_{\rm tot}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{W}</span><span class="s2">_{\rm tot}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f80fd5a0940&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f8c84a25490&gt;
 </pre></div>
 </div>
 <img alt="_images/dcdd99d6495d78a84953362c501c8c3e03ac884218c68c0021f39a8ea6dd8da6.png" src="_images/dcdd99d6495d78a84953362c501c8c3e03ac884218c68c0021f39a8ea6dd8da6.png" />
@@ -657,62 +665,68 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setting up three models with different assumptions for the effective velocity disersion</span>
-<span class="n">const_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
-                    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
-                    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
-                    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-                    <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">,</span>
-                    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">const_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+    <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
+    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
+    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
+    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">,</span>
+    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="n">tigress_mid_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
-                    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
-                    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
-                    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-                    <span class="n">sigma_eff</span><span class="o">=</span><span class="s1">&#39;tigress_mid&#39;</span><span class="p">,</span>
-                    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">tigress_mid_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+    <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
+    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
+    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
+    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">,</span>
+    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="n">tigress_avg_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
-                    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
-                    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
-                    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-                    <span class="n">sigma_eff</span><span class="o">=</span><span class="s1">&#39;tigress_avg&#39;</span><span class="p">,</span>
-                    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">tigress_avg_model</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+    <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
+    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
+    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
+    <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress_avg&quot;</span><span class="p">,</span>
+    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">axes_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
-<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span><span class="n">tigress_mid_model</span><span class="p">,</span><span class="n">tigress_avg_model</span><span class="p">]:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span> <span class="n">tigress_mid_model</span><span class="p">,</span> <span class="n">tigress_avg_model</span><span class="p">]:</span>
     <span class="n">m</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
-    <span class="n">label</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">H_gas</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">],</span><span class="n">axes</span><span class="p">):</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">H_gas</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="n">xlab</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$R/R_0$&#39;</span>
-<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$\sigma_{\rm eff}$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$W_{\rm tot}$&#39;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">ylabels</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r0</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">xlab</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$R/R_0$&quot;</span>
+<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_{\rm eff}$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$H_{\rm gas}$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$W_{\rm tot}$&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">ylabels</span><span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="c1"># plt.xscale(&#39;log&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
-<span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
-<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span><span class="n">tigress_mid_model</span><span class="p">,</span><span class="n">tigress_avg_model</span><span class="p">]:</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">)</span>
-    <span class="n">label</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">name</span>
-    <span class="k">for</span> <span class="n">y</span><span class="p">,</span><span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">H_gas</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">],</span><span class="n">axes</span><span class="p">):</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">axes_</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span> <span class="n">tigress_mid_model</span><span class="p">,</span> <span class="n">tigress_avg_model</span><span class="p">]:</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;numerical&quot;</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">m</span><span class="o">.</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">H_gas</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">],</span> <span class="n">axes</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-<span class="n">xlab</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm gas}$&#39;</span>
-<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$\sigma_{\rm eff}$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$H_{\rm gas}$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$W_{\rm tot}$&#39;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">ylabels</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<span class="n">xlab</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm gas}$&quot;</span>
+<span class="n">ylabels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_{\rm eff}$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$H_{\rm gas}$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$W_{\rm tot}$&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ylab</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">ylabels</span><span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylab</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlab</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="c1"># plt.xscale(&#39;log&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -727,25 +741,28 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sanity check for effective EOS</span>
 <span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">ac</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span><span class="n">tigress_mid_model</span><span class="p">,</span><span class="n">tigress_avg_model</span><span class="p">]:</span>
-    <span class="n">rho_gas</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">.</span><span class="n">_H_gas</span><span class="p">)</span>
-    <span class="n">nH</span> <span class="o">=</span> <span class="n">rho_gas</span><span class="o">/</span><span class="p">(</span><span class="mf">1.4</span><span class="o">*</span><span class="n">ac</span><span class="o">.</span><span class="n">m_p</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">label</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">name</span>
 
-    <span class="n">l</span><span class="p">,</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nH</span><span class="p">,</span><span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="s1">&#39;_sigma_eff_model&#39;</span><span class="p">):</span>
-        <span class="n">seff</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span><span class="n">model</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">const_model</span><span class="p">,</span> <span class="n">tigress_mid_model</span><span class="p">,</span> <span class="n">tigress_avg_model</span><span class="p">]:</span>
+    <span class="n">rho_gas</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">_Sigma_gas</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">_H_gas</span><span class="p">)</span>
+    <span class="n">nH</span> <span class="o">=</span> <span class="n">rho_gas</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.4</span> <span class="o">*</span> <span class="n">ac</span><span class="o">.</span><span class="n">m_p</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nH</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+        <span class="n">seff</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">seff</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nH</span><span class="p">,</span><span class="n">rho_gas</span><span class="o">*</span><span class="n">seff</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">m</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s1">&#39;Wtot&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span><span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">seff</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">nH</span><span class="p">,</span> <span class="n">rho_gas</span> <span class="o">*</span> <span class="n">seff</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">m</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;Wtot&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">get_color</span><span class="p">(),</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span>
+    <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$n_H$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$W_{\rm tot}$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$n_H$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$W_{\rm tot}$&quot;</span><span class="p">)</span>
 <span class="c1"># plt.xscale(&#39;log&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
@@ -762,16 +779,18 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pressure-Sigma_SFR relation</span>
-<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.e3</span><span class="p">,</span><span class="s1">&#39;tigress-classic&#39;</span><span class="p">,</span><span class="s1">&#39;tigress-classic-decomp&#39;</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">1.0e3</span><span class="p">,</span> <span class="s2">&quot;tigress-classic&quot;</span><span class="p">,</span> <span class="s2">&quot;tigress-classic-decomp&quot;</span><span class="p">]:</span>
     <span class="n">tigress_avg_model</span><span class="o">.</span><span class="n">calc_sfr</span><span class="p">(</span><span class="n">Ytot</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tigress_avg_model</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span>
-             <span class="n">tigress_avg_model</span><span class="o">.</span><span class="n">Sigma_SFR</span><span class="p">,</span>
-             <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Upsilon:$&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">tigress_avg_model</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span>
+        <span class="n">tigress_avg_model</span><span class="o">.</span><span class="n">Sigma_SFR</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\Upsilon:$&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$P_{\rm DE}\, [k_B{\rm\,cm^{-3}\,K}]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
