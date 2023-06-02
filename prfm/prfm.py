@@ -15,42 +15,48 @@ _sfr_cgs = (ac.M_sun/ac.kpc**2/au.yr).cgs.value
 _kms_cgs = (1*au.km/au.s).cgs.value
 
 _sigma_eff_models = dict()
-_sigma_eff_models['tigress_mid'] = dict(sigma_0 = 9.8, expo=0.15, sigma_min=5)
-_sigma_eff_models['tigress_avg'] = dict(sigma_0 = 12, expo=0.22, sigma_min=5)
+_sigma_eff_models['tigress_mid'] = dict(sigma_0=9.8, expo=0.15, sigma_min=5)
+_sigma_eff_models['tigress_avg'] = dict(sigma_0=12, expo=0.22, sigma_min=5)
 
 _yield_models = dict()
-_yield_models['tigress-classic'] = dict(Y0 = 10**3.86, expo=-0.212)
-_yield_models['tigress-classic-decomp'] = dict(Yth0 = 10**4.45, expo_th=-0.506,
-                                              Ytrb0 = 1.5*10**2.81, expo_trb=-0.06)
-_yield_models['tigress-ncr-decomp'] = dict(Yth0 = 10**4.7, expo_th=-0.5,
-                                          Ytrb0 = 10**3.3, expo_trb=-0.1)
-_yield_models['tigress-ncr-decomp-Z01'] = dict(Yth0 = 10**5.2, expo_th=-0.5,
-                                          Ytrb0 = 10**3.3, expo_trb=-0.1)
+_yield_models['tigress-classic'] = dict(Y0=10**3.86, expo=-0.212)
+_yield_models['tigress-classic-decomp'] = dict(Yth0=10**4.45, expo_th=-0.506,
+                                               Ytrb0=1.5*10**2.81, expo_trb=-0.06)
+_yield_models['tigress-ncr-decomp'] = dict(Yth0=10**4.7, expo_th=-0.5,
+                                           Ytrb0=10**3.3, expo_trb=-0.1)
+_yield_models['tigress-ncr-decomp-Z01'] = dict(Yth0=10**5.2, expo_th=-0.5,
+                                               Ytrb0=10**3.3, expo_trb=-0.1)
+
 
 def get_weight_gas(Sigma_gas):
     """weight due to gas self-gravity
     """
     return 0.5*np.pi*_Gconst_cgs*Sigma_gas**2
 
-def get_weight_star(Sigma_gas,H_gas,Sigma_star,H_star):
+
+def get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star):
     """weight due to stellar gravity
     """
     return np.pi*_Gconst_cgs*Sigma_gas*Sigma_star*H_gas/(H_gas+H_star)
 
-def get_weight_star_gaussian(Sigma_gas,H_gas,Sigma_star,H_star):
+
+def get_weight_star_gaussian(Sigma_gas, H_gas, Sigma_star, H_star):
     """weight due to stellar gravity for Gaussian profiles
     """
     return 2*_Gconst_cgs*Sigma_gas*Sigma_star*np.arctan(H_gas/H_star)
 
-def get_weight_dm(Sigma_gas,H_gas,Omega_d,zeta_d=1/3.):
+
+def get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=1/3.):
     """weight due to dark matter gravity
     """
     return zeta_d*Sigma_gas*H_gas*Omega_d**2
 
-def get_pressure(Sigma_gas,H_gas,sigma_eff):
+
+def get_pressure(Sigma_gas, H_gas, sigma_eff):
     """total pressure
     """
     return 0.5*Sigma_gas/H_gas*sigma_eff**2
+
 
 @np.vectorize
 def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
@@ -90,7 +96,7 @@ def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
     >>> import prfm
     >>> H, W_gas, W_star, W_dm = prfm.get_weights(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
     """
-    H_gas = get_scale_height(Sigma_gas,Sigma_star,Omega_d,H_star,
+    H_gas = get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star,
                              sigma_eff, zeta_d=zeta_d, method=method)
 
     W_gas = get_weight_gas(Sigma_gas)
@@ -99,9 +105,11 @@ def get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
 
     return H_gas, W_gas, W_star, W_dm
 
+
 def get_weight_star_thick(Sigma_gas, rho_star, sigma_eff):
     W_star = Sigma_gas*np.sqrt(2*_Gconst_cgs*rho_star)*sigma_eff
     return W_star
+
 
 def get_weights_thick(Sigma_gas, rho_star, sigma_eff):
     """calculate gas scale height and then each weight term for H_*>>H_gas
@@ -130,17 +138,19 @@ def get_weights_thick(Sigma_gas, rho_star, sigma_eff):
     ----
     Used approximate formula Equation (7) in Ostriker and Kim (2022)
     """
-    H_gas = get_scale_height_thick(Sigma_gas,rho_star,sigma_eff)
+    H_gas = get_scale_height_thick(Sigma_gas, rho_star, sigma_eff)
 
     W_gas = get_weight_gas(Sigma_gas)
-    W_star = get_weight_star_thick(Sigma_gas,rho_star,sigma_eff)
+    W_star = get_weight_star_thick(Sigma_gas, rho_star, sigma_eff)
     W_dm = 0.*H_gas/H_gas
 
     return H_gas, W_gas, W_star, W_dm
 
+
 def get_weight_star_thin(Sigma_gas, Sigma_star, sigma_eff):
     W_star = np.pi*_Gconst_cgs*Sigma_gas*Sigma_star
     return W_star
+
 
 def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
     """calculate gas scale height and then each weight term for H_*>>H_gas
@@ -169,13 +179,14 @@ def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
     ----
     Used approximate formula Equation (7) in Ostriker and Kim (2022)
     """
-    H_gas = get_scale_height_thin(Sigma_gas,Sigma_star,sigma_eff)
+    H_gas = get_scale_height_thin(Sigma_gas, Sigma_star, sigma_eff)
 
     W_gas = get_weight_gas(Sigma_gas)
-    W_star = get_weight_star_thin(Sigma_gas,Sigma_star,sigma_eff)
+    W_star = get_weight_star_thin(Sigma_gas, Sigma_star, sigma_eff)
     W_dm = 0.*H_gas/H_gas
 
     return H_gas, W_gas, W_star, W_dm
+
 
 @np.vectorize
 def get_weight_contribution(Sigma_gas, Sigma_star, Omega_d, H_star,
@@ -208,21 +219,23 @@ def get_weight_contribution(Sigma_gas, Sigma_star, Omega_d, H_star,
     f_dm: float or array-like
         weight by dark matter/total weight
     """
-    H,wgas,wstar,wdm = get_weights(Sigma_gas,Sigma_star,Omega_d,H_star,
-                                   sigma_eff, zeta_d=zeta_d, method=method)
+    H, wgas, wstar, wdm = get_weights(Sigma_gas, Sigma_star, Omega_d, H_star,
+                                      sigma_eff, zeta_d=zeta_d, method=method)
     wtot = wgas+wstar+wdm
 
-    return wgas/wtot,wstar/wtot,wdm/wtot
+    return wgas/wtot, wstar/wtot, wdm/wtot
+
 
 @np.vectorize
-def get_scale_height_gas_only(*args,**kwargs):
+def get_scale_height_gas_only(*args, **kwargs):
     """analytic solution for gas only case
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     return sigma_eff**2/(np.pi*_Gconst_cgs*Sigma_gas)
 
+
 @np.vectorize
-def get_scale_height_star_only(*args,**kwargs):
+def get_scale_height_star_only(*args, **kwargs):
     """analytic solution for star only case
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
@@ -230,32 +243,35 @@ def get_scale_height_star_only(*args,**kwargs):
     h_star = H_star/h
     return h*(1+np.sqrt(1+2*h_star))
 
+
 @np.vectorize
-def get_scale_height_dm_only(*args,**kwargs):
+def get_scale_height_dm_only(*args, **kwargs):
     """analytic solution for dark matter only case
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     zeta_d = kwargs['zeta_d']
     return sigma_eff/np.sqrt(2*zeta_d)/Omega_d
 
+
 @np.vectorize
-def get_scale_height_star_gas(*args,**kwargs):
+def get_scale_height_star_gas(*args, **kwargs):
     """analytic solution neglecting dark matter
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
-    H_gas_only = get_scale_height_gas_only(*args,**kwargs)
+    H_gas_only = get_scale_height_gas_only(*args, **kwargs)
     eta_star = H_star/H_gas_only
     s_star = Sigma_star/Sigma_gas
     # h = ((1-eta_star)+np.sqrt((eta_star-1)**2+4*eta_star*(1+2.*s_star)))/(2*(1+2*s_star))
     h = 2*eta_star/((eta_star-1)+np.sqrt((eta_star+1)**2+8*s_star*eta_star))
     return h*H_gas_only
 
+
 @np.vectorize
-def get_scale_height_star_gas_approx(*args,**kwargs):
+def get_scale_height_star_gas_approx(*args, **kwargs):
     """analytic solution neglecting dark matter
     """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
-    H_gas_only = get_scale_height_gas_only(*args,**kwargs)
+    H_gas_only = get_scale_height_gas_only(*args, **kwargs)
     eta_star = H_star/H_gas_only
     s_star = Sigma_star/Sigma_gas
     h = (1+np.sqrt(1+8*s_star*eta_star))/(4*s_star)
@@ -263,14 +279,15 @@ def get_scale_height_star_gas_approx(*args,**kwargs):
 
 
 @np.vectorize
-def get_scale_height_dm_gas(*args,**kwargs):
+def get_scale_height_dm_gas(*args, **kwargs):
     """analytic solution neglectic star
     """
-    H_gas_only = get_scale_height_gas_only(*args,**kwargs)
-    H_dm_only = get_scale_height_dm_only(*args,**kwargs)
+    H_gas_only = get_scale_height_gas_only(*args, **kwargs)
+    H_dm_only = get_scale_height_dm_only(*args, **kwargs)
     eta_D = H_dm_only/H_gas_only
     h = (-eta_D**2+np.sqrt(eta_D**4+4*eta_D**2))*0.5
     return h*H_gas_only
+
 
 @np.vectorize
 def get_sigma_eff(P, model='tigress_mid'):
@@ -283,7 +300,8 @@ def get_sigma_eff(P, model='tigress_mid'):
 
     veld = sigma_0*(1.e-4*P/_kbol_cgs)**expo
 
-    return np.clip(veld,sigma_min,None)*1.e5
+    return np.clip(veld, sigma_min, None)*1.e5
+
 
 @np.vectorize
 def get_feedback_yield(P, model='tigress-classic'):
@@ -315,6 +333,7 @@ def get_feedback_yield(P, model='tigress-classic'):
         Ytot = Yth0*(P/_kbol_cgs)**expo_th + Ytrb0*(P/_kbol_cgs)**expo_trb
     return Ytot
 
+
 @np.vectorize
 def get_feedback_yield_comp(P, comp='th', model='tigress-classic-decomp'):
     """feedback yield of each component as a function of weight
@@ -339,6 +358,7 @@ def get_feedback_yield_comp(P, comp='th', model='tigress-classic-decomp'):
     expo = yield_model['expo_{}'.format(comp)]
     return Y0*(P/_kbol_cgs)**expo
 
+
 def get_sfr(P, Ytot='tigress-classic'):
     """calculate SFR surface density using feedback yield
 
@@ -355,8 +375,9 @@ def get_sfr(P, Ytot='tigress-classic'):
     sfr : float
         SFR surface density in g/cm^2/yr
     """
-    Ytot = get_feedback_yield(P,model=Ytot) if type(Ytot) == str else Ytot
+    Ytot = get_feedback_yield(P, model=Ytot) if type(Ytot) == str else Ytot
     return P/(Ytot*1.e5)
+
 
 def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                      zeta_d=1/3., method='analytic', wgas=1, wstar=1, wdm=1):
@@ -398,29 +419,30 @@ def get_scale_height(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
     """
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
     kwargs = dict(zeta_d=zeta_d, wgas=wgas, wstar=wstar, wdm=wdm)
-    w=(wgas<<2)+(wstar<<1)+(wdm<<0)
+    w = (wgas << 2)+(wstar << 1)+(wdm << 0)
 
     if method == 'numerical':
         return get_scale_height_numerical(*args, **kwargs)
     else:
-        if w == 7: # 111
+        if w == 7:  # 111
             return get_scale_height_analytic(*args, zeta_d=zeta_d)
-        elif w == 6: # 110
+        elif w == 6:  # 110
             return get_scale_height_star_gas(*args, zeta_d=zeta_d)
-        elif w == 5: # 101
+        elif w == 5:  # 101
             return get_scale_height_dm_gas(*args, zeta_d=zeta_d)
-        elif w == 4: # 100
+        elif w == 4:  # 100
             return get_scale_height_gas_only(*args, zeta_d=zeta_d)
-        elif w == 3: # 011
+        elif w == 3:  # 011
             # no analytic solution provided
             return
-        elif w == 2: # 010
+        elif w == 2:  # 010
             return get_scale_height_star_only(*args, zeta_d=zeta_d)
-        elif w == 1: # 001
+        elif w == 1:  # 001
             return get_scale_height_dm_only(*args, zeta_d=zeta_d)
         else:
             # no such gas is expected
-            raise("at least one term must be considered")
+            raise ("at least one term must be considered")
+
 
 def get_scale_height_thick(Sigma_gas, rho_star, sigma_eff, zeta_d=1/np.pi):
     """approximate solution for H_* >> H_gas without explicitly defining H_*
@@ -447,6 +469,7 @@ def get_scale_height_thick(Sigma_gas, rho_star, sigma_eff, zeta_d=1/np.pi):
     g2 = 32*np.pi*zeta_d*_Gconst_cgs*rho_star*sigma_eff**2
     return 2*sigma_eff**2/(g1+np.sqrt(g1**2+g2))
 
+
 def get_scale_height_thin(Sigma_gas, Sigma_star, sigma_eff):
     """approximate solution for H_* << H_gas without explicitly defining H_*
 
@@ -472,6 +495,7 @@ def get_scale_height_thin(Sigma_gas, Sigma_star, sigma_eff):
     g2 = 2*np.pi*_Gconst_cgs*Sigma_star
     return sigma_eff**2/(g1+g2)
 
+
 @np.vectorize
 def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                               zeta_d=1/3.):
@@ -482,8 +506,8 @@ def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
     """
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
     kwargs = dict(zeta_d=zeta_d)
-    H_gas_only = get_scale_height_gas_only(*args,**kwargs)
-    H_dm_only = get_scale_height_dm_only(*args,**kwargs)
+    H_gas_only = get_scale_height_gas_only(*args, **kwargs)
+    H_dm_only = get_scale_height_dm_only(*args, **kwargs)
 
     s_star = Sigma_star/Sigma_gas
     eta_star = H_star/H_gas_only
@@ -505,9 +529,9 @@ def get_scale_height_analytic(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
 @np.vectorize
 def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff,
                                zeta_d=1/3., wgas=1, wstar=1, wdm=1,
-                               fgas = get_weight_gas,
-                               fstar = get_weight_star,
-                               fdm = get_weight_dm,
+                               fgas=get_weight_gas,
+                               fstar=get_weight_star,
+                               fdm=get_weight_dm,
                                ):
     """Numerical solution of the vertical dynamical equilibrium equation
     including all weight terms.
@@ -520,21 +544,22 @@ def get_scale_height_numerical(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff
     fstar : func
     fdm : func
     """
-    fun = lambda x: (get_pressure(Sigma_gas, x, sigma_eff)
-                    - wgas*fgas(Sigma_gas)
-                    - wstar*fstar(Sigma_gas,x,Sigma_star,H_star)
-                    - wdm*fdm(Sigma_gas, x, Omega_d, zeta_d=zeta_d))
+    def fun(x): return (get_pressure(Sigma_gas, x, sigma_eff)
+                        - wgas*fgas(Sigma_gas)
+                        - wstar*fstar(Sigma_gas, x, Sigma_star, H_star)
+                        - wdm*fdm(Sigma_gas, x, Omega_d, zeta_d=zeta_d))
     # soln=root(fun,H_gas_init)
     # return soln.x
-    return brentq(fun,1.e-3*_pc_cgs,1.e6*_pc_cgs)
+    return brentq(fun, 1.e-3*_pc_cgs, 1.e6*_pc_cgs)
+
 
 def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
                                  sigma_eff='tigress_mid',
                                  zeta_d=1/3.,
                                  method='analytic',
-                                 tol = 1.e-5,
-                                 niter = 16
-                                ):
+                                 tol=1.e-5,
+                                 niter=16
+                                 ):
     """Iteratively solve for sigma_eff(P) to get converged weight, H, and sigma_eff
 
     Parameters
@@ -574,7 +599,8 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
     wtot_prev = wgas + wstar + wdm
 
     # return if velocity diseprsion is a constant
-    if type(sigma_eff) != str: return wtot_prev, Hprev, sigma0*np.ones_like(Hprev)
+    if type(sigma_eff) != str:
+        return wtot_prev, Hprev, sigma0*np.ones_like(Hprev)
 
     # iterative solve
     for i in range(niter):
@@ -584,11 +610,13 @@ def get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_star,
         wtot_next = wgas + wstar + wdm
         # L1_norm = np.sum(np.abs(wtot_next/wtot_prev - 1))
         L1_norm = np.sum(np.abs(Hnext/Hprev - 1))
-        if (L1_norm < tol): break
+        if (L1_norm < tol):
+            break
         wtot_prev = np.copy(wtot_next)
         Hprev = np.copy(Hnext)
 
     return wtot_next, Hnext, get_sigma_eff(wtot_next, model=sigma_eff)
+
 
 class PRFM(object):
     """a wrapper class for scale height, weight, SFR calculations
@@ -621,7 +649,7 @@ class PRFM(object):
                  sigma_eff='tigress-mid',
                  astro_units=True):
         # initialize method attribute
-        self._method='analytic'
+        self._method = 'analytic'
 
         # set model name based on sigma_eff
         self.name = sigma_eff if type(sigma_eff) == str else 'constant'
@@ -664,14 +692,16 @@ class PRFM(object):
                     Sigma_star = rho_star*2*H_star
                 else:
                     # both given
-                    raise ArgumentError("cannot provide all three: Sigma_star, rho_star, H_star")
+                    raise ArgumentError(
+                        "cannot provide all three: Sigma_star, rho_star, H_star")
 
                 self._stellar_disk = "general"
                 self._Sigma_star = Sigma_star
                 self._rho_star = rho_star
                 self._H_star = H_star
         # unit conversion done before DM part
-        if astro_units: self._astro_to_cgs()
+        if astro_units:
+            self._astro_to_cgs()
 
         # setting up dark matter
         if (Omega_d is None) and (rho_dm is None):
@@ -709,60 +739,60 @@ class PRFM(object):
 
         # set arguments that will be passed to the functions
         if self._stellar_disk == 'general':
-            self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
-                        self._H_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._Sigma_star, self._Omega_d,
+                          self._H_star, sigma_eff)
         elif self._stellar_disk == 'thick':
-            self._args = (self._Sigma_gas,self._rho_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._rho_star, sigma_eff)
         elif self._stellar_disk == 'thin':
-            self._args = (self._Sigma_gas,self._Sigma_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._Sigma_star, sigma_eff)
         # store parameters in astro-friendly units
         self._cgs_to_astro()
 
         # set weight functions
-        self._weight_functions=[get_weight_gas,
-                                get_weight_star,
-                                get_weight_dm]
+        self._weight_functions = [get_weight_gas,
+                                  get_weight_star,
+                                  get_weight_dm]
 
-    def set_weight_function_gas(self,func):
+    def set_weight_function_gas(self, func):
         """Update weight function for gas"""
-        self._weight_functions[0]=func
-        self._method='numerical'
+        self._weight_functions[0] = func
+        self._method = 'numerical'
 
-    def set_weight_function_star(self,func):
+    def set_weight_function_star(self, func):
         """Update weight function for star"""
-        self._weight_functions[1]=func
-        self._method='numerical'
+        self._weight_functions[1] = func
+        self._method = 'numerical'
 
-    def set_weight_function_dm(self,func):
+    def set_weight_function_dm(self, func):
         """Update weight function for star"""
-        self._weight_functions[2]=func
-        self._method='numerical'
+        self._weight_functions[2] = func
+        self._method = 'numerical'
 
-    def reset_arg_list(self,sigma_eff):
+    def reset_arg_list(self, sigma_eff):
         # reset arguments with new velocity dispersion
         if self._stellar_disk == 'general':
-            self._args = (self._Sigma_gas,self._Sigma_star,self._Omega_d,
-                          self._H_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._Sigma_star, self._Omega_d,
+                          self._H_star, sigma_eff)
         elif self._stellar_disk == 'thick':
-            self._args = (self._Sigma_gas,self._rho_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._rho_star, sigma_eff)
         elif self._stellar_disk == 'thin':
-            self._args = (self._Sigma_gas,self._Sigma_star,sigma_eff)
+            self._args = (self._Sigma_gas, self._Sigma_star, sigma_eff)
 
     def _astro_to_cgs(self):
-        for var in ['Sigma_gas','Sigma_star','H_star','rho_star',
-                    'rho_dm','Omega_d','sigma_eff']:
-            if hasattr(self,'_'+var):
+        for var in ['Sigma_gas', 'Sigma_star', 'H_star', 'rho_star',
+                    'rho_dm', 'Omega_d', 'sigma_eff']:
+            if hasattr(self, '_'+var):
                 u_cgs = self.units[var].cgs.value
-                v = getattr(self,'_'+var)*u_cgs
-                setattr(self,'_'+var,v)
+                v = getattr(self, '_'+var)*u_cgs
+                setattr(self, '_'+var, v)
 
     def _cgs_to_astro(self):
-        for var in ['Sigma_gas','Sigma_star','H_star','rho_star',
-                    'rho_dm','Omega_d','sigma_eff']:
-            if hasattr(self,'_'+var):
+        for var in ['Sigma_gas', 'Sigma_star', 'H_star', 'rho_star',
+                    'rho_dm', 'Omega_d', 'sigma_eff']:
+            if hasattr(self, '_'+var):
                 u_cgs = self.units[var].cgs.value
-                v = getattr(self,'_'+var)/u_cgs
-                setattr(self,var,v)
+                v = getattr(self, '_'+var)/u_cgs
+                setattr(self, var, v)
 
     def _set_units(self):
         units = dict()
@@ -780,16 +810,17 @@ class PRFM(object):
 
     def __repr__(self) -> str:
         args = "PRFM calculator is prepared for\n"
-        for var in ['Sigma_gas','Sigma_star','rho_star',
-                    'Omega_d','rho_dm','sigma_eff']:
-            if not hasattr(self,'_'+var): continue
-            v = np.atleast_1d(getattr(self,var))
-            args += "  {}[0]: {}, N={}\n".format(var,v[0],len(v))
-        if hasattr(self,'_sigma_eff_model'):
+        for var in ['Sigma_gas', 'Sigma_star', 'rho_star',
+                    'Omega_d', 'rho_dm', 'sigma_eff']:
+            if not hasattr(self, '_'+var):
+                continue
+            v = np.atleast_1d(getattr(self, var))
+            args += "  {}[0]: {}, N={}\n".format(var, v[0], len(v))
+        if hasattr(self, '_sigma_eff_model'):
             args += "  sigma_eff_model: {}\n".format(self._sigma_eff_model)
         return args
 
-    def get_scale_height(self,method=None,wgas=1,wstar=1,wdm=1):
+    def get_scale_height(self, method=None, wgas=1, wstar=1, wdm=1):
         """Wrapper function to get the gas scale height
 
         Parameters
@@ -798,10 +829,12 @@ class PRFM(object):
             override method if provided
         """
 
-        if method is None: method=self._method
+        if method is None:
+            method = self._method
 
         if self._stellar_disk == 'general':
-            H_gas = get_scale_height(*self._args,wgas=wgas,wstar=wstar,wdm=wdm)
+            H_gas = get_scale_height(
+                *self._args, wgas=wgas, wstar=wstar, wdm=wdm)
         elif self._stellar_disk == 'thick':
             H_gas = get_scale_height_thick(*self._args)
         elif self._stellar_disk == 'thin':
@@ -822,10 +855,11 @@ class PRFM(object):
     def get_weight_contribution(self):
         """Wrapper function to get weight contribution
         """
-        if not hasattr(self,'Wtot'): self.calc_weights()
-        return self.Wgas/self.Wtot,self.Wstar/self.Wtot,self.Wdm/self.Wtot
+        if not hasattr(self, 'Wtot'):
+            self.calc_weights()
+        return self.Wgas/self.Wtot, self.Wstar/self.Wtot, self.Wdm/self.Wtot
 
-    def calc_weights(self,method=None):
+    def calc_weights(self, method=None):
         """Wrapper function to calculate scale height and all weights
 
         Parameters
@@ -834,11 +868,12 @@ class PRFM(object):
             override method if provided
         """
 
-        if method is None: method=self._method
+        if method is None:
+            method = self._method
 
-        if method=='analytic':
-            H_gas = self.get_scale_height(wstar=self._wstar,wdm=self._wdm)
-        elif method=='numerical':
+        if method == 'analytic':
+            H_gas = self.get_scale_height(wstar=self._wstar, wdm=self._wdm)
+        elif method == 'numerical':
             H_gas = self.get_scale_height_numerical()
 
         _H_gas = H_gas*self.units['H_gas'].cgs.value
@@ -853,13 +888,14 @@ class PRFM(object):
             W_star = get_weight_star_thin(*self._args)
         else:
             W_star = self._weight_functions[1](self._Sigma_gas, _H_gas,
-                                            self._Sigma_star, self._H_star)
-        W_dm = self._weight_functions[2](self._Sigma_gas, _H_gas, self._Omega_d)
+                                               self._Sigma_star, self._H_star)
+        W_dm = self._weight_functions[2](
+            self._Sigma_gas, _H_gas, self._Omega_d)
 
-        for var,v in zip(['H_gas','Wgas','Wstar','Wdm'],[_H_gas,W_gas,W_star,W_dm]):
+        for var, v in zip(['H_gas', 'Wgas', 'Wstar', 'Wdm'], [_H_gas, W_gas, W_star, W_dm]):
             u_cgs = self.units[var].cgs.value
-            setattr(self,'_'+var,v) # results in cgs
-            setattr(self,var,v/u_cgs) # results in astro units
+            setattr(self, '_'+var, v)  # results in cgs
+            setattr(self, var, v/u_cgs)  # results in astro units
 
         # total weight
         Wtot = W_gas+W_star+W_dm
@@ -867,44 +903,46 @@ class PRFM(object):
         self._Wtot = Wtot
         self.Wtot = Wtot/u_cgs
 
-        if hasattr(self,'_sigma_eff_model'):
+        if hasattr(self, '_sigma_eff_model'):
             self._sigma_eff = get_sigma_eff(Wtot, model=self._sigma_eff_model)
             self.sigma_eff = self._sigma_eff/self.units['sigma_eff'].cgs.value
 
-    def calc_self_consistent_solution(self,method=None,
-                                      niter=16,tol=1.e-6):
+    def calc_self_consistent_solution(self, method=None,
+                                      niter=16, tol=1.e-6):
         """Wrapper function to calculate self-consistent solutions
 
         Update H_gas, W_tot (and all components), sigma_eff
         """
-        if method is None: method=self._method
+        if method is None:
+            method = self._method
 
         # for model sigma, need to give an initial guess
-        if hasattr(self,'_sigma_eff_model'):
+        if hasattr(self, '_sigma_eff_model'):
             self.reset_arg_list(15.e5)
         self.calc_weights(method=method)
 
         # that's it for constant sigma_eff
         # iterative solve for model sigma
-        if hasattr(self,'_sigma_eff_model'):
+        if hasattr(self, '_sigma_eff_model'):
             # iterative solve
             for i in range(niter):
                 Hprev = np.copy(self._H_gas)
                 self.reset_arg_list(self._sigma_eff)
                 self.calc_weights(method=method)
                 L1_norm = np.sum(np.abs(self._H_gas/Hprev - 1))
-                if (L1_norm < tol): break
+                if (L1_norm < tol):
+                    break
 
-    def calc_sfr(self,Ytot=1.e3):
+    def calc_sfr(self, Ytot=1.e3):
         """Wrapper function to calculate SFR surface density
 
         Update Sigma_SFR (astro units) and _Sigma_SFR (cgs)
         """
-        if not hasattr(self,'_Wtot'):
+        if not hasattr(self, '_Wtot'):
             self.calc_self_consistent_solution()
 
         # results in c.g.s.
-        Sigma_SFR = get_sfr(self._Wtot,Ytot=Ytot)
+        Sigma_SFR = get_sfr(self._Wtot, Ytot=Ytot)
         u_cgs = self.units['Sigma_SFR'].cgs.value
         self._Sigma_SFR = Sigma_SFR
         self.Sigma_SFR = Sigma_SFR/u_cgs
@@ -917,5 +955,4 @@ class PRFM(object):
 
         L1 = np.mean(np.abs(sola-soln))
         print("difference between analytic and numerical solutions: {}".format(L1))
-        return sola,soln
-
+        return sola, soln
