@@ -115,7 +115,7 @@ $$ {\cal W}_{\rm tot}\approx \frac{\pi G \Sigma_{\rm gas}^2}{2} + \Sigma_{\rm ga
 where $\rho_{\rm sd} = \rho_* + \rho_{\rm dm}$.
 This is equivalent to the limit of $H_*\gg H_{\rm gas}$ with $\Sigma_*>\Sigma_{\rm gas}$ discussed above ($\sqrt{2}$ instead of $\sqrt{\pi}$ due to different assumptions in the vertical gas profiles, Gaussian vs exponential).
 
-In practical applications, often the relation between stellar disk scale length $l_*$ and scale height $z_*$; $z_*=l_*/7.3$ or $\rho_* = \Sigma_*/(4 z_*) = \Sigma_*/(0.54 l_*)$, which is based on the assumption of the isothermal (or ${\rm sech}^2$) stellar density profile. It is important to note that our definition of the stellar scale height yields $H_*=2z_*$. Therefore, when one wants to switch to the more general formula presented above using $H_*$ explicitly, it is important to use the correct empirical relation consistent to the definition of $H_*$, i.e.,
+In practical applications, the relation between stellar disk scale length $l_*$ and scale height $z_*$ is often assumed; $z_*=l_*/7.3$ or $\rho_* = \Sigma_*/(4 z_*) = \Sigma_*/(0.54 l_*)$, which is based on the assumption of the isothermal (or ${\rm sech}^2$) stellar density profile. It is important to note that our definition of the stellar scale height yields $H_*=2z_*$. Therefore, when one wants to switch to the more general formula presented above using $H_*$ explicitly, it is important to use the correct empirical relation consistent with the definition of $H_*$, i.e.,
 
 $$H_* = 2 z_* = 2 (l_*/7.3).$$
 ```
