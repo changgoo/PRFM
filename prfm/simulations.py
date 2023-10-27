@@ -103,7 +103,7 @@ class PRFM_data(object):
             verr = self.Pimag_std
             self.log_Pimag = np.log10(v)
             self.log_Pimag_std = verr / v / np.log(10)
-            if not ("Pimag" in self.field_list):
+            if "Pimag" not in self.field_list:
                 self.field_list += ["Pimag"]
 
     def get_yield(self):

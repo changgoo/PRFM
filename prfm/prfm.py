@@ -616,7 +616,7 @@ def get_self_consistent_solution(
     if not isinstance(sigma_eff, str):
         sigma0 = sigma_eff
     else:
-        if not (sigma_eff in _sigma_eff_models):
+        if sigma_eff not in _sigma_eff_models:
             raise IndexError("sigma_eff models: ", list(_sigma_eff_models.keys()))
         sigma0 = 15.0e5
     args = (Sigma_gas, Sigma_star, Omega_d, H_star, sigma0)
@@ -905,7 +905,7 @@ class PRFM(object):
             *self._args,
             fgas=self._weight_functions[0],
             fstar=self._weight_functions[1],
-            fdm=self._weight_functions[2]
+            fdm=self._weight_functions[2],
         )
         return H_gas / self.units["H_gas"].cgs.value
 
