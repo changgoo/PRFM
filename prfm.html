@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -78,6 +79,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -134,6 +144,7 @@ const thebe_selector_output = ".output, .cell_output"
   
 
 <a class="navbar-brand logo" href="intro.html">
+  
   
   
   
@@ -352,10 +363,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -363,7 +374,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -501,6 +512,25 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># construct model</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># parameters are given in astro-friendly units</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">mymodel</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_gas</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="p">)</span>
+
+<span class="ne">AttributeError</span>: module &#39;prfm&#39; has no attribute &#39;PRFM&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <p>The class input parameters must contain</p>
 <ul class="simple">
@@ -561,7 +591,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/c36bbe00350e8dd5a71c9d4826984f1a271436519f638f6cb4d4bcf686c0aac5.png" src="_images/c36bbe00350e8dd5a71c9d4826984f1a271436519f638f6cb4d4bcf686c0aac5.png" />
+<img alt="_images/69abd0cb5edb674b324b5e0570500cb83b5c7544aaa2539232d0710d9979cf6e.png" src="_images/69abd0cb5edb674b324b5e0570500cb83b5c7544aaa2539232d0710d9979cf6e.png" />
 </div>
 </div>
 </section>
@@ -622,7 +652,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/14d91536a4ca276b5bf0104607a2f42eff78525482232d44974519c900de5f5f.png" src="_images/14d91536a4ca276b5bf0104607a2f42eff78525482232d44974519c900de5f5f.png" />
+<img alt="_images/9ae6ce15641c13bf3d087aa12dd7e292089af264841bc3b415f5e3ba20abd752.png" src="_images/9ae6ce15641c13bf3d087aa12dd7e292089af264841bc3b415f5e3ba20abd752.png" />
 </div>
 </div>
 <p>There are additional convenient function wrappers (internally using <code class="docutils literal notranslate"><span class="pre">PRFM.get_scale_height</span></code> to find gas scale height):</p>
@@ -646,10 +676,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f53ac4d4150&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x18b2add50&gt;
 </pre></div>
 </div>
-<img alt="_images/dcdd99d6495d78a84953362c501c8c3e03ac884218c68c0021f39a8ea6dd8da6.png" src="_images/dcdd99d6495d78a84953362c501c8c3e03ac884218c68c0021f39a8ea6dd8da6.png" />
+<img alt="_images/c51bb654b9408356fcded9279a9975e9cbae0aa6404123bf743f71134c144499.png" src="_images/c51bb654b9408356fcded9279a9975e9cbae0aa6404123bf743f71134c144499.png" />
 </div>
 </div>
 </section>
@@ -734,7 +764,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/dcd7d8e77842ea4ba44c4e8ddcee34bc8ad655c5d78e68e341440706bfcc4945.png" src="_images/dcd7d8e77842ea4ba44c4e8ddcee34bc8ad655c5d78e68e341440706bfcc4945.png" />
+<img alt="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" src="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -769,7 +799,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/20e04c31019b874967a1eec01ab1dde21f5bbcaa426e9f5f18a04bfc81fafbc0.png" src="_images/20e04c31019b874967a1eec01ab1dde21f5bbcaa426e9f5f18a04bfc81fafbc0.png" />
+<img alt="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" src="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" />
 </div>
 </div>
 </section>
@@ -798,7 +828,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/04e17ca74d828a6d2efe047936b203ec42d95dda8a920129c7a70a1ae2f30477.png" src="_images/04e17ca74d828a6d2efe047936b203ec42d95dda8a920129c7a70a1ae2f30477.png" />
+<img alt="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" src="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" />
 </div>
 </div>
 </section>
@@ -829,11 +859,10 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="reference.html"
@@ -853,10 +882,7 @@ document.write(`
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -922,8 +948,8 @@ By Chang-Goo Kim and Eve Ostriker
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
   </footer>
