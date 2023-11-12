@@ -477,7 +477,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f7240d5b3d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21d012a710&gt;
 </pre></div>
 </div>
 <img alt="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" src="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" />
@@ -537,7 +537,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f723ec8ecd0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21cbd6b0d0&gt;
 </pre></div>
 </div>
 <img alt="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" src="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" />
@@ -545,16 +545,16 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span>
     <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-NCR-lowZ&quot;</span><span class="p">]:</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot;Ptot&quot;</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;SFR&quot;</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot;Ptot&quot;</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;SFR&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Y_Pnonth&quot;</span><span class="p">,</span> <span class="s2">&quot;Y_Pth&quot;</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+        <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span>
@@ -566,36 +566,25 @@ document.write(`
         <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log\,P_{\rm tot}\,[{\rm cm^{-3}\,K}]$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic-decomp&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;classic &quot;</span>
 <span class="p">)</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-ncr-decomp&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;NCR Z=1&quot;</span>
 <span class="p">)</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-ncr-decomp-Z01&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;NCR Z=0.1&quot;</span>
 <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;trb&quot;</span><span class="p">,</span> <span class="s2">&quot;th&quot;</span><span class="p">]):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_yield_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_yield_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-NCR-lowZ&quot;</span><span class="p">]:</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-
-<span class="ne">AttributeError</span>: module &#39;prfm&#39; has no attribute &#39;sims&#39;
-</pre></div>
-</div>
+<img alt="_images/891faee059581a8d96ffc8a523c66df653c7dfbb456d13b4128f619ec781fe30.png" src="_images/891faee059581a8d96ffc8a523c66df653c7dfbb456d13b4128f619ec781fe30.png" />
 </div>
 </div>
 </section>
