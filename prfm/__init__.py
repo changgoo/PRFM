@@ -17,7 +17,7 @@ from prfm.prfm import (
     PRFM,
 )
 
-from prfm import simulations as sims
+from prfm import simulations
 
 __all__ = [
     "get_scale_height",
@@ -30,5 +30,5 @@ __all__ = [
     "get_self_consistent_solution",
     "get_sigma_eff",
     "PRFM",
-    "sims",
+    "simulations",
 ]
