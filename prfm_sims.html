@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -408,8 +408,10 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -422,9 +424,8 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
 </pre></div>
 </div>
 </div>
@@ -434,8 +435,7 @@ document.write(`
 <h1>Simulation Results and PRFM Theory<a class="headerlink" href="#simulation-results-and-prfm-theory" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">prfm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm</span>  <span class="c1"># noqa: E402</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">200</span>
 </pre></div>
@@ -448,34 +448,39 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">data</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">load_sim_data</span><span class="p">()</span>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># quick plot of TIGRESS-classic points and fitting</span>
+<span class="c1"># here the points are not identical to OK22</span>
+<span class="c1"># -- recalculation from history files to get errorbars</span>
 
-<span class="ne">AttributeError</span>: module &#39;prfm&#39; has no attribute &#39;simulations&#39;
+<span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">])</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/02321a573e589f6402ac0d742229b2b1beacea4afa46dbd90836c5cbda3a0a54.png" src="_images/02321a573e589f6402ac0d742229b2b1beacea4afa46dbd90836c5cbda3a0a54.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># all simulations</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
 <span class="c1"># P_SFR</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1855a3950&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f7240d5b3d0&gt;
 </pre></div>
 </div>
-<img alt="_images/00641d0729032048c40e5483d1830a7517ad0e8295332591e29b8db4ec736650.png" src="_images/00641d0729032048c40e5483d1830a7517ad0e8295332591e29b8db4ec736650.png" />
+<img alt="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" src="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -488,26 +493,28 @@ document.write(`
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mlist</span><span class="p">):</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
-    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/07b3ac7b2cee3ec49e740e719f22e789451774697553a870cbc36524a67afe17.png" src="_images/07b3ac7b2cee3ec49e740e719f22e789451774697553a870cbc36524a67afe17.png" />
+<img alt="_images/946c6ac16b8ff25cf150742e193423259f06bc562ff639c5b32f62ff48fe2b71.png" src="_images/946c6ac16b8ff25cf150742e193423259f06bc562ff639c5b32f62ff48fe2b71.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-NCR-lowZ&quot;</span><span class="p">]:</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-    <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot;Ptot&quot;</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;SFR&quot;</span><span class="p">)</span>
+    <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">xf</span><span class="o">=</span><span class="s2">&quot;Ptot&quot;</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="s2">&quot;SFR&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">yf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">side_axes</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Y_Pturb&quot;</span><span class="p">,</span> <span class="s2">&quot;Y_Pth&quot;</span><span class="p">,</span> <span class="s2">&quot;Y_Pimag&quot;</span><span class="p">]):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
+        <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">yf</span><span class="o">=</span><span class="n">yf</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span>
@@ -519,10 +526,10 @@ document.write(`
         <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log\,P_{\rm tot}\,[{\rm cm^{-3}\,K}]$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">main_ax</span><span class="p">)</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic-decomp&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;classic &quot;</span>
 <span class="p">)</span>
-<span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-ncr-decomp&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;NCR Z=1&quot;</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
@@ -530,10 +537,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x185498ed0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f723ec8ecd0&gt;
 </pre></div>
 </div>
-<img alt="_images/e05d649f8d4ba456d68627ab72488ce4849e61be75086027a1a9987fab1b89c5.png" src="_images/e05d649f8d4ba456d68627ab72488ce4849e61be75086027a1a9987fab1b89c5.png" />
+<img alt="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" src="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -577,7 +584,18 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2df12d55f58f21459badff47b4ca52401eb394ff6ea4238bc80f83481503a7ac.png" src="_images/2df12d55f58f21459badff47b4ca52401eb394ff6ea4238bc80f83481503a7ac.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fig</span><span class="p">,</span> <span class="n">main_ax</span><span class="p">,</span> <span class="n">side_axes</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">sims</span><span class="o">.</span><span class="n">setup_axes</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">nrow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-NCR-lowZ&quot;</span><span class="p">]:</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+<span class="ne">AttributeError</span>: module &#39;prfm&#39; has no attribute &#39;sims&#39;
+</pre></div>
+</div>
 </div>
 </div>
 </section>
@@ -679,8 +697,8 @@ By Chang-Goo Kim and Eve Ostriker
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
