@@ -412,21 +412,28 @@ def load_sim_data():
     data.get_yield()
 
     # OK22: TIGRESS-classic
-    PRFM_OK22 = PRFM_data("TIGRESS-classic")
-    data = PRFM_OK22
+    PRFM_OK22_table = PRFM_data("TIGRESS-classic-table")
+    data = PRFM_OK22_table
     # from table
-    data.SFR = np.array([1.1, 5.37e-2, 2.67e-3, 6.21e-5, 5.17e-1, 5.41e-2, 2.16e-3])
+    data.SFR = np.array([1.1, 5.37e-2, 2.67e-3, 6.21e-5, 1.17e-1, 5.41e-2, 2.16e-3])
     data.Pturb = np.array([1.26e6, 1.95e5, 5.71e3, 1.88e2, 6.41e5, 1.01e5, 4.78e3])
     data.Pth = np.array([1.13e5, 1.76e4, 5.02e3, 3.39e2, 6.60e4, 1.34e4, 2.36e3])
     data.Pimag = np.array([5.37e5, 2.22e4, 7.86e3, 1.67e2, 2.77e5, 1.92e4, 1.91e3])
 
     # ad hoc value
-    data.SFR_std = data.SFR * 0.3
-    data.Pturb_std = data.Pturb * 0.5
-    data.Pth_std = data.Pth * 0.3
-    data.Pimag_std = data.Pimag * 0.8
+    data.SFR_std = data.SFR * 0.0
+    data.Pturb_std = data.Pturb * 0.0
+    data.Pth_std = data.Pth * 0.0
+    data.Pimag_std = data.Pimag * 0.0
+
+    data.convert_linear_log()
+    data.get_Ptotal()
+    data.get_yield()
 
     # my re caclulation
+    PRFM_OK22 = PRFM_data("TIGRESS-classic")
+    data = PRFM_OK22
+
     data.SFR = np.array(
         [9.55e-01, 6.18e-01, 7.81e-02, 7.39e-02, 3.60e-03, 3.11e-03, 6.69e-05]
     )
@@ -461,9 +468,9 @@ def load_sim_data():
     data.get_yield()
 
     # Galactic center from M21 and M23
-    PRFM_M21 = PRFM_data("TIGRESS-GC")
-    data = PRFM_M21
-    data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
+    PRFM_M21_table = PRFM_data("TIGRESS-GC-table")
+    data = PRFM_M21_table
+    # data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
     # from paper table
     data.SFR = np.array([0.148, 0.648, 2.07, 7.94, 1.88, 6.67, 27.1, 94.8])
     data.Pturb = np.array([0.137, 0.512, 1.49, 4.49, 1.44, 4.26, 12.7, 57.4]) * 1.0e6
@@ -477,8 +484,13 @@ def load_sim_data():
         np.array([0.0022, 0.051, 0.106, 0.32, 0.30, 0.42, 0.78, 2.06]) * 1.0e6
     )
     data.convert_linear_log()
+    data.get_Ptotal()
+    data.get_yield()
 
     # from recalculation for warm/cold
+    PRFM_M21 = PRFM_data("TIGRESS-GC")
+    data = PRFM_M21
+    data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
     # Read csv file
     df = pd.read_csv(os.path.join(dirpath, "prfm_ring.csv"), index_col="model")
     df.replace(0, np.nan, inplace=True)
@@ -856,7 +868,9 @@ def load_sim_data():
         "KOK13": "tab:pink",
         "KO15": "tab:olive",
         "TIGRESS-classic": "tab:blue",
+        "TIGRESS-classic-table": "tab:blue",
         "TIGRESS-GC": "tab:orange",
+        "TIGRESS-GC-table": "tab:orange",
         "TIGRESS-NCR": "tab:cyan",
         "TIGRESS-NCR-lowZ": "tab:red",
     }
@@ -865,7 +879,9 @@ def load_sim_data():
         PRFM_KOK13,
         PRFM_KO15,
         PRFM_OK22,
+        PRFM_OK22_table,
         PRFM_M21,
+        PRFM_M21_table,
         PRFM_NCR_Z1,
         PRFM_NCR_lowZ,
     ]:
