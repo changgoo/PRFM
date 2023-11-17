@@ -734,21 +734,28 @@ document.write(`
     <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
 
     <span class="c1"># OK22: TIGRESS-classic</span>
-    <span class="n">PRFM_OK22</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_OK22</span>
+    <span class="n">PRFM_OK22_table</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-classic-table&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_OK22_table</span>
     <span class="c1"># from table</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">5.37e-2</span><span class="p">,</span> <span class="mf">2.67e-3</span><span class="p">,</span> <span class="mf">6.21e-5</span><span class="p">,</span> <span class="mf">5.17e-1</span><span class="p">,</span> <span class="mf">5.41e-2</span><span class="p">,</span> <span class="mf">2.16e-3</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">5.37e-2</span><span class="p">,</span> <span class="mf">2.67e-3</span><span class="p">,</span> <span class="mf">6.21e-5</span><span class="p">,</span> <span class="mf">1.17e-1</span><span class="p">,</span> <span class="mf">5.41e-2</span><span class="p">,</span> <span class="mf">2.16e-3</span><span class="p">])</span>
     <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.26e6</span><span class="p">,</span> <span class="mf">1.95e5</span><span class="p">,</span> <span class="mf">5.71e3</span><span class="p">,</span> <span class="mf">1.88e2</span><span class="p">,</span> <span class="mf">6.41e5</span><span class="p">,</span> <span class="mf">1.01e5</span><span class="p">,</span> <span class="mf">4.78e3</span><span class="p">])</span>
     <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.13e5</span><span class="p">,</span> <span class="mf">1.76e4</span><span class="p">,</span> <span class="mf">5.02e3</span><span class="p">,</span> <span class="mf">3.39e2</span><span class="p">,</span> <span class="mf">6.60e4</span><span class="p">,</span> <span class="mf">1.34e4</span><span class="p">,</span> <span class="mf">2.36e3</span><span class="p">])</span>
     <span class="n">data</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.37e5</span><span class="p">,</span> <span class="mf">2.22e4</span><span class="p">,</span> <span class="mf">7.86e3</span><span class="p">,</span> <span class="mf">1.67e2</span><span class="p">,</span> <span class="mf">2.77e5</span><span class="p">,</span> <span class="mf">1.92e4</span><span class="p">,</span> <span class="mf">1.91e3</span><span class="p">])</span>
 
     <span class="c1"># ad hoc value</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">*</span> <span class="mf">0.3</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">*</span> <span class="mf">0.5</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">*</span> <span class="mf">0.3</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">Pimag_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">*</span> <span class="mf">0.8</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">SFR_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">*</span> <span class="mf">0.0</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pturb_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">*</span> <span class="mf">0.0</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pth_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pth</span> <span class="o">*</span> <span class="mf">0.0</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">Pimag_std</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">*</span> <span class="mf">0.0</span>
+
+    <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
 
     <span class="c1"># my re caclulation</span>
+    <span class="n">PRFM_OK22</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_OK22</span>
+
     <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span><span class="mf">9.55e-01</span><span class="p">,</span> <span class="mf">6.18e-01</span><span class="p">,</span> <span class="mf">7.81e-02</span><span class="p">,</span> <span class="mf">7.39e-02</span><span class="p">,</span> <span class="mf">3.60e-03</span><span class="p">,</span> <span class="mf">3.11e-03</span><span class="p">,</span> <span class="mf">6.69e-05</span><span class="p">]</span>
     <span class="p">)</span>
@@ -783,9 +790,9 @@ document.write(`
     <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
 
     <span class="c1"># Galactic center from M21 and M23</span>
-    <span class="n">PRFM_M21</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-GC&quot;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_M21</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">field_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SFR&quot;</span><span class="p">,</span> <span class="s2">&quot;Pturb&quot;</span><span class="p">,</span> <span class="s2">&quot;Pth&quot;</span><span class="p">,</span> <span class="s2">&quot;Pimag&quot;</span><span class="p">]</span>
+    <span class="n">PRFM_M21_table</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-GC-table&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_M21_table</span>
+    <span class="c1"># data.field_list = [&quot;SFR&quot;, &quot;Pturb&quot;, &quot;Pth&quot;, &quot;Pimag&quot;]</span>
     <span class="c1"># from paper table</span>
     <span class="n">data</span><span class="o">.</span><span class="n">SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.148</span><span class="p">,</span> <span class="mf">0.648</span><span class="p">,</span> <span class="mf">2.07</span><span class="p">,</span> <span class="mf">7.94</span><span class="p">,</span> <span class="mf">1.88</span><span class="p">,</span> <span class="mf">6.67</span><span class="p">,</span> <span class="mf">27.1</span><span class="p">,</span> <span class="mf">94.8</span><span class="p">])</span>
     <span class="n">data</span><span class="o">.</span><span class="n">Pturb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.137</span><span class="p">,</span> <span class="mf">0.512</span><span class="p">,</span> <span class="mf">1.49</span><span class="p">,</span> <span class="mf">4.49</span><span class="p">,</span> <span class="mf">1.44</span><span class="p">,</span> <span class="mf">4.26</span><span class="p">,</span> <span class="mf">12.7</span><span class="p">,</span> <span class="mf">57.4</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1.0e6</span>
@@ -799,8 +806,13 @@ document.write(`
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0022</span><span class="p">,</span> <span class="mf">0.051</span><span class="p">,</span> <span class="mf">0.106</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.42</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">,</span> <span class="mf">2.06</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1.0e6</span>
     <span class="p">)</span>
     <span class="n">data</span><span class="o">.</span><span class="n">convert_linear_log</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_Ptotal</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">get_yield</span><span class="p">()</span>
 
     <span class="c1"># from recalculation for warm/cold</span>
+    <span class="n">PRFM_M21</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-GC&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_M21</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">field_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SFR&quot;</span><span class="p">,</span> <span class="s2">&quot;Pturb&quot;</span><span class="p">,</span> <span class="s2">&quot;Pth&quot;</span><span class="p">,</span> <span class="s2">&quot;Pimag&quot;</span><span class="p">]</span>
     <span class="c1"># Read csv file</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;prfm_ring.csv&quot;</span><span class="p">),</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1178,7 +1190,9 @@ document.write(`
         <span class="s2">&quot;KOK13&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:pink&quot;</span><span class="p">,</span>
         <span class="s2">&quot;KO15&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:olive&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:blue&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TIGRESS-classic-table&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:blue&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TIGRESS-GC&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TIGRESS-GC-table&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:cyan&quot;</span><span class="p">,</span>
         <span class="s2">&quot;TIGRESS-NCR-lowZ&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
     <span class="p">}</span>
@@ -1187,7 +1201,9 @@ document.write(`
         <span class="n">PRFM_KOK13</span><span class="p">,</span>
         <span class="n">PRFM_KO15</span><span class="p">,</span>
         <span class="n">PRFM_OK22</span><span class="p">,</span>
+        <span class="n">PRFM_OK22_table</span><span class="p">,</span>
         <span class="n">PRFM_M21</span><span class="p">,</span>
+        <span class="n">PRFM_M21_table</span><span class="p">,</span>
         <span class="n">PRFM_NCR_Z1</span><span class="p">,</span>
         <span class="n">PRFM_NCR_lowZ</span><span class="p">,</span>
     <span class="p">]:</span>

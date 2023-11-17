@@ -466,8 +466,61 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot for</span>
+<span class="c1"># here the points are not identical to OK22</span>
+<span class="c1"># -- recalculation from history files to get errorbars</span>
+<span class="n">xf</span> <span class="o">=</span> <span class="s2">&quot;Ptot&quot;</span>
+<span class="n">yf</span> <span class="o">=</span> <span class="s2">&quot;SFR&quot;</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-classic-table&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-GC&quot;</span><span class="p">]:</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;log_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xf</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;log_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">))</span>
+    <span class="n">xerr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;log_</span><span class="si">{}</span><span class="s2">_std&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xf</span><span class="p">))</span>
+    <span class="n">yerr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;log_</span><span class="si">{}</span><span class="s2">_std&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yf</span><span class="p">))</span>
+
+    <span class="n">hd_idx</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">Pimag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">hd_idx</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">paper</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">hd_idx</span><span class="p">],</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">hd_idx</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="o">.</span><span class="n">paper</span><span class="si">}</span><span class="s2">-HD&quot;</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">mec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">[</span><span class="o">~</span><span class="n">hd_idx</span><span class="p">],</span>
+            <span class="n">y</span><span class="p">[</span><span class="o">~</span><span class="n">hd_idx</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="o">.</span><span class="n">paper</span><span class="si">}</span><span class="s2">-MHD&quot;</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+            <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">mew</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">mec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$P_{\rm tot}\, [k_B{\rm\,cm^{-3}\,K}]$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
+</pre></div>
+</div>
+<img alt="_images/d2f8363fc69a759ae16fa0adf6de58eff263efeaeb0b0d90bbef2a9eadafdd1d.png" src="_images/d2f8363fc69a759ae16fa0adf6de58eff263efeaeb0b0d90bbef2a9eadafdd1d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># all simulations</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="s2">&quot;table&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">continue</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
 <span class="c1"># P_SFR</span>
@@ -477,7 +530,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21d012a710&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5e6f583550&gt;
 </pre></div>
 </div>
 <img alt="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" src="_images/688b30e614991fb2f2d0c4d81b81e52c0736a0ecaaf4b46f938fc96b951bec1d.png" />
@@ -537,7 +590,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21cbd6b0d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f5e6d153550&gt;
 </pre></div>
 </div>
 <img alt="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" src="_images/f5015497cc5e57e5861db94dc7c8cd277c49a626ce7ce52e53e981cc60424b69.png" />
