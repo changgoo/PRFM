@@ -18,40 +18,51 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import prfm  # noqa: E402
-
-plt.rcParams["figure.dpi"] = 200
+data = prfm.simulations.load_sim_data()
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[3], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mprfm[39;00m  [38;5;66;03m# noqa: E402[39;00m
-[1;32m      3[0m plt[38;5;241m.[39mrcParams[[38;5;124m"[39m[38;5;124mfigure.dpi[39m[38;5;124m"[39m] [38;5;241m=[39m [38;5;241m200[39m
+[0;31mValueError[0m                                Traceback (most recent call last)
+Cell [0;32mIn[4], line 1[0m
+[0;32m----> 1[0m data [38;5;241m=[39m [43mprfm[49m[38;5;241;43m.[39;49m[43msimulations[49m[38;5;241;43m.[39;49m[43mload_sim_data[49m[43m([49m[43m)[49m
 
-File [0;32m~/work/PRFM/PRFM/book/../prfm/__init__.py:20[0m
-[1;32m      4[0m __description__ [38;5;241m=[39m [38;5;124m"[39m[38;5;124mPython packages for the PRFM theory[39m[38;5;124m"[39m
-[1;32m      7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mprfm[39;00m[38;5;21;01m.[39;00m[38;5;21;01mprfm[39;00m [38;5;28;01mimport[39;00m (
-[1;32m      8[0m     get_scale_height,
-[1;32m      9[0m     get_weights,
+File [0;32m~/work/PRFM/PRFM/book/../prfm/simulations.py:633[0m, in [0;36mload_sim_data[0;34m()[0m
+[1;32m    631[0m PRFM_GC [38;5;241m=[39m load_gc_data()
+[1;32m    632[0m [38;5;66;03m# NCR (K24)[39;00m
+[0;32m--> 633[0m PRFM_NCR [38;5;241m=[39m [43mload_ncr_data[49m[43m([49m[43m)[49m
+[1;32m    635[0m data [38;5;241m=[39m [38;5;28mdict[39m()
+[1;32m    636[0m colors [38;5;241m=[39m {
+[1;32m    637[0m     [38;5;124m"[39m[38;5;124mKKO11[39m[38;5;124m"[39m: [38;5;124m"[39m[38;5;124mtab:gray[39m[38;5;124m"[39m,
+[1;32m    638[0m     [38;5;124m"[39m[38;5;124mKOK13[39m[38;5;124m"[39m: [38;5;124m"[39m[38;5;124mtab:pink[39m[38;5;124m"[39m,
 [0;32m   (...)[0m
-[1;32m     17[0m     PRFM,
-[1;32m     18[0m )
-[0;32m---> 20[0m [38;5;28;01mfrom[39;00m [38;5;21;01mprfm[39;00m [38;5;28;01mimport[39;00m simulations
-[1;32m     22[0m __all__ [38;5;241m=[39m [
-[1;32m     23[0m     [38;5;124m"[39m[38;5;124mget_scale_height[39m[38;5;124m"[39m,
-[1;32m     24[0m     [38;5;124m"[39m[38;5;124mget_weights[39m[38;5;124m"[39m,
-[0;32m   (...)[0m
-[1;32m     33[0m     [38;5;124m"[39m[38;5;124msimulations[39m[38;5;124m"[39m,
-[1;32m     34[0m ]
+[1;32m    642[0m     [38;5;124m"[39m[38;5;124mTIGRESS-NCR[39m[38;5;124m"[39m: [38;5;124m"[39m[38;5;124mtab:red[39m[38;5;124m"[39m,
+[1;32m    643[0m }
 
-File [0;32m~/work/PRFM/PRFM/book/../prfm/simulations.py:10[0m
-[1;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
-[1;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mxarray[39;00m [38;5;28;01mas[39;00m [38;5;21;01mxr[39;00m
-[0;32m---> 10[0m [38;5;28;01mimport[39;00m [38;5;21;01mcmasher[39;00m [38;5;28;01mas[39;00m [38;5;21;01mcmr[39;00m
-[1;32m     12[0m [38;5;28;01mimport[39;00m [38;5;21;01mos[39;00m
-[1;32m     13[0m [38;5;28;01mfrom[39;00m [38;5;21;01mprfm[39;00m [38;5;28;01mimport[39;00m get_sfr, get_feedback_yield_comp
+File [0;32m~/work/PRFM/PRFM/book/../prfm/simulations.py:597[0m, in [0;36mload_ncr_data[0;34m(fname)[0m
+[1;32m    596[0m [38;5;28;01mdef[39;00m [38;5;21mload_ncr_data[39m(fname[38;5;241m=[39m[38;5;124m"[39m[38;5;124mtigress_ncr_K24.nc[39m[38;5;124m"[39m):
+[0;32m--> 597[0m     dset [38;5;241m=[39m [43mxr[49m[38;5;241;43m.[39;49m[43mopen_dataset[49m[43m([49m[43mos[49m[38;5;241;43m.[39;49m[43mpath[49m[38;5;241;43m.[39;49m[43mjoin[49m[43m([49m[43mdirpath[49m[43m,[49m[43m [49m[43mfname[49m[43m)[49m[43m)[49m
+[1;32m    598[0m     data [38;5;241m=[39m PRFM_data([38;5;124m"[39m[38;5;124mTIGRESS-NCR[39m[38;5;124m"[39m)
+[1;32m    599[0m     data[38;5;241m.[39mZdust [38;5;241m=[39m dset[[38;5;124m"[39m[38;5;124mZdust[39m[38;5;124m"[39m][38;5;241m.[39msel(q[38;5;241m=[39m[38;5;124m"[39m[38;5;124mmean[39m[38;5;124m"[39m)[38;5;241m.[39mdata
 
-[0;31mModuleNotFoundError[0m: No module named 'cmasher'
+File [0;32m/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/xarray/backends/api.py:592[0m, in [0;36mopen_dataset[0;34m(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, inline_array, chunked_array_type, from_array_kwargs, backend_kwargs, **kwargs)[0m
+[1;32m    589[0m     kwargs[38;5;241m.[39mupdate(backend_kwargs)
+[1;32m    591[0m [38;5;28;01mif[39;00m engine [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[0;32m--> 592[0m     engine [38;5;241m=[39m [43mplugins[49m[38;5;241;43m.[39;49m[43mguess_engine[49m[43m([49m[43mfilename_or_obj[49m[43m)[49m
+[1;32m    594[0m [38;5;28;01mif[39;00m from_array_kwargs [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[1;32m    595[0m     from_array_kwargs [38;5;241m=[39m {}
+
+File [0;32m/opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/xarray/backends/plugins.py:187[0m, in [0;36mguess_engine[0;34m(store_spec)[0m
+[1;32m    179[0m [38;5;28;01melse[39;00m:
+[1;32m    180[0m     error_msg [38;5;241m=[39m (
+[1;32m    181[0m         [38;5;124m"[39m[38;5;124mfound the following matches with the input file in xarray[39m[38;5;124m'[39m[38;5;124ms IO [39m[38;5;124m"[39m
+[1;32m    182[0m         [38;5;124mf[39m[38;5;124m"[39m[38;5;124mbackends: [39m[38;5;132;01m{[39;00mcompatible_engines[38;5;132;01m}[39;00m[38;5;124m. But their dependencies may not be installed, see:[39m[38;5;130;01m\n[39;00m[38;5;124m"[39m
+[1;32m    183[0m         [38;5;124m"[39m[38;5;124mhttps://docs.xarray.dev/en/stable/user-guide/io.html [39m[38;5;130;01m\n[39;00m[38;5;124m"[39m
+[1;32m    184[0m         [38;5;124m"[39m[38;5;124mhttps://docs.xarray.dev/en/stable/getting-started-guide/installing.html[39m[38;5;124m"[39m
+[1;32m    185[0m     )
+[0;32m--> 187[0m [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(error_msg)
+
+[0;31mValueError[0m: found the following matches with the input file in xarray's IO backends: ['netcdf4', 'h5netcdf']. But their dependencies may not be installed, see:
+https://docs.xarray.dev/en/stable/user-guide/io.html 
+https://docs.xarray.dev/en/stable/getting-started-guide/installing.html
 

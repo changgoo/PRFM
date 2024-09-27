@@ -476,42 +476,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">prfm</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">book</span><span class="o">/../</span><span class="n">prfm</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">20</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">__description__</span> <span class="o">=</span> <span class="s2">&quot;Python packages for the PRFM theory&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">prfm.prfm</span> <span class="kn">import</span> <span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">get_scale_height</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">get_weights</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">PRFM</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">20</span> <span class="kn">from</span> <span class="nn">prfm</span> <span class="kn">import</span> <span class="n">simulations</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span>     <span class="s2">&quot;get_scale_height&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="s2">&quot;get_weights&quot;</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span>     <span class="s2">&quot;simulations&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="p">]</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">PRFM</span><span class="o">/</span><span class="n">book</span><span class="o">/../</span><span class="n">prfm</span><span class="o">/</span><span class="n">simulations</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">10</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">cmasher</span> <span class="k">as</span> <span class="nn">cmr</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="kn">from</span> <span class="nn">prfm</span> <span class="kn">import</span> <span class="n">get_sfr</span><span class="p">,</span> <span class="n">get_feedback_yield_comp</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;cmasher&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <section id="model">
 <h2>Model<a class="headerlink" href="#model" title="Permalink to this heading">#</a></h2>
@@ -627,7 +591,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/69abd0cb5edb674b324b5e0570500cb83b5c7544aaa2539232d0710d9979cf6e.png" src="_images/69abd0cb5edb674b324b5e0570500cb83b5c7544aaa2539232d0710d9979cf6e.png" />
+<img alt="_images/d76fe2df9ddb5aad156cdcb36cb8f7cc7d70000cde93d3df9c829cef343aceec.png" src="_images/d76fe2df9ddb5aad156cdcb36cb8f7cc7d70000cde93d3df9c829cef343aceec.png" />
 </div>
 </div>
 </section>
@@ -688,7 +652,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9ae6ce15641c13bf3d087aa12dd7e292089af264841bc3b415f5e3ba20abd752.png" src="_images/9ae6ce15641c13bf3d087aa12dd7e292089af264841bc3b415f5e3ba20abd752.png" />
+<img alt="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" src="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" />
 </div>
 </div>
 <p>There are additional convenient function wrappers (internally using <code class="docutils literal notranslate"><span class="pre">PRFM.get_scale_height</span></code> to find gas scale height):</p>
@@ -712,10 +676,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x18b2add50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fe235c2ab90&gt;
 </pre></div>
 </div>
-<img alt="_images/c51bb654b9408356fcded9279a9975e9cbae0aa6404123bf743f71134c144499.png" src="_images/c51bb654b9408356fcded9279a9975e9cbae0aa6404123bf743f71134c144499.png" />
+<img alt="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" src="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" />
 </div>
 </div>
 </section>
@@ -800,7 +764,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" src="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" />
+<img alt="_images/ec878e5fbab6b5bdc97cf5669764ad3b6e3004865e98e258d16db570a0673c76.png" src="_images/ec878e5fbab6b5bdc97cf5669764ad3b6e3004865e98e258d16db570a0673c76.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -835,7 +799,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" src="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" />
+<img alt="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" src="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" />
 </div>
 </div>
 </section>
@@ -864,7 +828,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" src="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" />
+<img alt="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" src="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" />
 </div>
 </div>
 </section>

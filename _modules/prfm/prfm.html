@@ -1036,7 +1036,7 @@ document.write(`
     <span class="k">return</span> <span class="n">wtot_next</span><span class="p">,</span> <span class="n">Hnext</span><span class="p">,</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">wtot_next</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">sigma_eff</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">PRFM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM">[docs]</a><span class="k">class</span> <span class="nc">PRFM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;a wrapper class for scale height, weight, SFR calculations</span>
 
 <span class="sd">    Parameters</span>
@@ -1177,20 +1177,20 @@ document.write(`
         <span class="c1"># set weight functions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_weight_gas</span><span class="p">,</span> <span class="n">get_weight_star</span><span class="p">,</span> <span class="n">get_weight_dm</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">set_weight_function_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.set_weight_function_gas"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_weight_function_gas">[docs]</a>    <span class="k">def</span> <span class="nf">set_weight_function_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update weight function for gas&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">set_weight_function_star</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.set_weight_function_star"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_weight_function_star">[docs]</a>    <span class="k">def</span> <span class="nf">set_weight_function_star</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update weight function for star&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span></div>
 
-    <span class="k">def</span> <span class="nf">set_weight_function_dm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.set_weight_function_dm"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_weight_function_dm">[docs]</a>    <span class="k">def</span> <span class="nf">set_weight_function_dm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update weight function for star&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="s2">&quot;numerical&quot;</span></div>
 
     <span class="k">def</span> <span class="nf">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
         <span class="c1"># reset arguments with new velocity dispersion</span>
@@ -1269,7 +1269,7 @@ document.write(`
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  sigma_eff_model: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">args</span>
 
-    <span class="k">def</span> <span class="nf">get_scale_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.get_scale_height"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_scale_height">[docs]</a>    <span class="k">def</span> <span class="nf">get_scale_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to get the gas scale height</span>
 
 <span class="sd">        Parameters</span>
@@ -1288,9 +1288,9 @@ document.write(`
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s2">&quot;thin&quot;</span><span class="p">:</span>
             <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_thin</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">H_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">H_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
-    <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.get_scale_height_numerical"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_scale_height_numerical">[docs]</a>    <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to get the gas scale height for generic weight functions&quot;&quot;&quot;</span>
 
         <span class="n">H_gas</span> <span class="o">=</span> <span class="n">get_scale_height_numerical</span><span class="p">(</span>
@@ -1299,15 +1299,15 @@ document.write(`
             <span class="n">fstar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">fdm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">H_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">H_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
-    <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.get_weight_contribution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_weight_contribution">[docs]</a>    <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to get weight contribution&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Wtot&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wgas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wstar</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wdm</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wgas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wstar</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wdm</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_weights"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_weights">[docs]</a>    <span class="k">def</span> <span class="nf">calc_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate scale height and all weights</span>
 
 <span class="sd">        Parameters</span>
@@ -1355,9 +1355,9 @@ document.write(`
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_self_consistent_solution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_self_consistent_solution">[docs]</a>    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate self-consistent solutions</span>
 
 <span class="sd">        Update H_gas, W_tot (and all components), sigma_eff</span>
@@ -1380,9 +1380,9 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
                 <span class="n">L1_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span> <span class="o">/</span> <span class="n">Hprev</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">L1_norm</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
-                    <span class="k">break</span>
+                    <span class="k">break</span></div>
 
-    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="mf">1.0e3</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_sfr"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_sfr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="mf">1.0e3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate SFR surface density</span>
 
 <span class="sd">        Update Sigma_SFR (astro units) and _Sigma_SFR (cgs)</span>
@@ -1394,7 +1394,7 @@ document.write(`
         <span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="n">Ytot</span><span class="p">)</span>
         <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span> <span class="o">/</span> <span class="n">u_cgs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span> <span class="o">/</span> <span class="n">u_cgs</span></div>
 
     <span class="k">def</span> <span class="nf">check_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">)</span>
@@ -1404,7 +1404,7 @@ document.write(`
 
         <span class="n">L1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sola</span> <span class="o">-</span> <span class="n">soln</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;difference between analytic and numerical solutions: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">L1</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">sola</span><span class="p">,</span> <span class="n">soln</span>
+        <span class="k">return</span> <span class="n">sola</span><span class="p">,</span> <span class="n">soln</span></div>
 </pre></div>
 
                 </article>
