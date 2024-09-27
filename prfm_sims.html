@@ -467,53 +467,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">data</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">load_sim_data</span><span class="p">()</span>
-
-<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/simulations.py:633,</span> in <span class="ni">load_sim_data</span><span class="nt">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">631</span> <span class="n">PRFM_GC</span> <span class="o">=</span> <span class="n">load_gc_data</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">632</span> <span class="c1"># NCR (K24)</span>
-<span class="ne">--&gt; </span><span class="mi">633</span> <span class="n">PRFM_NCR</span> <span class="o">=</span> <span class="n">load_ncr_data</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">635</span> <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">636</span> <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
-<span class="g g-Whitespace">    </span><span class="mi">637</span>     <span class="s2">&quot;KKO11&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:gray&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">638</span>     <span class="s2">&quot;KOK13&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:pink&quot;</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">642</span>     <span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">:</span> <span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">643</span> <span class="p">}</span>
-
-<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/simulations.py:597,</span> in <span class="ni">load_ncr_data</span><span class="nt">(fname)</span>
-<span class="g g-Whitespace">    </span><span class="mi">596</span> <span class="k">def</span> <span class="nf">load_ncr_data</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s2">&quot;tigress_ncr_K24.nc&quot;</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">597</span>     <span class="n">dset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">fname</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">598</span>     <span class="n">data</span> <span class="o">=</span> <span class="n">PRFM_data</span><span class="p">(</span><span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">599</span>     <span class="n">data</span><span class="o">.</span><span class="n">Zdust</span> <span class="o">=</span> <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;Zdust&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/xarray/backends/api.py:592,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, inline_array, chunked_array_type, from_array_kwargs, backend_kwargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">589</span>     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">backend_kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">591</span> <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">592</span>     <span class="n">engine</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">guess_engine</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">594</span> <span class="k">if</span> <span class="n">from_array_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">595</span>     <span class="n">from_array_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.10/x64/lib/python3.11/site-packages/xarray/backends/plugins.py:187,</span> in <span class="ni">guess_engine</span><span class="nt">(store_spec)</span>
-<span class="g g-Whitespace">    </span><span class="mi">179</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">181</span>         <span class="s2">&quot;found the following matches with the input file in xarray&#39;s IO &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">182</span>         <span class="sa">f</span><span class="s2">&quot;backends: </span><span class="si">{</span><span class="n">compatible_engines</span><span class="si">}</span><span class="s2">. But their dependencies may not be installed, see:</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">183</span>         <span class="s2">&quot;https://docs.xarray.dev/en/stable/user-guide/io.html </span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">184</span>         <span class="s2">&quot;https://docs.xarray.dev/en/stable/getting-started-guide/installing.html&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">187</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
-
-<span class="ne">ValueError</span>: found the following matches with the input file in xarray&#39;s IO backends: [&#39;netcdf4&#39;, &#39;h5netcdf&#39;]. But their dependencies may not be installed, see:
-<span class="ne">https</span>://docs.xarray.dev/en/stable/user-guide/io.html 
-<span class="ne">https</span>://docs.xarray.dev/en/stable/getting-started-guide/installing.html
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -527,7 +480,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4599c852cb840948b93772b40ad39eae659af740f24f1b8964309b4ba6eb5796.png" src="_images/4599c852cb840948b93772b40ad39eae659af740f24f1b8964309b4ba6eb5796.png" />
+<img alt="_images/e59115f06822bfa5a84b8a53699544bf590c0e007658ea1a0b5fd44ddcee8e96.png" src="_images/e59115f06822bfa5a84b8a53699544bf590c0e007658ea1a0b5fd44ddcee8e96.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -578,7 +531,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/021df6ad1a3ea6cc2a7feb1bbfbe5ec2f43ff04c966ab12bca63c4e8e8a2fc6c.png" src="_images/021df6ad1a3ea6cc2a7feb1bbfbe5ec2f43ff04c966ab12bca63c4e8e8a2fc6c.png" />
+<img alt="_images/5d6da3ba7c1662bb665261074b7e71a2612bf127c2083fb8b670f060514e86d0.png" src="_images/5d6da3ba7c1662bb665261074b7e71a2612bf127c2083fb8b670f060514e86d0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -596,31 +549,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">23</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="k">if</span> <span class="s2">&quot;table&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="k">continue</span>
-<span class="ne">----&gt; </span><span class="mi">5</span>     <span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># P_SFR</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-
-<span class="nn">File ~/Sources/PRFM/book/../prfm/simulations.py:149,</span> in <span class="ni">add_one_sim</span><span class="nt">(data, xf, yf, ms)</span>
-<span class="g g-Whitespace">    </span><span class="mi">147</span>     <span class="n">norm</span> <span class="o">=</span> <span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">148</span>     <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Zdust</span><span class="p">))</span>
-<span class="ne">--&gt; </span><span class="mi">149</span>     <span class="k">for</span> <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">xerr_</span><span class="p">,</span> <span class="n">yerr_</span><span class="p">,</span> <span class="n">c_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">xerr</span><span class="p">,</span><span class="n">yerr</span><span class="p">,</span><span class="n">colors</span><span class="p">]):</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span>         <span class="n">p</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">151</span>             <span class="n">x_</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">152</span>             <span class="n">y_</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">162</span>             <span class="c1"># label=data.paper,</span>
-<span class="g g-Whitespace">    </span><span class="mi">163</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">164</span> <span class="k">else</span><span class="p">:</span>
-
-<span class="ne">ValueError</span>: not enough values to unpack (expected 5, got 1)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f13d5b07710&gt;
 </pre></div>
 </div>
-<img alt="_images/b4ba160e247c9e62dec7b031bc56a0c7d07b44f8e72c063ddd4275122d6e2f8b.png" src="_images/b4ba160e247c9e62dec7b031bc56a0c7d07b44f8e72c063ddd4275122d6e2f8b.png" />
+<img alt="_images/2e8960c1b9913378f2473a452109b18564237a8f9d664212004475f06b4e6221.png" src="_images/2e8960c1b9913378f2473a452109b18564237a8f9d664212004475f06b4e6221.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -645,7 +577,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/af7c4d92f4d6bda3829591bc679a93d3fb0e687d3bb85f7f88266dc6f932590c.png" src="_images/af7c4d92f4d6bda3829591bc679a93d3fb0e687d3bb85f7f88266dc6f932590c.png" />
+<img alt="_images/6d4da91aed7e6d5685e5a4fe67a60ad2513ace56fbc064bf44b76609ea624fe6.png" src="_images/6d4da91aed7e6d5685e5a4fe67a60ad2513ace56fbc064bf44b76609ea624fe6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -683,10 +615,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x19058db50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f13d5dde450&gt;
 </pre></div>
 </div>
-<img alt="_images/a30b641e0cb319a9cf87a44ac9c1f342b0d598e993bfda9a199cde4477cd3017.png" src="_images/a30b641e0cb319a9cf87a44ac9c1f342b0d598e993bfda9a199cde4477cd3017.png" />
+<img alt="_images/321026c2a8c1c88789d84a57041ce02b36fd9f0e6ef2fbd5c3265bdc3de76b56.png" src="_images/321026c2a8c1c88789d84a57041ce02b36fd9f0e6ef2fbd5c3265bdc3de76b56.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -725,7 +657,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/8eb32e813684a8fcd956d108cafc05b4bbb568d6439d63289d976c8868357bcf.png" src="_images/8eb32e813684a8fcd956d108cafc05b4bbb568d6439d63289d976c8868357bcf.png" />
+<img alt="_images/8a33deb4aa99d32f708e946fd851874d916bf2ba84f7aad6d083528d7105d05f.png" src="_images/8a33deb4aa99d32f708e946fd851874d916bf2ba84f7aad6d083528d7105d05f.png" />
 </div>
 </div>
 </section>
