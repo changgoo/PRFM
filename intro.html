@@ -180,12 +180,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equation_of_state.html">Effective Equation of State</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with the PHANGS results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -362,7 +365,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -378,6 +383,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -390,12 +405,17 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-the-prfm-cookbook">
 <h1>Welcome to the PRFM cookbook<a class="headerlink" href="#welcome-to-the-prfm-cookbook" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://changgoo.github.io/PRFM/"><img alt="Jupyter Book Badge" src="https://jupyterbook.org/badge.svg" /></a></p>
-<p>This is a small cookbook to guide you in applying the PRFM theory.</p>
+<p>This is a cookbook to guide you in applying the PRFM theory for star formation.</p>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
+<p>Recent advances in theoretical and computational modeling of the star-forming ISM provide an opportunity to develop more sophisticated subgrid model treatments in cosmological simulations.  A key goal of the <a class="reference external" href="https://www.learning-the-universe.org/">Learning the Universe Simons Collaboration</a> is to replace the current, <em>empirically-calibrated</em> prescriptions for star formation with new subgrid models that are instead calibrated from <em>full-physics ISM simulations</em>. In this regard, the <strong>pressure-regulated feedback-modulated (PRFM)</strong> star formation theory has been developed (<span id="id1">Ostriker and Kim [<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>; see also <span id="id2">Ostriker <em>et al.</em> [<a class="reference internal" href="reference.html#id7" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">OstrikerMcKeeLeroy10</a>]</span>, <span id="id3">Ostriker and Shetty [<a class="reference internal" href="reference.html#id6" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">OstrikerShetty11</a>]</span>, <span id="id4">Kim <em>et al.</em> [<a class="reference internal" href="reference.html#id5" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">KimKimOstriker11</a>]</span>).</p>
+<p>The theoretical concepts of the PRFM theory assume two equilibria – <a class="reference internal" href="vertical-de.html"><span class="doc std std-doc">vertical dynamical equilibrium</span></a> and thermal/dynamical equilibrium. A vertical dynamical equilibrium state of the ISM in disk galaxies demands a certain level of total pressure to support disk weight. Each component of ISM pressure/stress is maintained by massive star feedback by heating the gas, driving turbulence, and activating galactic dynamo to offset losses through cooling and turbulence dissipation. From the former, one can connect galactic condtions with the required total pressure. From the latter, one can connect each pressure component (and hence total pressure) and star formation rate, which is characterized by <a class="reference internal" href="feedback-yield.html"><span class="doc std std-doc">feedback yields</span></a>.</p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PRFM primer</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1"><a class="reference internal" href="feedback-yield.html">Feedback Yields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equation_of_state.html">Effective Equation of State</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
 </ul>
 </div>
@@ -404,6 +424,8 @@ document.write(`
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with the PHANGS results</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -412,6 +434,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -459,6 +482,23 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

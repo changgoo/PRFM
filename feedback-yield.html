@@ -64,7 +64,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'feedback-yield';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="References" href="reference.html" />
+    <link rel="next" title="Effective Equation of State" href="equation_of_state.html" />
     <link rel="prev" title="Vertical Dynamical Equilibrium" href="vertical-de.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -181,12 +181,15 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="vertical-de.html">Vertical Dynamical Equilibrium</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Feedback Yields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equation_of_state.html">Effective Equation of State</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">References</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with the PHANGS results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -363,7 +366,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -379,6 +384,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-classic-calibration">TIGRESS-classic calibration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-ncr-calibration">TIGRESS-NCR calibration</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -413,21 +427,42 @@ P_{\rm DE} = \frac{\pi G}{2}\Sigma_g^2 + [2 G (\rho_{sd})]^{1/2} \sigma_\mathrm{
 \]</div>
 <p>for <span class="math notranslate nohighlight">\(\Sigma_g\)</span> the gas surface density, <span class="math notranslate nohighlight">\(\rho_{sd}\)</span> the midplane star+dark matter midplane density, and  <span class="math notranslate nohighlight">\(\sigma_\mathrm{eff}\)</span> the effective vertical
 velocity dispersion.</p>
+<section id="tigress-classic-calibration">
+<h2>TIGRESS-classic calibration<a class="headerlink" href="#tigress-classic-calibration" title="Permalink to this heading">#</a></h2>
 <p>The numerically calibrated total feedback yield from the TIGRESS-classic suite (<span id="id1">[<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">OstrikerKim22</a>]</span>; see Eqs (25)) is either</p>
 <div class="math notranslate nohighlight">
 \[
   \Upsilon_{\rm tot} = 1030{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.212}
 \]</div>
-<p>or the sum of thermal and kinetic+magnetic</p>
+<p>or the sum of thermal and turbulent+magnetic</p>
 <div class="math notranslate nohighlight">
 \[
   \Upsilon_{\rm th} = 267{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.506}
 \]</div>
 <div class="math notranslate nohighlight">
 \[
-  \Upsilon_{\rm kin+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
+  \Upsilon_{\rm turb+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
 \]</div>
-<p>where we assume that the magnetic contribution is 50% of the kinetic.</p>
+<p>where we assume that the magnetic contribution is 50% of the turbulent.</p>
+</section>
+<section id="tigress-ncr-calibration">
+<h2>TIGRESS-NCR calibration<a class="headerlink" href="#tigress-ncr-calibration" title="Permalink to this heading">#</a></h2>
+<p>The total feedback yield with additional metallicity dependence is calibrated using the TIGRESS-NCR suite (<span id="id2">[<a class="reference internal" href="reference.html#id12" title="Chang-Goo Kim, Eve C. Ostriker, Jeong-Gyu Kim, Munan Gong, Greg L. Bryan, Drummond B. Fielding, Sultan Hassan, Matthew Ho, Sarah M. R. Jeffreson, Rachel S. Somerville, and Ulrich P. Steinwandel. Metallicity Dependence of Pressure-regulated Feedback-modulated Star Formation in the TIGRESS-NCR Simulation Suite. \apj , 972(1):67, September 2024. arXiv:2405.19227, doi:10.3847/1538-4357/ad59ab.">KimOstrikerKim+24</a>]</span>; see Eqs (14) – (17)).</p>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm tot} = 1.65\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.29} Z_g^\prime^{-0.27}
+\]</div>
+<p>or the sum of thermal and turbulent+magnetic</p>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm th} = 390{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.46}Z_g^\prime^{-0.53}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+  \Upsilon_{\rm turb+mag} = 1.17\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.22}Z_g^\prime^{-0.18}
+\]</div>
+<p>where we assume that the magnetic contribution is 50% of the turbulent.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -470,11 +505,11 @@ velocity dispersion.</p>
       </div>
     </a>
     <a class="right-next"
-       href="reference.html"
+       href="equation_of_state.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">References</p>
+        <p class="prev-next-title">Effective Equation of State</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -484,6 +519,22 @@ velocity dispersion.</p>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-classic-calibration">TIGRESS-classic calibration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-ncr-calibration">TIGRESS-NCR calibration</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

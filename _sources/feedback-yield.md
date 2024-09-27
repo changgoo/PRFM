@@ -28,20 +28,42 @@ $$
 for $\Sigma_g$ the gas surface density, $\rho_{sd}$ the midplane star+dark matter midplane density, and  $\sigma_\mathrm{eff}$ the effective vertical
 velocity dispersion.
 
+## TIGRESS-classic calibration
+
 The numerically calibrated total feedback yield from the TIGRESS-classic suite ({cite}`2022ApJ...936..137O`; see Eqs (25)) is either
 
 $$
   \Upsilon_{\rm tot} = 1030{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.212}
 $$
 
-or the sum of thermal and kinetic+magnetic
+or the sum of thermal and turbulent+magnetic
 
 $$
   \Upsilon_{\rm th} = 267{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.506}
 $$
 
 $$
-  \Upsilon_{\rm kin+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
+  \Upsilon_{\rm turb+mag} = 1.5*370{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.060}
 $$
 
-where we assume that the magnetic contribution is 50\% of the kinetic.
+where we assume that the magnetic contribution is 50\% of the turbulent.
+
+## TIGRESS-NCR calibration
+
+The total feedback yield with additional metallicity dependence is calibrated using the TIGRESS-NCR suite ({cite}`2024ApJ...972...67K`; see Eqs (14) -- (17)).
+
+$$
+  \Upsilon_{\rm tot} = 1.65\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.29} Z_g^\prime^{-0.27}
+$$
+
+or the sum of thermal and turbulent+magnetic
+
+$$
+  \Upsilon_{\rm th} = 390{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.46}Z_g^\prime^{-0.53}
+$$
+
+$$
+  \Upsilon_{\rm turb+mag} = 1.17\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.22}Z_g^\prime^{-0.18}
+$$
+
+where we assume that the magnetic contribution is 50\% of the turbulent.
