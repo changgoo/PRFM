@@ -4,4 +4,5 @@ numpy
 scipy
 astropy
 pandas
+xarray
 docutils==0.17.1
