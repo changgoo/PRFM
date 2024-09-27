@@ -5,4 +5,5 @@ scipy
 astropy
 pandas
 xarray
+cmasher
 docutils==0.17.1
