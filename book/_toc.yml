@@ -8,11 +8,14 @@ parts:
     chapters:
     - file: vertical-de
     - file: feedback-yield
+    - file: equation_of_state
     - file: reference
   - caption: Example Notebooks
     chapters:
     - file: prfm
     - file: prfm_sims
+    - file: prfm_tng
+    - file: prfm_phangs
   - caption: Code package
     chapters:
     - file: api
