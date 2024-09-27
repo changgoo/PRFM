@@ -53,17 +53,17 @@ where we assume that the magnetic contribution is 50\% of the turbulent.
 The total feedback yield with additional metallicity dependence is calibrated using the TIGRESS-NCR suite ({cite}`2024ApJ...972...67K`; see Eqs (14) -- (17)).
 
 $$
-  \Upsilon_{\rm tot} = 1.65\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.29} Z_g^\prime^{-0.27}
+  \Upsilon_{\rm tot} = 1.65\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.29} {Z_g^\prime}^{-0.27}
 $$
 
 or the sum of thermal and turbulent+magnetic
 
 $$
-  \Upsilon_{\rm th} = 390{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.46}Z_g^\prime^{-0.53}
+  \Upsilon_{\rm th} = 390{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.46}{Z_g^\prime}^{-0.53}
 $$
 
 $$
-  \Upsilon_{\rm turb+mag} = 1.17\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.22}Z_g^\prime^{-0.18}
+  \Upsilon_{\rm turb+mag} = 1.17\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.22}{Z_g^\prime}^{-0.18}
 $$
 
 where we assume that the magnetic contribution is 50\% of the turbulent.
