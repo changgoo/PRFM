@@ -1,8 +1,14 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+from matplotlib.lines import Line2D
+
 import numpy as np
 import astropy.units as au
 import astropy.constants as ac
 import pandas as pd
+import xarray as xr
+import cmasher as cmr
+
 import os
 from prfm import get_sfr, get_feedback_yield_comp
 
@@ -16,8 +22,10 @@ _kbol_cgs = ac.k_B.cgs.value
 _surf_cgs = (ac.M_sun / ac.pc**2).cgs.value
 _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value
 _kms_cgs = (1 * au.km / au.s).cgs.value
+
 # =====================================================================================
 # data container class
+# =====================================================================================
 
 
 class PRFM_data(object):
@@ -127,6 +135,7 @@ class PRFM_data(object):
 
 # =====================================================================================
 # plotting utilities
+# =====================================================================================
 
 
 def add_one_sim(data, xf="Ptot", yf="SFR", ms=5):
@@ -153,11 +162,62 @@ def add_one_sim(data, xf="Ptot", yf="SFR", ms=5):
     return p
 
 
-def add_PSFR_model_line(Wmin=2, Wmax=8, labels=True, model="tigress-classic", **kwargs):
+def get_ncr_color(Z, cmap=cmr.guppy, Zmin=10 ** (-1.3), Zmax=10 ** (0.5)):
+    norm = LogNorm(vmin=Zmin, vmax=Zmax)
+    return cmap(norm(Z))
+
+
+def add_ncr_sim(data, xf="Ptot", yf="SFR", ms=5, legend=4):
+    m = "o"
+    x = getattr(data, "log_{}".format(xf))
+    y = getattr(data, "log_{}".format(yf))
+    xerr = getattr(data, "log_{}_std".format(xf))
+    yerr = getattr(data, "log_{}_std".format(yf))
+    colors = get_ncr_color(data.Zdust)
+    for x_, y_, xerr_, yerr_, c_ in zip(x, y, xerr, yerr, colors):
+        p = plt.errorbar(
+            x_,
+            y_,
+            yerr=yerr_,
+            xerr=xerr_,
+            marker=m,
+            ls="",
+            mew=1,
+            mec="k",
+            lw=1,
+            color=c_,
+            ms=ms * (1.5 if m == "*" else 1),
+        )
+
+    # legend like K24
+    if legend:
+        ec = plt.rcParams["axes.labelcolor"]
+        pkwargs = dict(ls="", marker="o", markeredgecolor=ec)
+
+        Zmodels = [0.025, 0.1, 0.3, 1, 3]
+        colors = get_ncr_color(Zmodels)
+        custom_lines = []
+        for c in colors:
+            custom_lines.append(Line2D([0], [0], color=c, **pkwargs))
+        _ = plt.legend(
+            custom_lines,
+            Zmodels,
+            title=r"$Z_{\rm d}^\prime$",
+            fontsize="xx-small",
+            title_fontsize="x-small",
+            loc=legend,
+        )
+
+    return p
+
+
+def add_PSFR_model_line(
+    Wmin=2, Wmax=8, Z=None, labels=True, model="tigress-classic", **kwargs
+):
     Wtmp = np.logspace(Wmin, Wmax)
     plt.plot(
         np.log10(Wtmp),
-        np.log10(get_sfr(Wtmp * _kbol_cgs, Ytot=model) / _sfr_cgs),
+        np.log10(get_sfr(Wtmp * _kbol_cgs, Z=Z, Ytot=model) / _sfr_cgs),
         **kwargs,
     )
     if labels:
@@ -165,9 +225,9 @@ def add_PSFR_model_line(Wmin=2, Wmax=8, labels=True, model="tigress-classic", **
         plt.ylabel(r"$\Sigma_{\rm SFR}\, [M_\odot\,{\rm kpc^{-2}\,yr^{-1}}]$")
 
 
-def add_PSFR_model_lines(Wmin=2, Wmax=8):
+def add_PSFR_model_lines(Wmin=2, Wmax=8, model="classic"):
     for y, ls in zip(
-        [1.0e3, "tigress-classic", "tigress-classic-decomp"], ["-", ":", "--"]
+        [1.0e3, f"tigress-{model}", f"tigress-{model}-decomp"], ["-", ":", "--"]
     ):
         add_PSFR_model_line(
             Wmin=Wmin,
@@ -179,23 +239,49 @@ def add_PSFR_model_lines(Wmin=2, Wmax=8):
         )
 
 
+def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8):
+    for Z in [0.1, 0.3, 1, 3]:
+        add_PSFR_model_line(
+            Wmin=Wmin,
+            Wmax=Wmax,
+            Z=Z,
+            model="tigress-ncr-decomp",
+            color=get_ncr_color(Z),
+            label=r"$\Upsilon:$" + f"tigress-ncr Z={Z}",
+        )
+
+
 def add_yield_model_line(
-    Wmin=2, Wmax=8, labels=True, comp="th", model="tigress-classic", **kwargs
+    Wmin=2, Wmax=8, Z=None, labels=True, comp="th", model="tigress-classic", **kwargs
 ):
     Wtmp = np.logspace(Wmin, Wmax)
     plt.plot(
         np.log10(Wtmp),
-        np.log10(get_feedback_yield_comp(Wtmp * _kbol_cgs, comp=comp, model=model)),
+        np.log10(
+            get_feedback_yield_comp(Wtmp * _kbol_cgs, Z=Z, comp=comp, model=model)
+        ),
         **kwargs,
     )
 
 
 def add_yield_model_lines(Wmin=2, Wmax=8, comp="th"):
     for y, ls in zip(
-        ["tigress-classic-decomp", "tigress-ncr-decomp", "tigress-ncr-decomp-Z01"],
+        ["tigress-classic-decomp", "tigress-ncr-decomp"],
         [":", "--", "-"],
     ):
         add_yield_model_line(Wmin=Wmin, Wmax=Wmax, model=y, comp=comp, ls=ls, color="k")
+
+
+def add_yield_ncr_model_lines(Wmin=2, Wmax=8, comp="th"):
+    for Z in [0.1, 0.3, 1, 3]:
+        add_yield_model_line(
+            Wmin=Wmin,
+            Wmax=Wmax,
+            Z=Z,
+            model="tigress-ncr-decomp",
+            comp=comp,
+            color=get_ncr_color(Z),
+        )
 
 
 def setup_axes(nrow=3, figsize=(12, 6.75), width_ratios=(2, 1)):
@@ -209,19 +295,10 @@ def setup_axes(nrow=3, figsize=(12, 6.75), width_ratios=(2, 1)):
     return fig, main_ax, side_axes
 
 
-# =========================================================================================
+# ========================================================================================
 # loader
-
-
-def load_sim_data():
-    """loading all simulation data as a dictionary
-
-    Returns
-    -------
-    data : dict
-        Dictionary containing all simulation data.
-        PRFM class.
-    """
+# ========================================================================================
+def load_pretigress():
     # loading Kim & Ostriker 2014
     PRFM_KO15 = PRFM_data("KO15")
     data = PRFM_KO15
@@ -411,456 +488,149 @@ def load_sim_data():
     data.get_Ptotal()
     data.get_yield()
 
+    return PRFM_KKO11, PRFM_KOK13, PRFM_KO15
+
+
+def load_classic_data(from_table=False):
     # OK22: TIGRESS-classic
-    PRFM_OK22_table = PRFM_data("TIGRESS-classic-table")
-    data = PRFM_OK22_table
-    # from table
-    data.SFR = np.array([1.1, 5.37e-2, 2.67e-3, 6.21e-5, 1.17e-1, 5.41e-2, 2.16e-3])
-    data.Pturb = np.array([1.26e6, 1.95e5, 5.71e3, 1.88e2, 6.41e5, 1.01e5, 4.78e3])
-    data.Pth = np.array([1.13e5, 1.76e4, 5.02e3, 3.39e2, 6.60e4, 1.34e4, 2.36e3])
-    data.Pimag = np.array([5.37e5, 2.22e4, 7.86e3, 1.67e2, 2.77e5, 1.92e4, 1.91e3])
+    data = PRFM_data("TIGRESS-classic")
+    if from_table:
+        # from table
+        data.SFR = np.array([1.1, 5.37e-2, 2.67e-3, 6.21e-5, 1.17e-1, 5.41e-2, 2.16e-3])
+        data.Pturb = np.array([1.26e6, 1.95e5, 5.71e3, 1.88e2, 6.41e5, 1.01e5, 4.78e3])
+        data.Pth = np.array([1.13e5, 1.76e4, 5.02e3, 3.39e2, 6.60e4, 1.34e4, 2.36e3])
+        data.Pimag = np.array([5.37e5, 2.22e4, 7.86e3, 1.67e2, 2.77e5, 1.92e4, 1.91e3])
 
-    # ad hoc value
-    data.SFR_std = data.SFR * 0.0
-    data.Pturb_std = data.Pturb * 0.0
-    data.Pth_std = data.Pth * 0.0
-    data.Pimag_std = data.Pimag * 0.0
+        # ad hoc value
+        data.SFR_std = data.SFR * 0.0
+        data.Pturb_std = data.Pturb * 0.0
+        data.Pth_std = data.Pth * 0.0
+        data.Pimag_std = data.Pimag * 0.0
 
-    data.convert_linear_log()
-    data.get_Ptotal()
-    data.get_yield()
+        data.convert_linear_log()
+        data.get_Ptotal()
+        data.get_yield()
+    else:
+        # my re caclulation
+        data.SFR = np.array(
+            [9.55e-01, 6.18e-01, 7.81e-02, 7.39e-02, 3.60e-03, 3.11e-03, 6.69e-05]
+        )
+        data.Pturb = np.array(
+            [1.74e06, 6.16e05, 3.09e05, 1.68e05, 6.01e03, 5.15e03, 1.42e02]
+        )
+        data.Pth = np.array(
+            [1.09e05, 7.00e04, 1.63e04, 1.35e04, 4.92e03, 2.32e03, 2.58e02]
+        )
+        data.oPimag = np.array(
+            [1.44e05, 1.24e05, 8.77e03, 7.55e03, 4.37e03, 7.99e02, 1.88e02]
+        )
+        data.dPimag = np.array(
+            [3.17e05, 1.65e05, 1.14e04, 1.06e04, 3.42e03, 1.13e03, 7.34e01]
+        )
 
-    # my re caclulation
-    PRFM_OK22 = PRFM_data("TIGRESS-classic")
-    data = PRFM_OK22
+        data.SFR_std = np.array(
+            [2.76e-01, 9.17e-02, 1.06e-02, 2.59e-02, 1.47e-03, 2.14e-03, 7.04e-05]
+        )
+        data.Pturb_std = np.array(
+            [1.57e06, 2.47e05, 3.83e05, 1.43e05, 2.23e03, 2.77e03, 1.09e02]
+        )
+        data.Pth_std = np.array(
+            [6.85e04, 1.54e04, 9.60e03, 3.80e03, 1.44e03, 1.30e03, 1.73e02]
+        )
+        data.oPimag_std = np.array(
+            [1.60e05, 7.36e04, 1.21e04, 6.88e03, 1.25e03, 8.13e02, 2.08e02]
+        )
+        data.dPimag_std = np.array(
+            [2.51e05, 7.71e04, 1.37e04, 1.09e04, 1.41e03, 7.40e02, 3.97e01]
+        )
+        data.convert_linear_log()
+        data.get_Ptotal()
+        data.get_yield()
+    return data
 
-    data.SFR = np.array(
-        [9.55e-01, 6.18e-01, 7.81e-02, 7.39e-02, 3.60e-03, 3.11e-03, 6.69e-05]
-    )
-    data.Pturb = np.array(
-        [1.74e06, 6.16e05, 3.09e05, 1.68e05, 6.01e03, 5.15e03, 1.42e02]
-    )
-    data.Pth = np.array([1.09e05, 7.00e04, 1.63e04, 1.35e04, 4.92e03, 2.32e03, 2.58e02])
-    data.oPimag = np.array(
-        [1.44e05, 1.24e05, 8.77e03, 7.55e03, 4.37e03, 7.99e02, 1.88e02]
-    )
-    data.dPimag = np.array(
-        [3.17e05, 1.65e05, 1.14e04, 1.06e04, 3.42e03, 1.13e03, 7.34e01]
-    )
 
-    data.SFR_std = np.array(
-        [2.76e-01, 9.17e-02, 1.06e-02, 2.59e-02, 1.47e-03, 2.14e-03, 7.04e-05]
-    )
-    data.Pturb_std = np.array(
-        [1.57e06, 2.47e05, 3.83e05, 1.43e05, 2.23e03, 2.77e03, 1.09e02]
-    )
-    data.Pth_std = np.array(
-        [6.85e04, 1.54e04, 9.60e03, 3.80e03, 1.44e03, 1.30e03, 1.73e02]
-    )
-    data.oPimag_std = np.array(
-        [1.60e05, 7.36e04, 1.21e04, 6.88e03, 1.25e03, 8.13e02, 2.08e02]
-    )
-    data.dPimag_std = np.array(
-        [2.51e05, 7.71e04, 1.37e04, 1.09e04, 1.41e03, 7.40e02, 3.97e01]
-    )
-    data.convert_linear_log()
-    data.get_Ptotal()
-    data.get_yield()
-
+def load_gc_data(from_table=False):
     # Galactic center from M21 and M23
-    PRFM_M21_table = PRFM_data("TIGRESS-GC-table")
-    data = PRFM_M21_table
-    # data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
-    # from paper table
-    data.SFR = np.array([0.148, 0.648, 2.07, 7.94, 1.88, 6.67, 27.1, 94.8])
-    data.Pturb = np.array([0.137, 0.512, 1.49, 4.49, 1.44, 4.26, 12.7, 57.4]) * 1.0e6
-    data.Pth = np.array([0.128, 0.424, 0.966, 1.99, 1.01, 2.32, 3.82, 9.51]) * 1.0e6
+    data = PRFM_data("TIGRESS-GC")
+    if from_table:
+        # data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
+        # from paper table
+        data.SFR = np.array([0.148, 0.648, 2.07, 7.94, 1.88, 6.67, 27.1, 94.8])
+        data.Pturb = (
+            np.array([0.137, 0.512, 1.49, 4.49, 1.44, 4.26, 12.7, 57.4]) * 1.0e6
+        )
+        data.Pth = np.array([0.128, 0.424, 0.966, 1.99, 1.01, 2.32, 3.82, 9.51]) * 1.0e6
 
-    data.SFR_std = np.array([0.027, 0.099, 0.37, 0.86, 0.24, 0.98, 2.5, 7.4])
-    data.Pturb_std = (
-        np.array([0.0022, 0.079, 0.19, 0.78, 0.33, 0.82, 2.7, 19.7]) * 1.0e6
-    )
-    data.Pth_std = (
-        np.array([0.0022, 0.051, 0.106, 0.32, 0.30, 0.42, 0.78, 2.06]) * 1.0e6
-    )
+        data.SFR_std = np.array([0.027, 0.099, 0.37, 0.86, 0.24, 0.98, 2.5, 7.4])
+        data.Pturb_std = (
+            np.array([0.0022, 0.079, 0.19, 0.78, 0.33, 0.82, 2.7, 19.7]) * 1.0e6
+        )
+        data.Pth_std = (
+            np.array([0.0022, 0.051, 0.106, 0.32, 0.30, 0.42, 0.78, 2.06]) * 1.0e6
+        )
+        data.convert_linear_log()
+        data.get_Ptotal()
+        data.get_yield()
+    else:
+        # from recalculation for warm/cold
+        data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
+        # Read csv file
+        df = pd.read_csv(os.path.join(dirpath, "prfm_ring.csv"), index_col="model")
+        df.replace(0, np.nan, inplace=True)
+        data.log_SFR = np.array(df["sigsfr_mean"])
+        data.log_Pturb = np.array(df["ptrb_mean"])
+        data.log_Pth = np.array(df["pthm_mean"])
+        data.log_Pimag = np.array(df["pmag_mean"])
+
+        data.log_SFR_std = np.array(df["sigsfr_std"])
+        data.log_Pturb_std = np.array(df["ptrb_std"])
+        data.log_Pth_std = np.array(df["pthm_std"])
+        data.log_Pimag_std = np.array(df["pmag_std"])
+
+        data.convert_log_linear()
+        data.get_Ptotal()
+        data.get_yield()
+    return data
+
+
+def load_ncr_data(fname="tigress_ncr_K24.nc"):
+    dset = xr.open_dataset(os.path.join(dirpath, fname))
+    data = PRFM_data("TIGRESS-NCR")
+    data.Zdust = dset["Zdust"].sel(q="mean").data
+    data.SFR = dset["sfr10"].sel(q="mean").data
+    data.Pturb = dset["Pturb"].sel(q="mean").data
+    data.Pth = dset["Pth"].sel(q="mean").data
+    data.oPimag = dset["oPimag"].sel(q="mean").data
+    data.dPimag = dset["dPimag"].sel(q="mean").data
+    data.SFR_std = dset["sfr10"].sel(q="std").data
+    data.Pturb_std = dset["Pturb"].sel(q="std").data
+    data.Pth_std = dset["Pth"].sel(q="std").data
+    data.oPimag_std = dset["oPimag"].sel(q="std").data
+    data.dPimag_std = dset["dPimag"].sel(q="std").data
     data.convert_linear_log()
     data.get_Ptotal()
     data.get_yield()
 
-    # from recalculation for warm/cold
-    PRFM_M21 = PRFM_data("TIGRESS-GC")
-    data = PRFM_M21
-    data.field_list = ["SFR", "Pturb", "Pth", "Pimag"]
-    # Read csv file
-    df = pd.read_csv(os.path.join(dirpath, "prfm_ring.csv"), index_col="model")
-    df.replace(0, np.nan, inplace=True)
-    data.log_SFR = np.array(df["sigsfr_mean"])
-    data.log_Pturb = np.array(df["ptrb_mean"])
-    data.log_Pth = np.array(df["pthm_mean"])
-    data.log_Pimag = np.array(df["pmag_mean"])
+    return data
 
-    data.log_SFR_std = np.array(df["sigsfr_std"])
-    data.log_Pturb_std = np.array(df["ptrb_std"])
-    data.log_Pth_std = np.array(df["pthm_std"])
-    data.log_Pimag_std = np.array(df["pmag_std"])
 
-    data.convert_log_linear()
-    data.get_Ptotal()
-    data.get_yield()
+def load_sim_data():
+    """loading all simulation data as a dictionary
 
-    # NCR
-    PRFM_NCR_Z1 = PRFM_data("TIGRESS-NCR")
-    data = PRFM_NCR_Z1
-    data.SFR = np.array(
-        [
-            1.14e-02,
-            2.60e-03,
-            2.97e-03,
-            1.13e-04,
-            1.27e-01,
-            8.60e-02,
-            2.78e-02,
-            3.43e-02,
-            2.47e-01,
-            1.33e-01,
-            2.78e-01,
-        ]
-    )
-    data.Pturb = np.array(
-        [
-            1.86e04,
-            5.58e03,
-            8.35e03,
-            5.87e02,
-            1.96e05,
-            2.78e05,
-            4.23e04,
-            5.00e04,
-            1.59e05,
-            8.78e04,
-            9.87e05,
-        ]
-    )
-    data.Pth = np.array(
-        [
-            1.07e04,
-            4.02e03,
-            4.39e03,
-            4.00e02,
-            5.70e04,
-            3.93e04,
-            2.00e04,
-            2.43e04,
-            8.81e04,
-            3.82e04,
-            1.06e05,
-        ]
-    )
-    data.oPimag = np.array(
-        [
-            8.09e03,
-            4.74e03,
-            4.63e03,
-            3.02e02,
-            4.23e04,
-            1.93e04,
-            2.48e04,
-            2.45e04,
-            3.32e05,
-            3.86e05,
-            5.66e03,
-        ]
-    )
-    data.dPimag = np.array(
-        [
-            9.48e03,
-            3.33e03,
-            3.22e03,
-            1.20e02,
-            3.20e04,
-            1.74e04,
-            1.34e04,
-            1.86e04,
-            1.43e05,
-            6.21e04,
-            2.48e04,
-        ]
-    )
-    data.SFR_std = np.array(
-        [
-            3.05e-03,
-            7.88e-04,
-            1.20e-03,
-            6.11e-05,
-            6.07e-02,
-            4.91e-02,
-            8.16e-03,
-            6.11e-03,
-            7.50e-02,
-            5.23e-02,
-            1.15e-01,
-        ]
-    )
-    data.Pturb_std = np.array(
-        [
-            6.63e03,
-            2.09e03,
-            5.22e03,
-            4.73e02,
-            1.38e05,
-            2.62e05,
-            2.38e04,
-            2.54e04,
-            7.14e04,
-            4.55e04,
-            4.78e05,
-        ]
-    )
-    data.Pth_std = np.array(
-        [
-            3.15e03,
-            1.10e03,
-            1.61e03,
-            2.08e02,
-            3.25e04,
-            2.23e04,
-            6.36e03,
-            6.32e03,
-            3.46e04,
-            1.15e04,
-            6.88e04,
-        ]
-    )
-    data.oPimag_std = np.array(
-        [
-            4.42e03,
-            2.27e03,
-            2.21e03,
-            2.36e02,
-            5.46e04,
-            2.51e04,
-            2.27e04,
-            2.37e04,
-            1.04e05,
-            6.99e04,
-            9.28e03,
-        ]
-    )
-    data.dPimag_std = np.array(
-        [
-            3.61e03,
-            1.22e03,
-            1.46e03,
-            7.17e01,
-            3.72e04,
-            1.95e04,
-            6.32e03,
-            1.04e04,
-            5.93e04,
-            3.79e04,
-            3.26e04,
-        ]
-    )
-    data.convert_linear_log()
-    data.get_Ptotal()
-    data.get_yield()
-
-    # NCR-lowZ
-    PRFM_NCR_lowZ = PRFM_data("TIGRESS-NCR-lowZ")
-    data = PRFM_NCR_lowZ
-    data.SFR = np.array(
-        [
-            7.92e-03,
-            1.90e-03,
-            1.27e-03,
-            1.17e-03,
-            1.92e-03,
-            1.29e-03,
-            1.32e-03,
-            4.08e-05,
-            8.85e-02,
-            1.69e-02,
-            2.52e-02,
-            1.86e-02,
-            2.02e-02,
-            1.08e-01,
-            2.61e-01,
-        ]
-    )
-    data.Pturb = np.array(
-        [
-            2.03e04,
-            4.65e03,
-            3.09e03,
-            3.15e03,
-            5.71e03,
-            3.36e03,
-            3.22e03,
-            1.49e02,
-            1.27e05,
-            3.44e04,
-            3.88e04,
-            3.37e04,
-            5.00e04,
-            8.66e04,
-            3.20e05,
-        ]
-    )
-    data.Pth = np.array(
-        [
-            2.04e04,
-            5.89e03,
-            6.80e03,
-            5.74e03,
-            5.75e03,
-            6.96e03,
-            6.53e03,
-            9.37e02,
-            8.53e04,
-            3.41e04,
-            3.18e04,
-            3.97e04,
-            3.24e04,
-            1.24e05,
-            1.62e05,
-        ]
-    )
-    data.oPimag = np.array(
-        [
-            1.18e04,
-            4.87e03,
-            6.35e03,
-            7.95e03,
-            5.35e03,
-            6.12e03,
-            6.05e03,
-            1.77e02,
-            5.13e04,
-            2.96e04,
-            3.82e04,
-            3.83e04,
-            3.18e04,
-            4.14e05,
-            1.08e04,
-        ]
-    )
-    data.dPimag = np.array(
-        [
-            9.59e03,
-            3.03e03,
-            2.46e03,
-            2.51e03,
-            3.27e03,
-            2.38e03,
-            2.71e03,
-            1.04e02,
-            5.24e04,
-            1.66e04,
-            1.83e04,
-            2.07e04,
-            1.89e04,
-            9.55e04,
-            3.79e04,
-        ]
-    )
-    data.SFR_std = np.array(
-        [
-            2.90e-03,
-            8.53e-04,
-            7.95e-04,
-            9.17e-04,
-            5.18e-04,
-            8.13e-04,
-            7.20e-04,
-            3.62e-05,
-            3.26e-02,
-            5.95e-03,
-            6.39e-03,
-            7.73e-03,
-            4.48e-03,
-            2.47e-02,
-            1.12e-01,
-        ]
-    )
-    data.Pturb_std = np.array(
-        [
-            9.36e03,
-            1.77e03,
-            1.04e03,
-            1.50e03,
-            2.64e03,
-            1.13e03,
-            1.12e03,
-            6.05e01,
-            6.38e04,
-            1.97e04,
-            2.06e04,
-            1.63e04,
-            2.68e04,
-            2.15e04,
-            1.71e05,
-        ]
-    )
-    data.Pth_std = np.array(
-        [
-            5.11e03,
-            1.72e03,
-            1.74e03,
-            2.12e03,
-            1.14e03,
-            2.04e03,
-            1.39e03,
-            2.95e02,
-            3.26e04,
-            8.52e03,
-            6.56e03,
-            1.31e04,
-            9.48e03,
-            2.10e04,
-            5.55e04,
-        ]
-    )
-    data.oPimag_std = np.array(
-        [
-            5.44e03,
-            2.36e03,
-            2.25e03,
-            3.32e03,
-            1.39e03,
-            2.38e03,
-            2.51e03,
-            1.22e02,
-            4.10e04,
-            2.03e04,
-            3.42e04,
-            3.70e04,
-            2.33e04,
-            4.80e04,
-            1.10e04,
-        ]
-    )
-    data.dPimag_std = np.array(
-        [
-            3.49e03,
-            1.29e03,
-            1.05e03,
-            1.56e03,
-            1.51e03,
-            1.16e03,
-            1.28e03,
-            4.13e01,
-            3.23e04,
-            9.10e03,
-            8.52e03,
-            1.40e04,
-            9.68e03,
-            3.06e04,
-            2.57e04,
-        ]
-    )
-    data.convert_linear_log()
-    data.get_Ptotal()
-    data.get_yield()
+    Returns
+    -------
+    data : dict
+        Dictionary containing all simulation data.
+        PRFM class.
+    """
+    # pre-tigress (KKO11, KOK13, KO15)
+    PRFM_KKO11, PRFM_KOK13, PRFM_KO15 = load_pretigress()
+    # classic (OK22)
+    PRFM_OK22 = load_classic_data()
+    # GC (M21, M23)
+    PRFM_GC = load_gc_data()
+    # NCR (K24)
+    PRFM_NCR = load_ncr_data()
 
     data = dict()
     colors = {
@@ -868,23 +638,10 @@ def load_sim_data():
         "KOK13": "tab:pink",
         "KO15": "tab:olive",
         "TIGRESS-classic": "tab:blue",
-        "TIGRESS-classic-table": "tab:blue",
         "TIGRESS-GC": "tab:orange",
-        "TIGRESS-GC-table": "tab:orange",
-        "TIGRESS-NCR": "tab:cyan",
-        "TIGRESS-NCR-lowZ": "tab:red",
+        "TIGRESS-NCR": "tab:red",
     }
-    for d in [
-        PRFM_KKO11,
-        PRFM_KOK13,
-        PRFM_KO15,
-        PRFM_OK22,
-        PRFM_OK22_table,
-        PRFM_M21,
-        PRFM_M21_table,
-        PRFM_NCR_Z1,
-        PRFM_NCR_lowZ,
-    ]:
+    for d in [PRFM_KKO11, PRFM_KOK13, PRFM_KO15, PRFM_OK22, PRFM_GC, PRFM_NCR]:
         d.color = colors[d.paper]
         data[d.paper] = d
     return data

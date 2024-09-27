@@ -17,18 +17,49 @@ _kms_cgs = (1 * au.km / au.s).cgs.value
 _sigma_eff_models = dict()
 _sigma_eff_models["tigress_mid"] = dict(sigma_0=9.8, expo=0.15, sigma_min=5)
 _sigma_eff_models["tigress_avg"] = dict(sigma_0=12, expo=0.22, sigma_min=5)
+_sigma_eff_models["tigress-ncr_mid"] = dict(
+    sigma_0=8.9, expo=0.08, expo_Z=-0.005, sigma_min=5
+)
+_sigma_eff_models["tigress-ncr_avg"] = dict(
+    sigma_0=11.7, expo=0.12, expo_Z=-0.03, sigma_min=5
+)
 
 _yield_models = dict()
-_yield_models["tigress-classic"] = dict(Y0=10**3.86, expo=-0.212)
+# TIGRESS-NCR: Ostriker & Kim 2022
+# Equations (25)
+# renormalized for P/10^4
+# turbulent is multiplied by 1.5 to accomodate magnetic
+_yield_models["tigress-classic"] = dict(Y0=10 ** (3.86 - 0.212 * 4), expo=-0.212)
 _yield_models["tigress-classic-decomp"] = dict(
-    Yth0=10**4.45, expo_th=-0.506, Ytrb0=1.5 * 10**2.81, expo_trb=-0.06
+    Yth0=10 ** (4.45 - 0.506 * 4),
+    expo_th=-0.506,
+    Ytrb0=1.5 * 10 ** (2.81 - 0.06 * 4),
+    expo_trb=-0.06,
 )
+# TIGRESS-NCR: Kim et al. 2024
+# Equations 14, 15, 16
+_yield_models["tigress-ncr-decomp-all"] = dict(
+    Yth0=390,
+    expo_th=-0.46,
+    expo_th_Z=-0.53,
+    Ytrb0=561,
+    expo_trb=-0.21,
+    expo_trb_Z=-0.04,
+    Ymag0=578,
+    expo_mag=-0.40,
+    expo_mag_Z=-0.44,
+)
+# Equations 14 and 17
 _yield_models["tigress-ncr-decomp"] = dict(
-    Yth0=10**4.7, expo_th=-0.5, Ytrb0=10**3.3, expo_trb=-0.1
+    Yth0=390,
+    expo_th=-0.46,
+    expo_th_Z=-0.53,
+    Ytrb0=1.17e3,
+    expo_trb=-0.22,
+    expo_trb_Z=-0.18,
 )
-_yield_models["tigress-ncr-decomp-Z01"] = dict(
-    Yth0=10**5.2, expo_th=-0.5, Ytrb0=10**3.3, expo_trb=-0.1
-)
+# Equation 20
+_yield_models["tigress-ncr"] = dict(Y0=1.65e3, expo=-0.29, expo_Z=-0.27)
 
 
 def get_weight_gas(Sigma_gas):
@@ -290,7 +321,7 @@ def get_scale_height_dm_gas(*args, **kwargs):
 
 
 @np.vectorize
-def get_sigma_eff(P, model="tigress_mid"):
+def get_sigma_eff(P, Z=None, model="tigress_mid"):
     """pressure-dependent velocity dispersion model"""
     sigma_eff_model = _sigma_eff_models[model]
     sigma_0 = sigma_eff_model["sigma_0"]
@@ -298,12 +329,13 @@ def get_sigma_eff(P, model="tigress_mid"):
     sigma_min = sigma_eff_model["sigma_min"]
 
     veld = sigma_0 * (1.0e-4 * P / _kbol_cgs) ** expo
-
+    if (Z is not None) and ("expo_Z" in sigma_eff_model):
+        veld *= Z ** sigma_eff_model["expo_Z"]
     return np.clip(veld, sigma_min, None) * 1.0e5
 
 
 @np.vectorize
-def get_feedback_yield(P, model="tigress-classic"):
+def get_feedback_yield(P, Z=None, model="tigress-classic"):
     """total feedback yield as a function of weight
 
     Paramerters
@@ -312,7 +344,7 @@ def get_feedback_yield(P, model="tigress-classic"):
         midplane pressure or weight
     model : str
         tigress-classic for OK22
-        tigress-NCR for K23
+        tigress-NCR for K24
 
     Returns
     -------
@@ -323,18 +355,32 @@ def get_feedback_yield(P, model="tigress-classic"):
     if "Y0" in yield_model:
         Y0 = yield_model["Y0"]
         slope = yield_model["expo"]
-        Ytot = Y0 * (P / _kbol_cgs) ** slope
+        Ytot = Y0 * (1.0e-4 * P / _kbol_cgs) ** slope
+        if (Z is not None) and ("expo_Z" in yield_model):
+            Ytot *= Z ** yield_model["expo_Z"]
+        return Ytot
     elif "Yth0" in yield_model:
         Yth0 = yield_model["Yth0"]
         expo_th = yield_model["expo_th"]
         Ytrb0 = yield_model["Ytrb0"]
         expo_trb = yield_model["expo_trb"]
-        Ytot = Yth0 * (P / _kbol_cgs) ** expo_th + Ytrb0 * (P / _kbol_cgs) ** expo_trb
-    return Ytot
+        Yth = Yth0 * (1.0e-4 * P / _kbol_cgs) ** expo_th
+        if (Z is not None) and ("expo_th_Z" in yield_model):
+            Yth *= Z ** yield_model["expo_th_Z"]
+        Ytrb = Ytrb0 * (1.0e-4 * P / _kbol_cgs) ** expo_trb
+        if (Z is not None) and ("expo_trb_Z" in yield_model):
+            Ytrb *= Z ** yield_model["expo_trb_Z"]
+        if "Ymag0" in yield_model:
+            Ymag0 = yield_model["Ymag0"]
+            expo_mag = yield_model["expo_mag"]
+            expo_mag_Z = yield_model["expo_mag_Z"]
+            # add magnetic contribution to turbulent for fully decomposed yield
+            Ytrb += Ymag0 * (1.0e-4 * P / _kbol_cgs) ** expo_mag * Z**expo_mag_Z
+        return Yth + Ytrb
 
 
 @np.vectorize
-def get_feedback_yield_comp(P, comp="th", model="tigress-classic-decomp"):
+def get_feedback_yield_comp(P, Z=None, comp="th", model="tigress-classic-decomp"):
     """feedback yield of each component as a function of weight
 
     Paramerters
@@ -353,12 +399,15 @@ def get_feedback_yield_comp(P, comp="th", model="tigress-classic-decomp"):
         feedback yield in km/s
     """
     yield_model = _yield_models[model]
-    Y0 = yield_model["Y{}0".format(comp)]
-    expo = yield_model["expo_{}".format(comp)]
-    return Y0 * (P / _kbol_cgs) ** expo
+    Y0 = yield_model[f"Y{comp}0"]
+    expo = yield_model[f"expo_{comp}"]
+    Y = Y0 * (1.0e-4 * P / _kbol_cgs) ** expo
+    if (Z is not None) and (f"expo_{comp}_Z" in yield_model):
+        Y *= Z ** yield_model[f"expo_{comp}_Z"]
+    return Y
 
 
-def get_sfr(P, Ytot="tigress-classic"):
+def get_sfr(P, Z=None, Ytot="tigress-classic"):
     """calculate SFR surface density using feedback yield
 
     Paramerters
@@ -374,7 +423,7 @@ def get_sfr(P, Ytot="tigress-classic"):
     sfr : float
         SFR surface density in g/cm^2/yr
     """
-    Ytot = get_feedback_yield(P, model=Ytot) if isinstance(Ytot, str) else Ytot
+    Ytot = get_feedback_yield(P, Z=Z, model=Ytot) if isinstance(Ytot, str) else Ytot
     return P / (Ytot * 1.0e5)
 
 
