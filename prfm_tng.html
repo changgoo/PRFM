@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Post-processing TNG50 cosmological simulations with the PRFM theory &#8212; PRFM</title>
+    <title>Post-processing TNG50 Cosmological Simulations with the PRFM Theory &#8212; PRFM</title>
   
   
   
@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'prfm_tng';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Comparison with the PHANGS results" href="prfm_phangs.html" />
-    <link rel="prev" title="Simulation Results and PRFM Theory" href="prfm_sims.html" />
+    <link rel="next" title="Comparison with Observations of Nearby Galaxies (PHANGS)" href="prfm_phangs.html" />
+    <link rel="prev" title="High-resolution Simulation Results and PRFM Theory" href="prfm_sims.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -185,9 +185,9 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with the PHANGS results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -408,7 +408,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Post-processing TNG50 cosmological simulations with the PRFM theory</h1>
+    <h1>Post-processing TNG50 Cosmological Simulations with the PRFM Theory</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -454,12 +454,10 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">200</span>
 </pre></div>
 </div>
@@ -481,7 +479,7 @@ document.write(`
 </details>
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="post-processing-tng50-cosmological-simulations-with-the-prfm-theory">
-<h1>Post-processing TNG50 cosmological simulations with the PRFM theory<a class="headerlink" href="#post-processing-tng50-cosmological-simulations-with-the-prfm-theory" title="Permalink to this heading">#</a></h1>
+<h1>Post-processing TNG50 Cosmological Simulations with the PRFM Theory<a class="headerlink" href="#post-processing-tng50-cosmological-simulations-with-the-prfm-theory" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>This example utilizes the post-prcessed TNG50 galaxy catalogs presented in <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H">Hassan et al. 2024</a> as part of the <a class="reference external" href="http://learning-the-universe.org">Learning the Universe collaboration</a>. The original paper, code, and data can be found in the following links. For full analysis, one has to download the data in the <a class="reference external" href="https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing">link</a>, but in this example notebook, we utilize a reduced data stroed in this repository.</p>
@@ -672,9 +670,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1952/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1879/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
-/tmp/ipykernel_1952/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
+/tmp/ipykernel_1879/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
 </pre></div>
 </div>
@@ -752,7 +750,7 @@ document.write(`
 9 8.269903682361322e-07
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1952/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1879/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
   t_dep_TNG50 = Sigma_g / Sigma_SFR * 1e-9  # depletion time from TNG50 in Gyr
 </pre></div>
 </div>
@@ -906,6 +904,7 @@ document.write(`
   rho_star[0]: 0.00065556609375, N=107213
   Omega_d[0]: 14.179431180241075, N=107213
   rho_dm[0]: 0.003720031911502777, N=107213
+  H_star[0]: 274.1634168513234, N=107213
   sigma_eff_model: tigress-classic-avg
   feedback_yield_model: tigress-classic
 </pre></div>
@@ -951,7 +950,8 @@ document.write(`
 <h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># but weighted by SFR derived from PRFM</span>
+<span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1182,7 +1182,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Simulation Results and PRFM Theory</p>
+        <p class="prev-next-title">High-resolution Simulation Results and PRFM Theory</p>
       </div>
     </a>
     <a class="right-next"
@@ -1190,7 +1190,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Comparison with the PHANGS results</p>
+        <p class="prev-next-title">Comparison with Observations of Nearby Galaxies (PHANGS)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -64,7 +64,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'prfm';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Simulation Results and PRFM Theory" href="prfm_sims.html" />
+    <link rel="next" title="High-resolution Simulation Results and PRFM Theory" href="prfm_sims.html" />
     <link rel="prev" title="References" href="reference.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -187,9 +187,9 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Toy Galaxy Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">Simulation Results and PRFM Theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with the PHANGS results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -552,26 +552,6 @@ document.write(`
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mymodel</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PRFM calculator is prepared for
-  Sigma_gas[0]: 40.0, N=100
-  Sigma_star[0]: 233.21373077544513, N=100
-  rho_star[0]: 0.4759463893376431, N=100
-  Omega_d[0]: 112.0, N=100
-  rho_dm[0]: 0.23209463014478007, N=100
-  sigma_eff[0]: 15.0, N=1
-  sigma_eff_model: constant
-  feedback_yield_model: tigress-classic
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># model profiles</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
@@ -654,7 +634,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/5cf367b30bc4fdb7e213a1eac59382f78c10aee5feabbb68dad86074effeea9d.png" src="_images/5cf367b30bc4fdb7e213a1eac59382f78c10aee5feabbb68dad86074effeea9d.png" />
+<img alt="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" src="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" />
 </div>
 </div>
 <p>There are additional convenient function wrappers (internally using <code class="docutils literal notranslate"><span class="pre">PRFM.get_scale_height</span></code> to find gas scale height):</p>
@@ -678,41 +658,22 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">wfrac</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_weight_contribution</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span>
-
-<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/prfm.py:1028,</span> in <span class="ni">PRFM.calc_weights</span><span class="nt">(self, method)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1025</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span> <span class="o">=</span> <span class="n">Wtot</span> <span class="o">/</span> <span class="n">u_cgs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1027</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1028</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1029</span>     <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
-
-<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/prfm.py:326,</span> in <span class="ni">get_sigma_eff</span><span class="nt">(P, Z, model)</span>
-<span class="g g-Whitespace">    </span><span class="mi">324</span> <span class="k">def</span> <span class="nf">get_sigma_eff</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">325</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;pressure-dependent velocity dispersion model&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">326</span>     <span class="n">sigma_eff_model</span> <span class="o">=</span> <span class="n">_sigma_eff_models</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">327</span>     <span class="n">sigma_0</span> <span class="o">=</span> <span class="n">sigma_eff_model</span><span class="p">[</span><span class="s2">&quot;sigma_0&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">328</span>     <span class="n">expo</span> <span class="o">=</span> <span class="n">sigma_eff_model</span><span class="p">[</span><span class="s2">&quot;expo&quot;</span><span class="p">]</span>
-
-<span class="ne">KeyError</span>: &#39;constant&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f867bd2abd0&gt;
 </pre></div>
 </div>
+<img alt="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" src="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" />
 </div>
 </div>
 </section>
 <section id="self-consistent-solutions-for-different-velocity-dispersion-models">
 <h2>Self-consistent solutions for different velocity dispersion models<a class="headerlink" href="#self-consistent-solutions-for-different-velocity-dispersion-models" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">PRFM.calc_self_consistent_solution</span></code> function will calculate the scale height, weight, and velocity dispersion iteratively for a given velocity dispersion model.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress_mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress_avg</span></code>. Additional calibration results will be updated. For user-specfic velocity dispersion models using the same functional form, one can specify a coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and a power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sigma_eff</span></code> can either be a constant or a string to specify a model. For now, we provide two velocity dispersion models <code class="docutils literal notranslate"><span class="pre">tigress-classic-mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress-classic-avg</span></code>. Additional calibration results using the TIGRESS-NCR suite is available as <code class="docutils literal notranslate"><span class="pre">tigress-ncr-mid</span></code> and <code class="docutils literal notranslate"><span class="pre">tigress-ncr-avg</span></code>. For user-specfic velocity dispersion models using the same functional form, one can specify a coefficient, <code class="docutils literal notranslate"><span class="pre">sigma_0</span></code>, and a power-law exponent, <code class="docutils literal notranslate"><span class="pre">expo</span></code>, as well as the minimum veloicty dispersion, <code class="docutils literal notranslate"><span class="pre">sigma_min</span></code>. To allow additional metallicity dependence, one can specify <code class="docutils literal notranslate"><span class="pre">epxo_Z</span></code>.</p>
 <p>(TODO)</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_eff_models</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">expo</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">sigma_eff_models</span><span class="p">[</span><span class="s1">&#39;custom&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">expo</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">expo_Z</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then, <code class="docutils literal notranslate"><span class="pre">sigma_eff=&quot;custom&quot;</span></code> can be passed as a keyword for the function <code class="docutils literal notranslate"><span class="pre">get_self_consistent_solution</span></code></p>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">sigma_eff=&quot;custom&quot;</span></code> can be passed as a keyword for the function <code class="docutils literal notranslate"><span class="pre">calc_self_consistent_solution</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># setting up three models with different assumptions for the effective velocity disersion</span>
@@ -730,7 +691,7 @@ document.write(`
     <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
     <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
     <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-classic-mid&quot;</span><span class="p">,</span>
     <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -739,7 +700,7 @@ document.write(`
     <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span><span class="p">,</span>
     <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span><span class="p">,</span>
     <span class="n">Omega_d</span><span class="o">=</span><span class="n">Omega_d</span><span class="p">,</span>
-    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress_avg&quot;</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-classic-avg&quot;</span><span class="p">,</span>
     <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -785,7 +746,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" src="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating analytic H and weight solutions using the constant effective EoS
+Calculating analytic H and weight solutions using the tigress-classic-mid effective EoS
+Calculating analytic H and weight solutions using the tigress-classic-avg effective EoS
+Calculating numerical H and weight solutions using the constant effective EoS
+Calculating numerical H and weight solutions using the tigress-classic-mid effective EoS
+Calculating numerical H and weight solutions using the tigress-classic-avg effective EoS
+</pre></div>
+</div>
+<img alt="_images/9bb3f823ee457f09bb38d92ec96c00c46da42868784e0ffb5c82ae116d144b02.png" src="_images/9bb3f823ee457f09bb38d92ec96c00c46da42868784e0ffb5c82ae116d144b02.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -801,7 +770,7 @@ document.write(`
     <span class="n">label</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span>
 
     <span class="p">(</span><span class="n">l</span><span class="p">,)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">nH</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">!=</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
         <span class="n">seff</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">seff</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">_sigma_eff</span>
@@ -820,13 +789,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" src="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" />
+<img alt="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" src="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" />
 </div>
 </div>
 </section>
 <section id="sfr-surface-density">
 <h2>SFR surface density<a class="headerlink" href="#sfr-surface-density" title="Permalink to this heading">#</a></h2>
-<p>Finally, SFR surface density can be calculated by the formula <code class="docutils literal notranslate"><span class="pre">Sigma_SFR</span> <span class="pre">=</span> <span class="pre">P_tot/Y_tot</span> <span class="pre">=</span> <span class="pre">W_tot/Y_tot</span></code>, where <code class="docutils literal notranslate"><span class="pre">Y_tot</span></code> is the total feedback yield. One can use a constant value or array for <code class="docutils literal notranslate"><span class="pre">Ytot</span></code> or pass a model string <code class="docutils literal notranslate"><span class="pre">tigress-classic</span></code> or <code class="docutils literal notranslate"><span class="pre">tigress-classic-decomp</span></code>.</p>
+<p>Finally, SFR surface density can be calculated by the formula <code class="docutils literal notranslate"><span class="pre">Sigma_SFR</span> <span class="pre">=</span> <span class="pre">P_tot/Y_tot</span> <span class="pre">=</span> <span class="pre">W_tot/Y_tot</span></code>, where <code class="docutils literal notranslate"><span class="pre">Y_tot</span></code> is the total feedback yield. One can use a constant value or array for <code class="docutils literal notranslate"><span class="pre">Ytot</span></code> or pass a model string among [<code class="docutils literal notranslate"><span class="pre">tigress-classic</span></code>, <code class="docutils literal notranslate"><span class="pre">tigress-classic-decomp</span></code>, <code class="docutils literal notranslate"><span class="pre">tigress-ncr</span></code>, <code class="docutils literal notranslate"><span class="pre">tigress-ncr-decomp</span></code>, <code class="docutils literal notranslate"><span class="pre">tigress-ncr-decomp-all</span></code>].</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pressure-Sigma_SFR relation</span>
@@ -846,10 +815,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating Sigma_SFR with the tigress-classic feedback yield model
+Calculating Sigma_SFR with the tigress-classic feedback yield model
+Calculating Sigma_SFR with the tigress-classic feedback yield model
+</pre></div>
+</div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" src="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" />
+<img alt="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" src="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" />
 </div>
 </div>
 </section>
@@ -899,7 +873,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Simulation Results and PRFM Theory</p>
+        <p class="prev-next-title">High-resolution Simulation Results and PRFM Theory</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -184,9 +184,9 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../prfm.html">Toy Galaxy Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">Simulation Results and PRFM Theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../prfm_tng.html">Post-processing TNG50 cosmological simulations with the PRFM theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../prfm_phangs.html">Comparison with the PHANGS results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_tng.html">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -928,7 +928,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="c1"># @np.vectorize</span>
+<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span>
     <span class="n">Sigma_star</span><span class="p">,</span>
@@ -973,7 +973,7 @@ document.write(`
     <span class="n">Sigma_star</span><span class="p">,</span>
     <span class="n">Omega_d</span><span class="p">,</span>
     <span class="n">H_star</span><span class="p">,</span>
-    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">,</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-claasic-mid&quot;</span><span class="p">,</span>
     <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">,</span>
     <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-5</span><span class="p">,</span>
@@ -1065,7 +1065,7 @@ document.write(`
         <span class="n">rho_star</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">Omega_d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rho_dm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-mid&quot;</span><span class="p">,</span>
+        <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-classic-mid&quot;</span><span class="p">,</span>
         <span class="n">Ytot</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">,</span>
         <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
@@ -1153,7 +1153,6 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_feedback_yield</span><span class="p">(</span><span class="n">Ytot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_sigma_eff</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">astro_units</span><span class="o">=</span><span class="n">astro_units</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">)</span>
 
         <span class="c1"># store parameters in astro-friendly units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cgs_to_astro</span><span class="p">()</span>
@@ -1271,6 +1270,7 @@ document.write(`
             <span class="s2">&quot;rho_star&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Omega_d&quot;</span><span class="p">,</span>
             <span class="s2">&quot;rho_dm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;H_star&quot;</span><span class="p">,</span>
             <span class="s2">&quot;sigma_eff&quot;</span><span class="p">,</span>
         <span class="p">]:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">var</span><span class="p">):</span>
@@ -1367,7 +1367,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span> <span class="o">=</span> <span class="n">Wtot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span> <span class="o">=</span> <span class="n">Wtot</span> <span class="o">/</span> <span class="n">u_cgs</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">!=</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
