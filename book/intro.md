@@ -6,6 +6,7 @@ This is a cookbook to guide you in applying the PRFM theory for star formation.
 
 ## Quickstart
 ```sh
+git clone https://github.com/changgoo/PRFM
 pip install .
 ```
 
