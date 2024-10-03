@@ -30,7 +30,7 @@ velocity dispersion.
 
 ## TIGRESS-classic calibration
 
-The numerically calibrated total feedback yield from the TIGRESS-classic suite ({cite}`2022ApJ...936..137O`; see Eqs (25)) is either
+The numerically calibrated total feedback yield from the TIGRESS-classic suite ({cite:t}`2022ApJ...936..137O`; see Eqs (25)) is either
 
 $$
   \Upsilon_{\rm tot} = 1030{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.212}
@@ -50,7 +50,7 @@ where we assume that the magnetic contribution is 50\% of the turbulent.
 
 ## TIGRESS-NCR calibration
 
-The total feedback yield with additional metallicity dependence is calibrated using the TIGRESS-NCR suite ({cite}`2024ApJ...972...67K`; see Eqs (14) -- (17)).
+The total feedback yield with additional metallicity dependence is calibrated using the TIGRESS-NCR suite ({cite:t}`2024ApJ...972...67K`; see Eqs (14) -- (17)).
 
 $$
   \Upsilon_{\rm tot} = 1.65\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.29} {Z_g^\prime}^{-0.27}
