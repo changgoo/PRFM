@@ -388,6 +388,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quickstart">Quickstart</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
 </ul>
@@ -407,6 +408,21 @@ document.write(`
 <h1>Welcome to the PRFM cookbook<a class="headerlink" href="#welcome-to-the-prfm-cookbook" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://changgoo.github.io/PRFM/"><img alt="Jupyter Book Badge" src="https://jupyterbook.org/badge.svg" /></a></p>
 <p>This is a cookbook to guide you in applying the PRFM theory for star formation.</p>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">#</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># quick plot of the TIGRESS-classic results in Ostriker &amp; Kim (2022)</span>
+
+<span class="kn">import</span> <span class="nn">prfm</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">load_sim_data</span><span class="p">()</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">])</span>
+<span class="n">prfm</span><span class="o">.</span><span class="n">simulations</span><span class="o">.</span><span class="n">add_PSFR_model_line</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
 <p>Recent advances in theoretical and computational modeling of the star-forming ISM provide an opportunity to develop more sophisticated subgrid model treatments in cosmological simulations.  A key goal of the <a class="reference external" href="https://www.learning-the-universe.org/">Learning the Universe Simons Collaboration</a> is to replace the current, <em>empirically-calibrated</em> prescriptions for star formation with new subgrid models that are instead calibrated from <em>full-physics ISM simulations</em>. In this regard, the <strong>pressure-regulated feedback-modulated (PRFM)</strong> star formation theory has been developed (<span id="id1">Ostriker and Kim [<a class="reference internal" href="reference.html#id2" title="Eve C. Ostriker and Chang-Goo Kim. Pressure-regulated, Feedback-modulated Star Formation in Disk Galaxies. \apj , 936(2):137, September 2022. arXiv:2206.00681, doi:10.3847/1538-4357/ac7de2.">1</a>]</span>; see also <span id="id2">Ostriker <em>et al.</em> [<a class="reference internal" href="reference.html#id7" title="Eve C. Ostriker, Christopher F. McKee, and Adam K. Leroy. Regulation of Star Formation Rates in Multiphase Galactic Disks: A Thermal/Dynamical Equilibrium Model. \apj , 721(2):975-994, October 2010. arXiv:1008.0410, doi:10.1088/0004-637X/721/2/975.">2</a>]</span>, <span id="id3">Ostriker and Shetty [<a class="reference internal" href="reference.html#id6" title="Eve C. Ostriker and Rahul Shetty. Maximally Star-forming Galactic Disks. I. Starburst Regulation Via Feedback-driven Turbulence. \apj , 731(1):41, April 2011. arXiv:1102.1446, doi:10.1088/0004-637X/731/1/41.">3</a>]</span>, <span id="id4">Kim <em>et al.</em> [<a class="reference internal" href="reference.html#id5" title="Chang-Goo Kim, Woong-Tae Kim, and Eve C. Ostriker. Regulation of Star Formation Rates in Multiphase Galactic Disks: Numerical Tests of the Thermal/Dynamical Equilibrium Model. \apj , 743(1):25, December 2011. arXiv:1109.0028, doi:10.1088/0004-637X/743/1/25.">4</a>]</span>).</p>
@@ -497,6 +513,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quickstart">Quickstart</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
 </ul>

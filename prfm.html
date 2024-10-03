@@ -456,9 +456,9 @@ document.write(`
 <span class="expanded">Hide code cell content</span>
 </summary>
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 </pre></div>
 </div>
 </div>
@@ -468,11 +468,8 @@ document.write(`
 <h1>Toy Galaxy Model<a class="headerlink" href="#toy-galaxy-model" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">prfm</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
 </pre></div>
 </div>
 </div>
@@ -658,7 +655,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f6cfc602710&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f83bee15f10&gt;
 </pre></div>
 </div>
 <img alt="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" src="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" />
