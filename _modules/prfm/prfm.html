@@ -358,12 +358,12 @@ document.write(`
 <span class="n">_kms_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">km</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
 
 <span class="n">_sigma_eff_models</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span><span class="o">=</span><span class="mf">9.8</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress_avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.22</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-ncr_mid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-classic-mid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span><span class="o">=</span><span class="mf">9.8</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-classic-avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sigma_0</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.22</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-ncr-mid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">sigma_0</span><span class="o">=</span><span class="mf">8.9</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">expo_Z</span><span class="o">=-</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span>
 <span class="p">)</span>
-<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-ncr_avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="n">_sigma_eff_models</span><span class="p">[</span><span class="s2">&quot;tigress-ncr-avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">sigma_0</span><span class="o">=</span><span class="mf">11.7</span><span class="p">,</span> <span class="n">expo</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">expo_Z</span><span class="o">=-</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">sigma_min</span><span class="o">=</span><span class="mi">5</span>
 <span class="p">)</span>
 
@@ -430,8 +430,8 @@ document.write(`
     <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Sigma_gas</span> <span class="o">/</span> <span class="n">H_gas</span> <span class="o">*</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
-<span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span>
+<span class="c1"># @np.vectorize</span>
+<div class="viewcode-block" id="get_weights"><a class="viewcode-back" href="../../api.html#prfm.prfm.get_weights">[docs]</a><span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate gas scale height and then each weight term</span>
@@ -477,7 +477,7 @@ document.write(`
     <span class="n">W_star</span> <span class="o">=</span> <span class="n">get_weight_star</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">H_star</span><span class="p">)</span>
     <span class="n">W_dm</span> <span class="o">=</span> <span class="n">get_weight_dm</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="n">zeta_d</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
+    <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span></div>
 
 
 <span class="k">def</span> <span class="nf">get_weight_star_thick</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">rho_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
@@ -562,7 +562,7 @@ document.write(`
     <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span>
 <span class="p">):</span>
@@ -602,14 +602,14 @@ document.write(`
     <span class="k">return</span> <span class="n">wgas</span> <span class="o">/</span> <span class="n">wtot</span><span class="p">,</span> <span class="n">wstar</span> <span class="o">/</span> <span class="n">wtot</span><span class="p">,</span> <span class="n">wdm</span> <span class="o">/</span> <span class="n">wtot</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_gas_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for gas only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
     <span class="k">return</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">_Gconst_cgs</span> <span class="o">*</span> <span class="n">Sigma_gas</span><span class="p">)</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for star only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -618,7 +618,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h_star</span><span class="p">))</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_dm_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for dark matter only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -626,7 +626,7 @@ document.write(`
     <span class="k">return</span> <span class="n">sigma_eff</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">zeta_d</span><span class="p">)</span> <span class="o">/</span> <span class="n">Omega_d</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_gas</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglecting dark matter&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -642,7 +642,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_gas_approx</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglecting dark matter&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -653,7 +653,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_dm_gas</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglectic star&quot;&quot;&quot;</span>
     <span class="n">H_gas_only</span> <span class="o">=</span> <span class="n">get_scale_height_gas_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -663,7 +663,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_sigma_eff</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;pressure-dependent velocity dispersion model&quot;&quot;&quot;</span>
     <span class="n">sigma_eff_model</span> <span class="o">=</span> <span class="n">_sigma_eff_models</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
@@ -677,7 +677,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">veld</span><span class="p">,</span> <span class="n">sigma_min</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0e5</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_feedback_yield</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;total feedback yield as a function of weight</span>
 
@@ -722,7 +722,7 @@ document.write(`
         <span class="k">return</span> <span class="n">Yth</span> <span class="o">+</span> <span class="n">Ytrb</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_feedback_yield_comp</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s2">&quot;th&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic-decomp&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;feedback yield of each component as a function of weight</span>
 
@@ -897,7 +897,7 @@ document.write(`
     <span class="k">return</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">g1</span> <span class="o">+</span> <span class="n">g2</span><span class="p">)</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_analytic</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span>
 <span class="p">):</span>
@@ -928,7 +928,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="nd">@np</span><span class="o">.</span><span class="n">vectorize</span>
+<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_numerical</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span>
     <span class="n">Sigma_star</span><span class="p">,</span>
@@ -1066,6 +1066,7 @@ document.write(`
         <span class="n">Omega_d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">rho_dm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-mid&quot;</span><span class="p">,</span>
+        <span class="n">Ytot</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">,</span>
         <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># initialize method attribute</span>
@@ -1150,32 +1151,43 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span> <span class="o">=</span> <span class="n">Omega_d</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_rho_dm</span> <span class="o">=</span> <span class="n">rho_dm</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">astro_units</span><span class="p">:</span>
-                <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
-                <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">sigma_eff</span> <span class="o">*</span> <span class="n">u</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">sigma_eff</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">=</span> <span class="n">sigma_eff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_feedback_yield</span><span class="p">(</span><span class="n">Ytot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_sigma_eff</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="n">astro_units</span><span class="o">=</span><span class="n">astro_units</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">)</span>
 
-        <span class="c1"># set arguments that will be passed to the functions</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s2">&quot;general&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_Omega_d</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_H_star</span><span class="p">,</span>
-                <span class="n">sigma_eff</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s2">&quot;thick&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rho_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stellar_disk</span> <span class="o">==</span> <span class="s2">&quot;thin&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">)</span>
         <span class="c1"># store parameters in astro-friendly units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cgs_to_astro</span><span class="p">()</span>
 
         <span class="c1"># set weight functions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weight_functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_weight_gas</span><span class="p">,</span> <span class="n">get_weight_star</span><span class="p">,</span> <span class="n">get_weight_dm</span><span class="p">]</span>
+
+<div class="viewcode-block" id="PRFM.set_sigma_eff"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_sigma_eff">[docs]</a>    <span class="k">def</span> <span class="nf">set_sigma_eff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;For plug and play&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">astro_units</span><span class="p">:</span>
+                <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">sigma_eff</span> <span class="o">*</span> <span class="n">u</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">sigma_eff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sigma_eff</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_sigma_eff_models</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sigma_eff</span><span class="si">}</span><span class="s2"> effective EoS is not supported. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Try one of </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">_sigma_eff_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">=</span> <span class="n">sigma_eff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">SFR</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># set arguments that will be passed to the functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="n">sigma_eff</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PRFM.set_feedback_yield"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_feedback_yield">[docs]</a>    <span class="k">def</span> <span class="nf">set_feedback_yield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ytot</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;For plug and play&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Ytot</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yield_model</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_yield_model</span> <span class="o">=</span> <span class="n">Ytot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">SFR</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Ytot</span> <span class="o">=</span> <span class="n">Ytot</span></div>
 
 <div class="viewcode-block" id="PRFM.set_weight_function_gas"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.set_weight_function_gas">[docs]</a>    <span class="k">def</span> <span class="nf">set_weight_function_gas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update weight function for gas&quot;&quot;&quot;</span>
@@ -1267,6 +1279,8 @@ document.write(`
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  </span><span class="si">{}</span><span class="s2">[0]: </span><span class="si">{}</span><span class="s2">, N=</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  sigma_eff_model: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_yield_model&quot;</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot;  feedback_yield_model: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_yield_model</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">args</span>
 
 <div class="viewcode-block" id="PRFM.get_scale_height"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.get_scale_height">[docs]</a>    <span class="k">def</span> <span class="nf">get_scale_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wgas</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wstar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wdm</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -1357,7 +1371,9 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span></div>
 
-<div class="viewcode-block" id="PRFM.calc_self_consistent_solution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_self_consistent_solution">[docs]</a>    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_self_consistent_solution"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_self_consistent_solution">[docs]</a>    <span class="k">def</span> <span class="nf">calc_self_consistent_solution</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate self-consistent solutions</span>
 
 <span class="sd">        Update H_gas, W_tot (and all components), sigma_eff</span>
@@ -1365,36 +1381,72 @@ document.write(`
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
 
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Calculating </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> H and weight solutions &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;using the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="si">}</span><span class="s2"> effective EoS&quot;</span>
+        <span class="p">)</span>
+
         <span class="c1"># for model sigma, need to give an initial guess</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">!=</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="mf">15.0e5</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
 
         <span class="c1"># that&#39;s it for constant sigma_eff</span>
         <span class="c1"># iterative solve for model sigma</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span> <span class="o">!=</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
             <span class="c1"># iterative solve</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">niter</span><span class="p">):</span>
                 <span class="n">Hprev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">reset_arg_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
                 <span class="n">L1_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span> <span class="o">/</span> <span class="n">Hprev</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L1_norm</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">L1_norm</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
-                    <span class="k">break</span></div>
+                    <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">H_gas</span></div>
 
-<div class="viewcode-block" id="PRFM.calc_sfr"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_sfr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="mf">1.0e3</span><span class="p">):</span>
+<div class="viewcode-block" id="PRFM.calc_sfr"><a class="viewcode-back" href="../../api.html#prfm.prfm.PRFM.calc_sfr">[docs]</a>    <span class="k">def</span> <span class="nf">calc_sfr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrapper function to calculate SFR surface density</span>
 
 <span class="sd">        Update Sigma_SFR (astro units) and _Sigma_SFR (cgs)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_Wtot&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="n">Ytot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">Ytot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Ytot</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Calculating Sigma_SFR with the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_yield_model</span><span class="si">}</span><span class="s2"> feedback yield model&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">Z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; also considering metallicity dependence!&quot;</span><span class="p">)</span>
         <span class="c1"># results in c.g.s.</span>
-        <span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="n">Ytot</span><span class="p">)</span>
+        <span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Wtot</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="n">Ytot</span><span class="p">)</span>
         <span class="n">u_cgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span> <span class="o">/</span> <span class="n">u_cgs</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span> <span class="o">/</span> <span class="n">u_cgs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="p">[</span><span class="s2">&quot;SFR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sigma_SFR</span></div>
+
+    <span class="k">def</span> <span class="nf">calc_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="p">[</span><span class="s2">&quot;SFR&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">Ytot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">Ytot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Ytot</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calc_sfr</span><span class="p">(</span><span class="n">Ytot</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">)</span>
+
+        <span class="c1"># calculate tdep in c.g.s.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tdep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Sigma_SFR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tdyn</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H_gas</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tdep</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tdep</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;Gyr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tdyn</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tdyn</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;Gyr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdyn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tdep</span>
 
     <span class="k">def</span> <span class="nf">check_solutions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">)</span>

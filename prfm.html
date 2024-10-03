@@ -564,6 +564,8 @@ document.write(`
   Omega_d[0]: 112.0, N=100
   rho_dm[0]: 0.23209463014478007, N=100
   sigma_eff[0]: 15.0, N=1
+  sigma_eff_model: constant
+  feedback_yield_model: tigress-classic
 </pre></div>
 </div>
 </div>
@@ -652,7 +654,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" src="_images/7d7053634563eda55254a79bb6342f6524f980d168764ceb7c48b02b17f77682.png" />
+<img alt="_images/5cf367b30bc4fdb7e213a1eac59382f78c10aee5feabbb68dad86074effeea9d.png" src="_images/5cf367b30bc4fdb7e213a1eac59382f78c10aee5feabbb68dad86074effeea9d.png" />
 </div>
 </div>
 <p>There are additional convenient function wrappers (internally using <code class="docutils literal notranslate"><span class="pre">PRFM.get_scale_height</span></code> to find gas scale height):</p>
@@ -676,10 +678,29 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21ddc8e2d0&gt;
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">calc_weights</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">wfrac</span> <span class="o">=</span> <span class="n">mymodel</span><span class="o">.</span><span class="n">get_weight_contribution</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span>
+
+<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/prfm.py:1028,</span> in <span class="ni">PRFM.calc_weights</span><span class="nt">(self, method)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1025</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wtot</span> <span class="o">=</span> <span class="n">Wtot</span> <span class="o">/</span> <span class="n">u_cgs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1027</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sigma_eff_model&quot;</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1028</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">=</span> <span class="n">get_sigma_eff</span><span class="p">(</span><span class="n">Wtot</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff_model</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1029</span>     <span class="bp">self</span><span class="o">.</span><span class="n">sigma_eff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigma_eff</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="s2">&quot;sigma_eff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+
+<span class="nn">File ~/work/PRFM/PRFM/book/../prfm/prfm.py:326,</span> in <span class="ni">get_sigma_eff</span><span class="nt">(P, Z, model)</span>
+<span class="g g-Whitespace">    </span><span class="mi">324</span> <span class="k">def</span> <span class="nf">get_sigma_eff</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">325</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;pressure-dependent velocity dispersion model&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">326</span>     <span class="n">sigma_eff_model</span> <span class="o">=</span> <span class="n">_sigma_eff_models</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">327</span>     <span class="n">sigma_0</span> <span class="o">=</span> <span class="n">sigma_eff_model</span><span class="p">[</span><span class="s2">&quot;sigma_0&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">328</span>     <span class="n">expo</span> <span class="o">=</span> <span class="n">sigma_eff_model</span><span class="p">[</span><span class="s2">&quot;expo&quot;</span><span class="p">]</span>
+
+<span class="ne">KeyError</span>: &#39;constant&#39;
 </pre></div>
 </div>
-<img alt="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" src="_images/7d4818da9d574d2c16a308ddb8ba42154047490c792a4a1e02757ed45a4eb520.png" />
 </div>
 </div>
 </section>
@@ -764,7 +785,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ec878e5fbab6b5bdc97cf5669764ad3b6e3004865e98e258d16db570a0673c76.png" src="_images/ec878e5fbab6b5bdc97cf5669764ad3b6e3004865e98e258d16db570a0673c76.png" />
+<img alt="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" src="_images/226327c3231ea42de39dafe18eb3141e0852b0b3c07c8b293574f0b752069ef6.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -799,7 +820,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" src="_images/31545833fa3aed90e03362853d5c040d3eec7d804eb15580524281218af0d947.png" />
+<img alt="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" src="_images/e3ad6461f3b4f94e3354b84b29ab71e4319051ff42cb3952f355945afd12ae95.png" />
 </div>
 </div>
 </section>
@@ -828,7 +849,7 @@ document.write(`
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$\\Sigma_{\\rm SFR}\\, [M_\\odot\\,{\\rm kpc^{-2}\\,yr^{-1}}]$&#39;)
 </pre></div>
 </div>
-<img alt="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" src="_images/a64eb5dae59a0862f3bafb0b0e4e2025d40e395f5e12366b4d9609df9159a791.png" />
+<img alt="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" src="_images/046f474841a106f932cf607ad8c3a59dc0d99c0d659a14dc839ba18871bc103e.png" />
 </div>
 </div>
 </section>

@@ -395,7 +395,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -411,6 +413,30 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-as-shown-in-the-data-release-repository">Reproduce examples as shown in the data release repository</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-functions-and-constants">Helper functions and constants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-for-z-0">Data reading for z=0</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-example-galaxy">Visualization of example galaxy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-figure-9-in-hassan-et-al-2024">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-using-the-prfm-package">Reproduce examples using the PRFM package</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-same-as-above">Data reading (same as above)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prfm-class-initialization">PRFM class initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-scale-height-sfr-gas-depletion-time">Calculate scale height, SFR, gas depletion time</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-two-solutions">Compare two solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-classic-vs-ncr">TIGRESS classic vs NCR</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -451,11 +477,656 @@ document.write(`
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="post-processing-tng50-cosmological-simulations-with-the-prfm-theory">
 <h1>Post-processing TNG50 cosmological simulations with the PRFM theory<a class="headerlink" href="#post-processing-tng50-cosmological-simulations-with-the-prfm-theory" title="Permalink to this heading">#</a></h1>
+<p>This example utilizes the post-prcessed TNG50 galaxy catalogs presented in <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H">Hassan et al. 2024</a> as part of the <a class="reference external" href="http://learning-the-universe.org">Learning the Universe collaboration</a>. The original paper, code, and data can be found in the following links. For full analysis, one has to download the data in the <a class="reference external" href="https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing">link</a>, but in this example notebook, we utilize a reduced data stroed in this repository.</p>
 <ul class="simple">
 <li><p>Paper: <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H">https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H</a></p></li>
 <li><p>Code: <a class="github reference external" href="https://github.com/sultan-hassan/tng50-post-processing-prfm">sultan-hassan/tng50-post-processing-prfm</a></p></li>
 <li><p>Data: <a class="reference external" href="https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing">https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing</a></p></li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">au</span>
+<span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">ac</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LogNorm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="reproduce-examples-as-shown-in-the-data-release-repository">
+<h2>Reproduce examples as shown in <a class="reference external" href="https://github.com/sultan-hassan/tng50-post-processing-prfm">the data release repository</a><a class="headerlink" href="#reproduce-examples-as-shown-in-the-data-release-repository" title="Permalink to this heading">#</a></h2>
+<section id="helper-functions-and-constants">
+<h3>Helper functions and constants<a class="headerlink" href="#helper-functions-and-constants" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># constants and conversion factors</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kpc*M_sun-1*km2*s-2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="n">pc_per_cm</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">pc</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">Msun_per_gram</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">Year_per_sec</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">yr</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+<span class="n">kB</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">k_B</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>
+
+
+<span class="k">def</span> <span class="nf">solve_cubic</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Solves the cubic equation of the form: x^3 + a2*x^2 + a1*x + a0 = 0.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    a2 (float): Coefficient of x^2.</span>
+<span class="sd">    a1 (float): Coefficient of x.</span>
+<span class="sd">    a0 (float): Constant term.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    tuple: Three real roots of the cubic equation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Calculate the reduced coefficients</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span>  <span class="c1"># Depressed cubic&#39;s linear coefficient</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span> <span class="o">*</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">a2</span> <span class="o">-</span> <span class="mi">27</span> <span class="o">*</span> <span class="n">a0</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a2</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">27</span>  <span class="c1"># Depressed cubic&#39;s constant term</span>
+
+    <span class="c1"># Intermediate terms for solving the cubic equation</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">/</span> <span class="mi">3</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">q</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">discriminant</span> <span class="o">=</span> <span class="n">Q</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">R</span><span class="o">**</span><span class="mi">2</span>  <span class="c1"># Discriminant of the cubic equation</span>
+
+    <span class="c1"># Calculate the angle theta for real root solutions</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">R</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">Q</span><span class="o">**</span><span class="mi">3</span><span class="p">)))</span>
+
+    <span class="c1"># Compute the three real roots</span>
+    <span class="n">root1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">Q</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="n">a2</span> <span class="o">/</span> <span class="mi">3</span>
+    <span class="c1"># root2 = 2 * np.sqrt(-Q) * np.cos((theta + 2 * np.pi) / 3) - a2 / 3</span>
+    <span class="c1"># root3 = 2 * np.sqrt(-Q) * np.cos((theta + 4 * np.pi) / 3) - a2 / 3</span>
+    <span class="c1"># The discriminant, D = Q3 + R2, in this case is less than zero, which means there are three different real solutions.</span>
+    <span class="c1"># However, only one solution is positive: root1</span>
+
+    <span class="k">return</span> <span class="n">root1</span>
+
+
+<span class="k">def</span> <span class="nf">do_hist2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">bin_width</span><span class="p">,</span> <span class="n">aspect</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">v_min</span><span class="p">,</span> <span class="n">v_max</span><span class="p">,</span> <span class="n">cmap</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a 2D histogram (heatmap) using the provided data and plots it on the specified axis.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    x (array): Data for the x-axis.</span>
+<span class="sd">    y (array): Data for the y-axis.</span>
+<span class="sd">    w (array): Weights for the histogram.</span>
+<span class="sd">    ax (matplotlib axis): Axis on which to plot the histogram.</span>
+<span class="sd">    bin_width (float): bin width of bins for the histogram.</span>
+<span class="sd">    aspect (float): Aspect ratio for the plot.</span>
+<span class="sd">    t_min, t_max (float): Range for x-axis bins.</span>
+<span class="sd">    v_min, v_max (float): Range for y-axis bins.</span>
+<span class="sd">    cmap (str): Colormap for the plot.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    im1: The image object created by `imshow` for the heatmap.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Remove non-finite values from x, y, w</span>
+    <span class="n">valid_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">],</span> <span class="n">w</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span>
+
+    <span class="c1"># Define bin edges</span>
+    <span class="n">bins_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span> <span class="o">+</span> <span class="n">bin_width</span><span class="p">,</span> <span class="n">bin_width</span><span class="p">)</span>
+    <span class="n">bins_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">v_min</span><span class="p">,</span> <span class="n">v_max</span> <span class="o">+</span> <span class="n">bin_width</span><span class="p">,</span> <span class="n">bin_width</span><span class="p">)</span>
+
+    <span class="c1"># Compute weighted and unweighted 2D histograms</span>
+    <span class="n">heatmap_weighted</span><span class="p">,</span> <span class="n">xedges</span><span class="p">,</span> <span class="n">yedges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">bins_x</span><span class="p">,</span> <span class="n">bins_y</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">w</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Define the extent for the plot</span>
+    <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xedges</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xedges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">yedges</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">yedges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># Plot the heatmap with logarithmic normalization</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">heatmap_weighted</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">w</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
+        <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+        <span class="n">interpolation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span>
+        <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">im</span>
+
+
+<span class="k">def</span> <span class="nf">get_Hg_equil</span><span class="p">(</span><span class="n">Sigma_g</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">rho_dm</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find an quilibrium scale height given sigma_eff</span>
+<span class="sd">    using Equations (15)--(20) in Hassan et al. 2024</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">A_coeff</span> <span class="o">=</span> <span class="p">(</span><span class="mf">8.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">rho_dm</span> <span class="o">/</span> <span class="n">Sigma_g</span>  <span class="c1"># kpc^-1</span>
+    <span class="n">B_coeff</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">Sigma_star</span> <span class="o">/</span> <span class="n">Sigma_g</span> <span class="o">+</span> <span class="n">A_coeff</span> <span class="o">*</span> <span class="n">H_star</span>  <span class="c1"># unitless</span>
+
+    <span class="n">C_coeff</span> <span class="o">=</span> <span class="n">H_star</span> <span class="o">-</span> <span class="n">sigma_eff</span> <span class="o">*</span> <span class="n">sigma_eff</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">G</span> <span class="o">*</span> <span class="n">Sigma_g</span><span class="p">)</span>  <span class="c1"># kpc</span>
+    <span class="n">D_coeff</span> <span class="o">=</span> <span class="o">-</span><span class="n">H_star</span> <span class="o">*</span> <span class="n">sigma_eff</span> <span class="o">*</span> <span class="n">sigma_eff</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">G</span> <span class="o">*</span> <span class="n">Sigma_g</span><span class="p">)</span>  <span class="c1"># kpc^2</span>
+    <span class="n">Hg_equil</span> <span class="o">=</span> <span class="n">solve_cubic</span><span class="p">(</span>
+        <span class="n">B_coeff</span> <span class="o">/</span> <span class="n">A_coeff</span><span class="p">,</span> <span class="n">C_coeff</span> <span class="o">/</span> <span class="n">A_coeff</span><span class="p">,</span> <span class="n">D_coeff</span> <span class="o">/</span> <span class="n">A_coeff</span>
+    <span class="p">)</span>  <span class="c1"># scale</span>
+
+    <span class="k">return</span> <span class="n">Hg_equil</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-reading-for-z-0">
+<h3>Data reading for z=0<a class="headerlink" href="#data-reading-for-z-0" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve &quot;full&quot; data for redshift zero</span>
+<span class="c1"># please download the full data at https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing</span>
+
+<span class="c1"># redshift = 0</span>
+<span class="c1"># file_path = f&quot;../data/all_data_z{redshift}.pkl&quot;</span>
+<span class="c1"># df_all = pd.read_pickle(file_path)</span>
+
+<span class="c1"># construct reduced data</span>
+
+<span class="c1"># gal_ids = [np.random.randint(0, len(df_all)) for i in range(1000)]</span>
+<span class="c1"># df = df_all.iloc[gal_ids,:]</span>
+<span class="c1"># file_path_selected = f&quot;../data/all_data_z{redshift}_selected.pkl&quot;</span>
+<span class="c1"># df.to_pickle(file_path_selected)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve &quot;reduced&quot; data for redshift zero</span>
+
+<span class="n">redshift</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">file_path_selected</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;../data/all_data_z</span><span class="si">{</span><span class="n">redshift</span><span class="si">}</span><span class="s2">_selected.pkl&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">file_path_selected</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualization-of-example-galaxy">
+<h3>Visualization of example galaxy<a class="headerlink" href="#visualization-of-example-galaxy" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display an example galaxy projection</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">col_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">gal_ind</span> <span class="o">=</span> <span class="mi">606</span>  <span class="c1"># a good example; or np.random.randint(0,len(df))</span>
+<span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">ind</span><span class="p">]]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">gal_ind</span><span class="p">]))</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:][</span><span class="n">ind</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1868/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
+  ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
+/tmp/ipykernel_1868/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
+  ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
+</pre></div>
+</div>
+<img alt="_images/5cd64f88650c242fee560bda983bf67221fec7f1c6c80571e69e2efe94785b8b.png" src="_images/5cd64f88650c242fee560bda983bf67221fec7f1c6c80571e69e2efe94785b8b.png" />
+</div>
+</div>
+</section>
+<section id="self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">
+<h3>Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration<a class="headerlink" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># flattening the data</span>
+<span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR&quot;</span><span class="p">]])</span>
+<span class="n">rho_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rho_g&quot;</span><span class="p">]])</span>
+<span class="n">rho_dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rho_dm&quot;</span><span class="p">]])</span>
+<span class="n">Sigma_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_g&quot;</span><span class="p">]])</span>
+<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_*&quot;</span><span class="p">]])</span>
+<span class="n">H_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;H_*&quot;</span><span class="p">]])</span>
+
+<span class="c1"># apply data mask to exclude bad pixels</span>
+<span class="n">data_mask</span> <span class="o">=</span> <span class="n">Sigma_g</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Sigma_g</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">rho_dm</span><span class="p">]:</span>
+    <span class="n">data_mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+<span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">rho_g</span> <span class="o">=</span> <span class="n">rho_g</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">rho_dm</span> <span class="o">=</span> <span class="n">rho_dm</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">Sigma_g</span> <span class="o">=</span> <span class="n">Sigma_g</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">H_star</span> <span class="o">=</span> <span class="n">H_star</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+
+<span class="c1"># iterative solve for scale height</span>
+<span class="n">sigma_eff</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># initial guess; in km/s</span>
+<span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">Hg_equil</span> <span class="o">=</span> <span class="n">get_Hg_equil</span><span class="p">(</span>
+        <span class="n">Sigma_g</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">rho_dm</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span>
+    <span class="p">)</span>  <span class="c1"># scale height from vertical equalibrium in  kpc</span>
+    <span class="n">P_midplane</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Sigma_g</span>
+        <span class="o">*</span> <span class="n">sigma_eff</span>
+        <span class="o">*</span> <span class="n">sigma_eff</span>
+        <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">Hg_equil</span><span class="p">)</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">Msun_per_gram</span> <span class="o">/</span> <span class="p">(</span><span class="n">kB</span> <span class="o">*</span> <span class="n">pc_per_cm</span> <span class="o">*</span> <span class="n">pc_per_cm</span> <span class="o">*</span> <span class="n">pc_per_cm</span> <span class="o">/</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="p">)</span>  <span class="c1"># K/ cm^3</span>
+
+    <span class="c1"># check error in velocity dispersion (using effective EOS)</span>
+    <span class="n">sigma_eff_next</span> <span class="o">=</span> <span class="mf">12.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">P_midplane</span> <span class="o">*</span> <span class="mf">1e-4</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.22</span>
+    <span class="n">L1norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sigma_eff_next</span> <span class="o">-</span> <span class="n">sigma_eff</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">L1norm</span><span class="p">)</span>
+
+    <span class="c1"># update velocity dispersion</span>
+    <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">sigma_eff_next</span>
+
+<span class="c1"># feedback yield from the TIGRESS-classic calibration (OK22)</span>
+<span class="n">Upsilon</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.212</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">P_midplane</span><span class="p">)</span> <span class="o">+</span> <span class="mf">3.86</span><span class="p">)</span>  <span class="c1"># from TIGRESS simulations</span>
+
+<span class="c1"># gas dynamical time (Gyr)</span>
+<span class="n">t_dyn</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">Hg_equil</span> <span class="o">*</span> <span class="p">(</span><span class="n">pc_per_cm</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_eff</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">Year_per_sec</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e-9</span>
+<span class="c1"># gas depletion times (Gyr)</span>
+<span class="n">t_dep_TNG50</span> <span class="o">=</span> <span class="n">Sigma_g</span> <span class="o">/</span> <span class="n">Sigma_SFR</span> <span class="o">*</span> <span class="mf">1e-9</span>  <span class="c1"># depletion time from TNG50 in Gyr</span>
+<span class="n">t_dep_PRFM</span> <span class="o">=</span> <span class="n">Upsilon</span> <span class="o">*</span> <span class="n">t_dyn</span> <span class="o">/</span> <span class="n">sigma_eff</span>  <span class="c1"># depletion time from PRFM in Gyr</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 3.054212455265733
+1 0.42424704871239177
+2 0.07679528291118792
+3 0.014373624109374263
+4 0.002741791369510848
+5 0.0005305981903176927
+6 0.00010393022154018182
+7 2.0570637775586244e-05
+8 4.108454023291584e-06
+9 8.269903682361322e-07
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1868/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
+  t_dep_TNG50 = Sigma_g / Sigma_SFR * 1e-9  # depletion time from TNG50 in Gyr
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reproduce-figure-9-in-hassan-et-al-2024">
+<h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#reproduce-figure-9-in-hassan-et-al-2024" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">tdyn</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">tdep</span><span class="p">),</span>
+        <span class="n">weight</span><span class="p">,</span>
+        <span class="n">ax</span><span class="p">,</span>
+        <span class="mf">0.1</span><span class="p">,</span>
+        <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span>
+        <span class="mf">5.0</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span>
+        <span class="mf">5.0</span><span class="p">,</span>
+        <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># reference lines annd decorate axis</span>
+    <span class="n">x_tdyn</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span> <span class="o">*</span> <span class="mf">1.0</span><span class="p">),</span>
+        <span class="s2">&quot;g--&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}/t_{\rm dyn}=1$&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">),</span>
+        <span class="s2">&quot;b--&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}/t_{\rm dyn}=10$&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">0.02</span><span class="p">)),</span>
+        <span class="s2">&quot;k-&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}/t_{\rm dyn}=50$&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x_tdyn</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">),</span>
+        <span class="s2">&quot;r--&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}/t_{\rm dyn}=100$&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{10}</span><span class="s2">\, t_{\rm dep}\, [\rm Gyr]$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\log_</span><span class="si">{10}</span><span class="s2">\,  t_{\rm dyn}\, [\rm Gyr]$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">t_dyn</span><span class="p">,</span> <span class="n">t_dep_PRFM</span><span class="p">,</span> <span class="n">Sigma_SFR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/74c95c72339ba0cd9e9ecbbcafe0e4dffc05ab537434a48cf9b3c486f582b590.png" src="_images/74c95c72339ba0cd9e9ecbbcafe0e4dffc05ab537434a48cf9b3c486f582b590.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="reproduce-examples-using-the-prfm-package">
+<h2>Reproduce examples using the PRFM package<a class="headerlink" href="#reproduce-examples-using-the-prfm-package" title="Permalink to this heading">#</a></h2>
+<section id="data-reading-same-as-above">
+<h3>Data reading (same as above)<a class="headerlink" href="#data-reading-same-as-above" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve data for redshift zero</span>
+<span class="n">redshift</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;../data/all_data_z</span><span class="si">{</span><span class="n">redshift</span><span class="si">}</span><span class="s2">_selected.pkl&quot;</span><span class="p">)</span>
+
+<span class="c1"># flattening the data</span>
+<span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR&quot;</span><span class="p">]])</span>
+<span class="n">rho_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rho_g&quot;</span><span class="p">]])</span>
+<span class="n">rho_dm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rho_dm&quot;</span><span class="p">]])</span>
+<span class="n">Sigma_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_g&quot;</span><span class="p">]])</span>
+<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Sigma_*&quot;</span><span class="p">]])</span>
+<span class="n">H_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;H_*&quot;</span><span class="p">]])</span>
+<span class="n">Z_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Z_g&quot;</span><span class="p">]])</span>
+
+<span class="c1"># apply data mask to exclude bad pixels</span>
+<span class="n">data_mask</span> <span class="o">=</span> <span class="n">Sigma_g</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Sigma_g</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">rho_dm</span><span class="p">]:</span>
+    <span class="n">data_mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+<span class="n">Sigma_SFR</span> <span class="o">=</span> <span class="n">Sigma_SFR</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">rho_g</span> <span class="o">=</span> <span class="n">rho_g</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">rho_dm</span> <span class="o">=</span> <span class="n">rho_dm</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">Sigma_g</span> <span class="o">=</span> <span class="n">Sigma_g</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">Sigma_star</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">H_star</span> <span class="o">=</span> <span class="n">H_star</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+<span class="n">Z_g</span> <span class="o">=</span> <span class="n">Z_g</span><span class="p">[</span><span class="n">data_mask</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="prfm-class-initialization">
+<h3>PRFM class initialization<a class="headerlink" href="#prfm-class-initialization" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tng_prfm</span> <span class="o">=</span> <span class="n">prfm</span><span class="o">.</span><span class="n">PRFM</span><span class="p">(</span>
+    <span class="n">Sigma_gas</span><span class="o">=</span><span class="n">Sigma_g</span> <span class="o">/</span> <span class="mf">1.0e6</span><span class="p">,</span>  <span class="c1"># from M_sun/kpc^2 to M_sun/pc^2</span>
+    <span class="n">Sigma_star</span><span class="o">=</span><span class="n">Sigma_star</span> <span class="o">/</span> <span class="mf">1.0e6</span><span class="p">,</span>  <span class="c1"># from M_sun/kpc^2 to M_sun/pc^2</span>
+    <span class="n">H_star</span><span class="o">=</span><span class="n">H_star</span> <span class="o">*</span> <span class="mf">1.0e3</span><span class="p">,</span>  <span class="c1"># from kpc to pc</span>
+    <span class="n">rho_dm</span><span class="o">=</span><span class="n">rho_dm</span> <span class="o">/</span> <span class="mf">1.0e9</span><span class="p">,</span>  <span class="c1"># from M_sun/kpc^3 to M_sun/pc^3</span>
+    <span class="n">sigma_eff</span><span class="o">=</span><span class="s2">&quot;tigress-classic-avg&quot;</span><span class="p">,</span>
+    <span class="n">Ytot</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">,</span>
+    <span class="n">astro_units</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tng_prfm</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PRFM calculator is prepared for
+  Sigma_gas[0]: 1.0845986138916015, N=107213
+  Sigma_star[0]: 0.35946448046875, N=107213
+  rho_star[0]: 0.00065556609375, N=107213
+  Omega_d[0]: 14.179431180241075, N=107213
+  rho_dm[0]: 0.003720031911502777, N=107213
+  sigma_eff_model: tigress-classic-avg
+  feedback_yield_model: tigress-classic
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-scale-height-sfr-gas-depletion-time">
+<h3>Calculate scale height, SFR, gas depletion time<a class="headerlink" href="#calculate-scale-height-sfr-gas-depletion-time" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Hg</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating analytic H and weight solutions using the tigress-classic-avg effective EoS
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sfr</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_sfr</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating Sigma_SFR with the tigress-classic feedback yield model
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_times</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1adcf1026144e178b1008e1434ad346192208999444d6b617c54441fae8756f3.png" src="_images/1adcf1026144e178b1008e1434ad346192208999444d6b617c54441fae8756f3.png" />
+</div>
+</div>
+</section>
+<section id="compare-two-solutions">
+<h3>Compare two solutions<a class="headerlink" href="#compare-two-solutions" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bin_width</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg_equil</span> <span class="o">*</span> <span class="mf">1.0e3</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">Sigma_SFR</span><span class="p">),</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">bin_width</span><span class="p">,</span>
+    <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;no weight&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg_equil</span> <span class="o">*</span> <span class="mf">1.0e3</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg</span><span class="p">),</span>
+    <span class="n">sfr</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">bin_width</span><span class="p">,</span>
+    <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;sfr weighted&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;H_g (H24)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;H_g (this package)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/5b9f51c80447b9a0be75e6afe3467949a95f44fba8c231ca9c4b1e3dedfb6e11.png" src="_images/5b9f51c80447b9a0be75e6afe3467949a95f44fba8c231ca9c4b1e3dedfb6e11.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="tigress-classic-vs-ncr">
+<h2>TIGRESS classic vs NCR<a class="headerlink" href="#tigress-classic-vs-ncr" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tng_prfm</span><span class="o">.</span><span class="n">set_sigma_eff</span><span class="p">(</span><span class="s2">&quot;tigress-ncr-avg&quot;</span><span class="p">)</span>
+<span class="n">tng_prfm</span><span class="o">.</span><span class="n">set_feedback_yield</span><span class="p">(</span><span class="s2">&quot;tigress-ncr-decomp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Hg_ncr</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
+<span class="n">sfr_ncr</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_sfr</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="n">Z_g</span><span class="p">)</span>
+<span class="n">tdyn_ncr</span><span class="p">,</span> <span class="n">tdep_ncr</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_times</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating analytic H and weight solutions using the tigress-ncr-avg effective EoS
+Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
+ also considering metallicity dependence!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bin_width</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Hgas</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg_equil</span> <span class="o">*</span> <span class="mf">1.0e3</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg_ncr</span><span class="p">),</span>
+    <span class="n">Sigma_SFR</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">bin_width</span><span class="p">,</span>
+    <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;TNG SFR weighted&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$H_g$ (classic)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$H_g$ (NCR)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+
+<span class="c1"># Sigma_SFR</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr_ncr</span><span class="p">),</span>
+    <span class="n">Sigma_SFR</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">bin_width</span><span class="p">,</span>
+    <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">5</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">5</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;TNG SFR weighted&quot;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR} (classic)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR} (NCR)$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+
+<span class="c1"># t_dep</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">tdep</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">tdep_ncr</span><span class="p">),</span>
+    <span class="n">Sigma_SFR</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">bin_width</span><span class="p">,</span>
+    <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;hot_r&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;TNG SFR weighted&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep} (classic)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep} (NCR)$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/549e3e46484456c96341b0cc9d8ec1180113bd129e57486156d5e84074a8883e.png" src="_images/549e3e46484456c96341b0cc9d8ec1180113bd129e57486156d5e84074a8883e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;classic&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn_ncr</span><span class="p">,</span> <span class="n">tdep_ncr</span><span class="p">,</span> <span class="n">sfr_ncr</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NCR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/e1119c827dfd2b433eb6c374f3229ed5198a9a6689d8733a1e792aa603f1a230.png" src="_images/e1119c827dfd2b433eb6c374f3229ed5198a9a6689d8733a1e792aa603f1a230.png" />
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -512,6 +1183,37 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-as-shown-in-the-data-release-repository">Reproduce examples as shown in the data release repository</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-functions-and-constants">Helper functions and constants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-for-z-0">Data reading for z=0</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-example-galaxy">Visualization of example galaxy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-figure-9-in-hassan-et-al-2024">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-using-the-prfm-package">Reproduce examples using the PRFM package</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-same-as-above">Data reading (same as above)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prfm-class-initialization">PRFM class initialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-scale-height-sfr-gas-depletion-time">Calculate scale height, SFR, gas depletion time</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-two-solutions">Compare two solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tigress-classic-vs-ncr">TIGRESS classic vs NCR</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
