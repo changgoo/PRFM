@@ -418,19 +418,20 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-as-shown-in-the-data-release-repository">Reproduce examples as shown in the data release repository</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-as-in-the-h24-data-release">Examples as in the H24 data release</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-functions-and-constants">Helper functions and constants</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-for-z-0">Data reading for z=0</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-example-galaxy">Visualization of example galaxy</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading">Data reading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-an-example-galaxy">Visualization of an example galaxy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scale-height-sfr-and-gas-depletion-time">Scale height, SFR, and gas depletion time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-figure-9-in-hassan-et-al-2024">Reproduce Figure 9 in Hassan et al. 2024</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-using-the-prfm-package">Reproduce examples using the PRFM package</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-using-the-prfm-package">Examples using the PRFM package</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-same-as-above">Data reading (same as above)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prfm-class-initialization">PRFM class initialization</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-scale-height-sfr-gas-depletion-time">Calculate scale height, SFR, gas depletion time</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Scale height, SFR, and gas depletion time</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Reproduce Figure 9 in Hassan et al. 2024</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-two-solutions">Compare two solutions</a></li>
 </ul>
 </li>
@@ -456,6 +457,10 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">200</span>
 </pre></div>
 </div>
 </div>
@@ -477,16 +482,20 @@ document.write(`
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="post-processing-tng50-cosmological-simulations-with-the-prfm-theory">
 <h1>Post-processing TNG50 cosmological simulations with the PRFM theory<a class="headerlink" href="#post-processing-tng50-cosmological-simulations-with-the-prfm-theory" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>This example utilizes the post-prcessed TNG50 galaxy catalogs presented in <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H">Hassan et al. 2024</a> as part of the <a class="reference external" href="http://learning-the-universe.org">Learning the Universe collaboration</a>. The original paper, code, and data can be found in the following links. For full analysis, one has to download the data in the <a class="reference external" href="https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing">link</a>, but in this example notebook, we utilize a reduced data stroed in this repository.</p>
 <ul class="simple">
 <li><p>Paper: <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H">https://ui.adsabs.harvard.edu/abs/2024arXiv240909121H</a></p></li>
 <li><p>Code: <a class="github reference external" href="https://github.com/sultan-hassan/tng50-post-processing-prfm">sultan-hassan/tng50-post-processing-prfm</a></p></li>
 <li><p>Data: <a class="reference external" href="https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing">https://drive.google.com/drive/folders/1dsk6z7ugOJEedwfW6uhaDi8YYGvfPEF9?usp=sharing</a></p></li>
 </ul>
+</section>
+<section id="examples-as-in-the-h24-data-release">
+<h2>Examples as in <a class="reference external" href="https://github.com/sultan-hassan/tng50-post-processing-prfm">the H24 data release</a><a class="headerlink" href="#examples-as-in-the-h24-data-release" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">astropy.units</span> <span class="k">as</span> <span class="nn">au</span>
 <span class="kn">import</span> <span class="nn">astropy.constants</span> <span class="k">as</span> <span class="nn">ac</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -496,8 +505,6 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="reproduce-examples-as-shown-in-the-data-release-repository">
-<h2>Reproduce examples as shown in <a class="reference external" href="https://github.com/sultan-hassan/tng50-post-processing-prfm">the data release repository</a><a class="headerlink" href="#reproduce-examples-as-shown-in-the-data-release-repository" title="Permalink to this heading">#</a></h2>
 <section id="helper-functions-and-constants">
 <h3>Helper functions and constants<a class="headerlink" href="#helper-functions-and-constants" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -613,8 +620,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="data-reading-for-z-0">
-<h3>Data reading for z=0<a class="headerlink" href="#data-reading-for-z-0" title="Permalink to this heading">#</a></h3>
+<section id="data-reading">
+<h3>Data reading<a class="headerlink" href="#data-reading" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve &quot;full&quot; data for redshift zero</span>
@@ -646,8 +653,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="visualization-of-example-galaxy">
-<h3>Visualization of example galaxy<a class="headerlink" href="#visualization-of-example-galaxy" title="Permalink to this heading">#</a></h3>
+<section id="visualization-of-an-example-galaxy">
+<h3>Visualization of an example galaxy<a class="headerlink" href="#visualization-of-an-example-galaxy" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display an example galaxy projection</span>
@@ -665,18 +672,18 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1868/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1952/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
-/tmp/ipykernel_1868/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
+/tmp/ipykernel_1952/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
 </pre></div>
 </div>
-<img alt="_images/5cd64f88650c242fee560bda983bf67221fec7f1c6c80571e69e2efe94785b8b.png" src="_images/5cd64f88650c242fee560bda983bf67221fec7f1c6c80571e69e2efe94785b8b.png" />
+<img alt="_images/e9c6ea0afac930c37c0c7618d37eccf1637a402dc63d85166c540a4c5b011270.png" src="_images/e9c6ea0afac930c37c0c7618d37eccf1637a402dc63d85166c540a4c5b011270.png" />
 </div>
 </div>
 </section>
-<section id="self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">
-<h3>Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration<a class="headerlink" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration" title="Permalink to this heading">#</a></h3>
+<section id="scale-height-sfr-and-gas-depletion-time">
+<h3>Scale height, SFR, and gas depletion time<a class="headerlink" href="#scale-height-sfr-and-gas-depletion-time" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># flattening the data</span>
@@ -745,7 +752,7 @@ document.write(`
 9 8.269903682361322e-07
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1868/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1952/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
   t_dep_TNG50 = Sigma_g / Sigma_SFR * 1e-9  # depletion time from TNG50 in Gyr
 </pre></div>
 </div>
@@ -818,13 +825,23 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/74c95c72339ba0cd9e9ecbbcafe0e4dffc05ab537434a48cf9b3c486f582b590.png" src="_images/74c95c72339ba0cd9e9ecbbcafe0e4dffc05ab537434a48cf9b3c486f582b590.png" />
+<img alt="_images/0cf65c6afc4be9da575349d19af5b96d9c55a928a4a5bb4412dcbeaf13d6ca9a.png" src="_images/0cf65c6afc4be9da575349d19af5b96d9c55a928a4a5bb4412dcbeaf13d6ca9a.png" />
 </div>
 </div>
 </section>
 </section>
-<section id="reproduce-examples-using-the-prfm-package">
-<h2>Reproduce examples using the PRFM package<a class="headerlink" href="#reproduce-examples-using-the-prfm-package" title="Permalink to this heading">#</a></h2>
+<section id="examples-using-the-prfm-package">
+<h2>Examples using the PRFM package<a class="headerlink" href="#examples-using-the-prfm-package" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prfm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
 <section id="data-reading-same-as-above">
 <h3>Data reading (same as above)<a class="headerlink" href="#data-reading-same-as-above" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -896,8 +913,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="calculate-scale-height-sfr-gas-depletion-time">
-<h3>Calculate scale height, SFR, gas depletion time<a class="headerlink" href="#calculate-scale-height-sfr-gas-depletion-time" title="Permalink to this heading">#</a></h3>
+<section id="id1">
+<h3>Scale height, SFR, and gas depletion time<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Hg</span> <span class="o">=</span> <span class="n">tng_prfm</span><span class="o">.</span><span class="n">calc_self_consistent_solution</span><span class="p">()</span>
@@ -930,8 +947,8 @@ document.write(`
 </div>
 </div>
 </section>
-<section id="id1">
-<h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<section id="id2">
+<h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
@@ -939,7 +956,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/1adcf1026144e178b1008e1434ad346192208999444d6b617c54441fae8756f3.png" src="_images/1adcf1026144e178b1008e1434ad346192208999444d6b617c54441fae8756f3.png" />
+<img alt="_images/fb280dd2ce176e03379db4972178a6f808424ffc17e74cc823b07ef2ccac3d7d.png" src="_images/fb280dd2ce176e03379db4972178a6f808424ffc17e74cc823b07ef2ccac3d7d.png" />
 </div>
 </div>
 </section>
@@ -948,7 +965,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bin_width</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">im</span> <span class="o">=</span> <span class="n">do_hist2d</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Hg_equil</span> <span class="o">*</span> <span class="mf">1.0e3</span><span class="p">),</span>
@@ -993,7 +1010,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/5b9f51c80447b9a0be75e6afe3467949a95f44fba8c231ca9c4b1e3dedfb6e11.png" src="_images/5b9f51c80447b9a0be75e6afe3467949a95f44fba8c231ca9c4b1e3dedfb6e11.png" />
+<img alt="_images/bd3e730eb72e7ac550bbeea15b5f78c37c903084a86b991f45ae31e9c25ae4dc.png" src="_images/bd3e730eb72e7ac550bbeea15b5f78c37c903084a86b991f45ae31e9c25ae4dc.png" />
 </div>
 </div>
 </section>
@@ -1027,7 +1044,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bin_width</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 
 <span class="c1"># Hgas</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1074,8 +1091,8 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR} (classic)$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR} (NCR)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR}$ (classic)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Sigma_{\rm SFR}$ (NCR)&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
 
 <span class="c1"># t_dep</span>
@@ -1098,20 +1115,20 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">ref</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">&quot;k:&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep} (classic)$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep} (NCR)$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}$ (classic)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$t_{\rm dep}$ (NCR)&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/549e3e46484456c96341b0cc9d8ec1180113bd129e57486156d5e84074a8883e.png" src="_images/549e3e46484456c96341b0cc9d8ec1180113bd129e57486156d5e84074a8883e.png" />
+<img alt="_images/a7c8ec34ff8a7525a14124a2aa41904ca22e865bfddd5cf89343a5e1999964c7.png" src="_images/a7c8ec34ff8a7525a14124a2aa41904ca22e865bfddd5cf89343a5e1999964c7.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">sfr</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;classic&quot;</span><span class="p">)</span>
@@ -1123,7 +1140,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e1119c827dfd2b433eb6c374f3229ed5198a9a6689d8733a1e792aa603f1a230.png" src="_images/e1119c827dfd2b433eb6c374f3229ed5198a9a6689d8733a1e792aa603f1a230.png" />
+<img alt="_images/19c1eb8f69c93d4d7a3b520c7797c1bc4304786c3394a5237f03e50fda94b5ec.png" src="_images/19c1eb8f69c93d4d7a3b520c7797c1bc4304786c3394a5237f03e50fda94b5ec.png" />
 </div>
 </div>
 </section>
@@ -1193,19 +1210,20 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-as-shown-in-the-data-release-repository">Reproduce examples as shown in the data release repository</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-as-in-the-h24-data-release">Examples as in the H24 data release</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#helper-functions-and-constants">Helper functions and constants</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-for-z-0">Data reading for z=0</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-example-galaxy">Visualization of example galaxy</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-consistent-scale-height-and-depletion-time-calculations-using-the-prfm-theory-and-tigress-calibration">Self-consistent scale height and depletion time calculations using the PRFM theory and TIGRESS calibration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading">Data reading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-of-an-example-galaxy">Visualization of an example galaxy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scale-height-sfr-and-gas-depletion-time">Scale height, SFR, and gas depletion time</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-figure-9-in-hassan-et-al-2024">Reproduce Figure 9 in Hassan et al. 2024</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-examples-using-the-prfm-package">Reproduce examples using the PRFM package</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-using-the-prfm-package">Examples using the PRFM package</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-reading-same-as-above">Data reading (same as above)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prfm-class-initialization">PRFM class initialization</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-scale-height-sfr-gas-depletion-time">Calculate scale height, SFR, gas depletion time</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Reproduce Figure 9 in Hassan et al. 2024</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Scale height, SFR, and gas depletion time</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Reproduce Figure 9 in Hassan et al. 2024</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-two-solutions">Compare two solutions</a></li>
 </ul>
 </li>
