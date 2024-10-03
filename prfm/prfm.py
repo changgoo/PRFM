@@ -585,7 +585,7 @@ def get_scale_height_analytic(
     return h * H_gas_only
 
 
-# @np.vectorize
+@np.vectorize
 def get_scale_height_numerical(
     Sigma_gas,
     Sigma_star,
@@ -630,7 +630,7 @@ def get_self_consistent_solution(
     Sigma_star,
     Omega_d,
     H_star,
-    sigma_eff="tigress_mid",
+    sigma_eff="tigress-claasic-mid",
     zeta_d=1 / 3.0,
     method="analytic",
     tol=1.0e-5,
@@ -722,7 +722,7 @@ class PRFM(object):
         rho_star=None,
         Omega_d=None,
         rho_dm=None,
-        sigma_eff="tigress-mid",
+        sigma_eff="tigress-classic-mid",
         Ytot="tigress-classic",
         astro_units=True,
     ):
@@ -810,7 +810,6 @@ class PRFM(object):
 
         self.set_feedback_yield(Ytot)
         self.set_sigma_eff(sigma_eff, astro_units=astro_units)
-        self.reset_arg_list(sigma_eff)
 
         # store parameters in astro-friendly units
         self._cgs_to_astro()
@@ -928,6 +927,7 @@ class PRFM(object):
             "rho_star",
             "Omega_d",
             "rho_dm",
+            "H_star",
             "sigma_eff",
         ]:
             if not hasattr(self, "_" + var):
@@ -1024,7 +1024,7 @@ class PRFM(object):
         self._Wtot = Wtot
         self.Wtot = Wtot / u_cgs
 
-        if hasattr(self, "_sigma_eff_model"):
+        if self._sigma_eff_model != "constant":
             self._sigma_eff = get_sigma_eff(Wtot, model=self._sigma_eff_model)
             self.sigma_eff = self._sigma_eff / self.units["sigma_eff"].cgs.value
 
