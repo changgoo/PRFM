@@ -4,6 +4,21 @@
 
 This is a cookbook to guide you in applying the PRFM theory for star formation.
 
+## Quickstart
+```sh
+pip install .
+```
+
+```python
+# quick plot of the TIGRESS-classic results in Ostriker & Kim (2022)
+
+import prfm
+data = prfm.simulations.load_sim_data()
+
+p = prfm.simulations.add_one_sim(data["TIGRESS-classic"])
+prfm.simulations.add_PSFR_model_line(model="tigress-classic")
+```
+
 ## Motivation
 
 Recent advances in theoretical and computational modeling of the star-forming ISM provide an opportunity to develop more sophisticated subgrid model treatments in cosmological simulations.  A key goal of the [Learning the Universe Simons Collaboration](https://www.learning-the-universe.org/) is to replace the current, _empirically-calibrated_ prescriptions for star formation with new subgrid models that are instead calibrated from _full-physics ISM simulations_. In this regard, the **pressure-regulated feedback-modulated (PRFM)** star formation theory has been developed ({cite:t}`2022ApJ...936..137O`; see also {cite:t}`2010ApJ...721..975O`, {cite:t}`2011ApJ...731...41O`, {cite:t}`2011ApJ...743...25K`).
