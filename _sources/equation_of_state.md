@@ -2,7 +2,7 @@
 
 ## TIGRESS-classic calibration
 
-Using the TIGRESS-classic suite {cite:p}`2022ApJ...936..137O`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
+Using the TIGRESS-classic suite ({cite:t}`2022ApJ...936..137O`), we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure.
 
 From the effective equation of state, in which a power-law fit is obtained between measured midplane pressure and density, one can solve to obtain
 
@@ -23,7 +23,7 @@ $$
 
 ## TIGRESS-NCR calibration
 
-Using the TIGRESS-classic suite {cite:p}`2024ApJ...972...67K`, we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure and gas metallicity, but the latter dependence is found to be very weak.
+Using the TIGRESS-classic suite ({cite:t}`2024ApJ...972...67K`), we  obtained a calibration for $\sigma_{\rm eff}$ as a function of the total pressure and gas metallicity, but the latter dependence is found to be very weak.
 
 From the effective equation of state, in which a power-law fit is obtained between measured midplane pressure and density, one can solve to obtain
 

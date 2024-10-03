@@ -430,7 +430,6 @@ document.write(`
     <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">Sigma_gas</span> <span class="o">/</span> <span class="n">H_gas</span> <span class="o">*</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <div class="viewcode-block" id="get_weights"><a class="viewcode-back" href="../../api.html#prfm.prfm.get_weights">[docs]</a><span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span>
 <span class="p">):</span>
@@ -562,7 +561,6 @@ document.write(`
     <span class="k">return</span> <span class="n">H_gas</span><span class="p">,</span> <span class="n">W_gas</span><span class="p">,</span> <span class="n">W_star</span><span class="p">,</span> <span class="n">W_dm</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_weight_contribution</span><span class="p">(</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="p">,</span> <span class="n">zeta_d</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span>
 <span class="p">):</span>
@@ -602,14 +600,12 @@ document.write(`
     <span class="k">return</span> <span class="n">wgas</span> <span class="o">/</span> <span class="n">wtot</span><span class="p">,</span> <span class="n">wstar</span> <span class="o">/</span> <span class="n">wtot</span><span class="p">,</span> <span class="n">wdm</span> <span class="o">/</span> <span class="n">wtot</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_gas_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for gas only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
     <span class="k">return</span> <span class="n">sigma_eff</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">_Gconst_cgs</span> <span class="o">*</span> <span class="n">Sigma_gas</span><span class="p">)</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for star only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -618,7 +614,6 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h_star</span><span class="p">))</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_dm_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution for dark matter only case&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -626,7 +621,6 @@ document.write(`
     <span class="k">return</span> <span class="n">sigma_eff</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">zeta_d</span><span class="p">)</span> <span class="o">/</span> <span class="n">Omega_d</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_gas</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglecting dark matter&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -642,7 +636,6 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_star_gas_approx</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglecting dark matter&quot;&quot;&quot;</span>
     <span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">Sigma_star</span><span class="p">,</span> <span class="n">Omega_d</span><span class="p">,</span> <span class="n">H_star</span><span class="p">,</span> <span class="n">sigma_eff</span> <span class="o">=</span> <span class="n">args</span>
@@ -653,7 +646,6 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_scale_height_dm_gas</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;analytic solution neglectic star&quot;&quot;&quot;</span>
     <span class="n">H_gas_only</span> <span class="o">=</span> <span class="n">get_scale_height_gas_only</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -663,8 +655,7 @@ document.write(`
     <span class="k">return</span> <span class="n">h</span> <span class="o">*</span> <span class="n">H_gas_only</span>
 
 
-<span class="c1"># @np.vectorize</span>
-<span class="k">def</span> <span class="nf">get_sigma_eff</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress_mid&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_sigma_eff</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic-mid&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;pressure-dependent velocity dispersion model&quot;&quot;&quot;</span>
     <span class="n">sigma_eff_model</span> <span class="o">=</span> <span class="n">_sigma_eff_models</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
     <span class="n">sigma_0</span> <span class="o">=</span> <span class="n">sigma_eff_model</span><span class="p">[</span><span class="s2">&quot;sigma_0&quot;</span><span class="p">]</span>
@@ -677,7 +668,6 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">veld</span><span class="p">,</span> <span class="n">sigma_min</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0e5</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_feedback_yield</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;total feedback yield as a function of weight</span>
 
@@ -722,7 +712,6 @@ document.write(`
         <span class="k">return</span> <span class="n">Yth</span> <span class="o">+</span> <span class="n">Ytrb</span>
 
 
-<span class="c1"># @np.vectorize</span>
 <span class="k">def</span> <span class="nf">get_feedback_yield_comp</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s2">&quot;th&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tigress-classic-decomp&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;feedback yield of each component as a function of weight</span>
 

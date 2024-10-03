@@ -505,7 +505,12 @@ document.write(`
 </div>
 <section id="helper-functions-and-constants">
 <h3>Helper functions and constants<a class="headerlink" href="#helper-functions-and-constants" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># constants and conversion factors</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;kpc*M_sun-1*km2*s-2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
@@ -616,6 +621,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 </section>
 <section id="data-reading">
@@ -653,7 +659,12 @@ document.write(`
 </section>
 <section id="visualization-of-an-example-galaxy">
 <h3>Visualization of an example galaxy<a class="headerlink" href="#visualization-of-an-example-galaxy" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display an example galaxy projection</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -670,14 +681,15 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1879/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1939/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
-/tmp/ipykernel_1879/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
+/tmp/ipykernel_1939/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
 </pre></div>
 </div>
 <img alt="_images/e9c6ea0afac930c37c0c7618d37eccf1637a402dc63d85166c540a4c5b011270.png" src="_images/e9c6ea0afac930c37c0c7618d37eccf1637a402dc63d85166c540a4c5b011270.png" />
 </div>
+</details>
 </div>
 </section>
 <section id="scale-height-sfr-and-gas-depletion-time">
@@ -750,7 +762,7 @@ document.write(`
 9 8.269903682361322e-07
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1879/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1939/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
   t_dep_TNG50 = Sigma_g / Sigma_SFR * 1e-9  # depletion time from TNG50 in Gyr
 </pre></div>
 </div>
@@ -759,7 +771,12 @@ document.write(`
 </section>
 <section id="reproduce-figure-9-in-hassan-et-al-2024">
 <h3>Reproduce Figure 9 in Hassan et al. 2024<a class="headerlink" href="#reproduce-figure-9-in-hassan-et-al-2024" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
+<div class="cell tag_hide-cell docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell content</span>
+<span class="expanded">Hide code cell content</span>
+</summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_tdyn_tdep</span><span class="p">(</span><span class="n">tdyn</span><span class="p">,</span> <span class="n">tdep</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -815,6 +832,7 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
