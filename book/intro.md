@@ -14,7 +14,7 @@ The PRFM theory provides a new paradigm to undersand the observational correlati
 <!-- A vertical dynamical equilibrium state of the ISM in disk galaxies demands a certain level of total pressure to support disk weight. Each component of ISM pressure/stress is maintained by massive star feedback by heating the gas, driving turbulence, and activating galactic dynamo to offset losses through cooling and turbulence dissipation. From the former, one can connect galactic condtions with the required total pressure. From the latter, one can connect each pressure component (and hence total pressure) and star formation rate, which is characterized by [feedback yields](feedback-yield). -->
 
 
-# Table of Contents
+## Table of Contents
 
 ```{tableofcontents}
 ```

@@ -87,7 +87,6 @@ def get_pressure(Sigma_gas, H_gas, sigma_eff):
     return 0.5 * Sigma_gas / H_gas * sigma_eff**2
 
 
-# @np.vectorize
 def get_weights(
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=1 / 3.0, method="analytic"
 ):
@@ -219,7 +218,6 @@ def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
     return H_gas, W_gas, W_star, W_dm
 
 
-# @np.vectorize
 def get_weight_contribution(
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=1 / 3.0, method="analytic"
 ):
@@ -259,14 +257,12 @@ def get_weight_contribution(
     return wgas / wtot, wstar / wtot, wdm / wtot
 
 
-# @np.vectorize
 def get_scale_height_gas_only(*args, **kwargs):
     """analytic solution for gas only case"""
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     return sigma_eff**2 / (np.pi * _Gconst_cgs * Sigma_gas)
 
 
-# @np.vectorize
 def get_scale_height_star_only(*args, **kwargs):
     """analytic solution for star only case"""
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
@@ -275,7 +271,6 @@ def get_scale_height_star_only(*args, **kwargs):
     return h * (1 + np.sqrt(1 + 2 * h_star))
 
 
-# @np.vectorize
 def get_scale_height_dm_only(*args, **kwargs):
     """analytic solution for dark matter only case"""
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
@@ -283,7 +278,6 @@ def get_scale_height_dm_only(*args, **kwargs):
     return sigma_eff / np.sqrt(2 * zeta_d) / Omega_d
 
 
-# @np.vectorize
 def get_scale_height_star_gas(*args, **kwargs):
     """analytic solution neglecting dark matter"""
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
@@ -299,7 +293,6 @@ def get_scale_height_star_gas(*args, **kwargs):
     return h * H_gas_only
 
 
-# @np.vectorize
 def get_scale_height_star_gas_approx(*args, **kwargs):
     """analytic solution neglecting dark matter"""
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
@@ -310,7 +303,6 @@ def get_scale_height_star_gas_approx(*args, **kwargs):
     return h * H_gas_only
 
 
-# @np.vectorize
 def get_scale_height_dm_gas(*args, **kwargs):
     """analytic solution neglectic star"""
     H_gas_only = get_scale_height_gas_only(*args, **kwargs)
@@ -320,8 +312,7 @@ def get_scale_height_dm_gas(*args, **kwargs):
     return h * H_gas_only
 
 
-# @np.vectorize
-def get_sigma_eff(P, Z=None, model="tigress_mid"):
+def get_sigma_eff(P, Z=None, model="tigress-classic-mid"):
     """pressure-dependent velocity dispersion model"""
     sigma_eff_model = _sigma_eff_models[model]
     sigma_0 = sigma_eff_model["sigma_0"]
@@ -334,7 +325,6 @@ def get_sigma_eff(P, Z=None, model="tigress_mid"):
     return np.clip(veld, sigma_min, None) * 1.0e5
 
 
-# @np.vectorize
 def get_feedback_yield(P, Z=None, model="tigress-classic"):
     """total feedback yield as a function of weight
 
@@ -379,7 +369,6 @@ def get_feedback_yield(P, Z=None, model="tigress-classic"):
         return Yth + Ytrb
 
 
-# @np.vectorize
 def get_feedback_yield_comp(P, Z=None, comp="th", model="tigress-classic-decomp"):
     """feedback yield of each component as a function of weight
 
