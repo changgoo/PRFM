@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open("requirements.txt") as f:
     install_requires = f.read().splitlines()
@@ -9,6 +9,7 @@ setup(
     description="Tools for application of the PRFM theory",
     author="Chang-Goo Kim",
     author_email="changgoo@princeton.edu",
-    packages=find_packages(),
+    packages=["prfm"],
     install_requires=install_requires,
+    package_data={"prfm": ["prfm_ring.csv", "tigress_ncr_K24.nc"]},
 )
