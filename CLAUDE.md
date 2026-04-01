@@ -32,7 +32,17 @@ pre-commit run --all-files
 jupyter-book build book/
 ```
 
-**Run tests:**
+**Run tests (unit only, no data required):**
+```bash
+pytest tests/ -v -m "not integration"
+```
+
+**Run a single test file:**
+```bash
+pytest tests/test_prfm.py -v
+```
+
+**Run all tests including integration (requires downloaded PHANGS data):**
 ```bash
 pytest tests/ -v
 ```
@@ -69,3 +79,11 @@ Two embedded model dictionaries drive parameterized behavior:
 - `prfm/tigress_ncr_K24.nc` — TIGRESS-NCR simulation data (Kim et al. 2024)
 - `data/all_data_z0_selected.pkl` — processed galaxy/simulation data used in notebooks
 
+## Development Rules
+
+- **TDD**: Write tests before implementation; unit tests must not require network or disk data.
+- **Plan first**: For any non-trivial feature, enter plan mode and get alignment before coding.
+- **Ask clarifying questions** before starting work when requirements are ambiguous.
+- **Type hints**: All Python functions must have type annotations.
+- **Branch workflow**: New development goes on a feature branch; open a WIP PR with a task checklist immediately after planning.
+- **Frequent commits**: Commit after each self-contained chunk of work — do not bundle unrelated changes.
