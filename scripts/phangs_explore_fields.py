@@ -1,16 +1,17 @@
 """
 Histogram exploration of PHANGS megatable key fields.
 
-Produces three figures saved under figures/phangs/:
+Produces three figures saved under figures/phangs/<aperture>/:
   field_distributions.png       -- overall distribution of each field (all data)
   field_distributions_bygal.png -- per-galaxy distributions overlaid
   field_distributions_byrgal.png -- distributions split by galactocentric radius bin
 
 Usage
 -----
-python scripts/phangs_explore_fields.py
+python scripts/phangs_explore_fields.py [--aperture annulus|gauss|hexagon]
 """
 
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -18,12 +19,22 @@ import numpy as np
 
 from prfm import phangs
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--aperture", default="annulus",
+                    choices=["annulus", "gauss", "hexagon"])
+args = parser.parse_args()
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
-# Key columns to examine: (column_name, x_label, log_scale)
-FIELDS: list[tuple[str, str, bool]] = [
+# Aperture suffix: gauss/hexagon files append the aperture name to column names
+_SUFFIX = {"annulus": "", "gauss": "_gauss", "hexagon": "_hexagon"}
+sfx = _SUFFIX[args.aperture]
+
+# Base columns (suffix applied automatically below): (base_name, x_label, log_scale)
+# Columns that always keep their base name (no suffix in any aperture): r_gal, Zprime
+_BASE_FIELDS: list[tuple[str, str, bool]] = [
     ("r_gal",               r"$r_\mathrm{gal}$ [kpc]",                    False),
     ("Sigma_mol",           r"$\Sigma_\mathrm{mol}$ [$M_\odot$ pc$^{-2}$]", True),
     ("Sigma_atom",          r"$\Sigma_\mathrm{atom}$ [$M_\odot$ pc$^{-2}$]", True),
@@ -39,6 +50,11 @@ FIELDS: list[tuple[str, str, bool]] = [
     ("alpha_CO21_S20",      r"$\alpha_\mathrm{CO}$ [S20]",                  True),
 ]
 
+# Columns that never get a suffix (shared across apertures)
+_NO_SUFFIX = {"r_gal", "Zprime", "alpha_CO21_S20",
+              "rho_star_mp", "V_circ_CO21_URC", "Omega_d", "H_star",
+              "Sigma_gas"}  # Sigma_gas is derived, added by compute_prfm_inputs
+
 # Radial bins for the by-r_gal figure
 RGAL_BINS = [(0, 2), (2, 5), (5, 10), (10, 999)]
 RGAL_LABELS = [r"$r<2$ kpc", r"$2-5$ kpc", r"$5-10$ kpc", r"$r>10$ kpc"]
@@ -46,7 +62,7 @@ RGAL_COLORS = ["#c0392b", "#e67e22", "#27ae60", "#2980b9"]
 
 REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data/phangs_megatable"
-OUT_DIR = REPO_ROOT / "figures/phangs"
+OUT_DIR = REPO_ROOT / "figures/phangs" / args.aperture
 N_BINS = 40
 
 # ---------------------------------------------------------------------------
@@ -73,9 +89,19 @@ def bin_edges(vals: np.ndarray, log: bool, n: int = N_BINS) -> np.ndarray:
 # Load data
 # ---------------------------------------------------------------------------
 
-print("Loading PHANGS annulus data…")
-t = phangs.load_all(DATA_DIR, aperture="annulus")
-t = phangs.compute_prfm_inputs(t)
+print(f"Loading PHANGS {args.aperture} data…")
+t = phangs.load_all(DATA_DIR, aperture=args.aperture)
+if args.aperture == "annulus":
+    t = phangs.compute_prfm_inputs(t)
+
+# Resolve actual column names (apply suffix where the column exists with it)
+FIELDS: list[tuple[str, str, bool]] = []
+for base, label, log in _BASE_FIELDS:
+    col = base if base in _NO_SUFFIX else base + sfx
+    if col in t.colnames:
+        FIELDS.append((col, label, log))
+    elif base in t.colnames:      # fallback to unsuffixed
+        FIELDS.append((base, label, log))
 
 galaxies = sorted(set(t["GALAXY"]))
 gal_cmap = plt.cm.tab20

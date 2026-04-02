@@ -1,8 +1,13 @@
 """
 Quick inspection of PHANGS megatable columns, dtypes, units, and NaN coverage.
 Output is printed to stdout.
+
+Usage
+-----
+python scripts/inspect_phangs_columns.py [--aperture annulus|gauss|hexagon]
 """
 
+import argparse
 from pathlib import Path
 
 import numpy as np
@@ -10,7 +15,13 @@ from prfm import phangs
 
 REPO_ROOT = Path(__file__).parent.parent
 
-t = phangs.load_all(REPO_ROOT / "data/phangs_megatable", aperture="annulus")
+parser = argparse.ArgumentParser()
+parser.add_argument("--aperture", default="annulus",
+                    choices=["annulus", "gauss", "hexagon"])
+args = parser.parse_args()
+
+t = phangs.load_all(REPO_ROOT / "data/phangs_megatable", aperture=args.aperture)
+print(f"Aperture   : {args.aperture}")
 t = phangs.compute_prfm_inputs(t)
 
 print(f"Total rows : {len(t)}")

@@ -1,15 +1,16 @@
 """
 Correlation exploration of PHANGS megatable key fields.
 
-Produces two figures saved under figures/phangs/:
+Produces two figures saved under figures/phangs/<aperture>/:
   correlation_matrix.png   -- Spearman rank correlation heatmap
   scatter_matrix.png       -- scatter matrix colored by r_gal
 
 Usage
 -----
-python scripts/phangs_explore_correlations.py
+python scripts/phangs_explore_correlations.py [--aperture annulus|gauss|hexagon]
 """
 
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -19,12 +20,21 @@ from scipy import stats
 
 from prfm import phangs
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--aperture", default="annulus",
+                    choices=["annulus", "gauss", "hexagon"])
+args = parser.parse_args()
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
-# Columns for the scatter/correlation matrix (log-transform where noted)
-COLS: list[tuple[str, str, bool]] = [
+_SUFFIX = {"annulus": "", "gauss": "_gauss", "hexagon": "_hexagon"}
+sfx = _SUFFIX[args.aperture]
+_NO_SUFFIX = {"Sigma_gas", "H_star", "Omega_d", "Zprime"}
+
+# Base columns (suffix applied at load time): (base_name, x_label, log_scale)
+_BASE_COLS: list[tuple[str, str, bool]] = [
     ("Sigma_gas",           r"$\Sigma_\mathrm{gas}$",  True),
     ("Sigma_mol",           r"$\Sigma_\mathrm{mol}$",  True),
     ("Sigma_atom",          r"$\Sigma_\mathrm{atom}$", True),
@@ -37,7 +47,7 @@ COLS: list[tuple[str, str, bool]] = [
 
 REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data/phangs_megatable"
-OUT_DIR = REPO_ROOT / "figures/phangs"
+OUT_DIR = REPO_ROOT / "figures/phangs" / args.aperture
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -65,9 +75,20 @@ def build_matrix(t, cols: list[tuple[str, str, bool]]) -> tuple[np.ndarray, list
 # Load data
 # ---------------------------------------------------------------------------
 
-print("Loading PHANGS annulus data…")
-t = phangs.load_all(DATA_DIR, aperture="annulus")
-t = phangs.compute_prfm_inputs(t)
+print(f"Loading PHANGS {args.aperture} data…")
+t = phangs.load_all(DATA_DIR, aperture=args.aperture)
+if args.aperture == "annulus":
+    t = phangs.compute_prfm_inputs(t)
+
+# Resolve actual column names, keep only those present in this aperture's table
+COLS: list[tuple[str, str, bool]] = []
+for base, label, log in _BASE_COLS:
+    col = base if base in _NO_SUFFIX else base + sfx
+    if col in t.colnames:
+        COLS.append((col, label, log))
+    elif base in t.colnames:
+        COLS.append((base, label, log))
+
 r_gal_all = np.asarray(t["r_gal"], dtype=float)
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)
