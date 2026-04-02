@@ -232,6 +232,92 @@ class TestFiltering:
 
 
 # ---------------------------------------------------------------------------
+# run_prfm
+# ---------------------------------------------------------------------------
+
+
+class TestRunPRFM:
+    def test_returns_table(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert isinstance(out, Table)
+
+    def test_output_columns_present(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        for col in ("P_weight", "H_gas", "sigma_eff_sol", "Sigma_SFR_pred"):
+            assert col in out.colnames, f"Missing column: {col}"
+
+    def test_same_length_as_input(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert len(out) == len(synthetic_table)
+
+    def test_output_units_attached(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert out["P_weight"].unit is not None
+        assert out["H_gas"].unit is not None
+        assert out["sigma_eff_sol"].unit is not None
+        assert out["Sigma_SFR_pred"].unit is not None
+
+    def test_all_rows_finite_for_clean_input(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        for col in ("P_weight", "H_gas", "sigma_eff_sol", "Sigma_SFR_pred"):
+            assert np.all(np.isfinite(out[col].value)), f"Non-finite values in {col}"
+
+    def test_invalid_rows_give_nan(self, synthetic_file, tmp_path):
+        """Rows with NaN inputs should produce NaN outputs."""
+        import textwrap
+        ecsv_nan = textwrap.dedent("""\
+            # %ECSV 1.0
+            # ---
+            # datatype:
+            # - {name: r_gal, unit: kpc, datatype: float64}
+            # - {name: V_circ_CO21_URC, unit: km / s, datatype: float64}
+            # - {name: Sigma_mol, unit: solMass / pc2, datatype: float64}
+            # - {name: Sigma_atom, unit: solMass / pc2, datatype: float64}
+            # - {name: Sigma_star, unit: solMass / pc2, datatype: float64}
+            # - {name: rho_star_mp, unit: solMass / pc3, datatype: float64}
+            # - {name: Sigma_SFR_HaW4recal, unit: solMass / (kpc2 yr), datatype: float64}
+            # - {name: Zprime, datatype: float64}
+            # meta:
+            #   GALAXY: TESTNAN
+            # schema: astropy-2.0
+            r_gal V_circ_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
+            1.0 150.0 10.0 5.0 200.0 0.1 0.01 1.0
+            2.0 180.0 nan 4.0 150.0 0.08 0.008 0.9
+        """)
+        f = tmp_path / "TESTNAN_annulus_0p5kpc.ecsv"
+        f.write_text(ecsv_nan)
+        t = phangs.load(f)
+        import warnings
+        with warnings.catch_warnings(record=True):
+            out = phangs.run_prfm(t)
+        assert np.isfinite(out["Sigma_SFR_pred"].value[0])
+        assert np.isnan(out["Sigma_SFR_pred"].value[1])
+
+    def test_sfr_pred_positive_for_valid_rows(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert np.all(out["Sigma_SFR_pred"].value > 0)
+
+    def test_p_weight_positive_for_valid_rows(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert np.all(out["P_weight"].value > 0)
+
+    def test_h_gas_positive_for_valid_rows(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        assert np.all(out["H_gas"].value > 0)
+
+    def test_accepts_precomputed_inputs(self, synthetic_table):
+        """run_prfm should not recompute if Sigma_gas already present."""
+        t = phangs.compute_prfm_inputs(synthetic_table)
+        out = phangs.run_prfm(t)
+        assert "P_weight" in out.colnames
+
+    def test_zprime_none_skips_metallicity(self, synthetic_table):
+        """zprime_col=None should still produce valid outputs."""
+        out = phangs.run_prfm(synthetic_table, zprime_col=None)
+        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+
+
+# ---------------------------------------------------------------------------
 # Integration tests (require downloaded data)
 # ---------------------------------------------------------------------------
 

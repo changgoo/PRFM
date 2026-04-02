@@ -27,3 +27,16 @@ PRFM simulation data loader
 ---------------------------
 
 .. autofunction:: prfm.simulations.load_sim_data
+
+PHANGS data utilities
+---------------------
+
+.. autofunction:: prfm.phangs.load
+
+.. autofunction:: prfm.phangs.load_all
+
+.. autofunction:: prfm.phangs.compute_prfm_inputs
+
+.. autofunction:: prfm.phangs.run_prfm
+
+.. autofunction:: prfm.phangs.valid_rows
