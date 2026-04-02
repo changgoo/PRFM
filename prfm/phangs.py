@@ -217,7 +217,7 @@ def load_all(data_dir, aperture="annulus"):
         galaxy = t.meta.get("GALAXY", f.stem.split("_")[0])
         t["GALAXY"] = galaxy
         tables.append(t)
-    return vstack(tables)
+    return vstack(tables, metadata_conflicts="silent")
 
 
 # ---------------------------------------------------------------------------
