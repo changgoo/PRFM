@@ -392,8 +392,8 @@ def scatter_plot(
             return
         xm, ym = x[mask], y[mask]
         if ex is not None or ey is not None:
-            xerr = None if ex is None else _asymmetric_errorbars(xm, ex[mask])
-            yerr = None if ey is None else _asymmetric_errorbars(ym, ey[mask])
+            xerr = None if ex is None else get_symmetric_log_errorbars(xm, ex[mask])
+            yerr = None if ey is None else get_symmetric_log_errorbars(ym, ey[mask])
             ax.errorbar(
                 xm, ym,
                 xerr=xerr, yerr=yerr,
@@ -604,3 +604,82 @@ def _parse_slices(
             results.append((mask, color, label))
         break  # one slice column supported
     return results
+
+def get_symmetric_log_errorbars(linear_mean, linear_std):
+    """
+    Approximates linear standard deviation into a multiplicative factor so that
+    the resulting error bars appear visually symmetric on a log-scaled axis.
+
+    Parameters:
+    -----------
+    linear_mean : array_like
+        The mean values calculated in linear space.
+    linear_std : array_like
+        The standard deviation values calculated in linear space.
+
+    Returns:
+    --------
+    asymmetric_error : list of numpy.ndarray
+        A 2-element list [lower_errors, upper_errors] containing the absolute
+        linear distances required by Matplotlib's `yerr`.
+    """
+    linear_mean = np.asarray(linear_mean, dtype=float)
+    linear_std = np.asarray(linear_std, dtype=float)
+
+    # 1. Calculate the Coefficient of Variation (fractional error)
+    cv = linear_std / linear_mean
+
+    # 2. Calculate the multiplicative factor
+    # Using np.exp ensures the math works perfectly regardless of the log base
+    # Matplotlib uses for its axis scaling.
+    multiplier = np.exp(cv)
+
+    # 3. Calculate the new bounds based on the multiplier
+    upper_bound = linear_mean * multiplier
+    lower_bound = linear_mean / multiplier
+
+    # 4. Calculate the distances from the center point for Matplotlib
+    yerr_lower = linear_mean - lower_bound
+    yerr_upper = upper_bound - linear_mean
+
+    return [yerr_lower, yerr_upper]
+
+# Convert inputs to CGS for get_weight_contribution
+def plot_weights(tbl, ax=None, variation=None):
+    from prfm.phangs import get_weights
+
+    f_gas, f_star, f_dm = get_weights(tbl, variation=variation)
+    P_DE = np.asarray(tbl["P_weight"], dtype=float)   # k_B K cm^-3
+
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(5, 3.5))
+    else:
+        fig = ax.figure
+    kw = dict(s=2, alpha=0.5, rasterized=True, linewidths=0)
+    ax.scatter(P_DE, f_gas,  color="tab:blue",   **kw)
+    ax.scatter(P_DE, f_star, color="tab:orange", **kw)
+    ax.scatter(P_DE, f_dm,   color="tab:green",  **kw)
+
+    # Binned means
+    P_edges = np.logspace(np.log10(np.nanpercentile(P_DE, 1)),
+                        np.log10(np.nanpercentile(P_DE, 99)), 20)
+    P_centers = np.sqrt(P_edges[:-1] * P_edges[1:])   # geometric mid-points
+    for f, color, label in [
+        (f_gas,  "tab:blue",   r"$f_\mathrm{gas}$"),
+        (f_star, "tab:orange", r"$f_\star$"),
+        (f_dm,   "tab:green",  r"$f_\mathrm{DM}$"),
+    ]:
+        means = [np.nanmean(f[(P_DE >= lo) & (P_DE < hi)])
+                for lo, hi in zip(P_edges[:-1], P_edges[1:])]
+        ax.plot(P_centers, means, color=color, lw=2, label=label)
+
+    n_valid = np.isfinite(P_DE).sum()
+    ax.set_xscale("log")
+    ax.set_xlabel(r"$P_\mathrm{DE}/k_B\ [\mathrm{K\,cm^{-3}}]$")
+    ax.set_ylabel(r"$\mathcal{W}_i\,/\,\mathcal{W}_\mathrm{tot}$")
+    ax.set_ylim(0, 1)
+    ax.legend(markerscale=5)
+    ax.annotate(f"N={n_valid}", xy=(0.97, 0.97), xycoords="axes fraction",
+                ha="right", va="top", fontsize="x-small", color="0.4")
+    fig.tight_layout()
+    return fig

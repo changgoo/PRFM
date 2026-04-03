@@ -17,6 +17,7 @@ import astropy.constants as ac
 import astropy.units as au
 import numpy as np
 from astropy.table import Table, vstack
+import prfm
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -259,15 +260,28 @@ def compute_prfm_inputs(table):
     """
     t = table.copy()
 
-    Sigma_mol = t["Sigma_mol"].to(au.M_sun / au.pc**2)
-    Sigma_atom = t["Sigma_atom"].to(au.M_sun / au.pc**2)
-    t["Sigma_gas"] = (Sigma_mol + Sigma_atom).to(au.M_sun / au.pc**2)
-    t["Sigma_gas"].description = "Total gas surface density (mol + atom)"
+    Sigma_mol  = np.asarray(t["Sigma_mol"].to(au.M_sun / au.pc**2))
+    Sigma_atom = np.asarray(t["Sigma_atom"].to(au.M_sun / au.pc**2))
+
+    # Treat non-detections as zero for each component, but only when the other
+    # component is detected.  If both are NaN the sum stays NaN.
+    either_valid = np.isfinite(Sigma_mol) | np.isfinite(Sigma_atom)
+    mol_filled  = np.where(np.isfinite(Sigma_mol),  Sigma_mol,  0.0)
+    atom_filled = np.where(np.isfinite(Sigma_atom), Sigma_atom, 0.0)
+    Sigma_gas = np.where(either_valid, mol_filled + atom_filled, np.nan)
+    t["Sigma_gas"] = Sigma_gas * au.M_sun / au.pc**2
+    t["Sigma_gas"].description = (
+        "Total gas surface density (mol + atom; non-detections filled with 0)"
+    )
 
     if "e_Sigma_mol" in t.colnames and "e_Sigma_atom" in t.colnames:
-        e_mol = t["e_Sigma_mol"].to(au.M_sun / au.pc**2)
-        e_atom = t["e_Sigma_atom"].to(au.M_sun / au.pc**2)
-        t["e_Sigma_gas"] = np.sqrt(e_mol**2 + e_atom**2).to(au.M_sun / au.pc**2)
+        e_mol  = np.asarray(t["e_Sigma_mol"].to(au.M_sun / au.pc**2))
+        e_atom = np.asarray(t["e_Sigma_atom"].to(au.M_sun / au.pc**2))
+        # propagate only the errors that exist; treat missing component error as 0
+        e_mol_filled  = np.where(np.isfinite(e_mol),  e_mol,  0.0)
+        e_atom_filled = np.where(np.isfinite(e_atom), e_atom, 0.0)
+        e_gas = np.where(either_valid, np.sqrt(e_mol_filled**2 + e_atom_filled**2), np.nan)
+        t["e_Sigma_gas"] = e_gas * au.M_sun / au.pc**2
         t["e_Sigma_gas"].description = "Uncertainty on Sigma_gas (quadrature sum)"
 
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
@@ -288,7 +302,7 @@ def compute_prfm_inputs(table):
 # ---------------------------------------------------------------------------
 
 
-def valid_rows(table, cols=None):
+def valid_rows(table, cols=None, rel_error=0.1):
     """Boolean mask selecting rows that are finite and positive.
 
     Parameters
@@ -310,6 +324,9 @@ def valid_rows(table, cols=None):
     for col in cols:
         vals = np.asarray(table[col], dtype=float)
         mask &= np.isfinite(vals) & (vals > 0)
+        if (rel_error>0) and (f"e_{col}" in table.colnames):
+            e_vals = np.asarray(table["e_"+col], dtype=float)
+            mask &= np.isfinite(e_vals) & (e_vals/vals < rel_error)
     return mask
 
 
@@ -327,9 +344,11 @@ _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value  # M_sun/kpc²/yr → g/cm²
 
 def run_prfm(
     table: Table,
+    prfm_cols: Optional[str] = ["Sigma_gas", "Sigma_star", "Omega_d", "H_star"],
     sigma_eff_model: str = "tigress-ncr-avg",
     yield_model: str = "tigress-ncr-decomp-all",
     zprime_col: Optional[str] = "Zprime",
+    variation: Optional[dict] = None,
 ) -> Table:
     """Apply the PRFM model to every row of a PHANGS megatable.
 
@@ -375,7 +394,6 @@ def run_prfm(
         t = compute_prfm_inputs(t)
 
     # Identify valid rows
-    prfm_cols = ["Sigma_gas", "Sigma_star", "Omega_d", "H_star"]
     mask = valid_rows(t, cols=prfm_cols)
     n_invalid = (~mask).sum()
     if n_invalid > 0:
@@ -390,13 +408,32 @@ def run_prfm(
     H_gas = np.full(n, np.nan)
     sigma_sol = np.full(n, np.nan)
     Sigma_SFR_pred = np.full(n, np.nan)
-
+    print(mask.sum(), "valid rows out of", n)
     if mask.any():
         # Extract valid rows and convert to CGS
         sg = np.asarray(t["Sigma_gas"][mask], dtype=float) * _surf_cgs
         ss = np.asarray(t["Sigma_star"][mask], dtype=float) * _surf_cgs
-        od = np.asarray(t["Omega_d"][mask], dtype=float) * _kms_kpc_cgs
+        if "Omega_d" in prfm_cols:
+            od = np.asarray(t["Omega_d"][mask], dtype=float) * _kms_kpc_cgs
+        else:
+            od = None
         hs = np.asarray(t["H_star"][mask], dtype=float) * _pc_cgs
+
+        if variation is not None:
+            if "Omega_d" in variation:
+                print("Applying variation: setting Omega_d to", variation["Omega_d"])
+                if variation["Omega_d"] is None:
+                    od = None
+                else:
+                    od *= variation["Omega_d"]
+
+            if "Sigma_star" in variation:
+                print("Applying variation: scaling Sigma_star by", variation["Sigma_star"])
+                ss *= variation["Sigma_star"]
+
+            if "H_star" in variation:
+                print("Applying variation: scaling H_star by", variation["H_star"])
+                hs *= variation["H_star"]
 
         # Metallicity (dimensionless relative to solar); default to solar (Z=1) if absent
         if zprime_col is not None and zprime_col in t.colnames:
@@ -432,3 +469,34 @@ def run_prfm(
     t["Sigma_SFR_pred"].description = "PRFM-predicted SFR surface density"
 
     return t
+
+# Convert inputs to CGS for get_weight_contribution
+def get_weights(table: Table,
+                variation: Optional[dict] = None
+                ) -> (np.ndarray, np.ndarray, np.ndarray):
+    from prfm.prfm import get_weight_contribution
+
+    sg  = np.asarray(table["Sigma_gas"],    dtype=float) * _surf_cgs
+    ss  = np.asarray(table["Sigma_star"],   dtype=float) * _surf_cgs
+    od  = np.asarray(table["Omega_d"],      dtype=float) * _kms_kpc_cgs
+    hs  = np.asarray(table["H_star"],       dtype=float) * _pc_cgs
+    se  = np.asarray(table["sigma_eff_sol"],dtype=float) * 1e5   # km/s → cm/s
+
+    if variation is not None:
+        if "Omega_d" in variation:
+            print("Applying variation: setting Omega_d to", variation["Omega_d"])
+            if variation["Omega_d"] is None:
+                od = None
+            else:
+                od *= variation["Omega_d"]
+
+        if "Sigma_star" in variation:
+            print("Applying variation: scaling Sigma_star by", variation["Sigma_star"])
+            ss *= variation["Sigma_star"]
+
+        if "H_star" in variation:
+            print("Applying variation: scaling H_star by", variation["H_star"])
+            hs *= variation["H_star"]
+
+    f_gas, f_star, f_dm = get_weight_contribution(sg, ss, od, hs, se)
+    return f_gas, f_star, f_dm

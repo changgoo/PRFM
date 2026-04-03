@@ -125,13 +125,28 @@ def get_weights(
     >>> import prfm
     >>> H, W_gas, W_star, W_dm = prfm.get_weights(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)
     """
+    w_gas = Sigma_gas is not None
+    w_star = Sigma_star is not None
+    w_dm = Omega_d is not None
     H_gas = get_scale_height(
-        Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=zeta_d, method=method
+        Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=zeta_d, method=method,
+        wgas=w_gas, wstar=w_star, wdm=w_dm,
     )
 
-    W_gas = get_weight_gas(Sigma_gas)
-    W_star = get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)
-    W_dm = get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=zeta_d)
+    if w_gas:
+        W_gas = get_weight_gas(Sigma_gas)
+    else:
+        W_gas = 0.
+
+    if w_star:
+        W_star = get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)
+    else:
+        W_star = 0.
+
+    if w_dm:
+        W_dm = get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=zeta_d)
+    else:
+        W_dm = 0.
 
     return H_gas, W_gas, W_star, W_dm
 
