@@ -654,7 +654,6 @@ def load_sim_data():
         data[d.paper] = d
     return data
 
-import numpy as np
 
 def get_log_errorbars(log_mean, log_std, base=10):
     """

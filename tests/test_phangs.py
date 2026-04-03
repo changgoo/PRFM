@@ -283,6 +283,7 @@ class TestRunPRFM:
             r_gal V_circ_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
             1.0 150.0 10.0 5.0 200.0 0.1 0.01 1.0
             2.0 180.0 nan 4.0 150.0 0.08 0.008 0.9
+            3.0 200.0 nan nan 100.0 0.05 0.005 0.8
         """)
         f = tmp_path / "TESTNAN_annulus_0p5kpc.ecsv"
         f.write_text(ecsv_nan)
@@ -291,7 +292,10 @@ class TestRunPRFM:
         with warnings.catch_warnings(record=True):
             out = phangs.run_prfm(t)
         assert np.isfinite(out["Sigma_SFR_pred"].value[0])
-        assert np.isnan(out["Sigma_SFR_pred"].value[1])
+        # mol=nan, atom=valid → Sigma_gas filled with atom only → valid output
+        assert np.isfinite(out["Sigma_SFR_pred"].value[1])
+        # both mol and atom nan → Sigma_gas=nan → output must be nan
+        assert np.isnan(out["Sigma_SFR_pred"].value[2])
 
     def test_sfr_pred_positive_for_valid_rows(self, synthetic_table):
         out = phangs.run_prfm(synthetic_table)

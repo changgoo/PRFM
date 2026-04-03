@@ -17,7 +17,6 @@ import astropy.constants as ac
 import astropy.units as au
 import numpy as np
 from astropy.table import Table, vstack
-import prfm
 
 # ---------------------------------------------------------------------------
 # Constants
