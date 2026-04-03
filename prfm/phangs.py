@@ -211,13 +211,19 @@ def load_all(data_dir, aperture="annulus"):
         raise FileNotFoundError(
             f"No files matching '{pattern}' found in {data_dir}"
         )
-    tables = []
+    tables = dict()
     for f in files:
         t = load(f)
         galaxy = t.meta.get("GALAXY", f.stem.split("_")[0])
+        tables[galaxy] = t
+    return tables
+
+def vstack_tables(tables):
+    tbl = []
+    for galaxy, t in tables.items():
         t["GALAXY"] = galaxy
-        tables.append(t)
-    return vstack(tables, metadata_conflicts="silent")
+        tbl.append(t)
+    return vstack(tbl, metadata_conflicts="silent")
 
 
 # ---------------------------------------------------------------------------
@@ -233,6 +239,10 @@ def compute_prfm_inputs(table):
     ``Sigma_gas``
         Total gas surface density = ``Sigma_mol + Sigma_atom``
         [M_sun / pc^2].
+    ``e_Sigma_gas``
+        Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``
+        [M_sun / pc^2].  Added only when both ``e_Sigma_mol`` and
+        ``e_Sigma_atom`` are present.
     ``Omega_d``
         Angular velocity = ``V_circ_CO21_URC / r_gal`` [km / s / kpc].
     ``H_star``
@@ -253,6 +263,12 @@ def compute_prfm_inputs(table):
     Sigma_atom = t["Sigma_atom"].to(au.M_sun / au.pc**2)
     t["Sigma_gas"] = (Sigma_mol + Sigma_atom).to(au.M_sun / au.pc**2)
     t["Sigma_gas"].description = "Total gas surface density (mol + atom)"
+
+    if "e_Sigma_mol" in t.colnames and "e_Sigma_atom" in t.colnames:
+        e_mol = t["e_Sigma_mol"].to(au.M_sun / au.pc**2)
+        e_atom = t["e_Sigma_atom"].to(au.M_sun / au.pc**2)
+        t["e_Sigma_gas"] = np.sqrt(e_mol**2 + e_atom**2).to(au.M_sun / au.pc**2)
+        t["e_Sigma_gas"].description = "Uncertainty on Sigma_gas (quadrature sum)"
 
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
     r_gal = t["r_gal"].to(au.kpc)

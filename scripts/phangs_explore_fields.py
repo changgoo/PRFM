@@ -18,6 +18,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from prfm import phangs
+from prfm.phangs_plot import (
+    RGAL_BINS,
+    RGAL_COLORS,
+    RGAL_LABELS,
+    bin_edges,
+    clean,
+    resolve_columns,
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--aperture", default="annulus",
@@ -28,12 +36,7 @@ args = parser.parse_args()
 # Configuration
 # ---------------------------------------------------------------------------
 
-# Aperture suffix: gauss/hexagon files append the aperture name to column names
-_SUFFIX = {"annulus": "", "gauss": "_gauss", "hexagon": "_hexagon"}
-sfx = _SUFFIX[args.aperture]
-
 # Base columns (suffix applied automatically below): (base_name, x_label, log_scale)
-# Columns that always keep their base name (no suffix in any aperture): r_gal, Zprime
 _BASE_FIELDS: list[tuple[str, str, bool]] = [
     ("r_gal",               r"$r_\mathrm{gal}$ [kpc]",                    False),
     ("Sigma_mol",           r"$\Sigma_\mathrm{mol}$ [$M_\odot$ pc$^{-2}$]", True),
@@ -50,40 +53,9 @@ _BASE_FIELDS: list[tuple[str, str, bool]] = [
     ("alpha_CO21_S20",      r"$\alpha_\mathrm{CO}$ [S20]",                  True),
 ]
 
-# Columns that never get a suffix (shared across apertures)
-_NO_SUFFIX = {"r_gal", "Zprime", "alpha_CO21_S20",
-              "rho_star_mp", "V_circ_CO21_URC", "Omega_d", "H_star",
-              "Sigma_gas"}  # Sigma_gas is derived, added by compute_prfm_inputs
-
-# Radial bins for the by-r_gal figure
-RGAL_BINS = [(0, 2), (2, 5), (5, 10), (10, 999)]
-RGAL_LABELS = [r"$r<2$ kpc", r"$2-5$ kpc", r"$5-10$ kpc", r"$r>10$ kpc"]
-RGAL_COLORS = ["#c0392b", "#e67e22", "#27ae60", "#2980b9"]
-
 REPO_ROOT = Path(__file__).parent.parent
 DATA_DIR = REPO_ROOT / "data/phangs_megatable"
 OUT_DIR = REPO_ROOT / "figures/phangs" / args.aperture
-N_BINS = 40
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-
-def clean(vals: np.ndarray, log: bool) -> np.ndarray:
-    """Return finite, positive (if log) values as a plain float array."""
-    v = np.asarray(vals, dtype=float)
-    mask = np.isfinite(v)
-    if log:
-        mask &= v > 0
-    return v[mask]
-
-
-def bin_edges(vals: np.ndarray, log: bool, n: int = N_BINS) -> np.ndarray:
-    if log:
-        return np.logspace(np.log10(vals.min()), np.log10(vals.max()), n + 1)
-    return np.linspace(vals.min(), vals.max(), n + 1)
-
 
 # ---------------------------------------------------------------------------
 # Load data
@@ -91,17 +63,12 @@ def bin_edges(vals: np.ndarray, log: bool, n: int = N_BINS) -> np.ndarray:
 
 print(f"Loading PHANGS {args.aperture} data…")
 t = phangs.load_all(DATA_DIR, aperture=args.aperture)
+t = phangs.vstack_tables(t)
 if args.aperture == "annulus":
     t = phangs.compute_prfm_inputs(t)
 
 # Resolve actual column names (apply suffix where the column exists with it)
-FIELDS: list[tuple[str, str, bool]] = []
-for base, label, log in _BASE_FIELDS:
-    col = base if base in _NO_SUFFIX else base + sfx
-    if col in t.colnames:
-        FIELDS.append((col, label, log))
-    elif base in t.colnames:      # fallback to unsuffixed
-        FIELDS.append((base, label, log))
+FIELDS = resolve_columns(_BASE_FIELDS, t, aperture=args.aperture)
 
 galaxies = sorted(set(t["GALAXY"]))
 gal_cmap = plt.cm.tab20

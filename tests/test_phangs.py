@@ -346,10 +346,13 @@ class TestIntegrationLoad:
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):
         t = phangs.load_all(DATA_DIR, aperture="annulus")
+        assert isinstance(t, dict)
+        t = phangs.vstack_tables(t)
         assert isinstance(t, Table)
         assert len(t) > 0
         assert "GALAXY" in t.colnames
 
     def test_load_all_contains_multiple_galaxies(self):
         t = phangs.load_all(DATA_DIR, aperture="annulus")
+        t = phangs.vstack_tables(t)
         assert len(set(t["GALAXY"])) > 1

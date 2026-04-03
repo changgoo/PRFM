@@ -87,3 +87,8 @@ Two embedded model dictionaries drive parameterized behavior:
 - **Type hints**: All Python functions must have type annotations.
 - **Branch workflow**: New development goes on a feature branch; open a WIP PR with a task checklist immediately after planning.
 - **Frequent commits**: Commit after each self-contained chunk of work — do not bundle unrelated changes.
+- **Modular Design**: When writing python scripts, any helper functions should be in a python file such that reusable.
+
+## matplotlib plotting tips
+
+- **fontsize**: never use the absolute value. use medium, small, x-small, etc.

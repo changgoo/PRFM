@@ -19,6 +19,7 @@ import numpy as np
 from scipy import stats
 
 from prfm import phangs
+from prfm.phangs_plot import build_matrix, resolve_columns, to_log_or_raw
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--aperture", default="annulus",
@@ -28,10 +29,6 @@ args = parser.parse_args()
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-
-_SUFFIX = {"annulus": "", "gauss": "_gauss", "hexagon": "_hexagon"}
-sfx = _SUFFIX[args.aperture]
-_NO_SUFFIX = {"Sigma_gas", "H_star", "Omega_d", "Zprime"}
 
 # Base columns (suffix applied at load time): (base_name, x_label, log_scale)
 _BASE_COLS: list[tuple[str, str, bool]] = [
@@ -50,44 +47,17 @@ DATA_DIR = REPO_ROOT / "data/phangs_megatable"
 OUT_DIR = REPO_ROOT / "figures/phangs" / args.aperture
 
 # ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-
-def to_log_or_raw(t, col: str, log: bool) -> np.ndarray:
-    v = np.asarray(t[col], dtype=float)
-    if log:
-        with np.errstate(divide="ignore", invalid="ignore"):
-            v = np.log10(np.where(v > 0, v, np.nan))
-    return v
-
-
-def build_matrix(t, cols: list[tuple[str, str, bool]]) -> tuple[np.ndarray, list[str]]:
-    """Build a 2-D array (N_valid_rows × N_cols) with valid rows only."""
-    arrays = [to_log_or_raw(t, col, log) for col, _, log in cols]
-    stacked = np.column_stack(arrays)          # (N_rows, N_cols)
-    valid = np.all(np.isfinite(stacked), axis=1)
-    labels = [lbl for _, lbl, _ in cols]
-    return stacked[valid], labels
-
-
-# ---------------------------------------------------------------------------
 # Load data
 # ---------------------------------------------------------------------------
 
 print(f"Loading PHANGS {args.aperture} data…")
 t = phangs.load_all(DATA_DIR, aperture=args.aperture)
+t = phangs.vstack_tables(t)
 if args.aperture == "annulus":
     t = phangs.compute_prfm_inputs(t)
 
 # Resolve actual column names, keep only those present in this aperture's table
-COLS: list[tuple[str, str, bool]] = []
-for base, label, log in _BASE_COLS:
-    col = base if base in _NO_SUFFIX else base + sfx
-    if col in t.colnames:
-        COLS.append((col, label, log))
-    elif base in t.colnames:
-        COLS.append((base, label, log))
+COLS = resolve_columns(_BASE_COLS, t, aperture=args.aperture)
 
 r_gal_all = np.asarray(t["r_gal"], dtype=float)
 
