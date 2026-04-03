@@ -3,4 +3,16 @@ prfm.egg-info
 _build
 __pycache__
 figure
+figures/
 .DS_Store
+
+# Local notebooks and scratch work
+book/prfm_playground.ipynb
+temporary/
+
+# Local data files
+data/CMZoom_Kennicutt.png
+data/phangs_megatable/
+
+# Notes
+viz_tip.md
