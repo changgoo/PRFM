@@ -64,8 +64,14 @@ _GALAXIES = [
 # ---------------------------------------------------------------------------
 
 
-def list_galaxies():
-    """Return the list of galaxy names in the v4.0 release."""
+def list_galaxies() -> list[str]:
+    """Return the list of galaxy names in the v4.0 release.
+
+    Returns
+    -------
+    list of str
+        Sorted galaxy names (e.g. ``["IC1954", "IC5273", ...]``).
+    """
     return list(_GALAXIES)
 
 
@@ -112,8 +118,19 @@ def list_files(aperture=None):
     return files
 
 
-def build_url(fname):
-    """Return the download URL for a given filename."""
+def build_url(fname: str) -> str:
+    """Return the CANFAR download URL for a given filename.
+
+    Parameters
+    ----------
+    fname : str
+        Filename as returned by :func:`filename`.
+
+    Returns
+    -------
+    str
+        Full HTTPS URL pointing to the file on CANFAR.
+    """
     return f"{_CANFAR_BASE}/{fname}"
 
 
@@ -218,7 +235,22 @@ def load_all(data_dir, aperture="annulus"):
         tables[galaxy] = t
     return tables
 
-def vstack_tables(tables):
+def vstack_tables(tables: dict[str, Table]) -> Table:
+    """Vertically stack a dict of per-galaxy tables into a single Table.
+
+    Adds a ``GALAXY`` column populated from the dict keys before stacking.
+
+    Parameters
+    ----------
+    tables : dict of str → Table
+        Mapping of galaxy name to its corresponding Astropy Table, as
+        returned by :func:`load_all` with ``stack=False``.
+
+    Returns
+    -------
+    Table
+        Single stacked Table with an added ``GALAXY`` string column.
+    """
     tbl = []
     for galaxy, t in tables.items():
         t["GALAXY"] = galaxy
@@ -469,10 +501,34 @@ def run_prfm(
 
     return t
 
-# Convert inputs to CGS for get_weight_contribution
-def get_weights(table: Table,
-                variation: Optional[dict] = None
-                ) -> (np.ndarray, np.ndarray, np.ndarray):
+def get_weights(
+    table: Table,
+    variation: Optional[dict] = None,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Return fractional weight contributions (f_gas, f_star, f_DM) for each row.
+
+    Requires ``Sigma_gas``, ``Sigma_star``, ``Omega_d``, ``H_star``, and
+    ``sigma_eff_sol`` columns to be present (i.e. after calling
+    :func:`compute_prfm_inputs` and :func:`run_prfm`).
+
+    Parameters
+    ----------
+    table : Table
+        PHANGS table with PRFM solution columns.
+    variation : dict or None, optional
+        Override dictionary applied before computing weights.  Supported keys:
+        ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by
+        a scalar), ``"Sigma_star"`` (scale factor), ``"H_star"`` (scale factor).
+
+    Returns
+    -------
+    f_gas : ndarray
+        Fraction of total weight from gas self-gravity.
+    f_star : ndarray
+        Fraction of total weight from stellar gravity.
+    f_dm : ndarray
+        Fraction of total weight from dark matter.
+    """
     from prfm.prfm import get_weight_contribution
 
     sg  = np.asarray(table["Sigma_gas"],    dtype=float) * _surf_cgs
