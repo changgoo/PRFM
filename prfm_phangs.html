@@ -190,8 +190,6 @@
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
-
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="nav bd-sidenav">
@@ -422,7 +420,6 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparison with Observations of Nearby Galaxies (PHANGS)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data Loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-matrix">Correlation Matrix</a></li>
@@ -432,12 +429,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p-mathrm-de-vs-sigma-mathrm-sfr-comparison-with-simulations"><span class="math notranslate nohighlight">\(P_\mathrm{DE}\)</span> vs <span class="math notranslate nohighlight">\(\Sigma_\mathrm{SFR}\)</span>: comparison with simulations</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-test-i-if-rotation-curve-information-is-not-available">Further Test I: if rotation curve information is not available</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-test-ii-systematic-variations-of-the-measurements">Further Test II: systematic variations of the measurements</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#when-dm-contribution-is-ignored">When DM contribution is ignored</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#more-variations">More variations</a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -821,17 +815,14 @@ overlaid on TIGRESS simulation points and the theoretical <span class="math notr
 </div>
 </section>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="when-dm-contribution-is-ignored">
-<h1>When DM contribution is ignored<a class="headerlink" href="#when-dm-contribution-is-ignored" title="Permalink to this heading">#</a></h1>
+<section id="further-test-i-if-rotation-curve-information-is-not-available">
+<h2>Further Test I: if rotation curve information is not available<a class="headerlink" href="#further-test-i-if-rotation-curve-information-is-not-available" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#test without Omega_d for the full sample</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
-<span class="n">t_pred_nodm</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">run_prfm</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">prfm_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span> <span class="s2">&quot;H_star&quot;</span><span class="p">])</span>
+<span class="n">t_pred_nodm</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">run_prfm</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
 
 <span class="c1"># Valid rows for PRFM output</span>
 <span class="n">prfm_mask</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span>
@@ -839,141 +830,6 @@ overlaid on TIGRESS simulation points and the theoretical <span class="math notr
 <span class="p">)</span>
 <span class="n">t_clean_nodm</span> <span class="o">=</span> <span class="n">t_pred_nodm</span><span class="p">[</span><span class="n">prfm_mask</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valid PRFM rows: </span><span class="si">{</span><span class="n">prfm_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_pred_nodm</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6334 valid rows out of 46628
-Valid PRFM rows: 6334 / 46628
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_weights</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_weights</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">variation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e1</span><span class="p">,</span> <span class="mf">1.e7</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Applying variation: setting Omega_d to None
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[10.0, 10000000.0, 10.0, 10000000.0]
-</pre></div>
-</div>
-<img alt="_images/e02647100e24dd2d3d38f466c5849df092663b612c26cbb634bb2a75bdc8a28f.png" src="_images/e02647100e24dd2d3d38f466c5849df092663b612c26cbb634bb2a75bdc8a28f.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prfm.phangs_plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_plot</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">prfm.phangs</span><span class="w"> </span><span class="kn">import</span> <span class="n">ac</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-
-<span class="c1"># reference line for gas-only self-gravity</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">Sigma_gas</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">P_DE_gas</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">ac</span><span class="o">.</span><span class="n">G</span><span class="o">*</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="o">*</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span><span class="o">/</span><span class="n">ac</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">2.</span><span class="o">/</span><span class="n">ac</span><span class="o">.</span><span class="n">k_B</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Sigma_gas</span><span class="p">,</span> <span class="n">P_DE_gas</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
-         <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$P_\mathrm{DE,min} = \pi G\Sigma_\mathrm</span><span class="si">{gas}</span><span class="s2">^2/2$&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-small&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.70</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.4&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_clean</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
-
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
-
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
-    <span class="sa">r</span><span class="s2">&quot;with and without $\Omega_d$&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/a3b5fd6ce5ce40d73155cf5de561a7c1c34da20914881dcbf7a4dc5db7ef628e.png" src="_images/a3b5fd6ce5ce40d73155cf5de561a7c1c34da20914881dcbf7a4dc5db7ef628e.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">prfm.simulations</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sims</span>
-
-<span class="n">sim_data</span> <span class="o">=</span> <span class="n">sims</span><span class="o">.</span><span class="n">load_sim_data</span><span class="p">()</span>
-
-<span class="n">SFR_TRACERS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;Sigma_SFR_HaW4recal&quot;</span><span class="p">,</span>  <span class="sa">r</span><span class="s2">&quot;$\Sigma_\mathrm</span><span class="si">{SFR}</span><span class="s2">^\mathrm{H\alpha+W4}$&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;Sigma_SFR_FUVW4recal&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\Sigma_\mathrm</span><span class="si">{SFR}</span><span class="s2">^\mathrm{FUV+W4}$&quot;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;Sigma_SFR_Hacorr&quot;</span><span class="p">,</span>     <span class="sa">r</span><span class="s2">&quot;$\Sigma_\mathrm</span><span class="si">{SFR}</span><span class="s2">^\mathrm{H\alpha,corr}$&quot;</span><span class="p">),</span>
-<span class="p">]</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">sfr_col</span><span class="p">,</span> <span class="n">sfr_label</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">SFR_TRACERS</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-
-    <span class="c1"># --- simulation points ---</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;TIGRESS-classic&quot;</span><span class="p">,</span> <span class="s2">&quot;TIGRESS-NCR&quot;</span><span class="p">]:</span>
-        <span class="n">sims</span><span class="o">.</span><span class="n">add_one_sim</span><span class="p">(</span><span class="n">sim_data</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">ms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># --- PRFM model lines ---</span>
-    <span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_ncr_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># --- PHANGS data ---</span>
-    <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">])</span>
-    <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                 <span class="n">errorbars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.4&quot;</span><span class="p">)</span>
-
-    <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">])</span>
-    <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                 <span class="n">errorbars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="s2">&quot;small&quot;</span><span class="p">)</span>
-
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
-    <span class="sa">r</span><span class="s2">&quot;$P_\mathrm</span><span class="si">{DE}</span><span class="s2">$ vs $\Sigma_\mathrm</span><span class="si">{SFR}</span><span class="s2">$&quot;</span>
-    <span class="sa">f</span><span class="s2">&quot; — PHANGS </span><span class="si">{</span><span class="n">APERTURE</span><span class="si">}</span><span class="s2"> + TIGRESS-NCR simulations&quot;</span><span class="p">,</span>
-    <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/e6354f979203b31ccb3acd74dbd85d9153e652efa72705640c6666819e5c969a.png" src="_images/e6354f979203b31ccb3acd74dbd85d9153e652efa72705640c6666819e5c969a.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># test without Omega_d for the subset of data with valid Omega_d</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-
-<span class="n">t_pred_nodm2</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">run_prfm</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
-
-<span class="c1"># Valid rows for PRFM output</span>
-<span class="n">prfm_mask</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span>
-    <span class="n">t_pred_nodm2</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;H_gas&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma_eff_sol&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">t_clean_nodm2</span> <span class="o">=</span> <span class="n">t_pred_nodm2</span><span class="p">[</span><span class="n">prfm_mask</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valid PRFM rows: </span><span class="si">{</span><span class="n">prfm_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_pred_nodm2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -989,7 +845,7 @@ Valid PRFM rows: 1989 / 46628
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_weights</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_weights</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">variation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_weights</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">variation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mf">1.e2</span><span class="p">,</span> <span class="mf">1.e7</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -1019,15 +875,15 @@ Valid PRFM rows: 1989 / 46628
          <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$P_\mathrm{DE,min} = \pi G\Sigma_\mathrm</span><span class="si">{gas}</span><span class="s2">^2/2$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-small&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.70</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.70</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.4&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">t_clean</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">)</span>
 
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">,</span> <span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
 <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">)</span>
 
-<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+<span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
 <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span>  <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
     <span class="sa">r</span><span class="s2">&quot;with and without $\Omega_d$ for the same sample&quot;</span><span class="p">,</span>
@@ -1035,7 +891,7 @@ Valid PRFM rows: 1989 / 46628
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;relative L1 norm in P_weight (nodm vs full): &quot;</span><span class="p">,</span>
-      <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">t_clean</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">t_clean</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
@@ -1071,8 +927,8 @@ Valid PRFM rows: 1989 / 46628
     <span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_ncr_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># --- PHANGS data ---</span>
-    <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">])</span>
-    <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm2</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">])</span>
+    <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_clean_nodm</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
                  <span class="n">errorbars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s2">&quot;axes fraction&quot;</span><span class="p">,</span>
             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.4&quot;</span><span class="p">)</span>
@@ -1102,8 +958,8 @@ Valid PRFM rows: 1989 / 46628
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="more-variations">
-<h1>More variations<a class="headerlink" href="#more-variations" title="Permalink to this heading">#</a></h1>
+<section id="further-test-ii-systematic-variations-of-the-measurements">
+<h2>Further Test II: systematic variations of the measurements<a class="headerlink" href="#further-test-ii-systematic-variations-of-the-measurements" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># systematic variation</span>
@@ -1399,12 +1255,20 @@ relative L1 norm in P_weight H_star x 0.3:  0.4638410404595003
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">font</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_default</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">],</span><span class="n">rel_error</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_default</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">],</span><span class="n">rel_error</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_default</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;P_weight&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">errorbars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:blue&quot;</span><span class="p">)</span>
+<span class="c1"># --- PRFM model lines ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sims</span><span class="o">.</span><span class="n">add_PSFR_ncr_model_lines</span><span class="p">(</span><span class="n">Wmin</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">Wmax</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">log_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+
 <span class="n">valid</span> <span class="o">=</span> <span class="n">phangs</span><span class="o">.</span><span class="n">valid_rows</span><span class="p">(</span><span class="n">t_default</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">],</span><span class="n">rel_error</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">scatter_plot</span><span class="p">(</span><span class="n">t_default</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">,</span> <span class="n">sfr_col</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">errorbars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">bg_color</span><span class="o">=</span><span class="s2">&quot;tab:orange&quot;</span><span class="p">)</span>
@@ -1415,9 +1279,10 @@ relative L1 norm in P_weight H_star x 0.3:  0.4638410404595003
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;$\\Sigma_\\mathrm{SFR}^\\mathrm{pred}$ [$M_\\odot\\,\\mathrm{yr}^{-1}\\,\\mathrm{kpc}^{-2}$]&#39;, ylabel=&#39;$\\Sigma_\\mathrm{SFR}^\\mathrm{H\\alpha,corr}$ [$M_\\odot\\,\\mathrm{yr}^{-1}\\,\\mathrm{kpc}^{-2}$]&#39;&gt;
 </pre></div>
 </div>
-<img alt="_images/089ee04c72125ede5347d9816729a8340aa345e9f66c3e2bdf77af6218ba3b9c.png" src="_images/089ee04c72125ede5347d9816729a8340aa345e9f66c3e2bdf77af6218ba3b9c.png" />
+<img alt="_images/7038ce3bd2be714590c3d09d7b247d8515b9e14a0597950967438f257559e625.png" src="_images/7038ce3bd2be714590c3d09d7b247d8515b9e14a0597950967438f257559e625.png" />
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1484,7 +1349,6 @@ relative L1 norm in P_weight H_star x 0.3:  0.4638410404595003
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Comparison with Observations of Nearby Galaxies (PHANGS)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">Data Loading</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-matrix">Correlation Matrix</a></li>
@@ -1494,12 +1358,9 @@ relative L1 norm in P_weight H_star x 0.3:  0.4638410404595003
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p-mathrm-de-vs-sigma-mathrm-sfr-comparison-with-simulations"><span class="math notranslate nohighlight">\(P_\mathrm{DE}\)</span> vs <span class="math notranslate nohighlight">\(\Sigma_\mathrm{SFR}\)</span>: comparison with simulations</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-test-i-if-rotation-curve-information-is-not-available">Further Test I: if rotation curve information is not available</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-test-ii-systematic-variations-of-the-measurements">Further Test II: systematic variations of the measurements</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#when-dm-contribution-is-ignored">When DM contribution is ignored</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#more-variations">More variations</a></li>
-</ul>
-
   </nav></div>
 
 </div></div>

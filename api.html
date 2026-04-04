@@ -189,8 +189,6 @@
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_tng.html">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
-
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
 <ul class="current nav bd-sidenav">
@@ -649,30 +647,42 @@ document.write(`
 <h2>PRFM simulation data class<a class="headerlink" href="#prfm-simulation-data-class" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="prfm.simulations.PRFM_data">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">prfm.simulations.</span></span><span class="sig-name descname"><span class="pre">PRFM_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">prfm.simulations.</span></span><span class="sig-name descname"><span class="pre">PRFM_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paper</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data" title="Permalink to this definition">#</a></dt>
 <dd><p>Simulation data container class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="prfm.simulations.PRFM_data.convert_linear_log">
 <span class="sig-name descname"><span class="pre">convert_linear_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data.convert_linear_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data.convert_linear_log" title="Permalink to this definition">#</a></dt>
-<dd><p>convert data in linear into log10</p>
+<dd><p>Convert linear fields to log10 values.</p>
+<p>For every field in <code class="docutils literal notranslate"><span class="pre">self.field_list</span></code> that has a <code class="docutils literal notranslate"><span class="pre">&lt;field&gt;</span></code>
+attribute, sets <code class="docutils literal notranslate"><span class="pre">log_&lt;field&gt;</span> <span class="pre">=</span> <span class="pre">log10(&lt;field&gt;)</span></code> and propagates
+uncertainties: <code class="docutils literal notranslate"><span class="pre">log_&lt;field&gt;_std</span> <span class="pre">=</span> <span class="pre">&lt;field&gt;_std</span> <span class="pre">/</span> <span class="pre">(&lt;field&gt;</span> <span class="pre">*</span> <span class="pre">ln(10))</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="prfm.simulations.PRFM_data.convert_log_linear">
 <span class="sig-name descname"><span class="pre">convert_log_linear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data.convert_log_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data.convert_log_linear" title="Permalink to this definition">#</a></dt>
-<dd><p>convert data in log10 into linear</p>
+<dd><p>Convert log10-stored fields to linear values.</p>
+<p>For every field in <code class="docutils literal notranslate"><span class="pre">self.field_list</span></code> that has a <code class="docutils literal notranslate"><span class="pre">log_&lt;field&gt;</span></code>
+attribute, sets <code class="docutils literal notranslate"><span class="pre">&lt;field&gt;</span> <span class="pre">=</span> <span class="pre">10</span> <span class="pre">**</span> <span class="pre">log_&lt;field&gt;</span></code> and propagates
+uncertainties: <code class="docutils literal notranslate"><span class="pre">&lt;field&gt;_std</span> <span class="pre">=</span> <span class="pre">log_&lt;field&gt;_std</span> <span class="pre">*</span> <span class="pre">ln(10)</span> <span class="pre">*</span> <span class="pre">&lt;field&gt;</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="prfm.simulations.PRFM_data.get_Ptotal">
 <span class="sig-name descname"><span class="pre">get_Ptotal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data.get_Ptotal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data.get_Ptotal" title="Permalink to this definition">#</a></dt>
-<dd><p>calculate <em>Ptot</em>, <em>Pnonth</em>, <em>Pimag</em> given <cite>Pturb</cite>, <cite>Pth</cite>, <cite>oPimag</cite>, <cite>dPimag</cite></p>
+<dd><p>Compute total and non-thermal pressures from component fields.</p>
+<p>Sets <code class="docutils literal notranslate"><span class="pre">Ptot</span></code>, <code class="docutils literal notranslate"><span class="pre">Pnonth</span></code>, and (if magnetic components are present)
+<code class="docutils literal notranslate"><span class="pre">Pimag</span></code> together with their uncertainties and log10 versions.
+Requires <code class="docutils literal notranslate"><span class="pre">Pturb</span></code>, <code class="docutils literal notranslate"><span class="pre">Pth</span></code>, <code class="docutils literal notranslate"><span class="pre">oPimag</span></code>, and <code class="docutils literal notranslate"><span class="pre">dPimag</span></code> to be set.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="prfm.simulations.PRFM_data.get_yield">
 <span class="sig-name descname"><span class="pre">get_yield</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/simulations.html#PRFM_data.get_yield"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.simulations.PRFM_data.get_yield" title="Permalink to this definition">#</a></dt>
-<dd><p>calculate feedback yield P/SFR in km/s</p>
+<dd><p>Compute feedback yield Y = P / SFR [km s⁻¹] for each pressure field.</p>
+<p>For every pressure field in <code class="docutils literal notranslate"><span class="pre">self.field_list</span></code> (excluding <code class="docutils literal notranslate"><span class="pre">&quot;SFR&quot;</span></code>),
+sets <code class="docutils literal notranslate"><span class="pre">Y_&lt;field&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">Y_&lt;field&gt;_std</span></code>, <code class="docutils literal notranslate"><span class="pre">log_Y_&lt;field&gt;</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">log_Y_&lt;field&gt;_std</span></code>.  Requires <code class="docutils literal notranslate"><span class="pre">SFR</span></code> and <code class="docutils literal notranslate"><span class="pre">SFR_std</span></code> to be set.</p>
 </dd></dl>
 
 </dd></dl>
@@ -826,8 +836,30 @@ ignore metallicity dependence.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="prfm.phangs.get_weights">
-<span class="sig-prename descclassname"><span class="pre">prfm.phangs.</span></span><span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table:</span> <span class="pre">~astropy.table.table.Table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation:</span> <span class="pre">~typing.Optional[dict]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prfm/phangs.html#get_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.phangs.get_weights" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">prfm.phangs.</span></span><span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/prfm/phangs.html#get_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#prfm.phangs.get_weights" title="Permalink to this definition">#</a></dt>
+<dd><p>Return fractional weight contributions (f_gas, f_star, f_DM) for each row.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">Sigma_gas</span></code>, <code class="docutils literal notranslate"><span class="pre">Sigma_star</span></code>, <code class="docutils literal notranslate"><span class="pre">Omega_d</span></code>, <code class="docutils literal notranslate"><span class="pre">H_star</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">sigma_eff_sol</span></code> columns to be present (i.e. after calling
+<a class="reference internal" href="#prfm.phangs.compute_prfm_inputs" title="prfm.phangs.compute_prfm_inputs"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_prfm_inputs()</span></code></a> and <a class="reference internal" href="#prfm.phangs.run_prfm" title="prfm.phangs.run_prfm"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_prfm()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>Table</em>) – PHANGS table with PRFM solution columns.</p></li>
+<li><p><strong>variation</strong> (<em>dict</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Override dictionary applied before computing weights.  Supported keys:
+<code class="docutils literal notranslate"><span class="pre">&quot;Omega_d&quot;</span></code> (set to <code class="docutils literal notranslate"><span class="pre">None</span></code> to disable DM term, or multiply by
+a scalar), <code class="docutils literal notranslate"><span class="pre">&quot;Sigma_star&quot;</span></code> (scale factor), <code class="docutils literal notranslate"><span class="pre">&quot;H_star&quot;</span></code> (scale factor).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f_gas</strong> (<em>ndarray</em>) – Fraction of total weight from gas self-gravity.</p></li>
+<li><p><strong>f_star</strong> (<em>ndarray</em>) – Fraction of total weight from stellar gravity.</p></li>
+<li><p><strong>f_dm</strong> (<em>ndarray</em>) – Fraction of total weight from dark matter.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="prfm.phangs.valid_rows">

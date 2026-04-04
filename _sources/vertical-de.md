@@ -79,9 +79,9 @@ Or, the total weight is
 
 $$ {\cal W}_{\rm tot} = {\cal W}_{\rm g}+{\cal W}_* = {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+\eta_* + [(1+\eta_*)^2+8s_*\eta_*]^{1/2}}\right). $$
 
-This is slightly different from Equation (12) in {cite:t}`Hassan_et_al` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1.
+This is slightly different from Equation (12) in {cite:t}`2024ApJ...975..151H` as the first two terms in the denominator of ${\cal W}_*$ has $1+\eta_*$ rather than 1.
 
-Equation (12) in {cite:t}`Hassan_et_al` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
+Equation (12) in {cite:t}`2024ApJ...975..151H` is obtained by using $H_{\rm gas}$ in the star only limit (i.e., $\pi G \Sigma_{\rm gas} \rightarrow0$ or $\eta_*\rightarrow0$), which yields
 
 $$ h\rightarrow \frac{2\eta_*}{-1+(1+8s_*\eta_*)^{1/2}} =
  \frac{1}{4s_*}(1+(1+8s_*\eta_*)^{1/2}) $$
@@ -95,7 +95,7 @@ and
 $${\cal W}_*\approx {\cal W}_{\rm gas}\left(1+\frac{4s_*}{1+ [1+8s_*\eta_*]^{1/2}}\right)
 =\frac{2\pi G\Sigma_{\rm gas} \Sigma_* }{1+\left[1+8\pi G \Sigma_* \frac{H_*}{\sigma_{\rm eff}^2}\right]^{1/2}}. $$
 
-Note that the terms dropped in Equation (12) of {cite:t}`Hassan_et_al` make a difference to ${\cal W}_*$ only when ${\cal W}_*$ is subdominant, i.e. ${\cal W}_* < {\cal W}_{\rm gas}/2$ when $4s_*<\eta_*$.
+Note that the terms dropped in Equation (12) of {cite:t}`2024ApJ...975..151H` make a difference to ${\cal W}_*$ only when ${\cal W}_*$ is subdominant, i.e. ${\cal W}_* < {\cal W}_{\rm gas}/2$ when $4s_*<\eta_*$.
 
 In the limit of thick stellar disk ($H_*\gg H_{\rm gas},H_{\rm gas-only}$ or $\eta_*\gg1$), a more formal approximation for the weight by stars is
 
@@ -122,6 +122,6 @@ $$H_* = 2 z_* = 2 (l_*/7.3).$$
 
 ## References
 
-The most general form of the vertical dynamical equilibrium used here is derived in {cite:t}`Hassan_et_al`.
+The most general form of the vertical dynamical equilibrium used here is derived in {cite:t}`2024ApJ...975..151H`.
 See also {cite:t}`2022ApJ...936..137O`, {cite:t}`2015ApJ...815...67K`, {cite:t}`2013ApJ...776....1K`,
 {cite:t}`2011ApJ...743...25K`, {cite:t}`2011ApJ...731...41O`, {cite:t}`2010ApJ...721..975O`.
