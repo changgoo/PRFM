@@ -1,6 +1,6 @@
 # Welcome to the PRFM cookbook
 
-[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://changgoo.github.io/PRFM/)
+<!-- [![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://changgoo.github.io/PRFM/) -->
 
 This is a cookbook to guide you in applying the PRFM theory for star formation.
 
