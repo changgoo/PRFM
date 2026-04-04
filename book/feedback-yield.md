@@ -65,5 +65,3 @@ $$
 $$
   \Upsilon_{\rm turb+mag} = 1.17\times10^3{\rm km/s} \left(\frac{P_{\rm DE}/k_B}{10^4 {\rm cm^{-3}\,K}}\right)^{-0.22}{Z_g^\prime}^{-0.18}
 $$
-
-where we assume that the magnetic contribution is 50\% of the turbulent.
