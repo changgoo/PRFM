@@ -62,34 +62,136 @@ _yield_models["tigress-ncr-decomp"] = dict(
 _yield_models["tigress-ncr"] = dict(Y0=1.65e3, expo=-0.29, expo_Z=-0.27)
 
 
-def get_weight_gas(Sigma_gas):
-    """weight due to gas self-gravity"""
+def get_weight_gas(Sigma_gas: np.ndarray) -> np.ndarray:
+    """Gas self-gravity weight (π G Σ_gas² / 2).
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+
+    Returns
+    -------
+    W_gas : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     return 0.5 * np.pi * _Gconst_cgs * Sigma_gas**2
 
 
-def get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star):
-    """weight due to stellar gravity"""
+def get_weight_star(
+    Sigma_gas: np.ndarray,
+    H_gas: np.ndarray,
+    Sigma_star: np.ndarray,
+    H_star: np.ndarray,
+) -> np.ndarray:
+    """Stellar gravity weight for a sech² stellar profile.
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    H_gas : array-like
+        Gas scale height [cm].
+    Sigma_star : array-like
+        Stellar surface density [g cm⁻²].
+    H_star : array-like
+        Stellar scale height [cm].
+
+    Returns
+    -------
+    W_star : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     return np.pi * _Gconst_cgs * Sigma_gas * Sigma_star * H_gas / (H_gas + H_star)
 
 
-def get_weight_star_gaussian(Sigma_gas, H_gas, Sigma_star, H_star):
-    """weight due to stellar gravity for Gaussian profiles"""
+def get_weight_star_gaussian(
+    Sigma_gas: np.ndarray,
+    H_gas: np.ndarray,
+    Sigma_star: np.ndarray,
+    H_star: np.ndarray,
+) -> np.ndarray:
+    """Stellar gravity weight assuming Gaussian vertical profiles.
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    H_gas : array-like
+        Gas scale height [cm].
+    Sigma_star : array-like
+        Stellar surface density [g cm⁻²].
+    H_star : array-like
+        Stellar scale height [cm].
+
+    Returns
+    -------
+    W_star : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     return 2 * _Gconst_cgs * Sigma_gas * Sigma_star * np.arctan(H_gas / H_star)
 
 
-def get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=1 / 3.0):
-    """weight due to dark matter gravity"""
+def get_weight_dm(
+    Sigma_gas: np.ndarray,
+    H_gas: np.ndarray,
+    Omega_d: np.ndarray,
+    zeta_d: float = 1 / 3.0,
+) -> np.ndarray:
+    """Dark matter gravity weight.
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    H_gas : array-like
+        Gas scale height [cm].
+    Omega_d : array-like
+        Galactic angular velocity (rotation speed / galactocentric radius) [s⁻¹].
+    zeta_d : float, optional
+        Geometric factor relating the DM density to Omega_d²; default 1/3.
+
+    Returns
+    -------
+    W_dm : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     return zeta_d * Sigma_gas * H_gas * Omega_d**2
 
 
-def get_pressure(Sigma_gas, H_gas, sigma_eff):
-    """total pressure"""
+def get_pressure(
+    Sigma_gas: np.ndarray,
+    H_gas: np.ndarray,
+    sigma_eff: np.ndarray,
+) -> np.ndarray:
+    """Midplane turbulent + thermal pressure (σ² Σ / 2H).
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    H_gas : array-like
+        Gas scale height [cm].
+    sigma_eff : array-like
+        Effective vertical velocity dispersion [cm s⁻¹].
+
+    Returns
+    -------
+    P : array-like
+        Midplane pressure [dyn cm⁻²].
+    """
     return 0.5 * Sigma_gas / H_gas * sigma_eff**2
 
 
 def get_weights(
-    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=1 / 3.0, method="analytic"
-):
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray | None,
+    Omega_d: np.ndarray | None,
+    H_star: np.ndarray | None,
+    sigma_eff: np.ndarray | str,
+    zeta_d: float = 1 / 3.0,
+    method: str = "analytic",
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """calculate gas scale height and then each weight term
 
     Parameters
@@ -151,12 +253,36 @@ def get_weights(
     return H_gas, W_gas, W_star, W_dm
 
 
-def get_weight_star_thick(Sigma_gas, rho_star, sigma_eff):
+def get_weight_star_thick(
+    Sigma_gas: np.ndarray,
+    rho_star: np.ndarray,
+    sigma_eff: np.ndarray,
+) -> np.ndarray:
+    """Stellar gravity weight in the thick-disk limit (H★ ≫ H_gas).
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    rho_star : array-like
+        Stellar midplane volume density [g cm⁻³].
+    sigma_eff : array-like
+        Effective vertical velocity dispersion [cm s⁻¹].
+
+    Returns
+    -------
+    W_star : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     W_star = Sigma_gas * np.sqrt(2 * _Gconst_cgs * rho_star) * sigma_eff
     return W_star
 
 
-def get_weights_thick(Sigma_gas, rho_star, sigma_eff):
+def get_weights_thick(
+    Sigma_gas: np.ndarray,
+    rho_star: np.ndarray,
+    sigma_eff: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """calculate gas scale height and then each weight term for H_*>>H_gas
 
     Parameters
@@ -192,12 +318,37 @@ def get_weights_thick(Sigma_gas, rho_star, sigma_eff):
     return H_gas, W_gas, W_star, W_dm
 
 
-def get_weight_star_thin(Sigma_gas, Sigma_star, sigma_eff):
+def get_weight_star_thin(
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray,
+    sigma_eff: np.ndarray,
+) -> np.ndarray:
+    """Stellar gravity weight in the thin-disk limit (H★ ≪ H_gas).
+
+    Parameters
+    ----------
+    Sigma_gas : array-like
+        Gas surface density [g cm⁻²].
+    Sigma_star : array-like
+        Stellar surface density [g cm⁻²].
+    sigma_eff : array-like
+        Effective vertical velocity dispersion [cm s⁻¹]; not used in this limit
+        but kept for a consistent signature with other weight functions.
+
+    Returns
+    -------
+    W_star : array-like
+        Weight per unit area [dyn cm⁻²].
+    """
     W_star = np.pi * _Gconst_cgs * Sigma_gas * Sigma_star
     return W_star
 
 
-def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
+def get_weights_thin(
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray,
+    sigma_eff: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """calculate gas scale height and then each weight term for H_*>>H_gas
 
     Parameters
@@ -234,8 +385,14 @@ def get_weights_thin(Sigma_gas, Sigma_star, sigma_eff):
 
 
 def get_weight_contribution(
-    Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=1 / 3.0, method="analytic"
-):
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray | None,
+    Omega_d: np.ndarray | None,
+    H_star: np.ndarray | None,
+    sigma_eff: np.ndarray | str,
+    zeta_d: float = 1 / 3.0,
+    method: str = "analytic",
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Wrapper function to calculate the ratio of each weight term to the total weight
 
     Parameters
@@ -272,29 +429,74 @@ def get_weight_contribution(
     return wgas / wtot, wstar / wtot, wdm / wtot
 
 
-def get_scale_height_gas_only(*args, **kwargs):
-    """analytic solution for gas only case"""
+def get_scale_height_gas_only(*args, **kwargs) -> np.ndarray:
+    """Analytic scale height considering gas self-gravity only.
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+
+    Notes
+    -----
+    H = σ² / (π G Σ_gas)
+    """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     return sigma_eff**2 / (np.pi * _Gconst_cgs * Sigma_gas)
 
 
-def get_scale_height_star_only(*args, **kwargs):
-    """analytic solution for star only case"""
+def get_scale_height_star_only(*args, **kwargs) -> np.ndarray:
+    """Analytic scale height considering stellar gravity only.
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+    """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     h = sigma_eff**2 / (4 * np.pi * _Gconst_cgs * Sigma_star)
     h_star = H_star / h
     return h * (1 + np.sqrt(1 + 2 * h_star))
 
 
-def get_scale_height_dm_only(*args, **kwargs):
-    """analytic solution for dark matter only case"""
+def get_scale_height_dm_only(*args, **kwargs) -> np.ndarray:
+    """Analytic scale height considering dark matter gravity only.
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+    ``zeta_d`` must be supplied as a keyword argument.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+
+    Notes
+    -----
+    H = σ / (√(2 ζ_d) Ω_d)
+    """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     zeta_d = kwargs["zeta_d"]
     return sigma_eff / np.sqrt(2 * zeta_d) / Omega_d
 
 
-def get_scale_height_star_gas(*args, **kwargs):
-    """analytic solution neglecting dark matter"""
+def get_scale_height_star_gas(*args, **kwargs) -> np.ndarray:
+    """Analytic scale height including gas self-gravity and stellar gravity (no dark matter).
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+    """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     H_gas_only = get_scale_height_gas_only(*args, **kwargs)
     eta_star = H_star / H_gas_only
@@ -308,8 +510,17 @@ def get_scale_height_star_gas(*args, **kwargs):
     return h * H_gas_only
 
 
-def get_scale_height_star_gas_approx(*args, **kwargs):
-    """analytic solution neglecting dark matter"""
+def get_scale_height_star_gas_approx(*args, **kwargs) -> np.ndarray:
+    """Approximate scale height including gas and stellar gravity (simplified form).
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+    """
     Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff = args
     H_gas_only = get_scale_height_gas_only(*args, **kwargs)
     eta_star = H_star / H_gas_only
@@ -318,8 +529,17 @@ def get_scale_height_star_gas_approx(*args, **kwargs):
     return h * H_gas_only
 
 
-def get_scale_height_dm_gas(*args, **kwargs):
-    """analytic solution neglectic star"""
+def get_scale_height_dm_gas(*args, **kwargs) -> np.ndarray:
+    """Analytic scale height including gas self-gravity and dark matter (no stars).
+
+    All inputs must be in CGS units. Positional arguments follow the
+    standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
+
+    Returns
+    -------
+    H_gas : array-like
+        Gas scale height [cm].
+    """
     H_gas_only = get_scale_height_gas_only(*args, **kwargs)
     H_dm_only = get_scale_height_dm_only(*args, **kwargs)
     eta_D = H_dm_only / H_gas_only
@@ -327,8 +547,29 @@ def get_scale_height_dm_gas(*args, **kwargs):
     return h * H_gas_only
 
 
-def get_sigma_eff(P, Z=None, model="tigress-classic-mid"):
-    """pressure-dependent velocity dispersion model"""
+def get_sigma_eff(
+    P: np.ndarray,
+    Z: np.ndarray | None = None,
+    model: str = "tigress-classic-mid",
+) -> np.ndarray:
+    """Pressure-dependent effective velocity dispersion.
+
+    Parameters
+    ----------
+    P : array-like
+        Midplane pressure or weight [dyn cm⁻²].
+    Z : array-like or None, optional
+        Metallicity relative to solar (Z' = Z/Z_sun). Ignored when
+        the chosen model has no metallicity dependence.
+    model : str, optional
+        Name of the velocity dispersion model; must be a key in
+        ``_sigma_eff_models``. Default ``"tigress-classic-mid"``.
+
+    Returns
+    -------
+    sigma_eff : array-like
+        Effective vertical velocity dispersion [cm s⁻¹].
+    """
     sigma_eff_model = _sigma_eff_models[model]
     sigma_0 = sigma_eff_model["sigma_0"]
     expo = sigma_eff_model["expo"]
@@ -340,21 +581,28 @@ def get_sigma_eff(P, Z=None, model="tigress-classic-mid"):
     return np.clip(veld, sigma_min, None) * 1.0e5
 
 
-def get_feedback_yield(P, Z=None, model="tigress-classic"):
-    """total feedback yield as a function of weight
+def get_feedback_yield(
+    P: np.ndarray,
+    Z: np.ndarray | None = None,
+    model: str = "tigress-classic",
+) -> np.ndarray:
+    """Total feedback yield as a function of midplane pressure.
 
-    Paramerters
-    -----------
-    P : float
-        midplane pressure or weight
-    model : str
-        tigress-classic for OK22
-        tigress-NCR for K24
+    Parameters
+    ----------
+    P : array-like
+        Midplane pressure or weight [dyn cm⁻²].
+    Z : array-like or None, optional
+        Metallicity relative to solar. Ignored when the model has no
+        metallicity dependence.
+    model : str, optional
+        Feedback yield model name; must be a key in ``_yield_models``.
+        Use ``"tigress-classic"`` (OK22) or ``"tigress-ncr"`` / ``"tigress-ncr-decomp-all"`` (K24).
 
     Returns
     -------
-    Ytot : float
-        feedback yield in km/s
+    Ytot : array-like
+        Total feedback yield [km s⁻¹].
     """
     yield_model = _yield_models[model]
     if "Y0" in yield_model:
@@ -384,23 +632,32 @@ def get_feedback_yield(P, Z=None, model="tigress-classic"):
         return Yth + Ytrb
 
 
-def get_feedback_yield_comp(P, Z=None, comp="th", model="tigress-classic-decomp"):
-    """feedback yield of each component as a function of weight
+def get_feedback_yield_comp(
+    P: np.ndarray,
+    Z: np.ndarray | None = None,
+    comp: str = "th",
+    model: str = "tigress-classic-decomp",
+) -> np.ndarray:
+    """Per-component feedback yield as a function of midplane pressure.
 
-    Paramerters
-    -----------
-    P : float
-        midplane pressure or weight
-    comp : str
-        component name ['th','trb']
-    model : str
-        tigress-classic for OK22
-        tigress-NCR for K23
+    Parameters
+    ----------
+    P : array-like
+        Midplane pressure or weight [dyn cm⁻²].
+    Z : array-like or None, optional
+        Metallicity relative to solar. Ignored when the model has no
+        metallicity dependence.
+    comp : str, optional
+        Pressure component: ``"th"`` (thermal), ``"trb"`` (turbulent), or
+        ``"mag"`` (magnetic, if supported by the model).
+    model : str, optional
+        Decomposed yield model name; must be a key in ``_yield_models``.
+        Default ``"tigress-classic-decomp"``.
 
     Returns
     -------
-    Y : float
-        feedback yield in km/s
+    Y : array-like
+        Component feedback yield [km s⁻¹].
     """
     yield_model = _yield_models[model]
     Y0 = yield_model[f"Y{comp}0"]
@@ -411,38 +668,45 @@ def get_feedback_yield_comp(P, Z=None, comp="th", model="tigress-classic-decomp"
     return Y
 
 
-def get_sfr(P, Z=None, Ytot="tigress-classic"):
-    """calculate SFR surface density using feedback yield
+def get_sfr(
+    P: np.ndarray,
+    Z: np.ndarray | None = None,
+    Ytot: np.ndarray | str = "tigress-classic",
+) -> np.ndarray:
+    """Calculate SFR surface density from pressure and feedback yield.
 
-    Paramerters
-    -----------
-    P : float
-        midplane pressure or weight
-    Ytot : float, str
-        constant value in km/s or
-        P-dependent feedback yield model e.g., `tigress-classic`
+    Parameters
+    ----------
+    P : array-like
+        Midplane pressure or weight [dyn cm⁻²].
+    Z : array-like or None, optional
+        Metallicity relative to solar. Passed through to ``get_feedback_yield``
+        when ``Ytot`` is a model name string.
+    Ytot : float or str, optional
+        Constant yield value [km s⁻¹] or a model name string (key in
+        ``_yield_models``). Default ``"tigress-classic"``.
 
     Returns
     -------
-    sfr : float
-        SFR surface density in g/cm^2/yr
+    sfr : array-like
+        SFR surface density [g cm⁻² s⁻¹].
     """
     Ytot = get_feedback_yield(P, Z=Z, model=Ytot) if isinstance(Ytot, str) else Ytot
     return P / (Ytot * 1.0e5)
 
 
 def get_scale_height(
-    Sigma_gas,
-    Sigma_star,
-    Omega_d,
-    H_star,
-    sigma_eff,
-    zeta_d=1 / 3.0,
-    method="analytic",
-    wgas=1,
-    wstar=1,
-    wdm=1,
-):
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray | None,
+    Omega_d: np.ndarray | None,
+    H_star: np.ndarray | None,
+    sigma_eff: np.ndarray | str,
+    zeta_d: float = 1 / 3.0,
+    method: str = "analytic",
+    wgas: int = 1,
+    wstar: int = 1,
+    wdm: int = 1,
+) -> np.ndarray:
     """wrapper function to calculate gas scale height either numerically or analytically
 
     Parameters
@@ -630,16 +894,16 @@ def get_scale_height_numerical(
 
 
 def get_self_consistent_solution(
-    Sigma_gas,
-    Sigma_star,
-    Omega_d,
-    H_star,
-    sigma_eff="tigress-claasic-mid",
-    zeta_d=1 / 3.0,
-    method="analytic",
-    tol=1.0e-5,
-    niter=16,
-):
+    Sigma_gas: np.ndarray,
+    Sigma_star: np.ndarray | None,
+    Omega_d: np.ndarray | None,
+    H_star: np.ndarray | None,
+    sigma_eff: np.ndarray | str = "tigress-ncr-avg",
+    zeta_d: float = 1 / 3.0,
+    method: str = "analytic",
+    tol: float = 1.0e-5,
+    niter: int = 16,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Iteratively solve for sigma_eff(P) to get converged weight, H, and sigma_eff
 
     Parameters
