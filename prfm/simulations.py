@@ -31,12 +31,25 @@ _kms_cgs = (1 * au.km / au.s).cgs.value
 class PRFM_data(object):
     """Simulation data container class."""
 
-    def __init__(self, paper):
+    def __init__(self, paper: str) -> None:
+        """Initialise an empty simulation data container.
+
+        Parameters
+        ----------
+        paper : str
+            Short identifier for the simulation / paper (e.g. ``"KO15"``).
+            Used as the label in plots.
+        """
         self.paper = paper
         self.field_list = ["SFR", "Pturb", "Pth", "oPimag", "dPimag"]
 
     def convert_log_linear(self):
-        """convert data in log10 into linear"""
+        """Convert log10-stored fields to linear values.
+
+        For every field in ``self.field_list`` that has a ``log_<field>``
+        attribute, sets ``<field> = 10 ** log_<field>`` and propagates
+        uncertainties: ``<field>_std = log_<field>_std * ln(10) * <field>``.
+        """
         for f in self.field_list:
             logf = f"log_{f}"
             ferr = f"{f}_std"
@@ -49,7 +62,12 @@ class PRFM_data(object):
                     setattr(self, ferr, 10**v * np.log(10) * verr)
 
     def convert_linear_log(self):
-        """convert data in linear into log10"""
+        """Convert linear fields to log10 values.
+
+        For every field in ``self.field_list`` that has a ``<field>``
+        attribute, sets ``log_<field> = log10(<field>)`` and propagates
+        uncertainties: ``log_<field>_std = <field>_std / (<field> * ln(10))``.
+        """
         for f in self.field_list:
             logf = f"log_{f}"
             ferr = f"{f}_std"
@@ -62,7 +80,12 @@ class PRFM_data(object):
                     setattr(self, logferr, verr / v / np.log(10))
 
     def get_Ptotal(self):
-        """calculate *Ptot*, *Pnonth*, *Pimag* given `Pturb`, `Pth`, `oPimag`, `dPimag`"""
+        """Compute total and non-thermal pressures from component fields.
+
+        Sets ``Ptot``, ``Pnonth``, and (if magnetic components are present)
+        ``Pimag`` together with their uncertainties and log10 versions.
+        Requires ``Pturb``, ``Pth``, ``oPimag``, and ``dPimag`` to be set.
+        """
         self.Ptot = np.zeros_like(self.Pturb)
         self.Ptot_std = np.zeros_like(self.Pturb)
         self.Pnonth = np.zeros_like(self.Pturb)
@@ -115,7 +138,12 @@ class PRFM_data(object):
                 self.field_list += ["Pimag"]
 
     def get_yield(self):
-        """calculate feedback yield P/SFR in km/s"""
+        """Compute feedback yield Y = P / SFR [km s⁻¹] for each pressure field.
+
+        For every pressure field in ``self.field_list`` (excluding ``"SFR"``),
+        sets ``Y_<field>``, ``Y_<field>_std``, ``log_Y_<field>``, and
+        ``log_Y_<field>_std``.  Requires ``SFR`` and ``SFR_std`` to be set.
+        """
         SFR = self.SFR
         SFRerr = self.SFR_std
         for f in self.field_list:
@@ -139,6 +167,29 @@ class PRFM_data(object):
 
 
 def add_one_sim(data, xf="Ptot", yf="SFR", ms=5, log_x=True, log_y=True):
+    """Plot a single simulation dataset as error-bar points on the current axes.
+
+    Parameters
+    ----------
+    data : PRFM_data
+        Simulation data container with ``log_<xf>``, ``log_<yf>``, and their
+        ``_std`` counterparts, plus ``color`` and ``paper`` attributes.
+    xf : str, optional
+        Field name for the x-axis (default ``"Ptot"``).
+    yf : str, optional
+        Field name for the y-axis (default ``"SFR"``).
+    ms : float, optional
+        Marker size (default 5).
+    log_x : bool, optional
+        If ``True`` (default), use the log-space values for x.
+    log_y : bool, optional
+        If ``True`` (default), use the log-space values for y.
+
+    Returns
+    -------
+    ErrorbarContainer
+        The Matplotlib errorbar artist.
+    """
     c = data.color
     m = "*" if data.paper == "TIGRESS-GC" else "o"
     x = getattr(data, "log_{}".format(xf))
@@ -168,11 +219,52 @@ def add_one_sim(data, xf="Ptot", yf="SFR", ms=5, log_x=True, log_y=True):
 
 
 def get_ncr_color(Z, cmap=cmr.guppy, Zmin=10 ** (-1.3), Zmax=10 ** (0.5)):
+    """Map metallicity value(s) to colours using a logarithmic normalisation.
+
+    Parameters
+    ----------
+    Z : float or array-like
+        Metallicity relative to solar.
+    cmap : Colormap, optional
+        Matplotlib colormap (default ``cmr.guppy``).
+    Zmin : float, optional
+        Lower bound for the colour scale (default ≈ 0.05).
+    Zmax : float, optional
+        Upper bound for the colour scale (default ≈ 3.16).
+
+    Returns
+    -------
+    RGBA colour(s) from the colormap.
+    """
     norm = LogNorm(vmin=Zmin, vmax=Zmax)
     return cmap(norm(Z))
 
 
 def add_ncr_sim(data, xf="Ptot", yf="SFR", ms=5, legend=4):
+    """Plot TIGRESS-NCR simulation data colour-coded by metallicity.
+
+    Each point is coloured by the metallicity stored in ``data.Zdust`` using
+    :func:`get_ncr_color`.  Optionally draws a metallicity colour legend.
+
+    Parameters
+    ----------
+    data : PRFM_data
+        NCR simulation container; must have ``Zdust`` attribute.
+    xf : str, optional
+        Field name for the x-axis (default ``"Ptot"``).
+    yf : str, optional
+        Field name for the y-axis (default ``"SFR"``).
+    ms : float, optional
+        Marker size (default 5).
+    legend : int or False, optional
+        Matplotlib legend location code for the metallicity legend.
+        Pass ``False`` to suppress the legend.
+
+    Returns
+    -------
+    ErrorbarContainer
+        The last Matplotlib errorbar artist drawn.
+    """
     m = "o"
     x = getattr(data, "log_{}".format(xf))
     y = getattr(data, "log_{}".format(yf))
@@ -220,6 +312,27 @@ def add_PSFR_model_line(
     Wmin=2, Wmax=8, Z=None, labels=True, model="tigress-classic",
     log_x=True, log_y=True, **kwargs
 ):
+    """Overlay a single P_DE–SFR model line on the current axes.
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B [K cm⁻³]) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B [K cm⁻³]) upper bound (default 8).
+    Z : float or None, optional
+        Metallicity relative to solar; passed to :func:`get_sfr`.
+    labels : bool, optional
+        If ``True`` (default), set x/y axis labels.
+    model : str, optional
+        Feedback yield model name (default ``"tigress-classic"``).
+    log_x : bool, optional
+        Plot log10(P) on x-axis if ``True`` (default), else linear P.
+    log_y : bool, optional
+        Plot log10(SFR) on y-axis if ``True`` (default), else linear SFR.
+    **kwargs
+        Additional keyword arguments forwarded to ``plt.plot``.
+    """
     Wtmp = np.logspace(Wmin, Wmax)
     sfr = get_sfr(Wtmp * _kbol_cgs, Z=Z, Ytot=model) / _sfr_cgs
     plt.plot(
@@ -233,6 +346,17 @@ def add_PSFR_model_line(
 
 
 def add_PSFR_model_lines(Wmin=2, Wmax=8, model="classic"):
+    """Overlay multiple P–SFR model lines (constant, total, and decomposed yields).
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B) upper bound (default 8).
+    model : str, optional
+        Base model family: ``"classic"`` or ``"ncr"`` (default ``"classic"``).
+    """
     for y, ls in zip(
         [1.0e3, f"tigress-{model}", f"tigress-{model}-decomp"], ["-", ":", "--"]
     ):
@@ -247,6 +371,17 @@ def add_PSFR_model_lines(Wmin=2, Wmax=8, model="classic"):
 
 
 def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8, **kwargs):
+    """Overlay TIGRESS-NCR P–SFR model lines for a range of metallicities.
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B) upper bound (default 8).
+    **kwargs
+        Additional keyword arguments forwarded to :func:`add_PSFR_model_line`.
+    """
     for Z in [0.1, 0.3, 1, 3]:
         add_PSFR_model_line(
             Wmin=Wmin,
@@ -262,6 +397,25 @@ def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8, **kwargs):
 def add_yield_model_line(
     Wmin=2, Wmax=8, Z=None, labels=True, comp="th", model="tigress-classic", **kwargs
 ):
+    """Overlay a single feedback yield model line on the current axes.
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B) upper bound (default 8).
+    Z : float or None, optional
+        Metallicity relative to solar; passed to :func:`get_feedback_yield_comp`.
+    labels : bool, optional
+        Kept for API consistency; currently unused.
+    comp : str, optional
+        Pressure component: ``"th"`` or ``"trb"`` (default ``"th"``).
+    model : str, optional
+        Decomposed yield model name (default ``"tigress-classic"``).
+    **kwargs
+        Additional keyword arguments forwarded to ``plt.plot``.
+    """
     Wtmp = np.logspace(Wmin, Wmax)
     plt.plot(
         np.log10(Wtmp),
@@ -273,6 +427,17 @@ def add_yield_model_line(
 
 
 def add_yield_model_lines(Wmin=2, Wmax=8, comp="th"):
+    """Overlay classic and NCR yield model lines for a single pressure component.
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B) upper bound (default 8).
+    comp : str, optional
+        Pressure component: ``"th"`` or ``"trb"`` (default ``"th"``).
+    """
     for y, ls in zip(
         ["tigress-classic-decomp", "tigress-ncr-decomp"],
         [":", "--", "-"],
@@ -281,6 +446,17 @@ def add_yield_model_lines(Wmin=2, Wmax=8, comp="th"):
 
 
 def add_yield_ncr_model_lines(Wmin=2, Wmax=8, comp="th"):
+    """Overlay TIGRESS-NCR yield model lines for a range of metallicities.
+
+    Parameters
+    ----------
+    Wmin : float, optional
+        log10(P/k_B) lower bound (default 2).
+    Wmax : float, optional
+        log10(P/k_B) upper bound (default 8).
+    comp : str, optional
+        Pressure component: ``"th"`` or ``"trb"`` (default ``"th"``).
+    """
     for Z in [0.1, 0.3, 1, 3]:
         add_yield_model_line(
             Wmin=Wmin,
@@ -293,6 +469,25 @@ def add_yield_ncr_model_lines(Wmin=2, Wmax=8, comp="th"):
 
 
 def setup_axes(nrow=3, figsize=(12, 6.75), width_ratios=(2, 1)):
+    """Create a figure with a main panel on the left and a column of side panels.
+
+    Parameters
+    ----------
+    nrow : int, optional
+        Number of side-panel rows (default 3).
+    figsize : tuple, optional
+        Figure size ``(width, height)`` in inches (default ``(12, 6.75)``).
+    width_ratios : tuple, optional
+        Width ratio of the main panel to the side-panel column (default ``(2, 1)``).
+
+    Returns
+    -------
+    fig : Figure
+    main_ax : Axes
+        The large left panel spanning all rows.
+    side_axes : list of Axes
+        One Axes per row on the right.
+    """
     fig = plt.figure(figsize=figsize, layout="constrained")
     spec = fig.add_gridspec(nrow, 2, width_ratios=width_ratios)
 
@@ -307,6 +502,15 @@ def setup_axes(nrow=3, figsize=(12, 6.75), width_ratios=(2, 1)):
 # loader
 # ========================================================================================
 def load_pretigress():
+    """Load pre-TIGRESS simulation datasets (KO15, KOK13, KKO11).
+
+    Returns
+    -------
+    tuple of PRFM_data
+        ``(PRFM_KO15, PRFM_KOK13, PRFM_KKO11)`` — three data containers
+        with pressure and SFR measurements from Kim & Ostriker (2015),
+        Kim, Ostriker & Kim (2013), and Kim, Kim & Ostriker (2011).
+    """
     # loading Kim & Ostriker 2014
     PRFM_KO15 = PRFM_data("KO15")
     data = PRFM_KO15
@@ -500,6 +704,19 @@ def load_pretigress():
 
 
 def load_classic_data(from_table=False):
+    """Load TIGRESS-classic simulation data (Ostriker & Kim 2022).
+
+    Parameters
+    ----------
+    from_table : bool, optional
+        If ``True``, read pre-computed values from the bundled CSV table.
+        If ``False`` (default), recompute pressures from raw run data.
+
+    Returns
+    -------
+    PRFM_data
+        Data container with pressure, SFR, and yield fields populated.
+    """
     # OK22: TIGRESS-classic
     data = PRFM_data("TIGRESS-classic")
     if from_table:
@@ -558,6 +775,19 @@ def load_classic_data(from_table=False):
 
 
 def load_gc_data(from_table=False):
+    """Load TIGRESS galactic-centre simulation data (Moon et al. 2021, 2023).
+
+    Parameters
+    ----------
+    from_table : bool, optional
+        If ``True``, read pre-computed values from the bundled CSV table.
+        If ``False`` (default), recompute pressures from raw run data.
+
+    Returns
+    -------
+    PRFM_data
+        Data container with pressure, SFR, and yield fields populated.
+    """
     # Galactic center from M21 and M23
     data = PRFM_data("TIGRESS-GC")
     if from_table:
@@ -602,6 +832,19 @@ def load_gc_data(from_table=False):
 
 
 def load_ncr_data(fname="tigress_ncr_K24.nc"):
+    """Load TIGRESS-NCR simulation data from a NetCDF file (Kim et al. 2024).
+
+    Parameters
+    ----------
+    fname : str, optional
+        Filename of the NetCDF dataset relative to the package directory
+        (default ``"tigress_ncr_K24.nc"``).
+
+    Returns
+    -------
+    PRFM_data
+        Data container with NCR pressure, SFR, metallicity, and yield fields.
+    """
     dset = xr.open_dataset(os.path.join(dirpath, fname))
     data = PRFM_data("TIGRESS-NCR")
     data.Zdust = dset["Zdust"].sel(q="mean").data
