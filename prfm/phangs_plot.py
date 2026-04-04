@@ -605,23 +605,29 @@ def _parse_slices(
         break  # one slice column supported
     return results
 
-def get_symmetric_log_errorbars(linear_mean, linear_std):
-    """
-    Approximates linear standard deviation into a multiplicative factor so that
-    the resulting error bars appear visually symmetric on a log-scaled axis.
+def get_symmetric_log_errorbars(
+    linear_mean: np.ndarray,
+    linear_std: np.ndarray,
+) -> list[np.ndarray]:
+    """Convert linear-space std to visually symmetric error bars on a log axis.
 
-    Parameters:
-    -----------
+    Converts a standard deviation measured in linear space into a
+    multiplicative factor (exp(σ/μ)) so that the resulting error bars
+    appear symmetric when the axis is log-scaled.
+
+    Parameters
+    ----------
     linear_mean : array_like
-        The mean values calculated in linear space.
+        Mean values in linear space.
     linear_std : array_like
-        The standard deviation values calculated in linear space.
+        Standard deviation values in linear space.
 
-    Returns:
-    --------
-    asymmetric_error : list of numpy.ndarray
-        A 2-element list [lower_errors, upper_errors] containing the absolute
-        linear distances required by Matplotlib's `yerr`.
+    Returns
+    -------
+    list of ndarray
+        Two-element list ``[lower_errors, upper_errors]`` containing the
+        absolute linear distances from the centre point, as expected by
+        Matplotlib's ``yerr`` parameter.
     """
     linear_mean = np.asarray(linear_mean, dtype=float)
     linear_std = np.asarray(linear_std, dtype=float)
@@ -644,8 +650,33 @@ def get_symmetric_log_errorbars(linear_mean, linear_std):
 
     return [yerr_lower, yerr_upper]
 
-# Convert inputs to CGS for get_weight_contribution
-def plot_weights(tbl, ax=None, variation=None):
+def plot_weights(
+    tbl: "Table",
+    ax: "plt.Axes | None" = None,
+    variation: dict | None = None,
+) -> "plt.Figure":
+    """Plot weight fractions (f_gas, f_star, f_DM) vs dynamical equilibrium pressure.
+
+    Scatter plots each weight fraction against P_DE (from the ``P_weight``
+    column) and overlays binned geometric-mean lines for each component.
+
+    Parameters
+    ----------
+    tbl : Table
+        PHANGS table with ``P_weight``, ``Sigma_gas``, ``Sigma_star``,
+        ``Omega_d``, ``H_star``, and ``sigma_eff_sol`` columns.
+    ax : Axes or None, optional
+        Existing Matplotlib axes to draw on. A new figure is created if
+        ``None``.
+    variation : dict or None, optional
+        Passed directly to :func:`prfm.phangs.get_weights`; see that
+        function for supported keys.
+
+    Returns
+    -------
+    Figure
+        The Matplotlib figure containing the plot.
+    """
     from prfm.phangs import get_weights
 
     f_gas, f_star, f_dm = get_weights(tbl, variation=variation)
