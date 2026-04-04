@@ -320,6 +320,59 @@ class TestRunPRFM:
         out = phangs.run_prfm(synthetic_table, zprime_col=None)
         assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
 
+    def test_input_table_not_mutated(self, synthetic_table):
+        """run_prfm must return a copy; the original table is unchanged."""
+        cols_before = list(synthetic_table.colnames)
+        phangs.run_prfm(synthetic_table)
+        assert list(synthetic_table.colnames) == cols_before
+
+    def test_variation_omega_d_none(self, synthetic_table):
+        """variation={'Omega_d': None} disables rotation term; output still finite."""
+        out = phangs.run_prfm(synthetic_table, variation={"Omega_d": None})
+        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+
+    def test_variation_sigma_star_scaling(self, synthetic_table):
+        """Scaling Sigma_star via variation changes P_weight relative to default."""
+        out_default = phangs.run_prfm(synthetic_table)
+        out_scaled = phangs.run_prfm(synthetic_table, variation={"Sigma_star": 2.0})
+        assert np.all(out_scaled["P_weight"].value >= out_default["P_weight"].value)
+
+    def test_variation_h_star_scaling(self, synthetic_table):
+        """Scaling H_star via variation changes P_weight relative to default."""
+        out_default = phangs.run_prfm(synthetic_table)
+        out_scaled = phangs.run_prfm(synthetic_table, variation={"H_star": 2.0})
+        assert not np.allclose(
+            out_scaled["P_weight"].value, out_default["P_weight"].value
+        )
+
+    def test_prfm_cols_without_omega_d(self, synthetic_table):
+        """prfm_cols without Omega_d (gravity-only) produces finite outputs."""
+        out = phangs.run_prfm(
+            synthetic_table,
+            prfm_cols=["Sigma_gas", "Sigma_star", "H_star"],
+        )
+        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+
+    def test_invalid_rows_emit_warning(self, synthetic_table):
+        """A warning is emitted when any input row is invalid."""
+        import warnings
+
+        t = phangs.compute_prfm_inputs(synthetic_table.copy())
+        t["Sigma_gas"][0] = np.nan
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            phangs.run_prfm(t)
+        assert any("invalid" in str(w.message).lower() for w in caught)
+
+    def test_alternative_models_produce_finite_output(self, synthetic_table):
+        """Non-default sigma_eff and yield models should still produce finite outputs."""
+        out = phangs.run_prfm(
+            synthetic_table,
+            sigma_eff_model="tigress-classic-mid",
+            yield_model="tigress-classic",
+        )
+        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+
 
 # ---------------------------------------------------------------------------
 # Integration tests (require downloaded data)

@@ -39,4 +39,6 @@ PHANGS data utilities
 
 .. autofunction:: prfm.phangs.run_prfm
 
+.. autofunction:: prfm.phangs.get_weights
+
 .. autofunction:: prfm.phangs.valid_rows
