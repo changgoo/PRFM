@@ -1,0 +1,915 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>prfm.phangs &#8212; PRFM</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/prfm/phangs';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">PRFM</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Welcome to the PRFM cookbook
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">PRFM primer</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../vertical-de.html">Vertical Dynamical Equilibrium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../feedback-yield.html">Feedback Yields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../equation_of_state.html">Effective Equation of State</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">References</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../prfm.html">Toy Galaxy Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_tng.html">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Code package</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/changgoo/PRFM" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/changgoo/PRFM/issues/new?title=Issue%20on%20page%20%2F_modules/prfm/phangs.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for prfm.phangs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">PHANGS megatable data handling for PRFM theory applications.</span>
+
+<span class="sd">Data source: Sun et al. 2022/2023 (v4.0 public release)</span>
+<span class="sd">  https://www.canfar.net/storage/vault/list/phangs/RELEASES/Sun_etal_2022</span>
+
+<span class="sd">Key references:</span>
+<span class="sd">  Sun et al. 2022 — https://ui.adsabs.harvard.edu/abs/2022AJ....164...43S</span>
+<span class="sd">  Sun et al. 2023 — https://ui.adsabs.harvard.edu/abs/2023ApJ...945L..19S</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.constants</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ac</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.units</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">au</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span><span class="p">,</span> <span class="n">vstack</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Constants</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_CANFAR_BASE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://ws-cadc.canfar.net/vault/files/phangs/RELEASES&quot;</span>
+    <span class="s2">&quot;/Sun_etal_2022/v4p0_public_release&quot;</span>
+<span class="p">)</span>
+
+<span class="n">_VERSION</span> <span class="o">=</span> <span class="s2">&quot;v4p0&quot;</span>
+
+<span class="c1"># Aperture type → suffix in filename</span>
+<span class="n">_APERTURE_SUFFIX</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;annulus&quot;</span><span class="p">:</span> <span class="s2">&quot;annulus_0p5kpc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gauss&quot;</span><span class="p">:</span> <span class="s2">&quot;gauss_1p5kpc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hexagon&quot;</span><span class="p">:</span> <span class="s2">&quot;hexagon_1p5kpc&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># All 90 galaxies in the v4.0 release (alphabetical order)</span>
+<span class="n">_GALAXIES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ESO097-013&quot;</span><span class="p">,</span> <span class="s2">&quot;IC1954&quot;</span><span class="p">,</span> <span class="s2">&quot;IC5273&quot;</span><span class="p">,</span> <span class="s2">&quot;IC5332&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC0253&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC0300&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC0628&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC0685&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC1087&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1097&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1300&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1317&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1365&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1385&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC1433&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1511&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1512&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1546&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1559&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1566&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC1637&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1792&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC1809&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC2090&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC2283&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC2566&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC2775&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC2835&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC2903&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC2997&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC3059&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3137&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3239&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3351&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3489&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3507&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC3511&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3521&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3596&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3599&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3621&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC3626&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC3627&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC4254&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4293&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4298&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4303&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4321&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4457&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC4459&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4476&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4477&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4496A&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4535&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4536&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC4540&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4548&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4569&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4571&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4596&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4689&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC4731&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4781&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4826&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4941&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC4951&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC5042&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5068&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5128&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5134&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5236&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5248&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC5530&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC5643&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC6300&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC6744&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NGC7456&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC7496&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC7743&quot;</span><span class="p">,</span> <span class="s2">&quot;NGC7793&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Catalogue helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">list_galaxies</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the list of galaxy names in the v4.0 release.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_GALAXIES</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">filename</span><span class="p">(</span><span class="n">galaxy</span><span class="p">,</span> <span class="n">aperture</span><span class="o">=</span><span class="s2">&quot;annulus&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the ECSV filename for a given galaxy and aperture type.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    galaxy : str</span>
+<span class="sd">        Galaxy name, e.g. ``&quot;NGC0628&quot;``.</span>
+<span class="sd">    aperture : str</span>
+<span class="sd">        One of ``&quot;annulus&quot;``, ``&quot;gauss&quot;``, ``&quot;hexagon&quot;``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">aperture</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_APERTURE_SUFFIX</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown aperture &#39;</span><span class="si">{</span><span class="n">aperture</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Choose from </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">_APERTURE_SUFFIX</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">galaxy</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">_APERTURE_SUFFIX</span><span class="p">[</span><span class="n">aperture</span><span class="p">]</span><span class="si">}</span><span class="s2">.ecsv&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">list_files</span><span class="p">(</span><span class="n">aperture</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return all ECSV filenames in the release.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    aperture : str or None</span>
+<span class="sd">        If given, filter to that aperture type</span>
+<span class="sd">        (``&quot;annulus&quot;``, ``&quot;gauss&quot;``, or ``&quot;hexagon&quot;``).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">apertures</span> <span class="o">=</span> <span class="p">[</span><span class="n">aperture</span><span class="p">]</span> <span class="k">if</span> <span class="n">aperture</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">_APERTURE_SUFFIX</span><span class="p">)</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ap</span> <span class="ow">in</span> <span class="n">apertures</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">galaxy</span> <span class="ow">in</span> <span class="n">_GALAXIES</span><span class="p">:</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">(</span><span class="n">galaxy</span><span class="p">,</span> <span class="n">aperture</span><span class="o">=</span><span class="n">ap</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">files</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_url</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the download URL for a given filename.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_CANFAR_BASE</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Download</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="n">aperture</span><span class="o">=</span><span class="s2">&quot;annulus&quot;</span><span class="p">,</span> <span class="n">galaxies</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download PHANGS megatable ECSV files to *dest_dir*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dest_dir : str or Path</span>
+<span class="sd">        Directory to save files into (created if absent).</span>
+<span class="sd">    aperture : str or ``&quot;all&quot;``</span>
+<span class="sd">        Aperture type to download, or ``&quot;all&quot;`` for all three types.</span>
+<span class="sd">    galaxies : list of str or None</span>
+<span class="sd">        Subset of galaxies.  ``None`` downloads all 90.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        Re-download even if the file already exists locally.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of Path</span>
+<span class="sd">        Paths of downloaded files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+
+    <span class="n">dest_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">)</span>
+    <span class="n">dest_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">apertures</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_APERTURE_SUFFIX</span><span class="p">)</span> <span class="k">if</span> <span class="n">aperture</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="k">else</span> <span class="p">[</span><span class="n">aperture</span><span class="p">]</span>
+    <span class="n">gals</span> <span class="o">=</span> <span class="n">galaxies</span> <span class="k">if</span> <span class="n">galaxies</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_GALAXIES</span>
+
+    <span class="n">downloaded</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ap</span> <span class="ow">in</span> <span class="n">apertures</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">gal</span> <span class="ow">in</span> <span class="n">gals</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span><span class="p">(</span><span class="n">gal</span><span class="p">,</span> <span class="n">aperture</span><span class="o">=</span><span class="n">ap</span><span class="p">)</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">dest_dir</span> <span class="o">/</span> <span class="n">fname</span>
+            <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+                <span class="n">downloaded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">build_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="n">downloaded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: could not download </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">downloaded</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># I/O</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../api.html#prfm.phangs.load">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a single PHANGS megatable ECSV file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str or Path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.table.Table`</span>
+<span class="sd">        Table with units attached and ``GALAXY`` stored in ``.meta``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ascii.ecsv&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_all"><a class="viewcode-back" href="../../api.html#prfm.phangs.load_all">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">load_all</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">aperture</span><span class="o">=</span><span class="s2">&quot;annulus&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and vertically stack all ECSV files in *data_dir*.</span>
+
+<span class="sd">    A ``GALAXY`` column is added (taken from table metadata) before stacking.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_dir : str or Path</span>
+<span class="sd">    aperture : str</span>
+<span class="sd">        Filter to this aperture type.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.table.Table`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;*_</span><span class="si">{</span><span class="n">_APERTURE_SUFFIX</span><span class="p">[</span><span class="n">aperture</span><span class="p">]</span><span class="si">}</span><span class="s2">.ecsv&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No files matching &#39;</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">&#39; found in </span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">galaxy</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GALAXY&quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">stem</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">tables</span><span class="p">[</span><span class="n">galaxy</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+    <span class="k">return</span> <span class="n">tables</span></div>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">vstack_tables</span><span class="p">(</span><span class="n">tables</span><span class="p">):</span>
+    <span class="n">tbl</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">galaxy</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">t</span><span class="p">[</span><span class="s2">&quot;GALAXY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">galaxy</span>
+        <span class="n">tbl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vstack</span><span class="p">(</span><span class="n">tbl</span><span class="p">,</span> <span class="n">metadata_conflicts</span><span class="o">=</span><span class="s2">&quot;silent&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Derived PRFM quantities</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="compute_prfm_inputs"><a class="viewcode-back" href="../../api.html#prfm.phangs.compute_prfm_inputs">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_prfm_inputs</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add PRFM-relevant derived columns to a megatable.</span>
+
+<span class="sd">    Derived columns added</span>
+<span class="sd">    ---------------------</span>
+<span class="sd">    ``Sigma_gas``</span>
+<span class="sd">        Total gas surface density = ``Sigma_mol + Sigma_atom``</span>
+<span class="sd">        [M_sun / pc^2].</span>
+<span class="sd">    ``e_Sigma_gas``</span>
+<span class="sd">        Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``</span>
+<span class="sd">        [M_sun / pc^2].  Added only when both ``e_Sigma_mol`` and</span>
+<span class="sd">        ``e_Sigma_atom`` are present.</span>
+<span class="sd">    ``Omega_d``</span>
+<span class="sd">        Angular velocity = ``V_circ_CO21_URC / r_gal`` [km / s / kpc].</span>
+<span class="sd">    ``H_star``</span>
+<span class="sd">        Stellar scale height = ``Sigma_star / (2 * rho_star_mp)`` [pc].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    table : `~astropy.table.Table`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.table.Table`</span>
+<span class="sd">        A copy of the input table with the new columns appended.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">Sigma_mol</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_mol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">Sigma_atom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># Treat non-detections as zero for each component, but only when the other</span>
+    <span class="c1"># component is detected.  If both are NaN the sum stays NaN.</span>
+    <span class="n">either_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Sigma_mol</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Sigma_atom</span><span class="p">)</span>
+    <span class="n">mol_filled</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Sigma_mol</span><span class="p">),</span>  <span class="n">Sigma_mol</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">atom_filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Sigma_atom</span><span class="p">),</span> <span class="n">Sigma_atom</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">Sigma_gas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">either_valid</span><span class="p">,</span> <span class="n">mol_filled</span> <span class="o">+</span> <span class="n">atom_filled</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sigma_gas</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Total gas surface density (mol + atom; non-detections filled with 0)&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;e_Sigma_mol&quot;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">colnames</span> <span class="ow">and</span> <span class="s2">&quot;e_Sigma_atom&quot;</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">colnames</span><span class="p">:</span>
+        <span class="n">e_mol</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;e_Sigma_mol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">e_atom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;e_Sigma_atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="c1"># propagate only the errors that exist; treat missing component error as 0</span>
+        <span class="n">e_mol_filled</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">e_mol</span><span class="p">),</span>  <span class="n">e_mol</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">e_atom_filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">e_atom</span><span class="p">),</span> <span class="n">e_atom</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">e_gas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">either_valid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e_mol_filled</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">e_atom_filled</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">t</span><span class="p">[</span><span class="s2">&quot;e_Sigma_gas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_gas</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">t</span><span class="p">[</span><span class="s2">&quot;e_Sigma_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Uncertainty on Sigma_gas (quadrature sum)&quot;</span>
+
+    <span class="n">V_circ</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;V_circ_CO21_URC&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">km</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">r_gal</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;r_gal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">kpc</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">V_circ</span> <span class="o">/</span> <span class="n">r_gal</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">km</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">kpc</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Angular velocity V_circ / r_gal&quot;</span>
+
+    <span class="n">Sigma_star</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">rho_star</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;rho_star_mp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Sigma_star</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">rho_star</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">au</span><span class="o">.</span><span class="n">pc</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Stellar scale height Sigma_star / (2 * rho_star_mp)&quot;</span>
+
+    <span class="k">return</span> <span class="n">t</span></div>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Quality masking</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="valid_rows"><a class="viewcode-back" href="../../api.html#prfm.phangs.valid_rows">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">valid_rows</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rel_error</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Boolean mask selecting rows that are finite and positive.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    table : `~astropy.table.Table`</span>
+<span class="sd">    cols : list of str or None</span>
+<span class="sd">        Columns to check.  ``None`` checks all numeric columns.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray of bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">colnames</span>
+            <span class="k">if</span> <span class="n">table</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">vals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rel_error</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">colnames</span><span class="p">):</span>
+            <span class="n">e_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;e_&quot;</span><span class="o">+</span><span class="n">col</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">e_vals</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">e_vals</span><span class="o">/</span><span class="n">vals</span> <span class="o">&lt;</span> <span class="n">rel_error</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mask</span></div>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># PRFM model application</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1"># Unit conversion factors (astro → CGS) matching prfm.prfm conventions</span>
+<span class="n">_surf_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">ac</span><span class="o">.</span><span class="n">pc</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>      <span class="c1"># M_sun/pc² → g/cm²</span>
+<span class="n">_pc_cgs</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">pc</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>                          <span class="c1"># pc → cm</span>
+<span class="n">_kms_kpc_cgs</span> <span class="o">=</span> <span class="mf">1.0e5</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.085677581e21</span><span class="p">)</span>            <span class="c1"># km/s/kpc → 1/s</span>
+<span class="n">_kbol_cgs</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">k_B</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>                       <span class="c1"># erg/K</span>
+<span class="n">_sfr_cgs</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">ac</span><span class="o">.</span><span class="n">kpc</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">yr</span><span class="p">)</span><span class="o">.</span><span class="n">cgs</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># M_sun/kpc²/yr → g/cm²/s</span>
+
+
+<div class="viewcode-block" id="run_prfm"><a class="viewcode-back" href="../../api.html#prfm.phangs.run_prfm">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">run_prfm</span><span class="p">(</span>
+    <span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">,</span>
+    <span class="n">prfm_cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">,</span> <span class="s2">&quot;Sigma_star&quot;</span><span class="p">,</span> <span class="s2">&quot;Omega_d&quot;</span><span class="p">,</span> <span class="s2">&quot;H_star&quot;</span><span class="p">],</span>
+    <span class="n">sigma_eff_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tigress-ncr-avg&quot;</span><span class="p">,</span>
+    <span class="n">yield_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tigress-ncr-decomp-all&quot;</span><span class="p">,</span>
+    <span class="n">zprime_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Zprime&quot;</span><span class="p">,</span>
+    <span class="n">variation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Table</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply the PRFM model to every row of a PHANGS megatable.</span>
+
+<span class="sd">    Runs :func:`compute_prfm_inputs` if ``Sigma_gas`` is not already present,</span>
+<span class="sd">    then calls the self-consistent PRFM solver (vectorized over all rows).</span>
+<span class="sd">    Invalid rows (NaN or non-positive PRFM inputs) receive ``NaN`` outputs.</span>
+
+<span class="sd">    Columns added</span>
+<span class="sd">    -------------</span>
+<span class="sd">    ``P_weight``</span>
+<span class="sd">        Dynamical equilibrium pressure (total gas weight)</span>
+<span class="sd">        in units of :math:`k_\\mathrm{B}` K cm\\ :sup:`-3`.</span>
+<span class="sd">    ``H_gas``</span>
+<span class="sd">        Self-consistent gas scale height [pc].</span>
+<span class="sd">    ``sigma_eff_sol``</span>
+<span class="sd">        Self-consistent effective velocity dispersion [km s\\ :sup:`-1`].</span>
+<span class="sd">    ``Sigma_SFR_pred``</span>
+<span class="sd">        Predicted SFR surface density [M_sun kpc\\ :sup:`-2` yr\\ :sup:`-1`].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    table : `~astropy.table.Table`</span>
+<span class="sd">        PHANGS megatable, optionally pre-processed by :func:`compute_prfm_inputs`.</span>
+<span class="sd">    sigma_eff_model : str</span>
+<span class="sd">        Velocity dispersion model name (key in ``prfm._sigma_eff_models``).</span>
+<span class="sd">    yield_model : str</span>
+<span class="sd">        Feedback yield model name (key in ``prfm._yield_models``).</span>
+<span class="sd">    zprime_col : str or None</span>
+<span class="sd">        Column name for metallicity (relative to solar).  Pass ``None`` to</span>
+<span class="sd">        ignore metallicity dependence.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `~astropy.table.Table`</span>
+<span class="sd">        Copy of the input table with four new columns appended.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">prfm.prfm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_self_consistent_solution</span><span class="p">,</span> <span class="n">get_sfr</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Ensure derived PRFM inputs exist</span>
+    <span class="k">if</span> <span class="s2">&quot;Sigma_gas&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">colnames</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">compute_prfm_inputs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="c1"># Identify valid rows</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">valid_rows</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">prfm_cols</span><span class="p">)</span>
+    <span class="n">n_invalid</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">n_invalid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;run_prfm: </span><span class="si">{</span><span class="n">n_invalid</span><span class="si">}</span><span class="s2"> row(s) with invalid PRFM inputs will be NaN.&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Initialise output arrays with NaN</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">P_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">H_gas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">sigma_sol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">Sigma_SFR_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="s2">&quot;valid rows out of&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="c1"># Extract valid rows and convert to CGS</span>
+        <span class="n">sg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_surf_cgs</span>
+        <span class="n">ss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_surf_cgs</span>
+        <span class="k">if</span> <span class="s2">&quot;Omega_d&quot;</span> <span class="ow">in</span> <span class="n">prfm_cols</span><span class="p">:</span>
+            <span class="n">od</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_kms_kpc_cgs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">od</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">hs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_pc_cgs</span>
+
+        <span class="k">if</span> <span class="n">variation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;Omega_d&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: setting Omega_d to&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">od</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">od</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s2">&quot;Sigma_star&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: scaling Sigma_star by&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">])</span>
+                <span class="n">ss</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s2">&quot;H_star&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: scaling H_star by&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">])</span>
+                <span class="n">hs</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Metallicity (dimensionless relative to solar); default to solar (Z=1) if absent</span>
+        <span class="k">if</span> <span class="n">zprime_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">zprime_col</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">colnames</span><span class="p">:</span>
+            <span class="n">Z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">zprime_col</span><span class="p">][</span><span class="n">mask</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+
+        <span class="c1"># Solve</span>
+        <span class="n">wtot</span><span class="p">,</span> <span class="n">H_cgs</span><span class="p">,</span> <span class="n">se_cgs</span> <span class="o">=</span> <span class="n">get_self_consistent_solution</span><span class="p">(</span>
+            <span class="n">sg</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">hs</span><span class="p">,</span> <span class="n">sigma_eff</span><span class="o">=</span><span class="n">sigma_eff_model</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Back-convert to observer-friendly units</span>
+        <span class="n">P_weight</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">wtot</span> <span class="o">/</span> <span class="n">_kbol_cgs</span>          <span class="c1"># k_B K cm^-3</span>
+        <span class="n">H_gas</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">H_cgs</span> <span class="o">/</span> <span class="n">_pc_cgs</span>              <span class="c1"># pc</span>
+        <span class="n">sigma_sol</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">se_cgs</span> <span class="o">/</span> <span class="mf">1.0e5</span>           <span class="c1"># km/s</span>
+
+        <span class="c1"># Predicted SFR</span>
+        <span class="n">sfr_cgs</span> <span class="o">=</span> <span class="n">get_sfr</span><span class="p">(</span><span class="n">wtot</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">Z</span><span class="p">,</span> <span class="n">Ytot</span><span class="o">=</span><span class="n">yield_model</span><span class="p">)</span>
+        <span class="n">Sigma_SFR_pred</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">sfr_cgs</span> <span class="o">/</span> <span class="n">_sfr_cgs</span>  <span class="c1"># M_sun/kpc²/yr</span>
+
+    <span class="c1"># Attach columns with astropy units</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_weight</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">K</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">cm</span><span class="o">**</span><span class="mi">3</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;P_weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Dynamical equilibrium pressure (P_DE / k_B)&quot;</span>
+
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">H_gas</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">pc</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;H_gas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Self-consistent gas scale height&quot;</span>
+
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;sigma_eff_sol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma_sol</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">km</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">s</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;sigma_eff_sol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Self-consistent effective velocity dispersion&quot;</span>
+
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Sigma_SFR_pred</span> <span class="o">*</span> <span class="n">au</span><span class="o">.</span><span class="n">M_sun</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">kpc</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">au</span><span class="o">.</span><span class="n">yr</span>
+    <span class="n">t</span><span class="p">[</span><span class="s2">&quot;Sigma_SFR_pred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;PRFM-predicted SFR surface density&quot;</span>
+
+    <span class="k">return</span> <span class="n">t</span></div>
+
+<span class="c1"># Convert inputs to CGS for get_weight_contribution</span>
+<div class="viewcode-block" id="get_weights"><a class="viewcode-back" href="../../api.html#prfm.phangs.get_weights">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_weights</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">,</span>
+                <span class="n">variation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">prfm.prfm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_weight_contribution</span>
+
+    <span class="n">sg</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;Sigma_gas&quot;</span><span class="p">],</span>    <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_surf_cgs</span>
+    <span class="n">ss</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">],</span>   <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_surf_cgs</span>
+    <span class="n">od</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">],</span>      <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_kms_kpc_cgs</span>
+    <span class="n">hs</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">],</span>       <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">_pc_cgs</span>
+    <span class="n">se</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;sigma_eff_sol&quot;</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e5</span>   <span class="c1"># km/s → cm/s</span>
+
+    <span class="k">if</span> <span class="n">variation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;Omega_d&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: setting Omega_d to&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">od</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">od</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Omega_d&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Sigma_star&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: scaling Sigma_star by&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">])</span>
+            <span class="n">ss</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;Sigma_star&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;H_star&quot;</span> <span class="ow">in</span> <span class="n">variation</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying variation: scaling H_star by&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">])</span>
+            <span class="n">hs</span> <span class="o">*=</span> <span class="n">variation</span><span class="p">[</span><span class="s2">&quot;H_star&quot;</span><span class="p">]</span>
+
+    <span class="n">f_gas</span><span class="p">,</span> <span class="n">f_star</span><span class="p">,</span> <span class="n">f_dm</span> <span class="o">=</span> <span class="n">get_weight_contribution</span><span class="p">(</span><span class="n">sg</span><span class="p">,</span> <span class="n">ss</span><span class="p">,</span> <span class="n">od</span><span class="p">,</span> <span class="n">hs</span><span class="p">,</span> <span class="n">se</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f_gas</span><span class="p">,</span> <span class="n">f_star</span><span class="p">,</span> <span class="n">f_dm</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Chang-Goo Kim and Eve Ostriker
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
