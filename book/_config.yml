@@ -9,6 +9,8 @@ author: Chang-Goo Kim and Eve Ostriker
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: cache
+  exclude_patterns:
+    - 'prfm_phangs.ipynb'   # requires local PHANGS data; uses stored outputs
 
 # Define the name of the latex output file for PDF builds
 latex:

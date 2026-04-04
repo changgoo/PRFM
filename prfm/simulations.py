@@ -138,13 +138,18 @@ class PRFM_data(object):
 # =====================================================================================
 
 
-def add_one_sim(data, xf="Ptot", yf="SFR", ms=5):
+def add_one_sim(data, xf="Ptot", yf="SFR", ms=5, log_x=True, log_y=True):
     c = data.color
     m = "*" if data.paper == "TIGRESS-GC" else "o"
     x = getattr(data, "log_{}".format(xf))
     y = getattr(data, "log_{}".format(yf))
     xerr = getattr(data, "log_{}_std".format(xf))
     yerr = getattr(data, "log_{}_std".format(yf))
+    if not log_x:
+        x, xerr = get_log_errorbars(x, xerr)
+    if not log_y:
+        y, yerr = get_log_errorbars(y, yerr)
+
     p = plt.errorbar(
         x,
         y,
@@ -212,12 +217,14 @@ def add_ncr_sim(data, xf="Ptot", yf="SFR", ms=5, legend=4):
 
 
 def add_PSFR_model_line(
-    Wmin=2, Wmax=8, Z=None, labels=True, model="tigress-classic", **kwargs
+    Wmin=2, Wmax=8, Z=None, labels=True, model="tigress-classic",
+    log_x=True, log_y=True, **kwargs
 ):
     Wtmp = np.logspace(Wmin, Wmax)
+    sfr = get_sfr(Wtmp * _kbol_cgs, Z=Z, Ytot=model) / _sfr_cgs
     plt.plot(
-        np.log10(Wtmp),
-        np.log10(get_sfr(Wtmp * _kbol_cgs, Z=Z, Ytot=model) / _sfr_cgs),
+        np.log10(Wtmp) if log_x else Wtmp,
+        np.log10(sfr) if log_y else sfr,
         **kwargs,
     )
     if labels:
@@ -239,7 +246,7 @@ def add_PSFR_model_lines(Wmin=2, Wmax=8, model="classic"):
         )
 
 
-def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8):
+def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8, **kwargs):
     for Z in [0.1, 0.3, 1, 3]:
         add_PSFR_model_line(
             Wmin=Wmin,
@@ -247,6 +254,7 @@ def add_PSFR_ncr_model_lines(Wmin=2, Wmax=8):
             Z=Z,
             model="tigress-ncr-decomp",
             color=get_ncr_color(Z),
+            **kwargs,
             label=r"$\Upsilon:$" + f"tigress-ncr Z={Z}",
         )
 
@@ -645,3 +653,42 @@ def load_sim_data():
         d.color = colors[d.paper]
         data[d.paper] = d
     return data
+
+
+def get_log_errorbars(log_mean, log_std, base=10):
+    """
+    Converts mean and standard deviation from log-space into linear-space
+    center points and asymmetric error distances for Matplotlib.
+
+    Parameters:
+    -----------
+    log_mean : array_like
+        The mean values calculated in log-space.
+    log_std : array_like
+        The standard deviation values calculated in log-space.
+    base : float, optional
+        The logarithmic base used (default is 10. Use np.e for natural log).
+
+    Returns:
+    --------
+    y_center : numpy.ndarray
+        The geometric center points in linear space.
+    asymmetric_error : list of numpy.ndarray
+        A 2-element list [lower_errors, upper_errors] ready for Matplotlib's `yerr`.
+    """
+    # Ensure inputs are numpy arrays for element-wise math
+    log_mean = np.asarray(log_mean)
+    log_std = np.asarray(log_std)
+
+    # 1. Transform back to linear space
+    y_center = base ** log_mean
+
+    # 2. Calculate the absolute bounds in linear space
+    lower_bound = base ** (log_mean - log_std)
+    upper_bound = base ** (log_mean + log_std)
+
+    # 3. Calculate the distances from the center point
+    yerr_lower = y_center - lower_bound
+    yerr_upper = upper_bound - y_center
+
+    return y_center, [yerr_lower, yerr_upper]
