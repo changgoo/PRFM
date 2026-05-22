@@ -616,8 +616,29 @@ def get_sigma_eff(
     return np.clip(veld, sigma_min, None) * 1.0e5
 
 
-def get_sigma_eff_n(nH, Z=None, model="tigress-classic-mid"):
-    """density-dependent velocity dispersion model"""
+def get_sigma_eff_n(
+    nH: np.ndarray,
+    Z: np.ndarray | None = None,
+    model: str = "tigress-classic-mid",
+) -> np.ndarray:
+    """Density-dependent effective velocity dispersion.
+
+    Parameters
+    ----------
+    nH : array-like
+        Hydrogen number density [cm⁻³].
+    Z : array-like or None, optional
+        Metallicity relative to solar (Z' = Z/Z_sun). Ignored when
+        the chosen model has no metallicity dependence.
+    model : str, optional
+        Name of the velocity dispersion model; must be a key in
+        ``_sigma_eff_n_models``. Default ``"tigress-classic-mid"``.
+
+    Returns
+    -------
+    sigma_eff : array-like
+        Effective vertical velocity dispersion [cm s⁻¹].
+    """
     sigma_eff_model = _sigma_eff_n_models[model]
     sigma_0 = sigma_eff_model["sigma_0"]
     expo = sigma_eff_model["expo"]
@@ -629,8 +650,31 @@ def get_sigma_eff_n(nH, Z=None, model="tigress-classic-mid"):
     return np.clip(veld, sigma_min, None) * 1.0e5
 
 
-def get_Peff_n(nH, Z=None, model="tigress-classic-mid"):
-    """effective equation of state"""
+def get_Peff_n(
+    nH: np.ndarray,
+    Z: np.ndarray | None = None,
+    model: str = "tigress-classic-mid",
+) -> np.ndarray:
+    """Effective pressure from the density-based equation of state.
+
+    Computes the effective midplane pressure as a power-law function of
+    hydrogen number density: P_eff = P0 * nH^expo * k_B.
+
+    Parameters
+    ----------
+    nH : array-like
+        Hydrogen number density [cm⁻³].
+    Z : array-like or None, optional
+        Reserved for future metallicity dependence; currently unused.
+    model : str, optional
+        Name of the EoS model; must be a key in ``_eos_models``.
+        Default ``"tigress-classic-mid"``.
+
+    Returns
+    -------
+    Peff : array-like
+        Effective midplane pressure [dyn cm⁻²].
+    """
     eos_model = _eos_models[model]
     P0 = eos_model["P0"]
     expo = eos_model["expo"]
@@ -638,8 +682,33 @@ def get_Peff_n(nH, Z=None, model="tigress-classic-mid"):
     return P * _kbol_cgs
 
 
-def get_Peff_sigma(nH, Z=None, model="tigress-classic-mid"):
-    """effective equation of state"""
+def get_Peff_sigma(
+    nH: np.ndarray,
+    Z: np.ndarray | None = None,
+    model: str = "tigress-classic-mid",
+) -> np.ndarray:
+    """Effective pressure from the density-dependent velocity dispersion.
+
+    Computes the effective pressure as P_eff = sigma_eff^2 * rho, where
+    sigma_eff is evaluated via :func:`get_sigma_eff_n` and rho assumes a
+    mean molecular weight of 1.4 per hydrogen atom.
+
+    Parameters
+    ----------
+    nH : array-like
+        Hydrogen number density [cm⁻³].
+    Z : array-like or None, optional
+        Metallicity relative to solar (Z' = Z/Z_sun). Passed through to
+        :func:`get_sigma_eff_n`.
+    model : str, optional
+        Name of the velocity dispersion model; must be a key in
+        ``_sigma_eff_n_models``. Default ``"tigress-classic-mid"``.
+
+    Returns
+    -------
+    Peff : array-like
+        Effective midplane pressure [dyn cm⁻²].
+    """
     sigma_eff = get_sigma_eff_n(nH, Z=Z, model=model)
     rho = nH * 1.4 * _mh_cgs
     return sigma_eff**2 * rho
