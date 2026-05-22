@@ -30,7 +30,7 @@ jobs:
 
     - name: Build the book
       run: |
-        PYTHONPATH=./ myst build --html
+        PYTHONPATH=./ BASE_URL=/PRFM myst build --html
 
     # Deploy only on push to main (not on PRs)
     - name: GitHub Pages action
