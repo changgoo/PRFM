@@ -1,4 +1,4 @@
-jupyter-book<2
+mystmd
 matplotlib
 numpy
 scipy
@@ -7,4 +7,3 @@ pandas
 xarray
 netcdf4
 cmasher
-docutils==0.17.1

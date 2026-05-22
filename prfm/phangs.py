@@ -38,24 +38,86 @@ _APERTURE_SUFFIX = {
 
 # All 90 galaxies in the v4.0 release (alphabetical order)
 _GALAXIES = [
-    "ESO097-013", "IC1954", "IC5273", "IC5332",
-    "NGC0253", "NGC0300", "NGC0628", "NGC0685",
-    "NGC1087", "NGC1097", "NGC1300", "NGC1317", "NGC1365", "NGC1385",
-    "NGC1433", "NGC1511", "NGC1512", "NGC1546", "NGC1559", "NGC1566",
-    "NGC1637", "NGC1792", "NGC1809",
-    "NGC2090", "NGC2283", "NGC2566", "NGC2775", "NGC2835", "NGC2903",
+    "ESO097-013",
+    "IC1954",
+    "IC5273",
+    "IC5332",
+    "NGC0253",
+    "NGC0300",
+    "NGC0628",
+    "NGC0685",
+    "NGC1087",
+    "NGC1097",
+    "NGC1300",
+    "NGC1317",
+    "NGC1365",
+    "NGC1385",
+    "NGC1433",
+    "NGC1511",
+    "NGC1512",
+    "NGC1546",
+    "NGC1559",
+    "NGC1566",
+    "NGC1637",
+    "NGC1792",
+    "NGC1809",
+    "NGC2090",
+    "NGC2283",
+    "NGC2566",
+    "NGC2775",
+    "NGC2835",
+    "NGC2903",
     "NGC2997",
-    "NGC3059", "NGC3137", "NGC3239", "NGC3351", "NGC3489", "NGC3507",
-    "NGC3511", "NGC3521", "NGC3596", "NGC3599", "NGC3621", "NGC3626",
+    "NGC3059",
+    "NGC3137",
+    "NGC3239",
+    "NGC3351",
+    "NGC3489",
+    "NGC3507",
+    "NGC3511",
+    "NGC3521",
+    "NGC3596",
+    "NGC3599",
+    "NGC3621",
+    "NGC3626",
     "NGC3627",
-    "NGC4254", "NGC4293", "NGC4298", "NGC4303", "NGC4321", "NGC4457",
-    "NGC4459", "NGC4476", "NGC4477", "NGC4496A", "NGC4535", "NGC4536",
-    "NGC4540", "NGC4548", "NGC4569", "NGC4571", "NGC4596", "NGC4689",
-    "NGC4731", "NGC4781", "NGC4826", "NGC4941", "NGC4951",
-    "NGC5042", "NGC5068", "NGC5128", "NGC5134", "NGC5236", "NGC5248",
-    "NGC5530", "NGC5643",
-    "NGC6300", "NGC6744",
-    "NGC7456", "NGC7496", "NGC7743", "NGC7793",
+    "NGC4254",
+    "NGC4293",
+    "NGC4298",
+    "NGC4303",
+    "NGC4321",
+    "NGC4457",
+    "NGC4459",
+    "NGC4476",
+    "NGC4477",
+    "NGC4496A",
+    "NGC4535",
+    "NGC4536",
+    "NGC4540",
+    "NGC4548",
+    "NGC4569",
+    "NGC4571",
+    "NGC4596",
+    "NGC4689",
+    "NGC4731",
+    "NGC4781",
+    "NGC4826",
+    "NGC4941",
+    "NGC4951",
+    "NGC5042",
+    "NGC5068",
+    "NGC5128",
+    "NGC5134",
+    "NGC5236",
+    "NGC5248",
+    "NGC5530",
+    "NGC5643",
+    "NGC6300",
+    "NGC6744",
+    "NGC7456",
+    "NGC7496",
+    "NGC7743",
+    "NGC7793",
 ]
 
 
@@ -91,8 +153,7 @@ def filename(galaxy, aperture="annulus"):
     """
     if aperture not in _APERTURE_SUFFIX:
         raise ValueError(
-            f"Unknown aperture '{aperture}'. "
-            f"Choose from {list(_APERTURE_SUFFIX)}"
+            f"Unknown aperture '{aperture}'. Choose from {list(_APERTURE_SUFFIX)}"
         )
     return f"{galaxy}_{_APERTURE_SUFFIX[aperture]}.ecsv"
 
@@ -225,15 +286,14 @@ def load_all(data_dir, aperture="annulus"):
     pattern = f"*_{_APERTURE_SUFFIX[aperture]}.ecsv"
     files = sorted(data_dir.glob(pattern))
     if not files:
-        raise FileNotFoundError(
-            f"No files matching '{pattern}' found in {data_dir}"
-        )
+        raise FileNotFoundError(f"No files matching '{pattern}' found in {data_dir}")
     tables = dict()
     for f in files:
         t = load(f)
         galaxy = t.meta.get("GALAXY", f.stem.split("_")[0])
         tables[galaxy] = t
     return tables
+
 
 def vstack_tables(tables: dict[str, Table]) -> Table:
     """Vertically stack a dict of per-galaxy tables into a single Table.
@@ -291,27 +351,31 @@ def compute_prfm_inputs(table):
     """
     t = table.copy()
 
-    Sigma_mol  = np.asarray(t["Sigma_mol"].to(au.M_sun / au.pc**2))
+    Sigma_mol = np.asarray(t["Sigma_mol"].to(au.M_sun / au.pc**2))
     Sigma_atom = np.asarray(t["Sigma_atom"].to(au.M_sun / au.pc**2))
 
     # Treat non-detections as zero for each component, but only when the other
     # component is detected.  If both are NaN the sum stays NaN.
     either_valid = np.isfinite(Sigma_mol) | np.isfinite(Sigma_atom)
-    mol_filled  = np.where(np.isfinite(Sigma_mol),  Sigma_mol,  0.0)
+    mol_filled = np.where(np.isfinite(Sigma_mol), Sigma_mol, 0.0)
     atom_filled = np.where(np.isfinite(Sigma_atom), Sigma_atom, 0.0)
     Sigma_gas = np.where(either_valid, mol_filled + atom_filled, np.nan)
     t["Sigma_gas"] = Sigma_gas * au.M_sun / au.pc**2
-    t["Sigma_gas"].description = (
+    t[
+        "Sigma_gas"
+    ].description = (
         "Total gas surface density (mol + atom; non-detections filled with 0)"
     )
 
     if "e_Sigma_mol" in t.colnames and "e_Sigma_atom" in t.colnames:
-        e_mol  = np.asarray(t["e_Sigma_mol"].to(au.M_sun / au.pc**2))
+        e_mol = np.asarray(t["e_Sigma_mol"].to(au.M_sun / au.pc**2))
         e_atom = np.asarray(t["e_Sigma_atom"].to(au.M_sun / au.pc**2))
         # propagate only the errors that exist; treat missing component error as 0
-        e_mol_filled  = np.where(np.isfinite(e_mol),  e_mol,  0.0)
+        e_mol_filled = np.where(np.isfinite(e_mol), e_mol, 0.0)
         e_atom_filled = np.where(np.isfinite(e_atom), e_atom, 0.0)
-        e_gas = np.where(either_valid, np.sqrt(e_mol_filled**2 + e_atom_filled**2), np.nan)
+        e_gas = np.where(
+            either_valid, np.sqrt(e_mol_filled**2 + e_atom_filled**2), np.nan
+        )
         t["e_Sigma_gas"] = e_gas * au.M_sun / au.pc**2
         t["e_Sigma_gas"].description = "Uncertainty on Sigma_gas (quadrature sum)"
 
@@ -347,17 +411,14 @@ def valid_rows(table, cols=None, rel_error=0.1):
     numpy.ndarray of bool
     """
     if cols is None:
-        cols = [
-            c for c in table.colnames
-            if table[c].dtype.kind in ("f", "i")
-        ]
+        cols = [c for c in table.colnames if table[c].dtype.kind in ("f", "i")]
     mask = np.ones(len(table), dtype=bool)
     for col in cols:
         vals = np.asarray(table[col], dtype=float)
         mask &= np.isfinite(vals) & (vals > 0)
-        if (rel_error>0) and (f"e_{col}" in table.colnames):
-            e_vals = np.asarray(table["e_"+col], dtype=float)
-            mask &= np.isfinite(e_vals) & (e_vals/vals < rel_error)
+        if (rel_error > 0) and (f"e_{col}" in table.colnames):
+            e_vals = np.asarray(table["e_" + col], dtype=float)
+            mask &= np.isfinite(e_vals) & (e_vals / vals < rel_error)
     return mask
 
 
@@ -366,10 +427,10 @@ def valid_rows(table, cols=None, rel_error=0.1):
 # ---------------------------------------------------------------------------
 
 # Unit conversion factors (astro → CGS) matching prfm.prfm conventions
-_surf_cgs = (ac.M_sun / ac.pc**2).cgs.value      # M_sun/pc² → g/cm²
-_pc_cgs = ac.pc.cgs.value                          # pc → cm
-_kms_kpc_cgs = 1.0e5 / (3.085677581e21)            # km/s/kpc → 1/s
-_kbol_cgs = ac.k_B.cgs.value                       # erg/K
+_surf_cgs = (ac.M_sun / ac.pc**2).cgs.value  # M_sun/pc² → g/cm²
+_pc_cgs = ac.pc.cgs.value  # pc → cm
+_kms_kpc_cgs = 1.0e5 / (3.085677581e21)  # km/s/kpc → 1/s
+_kbol_cgs = ac.k_B.cgs.value  # erg/K
 _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value  # M_sun/kpc²/yr → g/cm²/s
 
 
@@ -459,7 +520,9 @@ def run_prfm(
                     od *= variation["Omega_d"]
 
             if "Sigma_star" in variation:
-                print("Applying variation: scaling Sigma_star by", variation["Sigma_star"])
+                print(
+                    "Applying variation: scaling Sigma_star by", variation["Sigma_star"]
+                )
                 ss *= variation["Sigma_star"]
 
             if "H_star" in variation:
@@ -478,9 +541,9 @@ def run_prfm(
         )
 
         # Back-convert to observer-friendly units
-        P_weight[mask] = wtot / _kbol_cgs          # k_B K cm^-3
-        H_gas[mask] = H_cgs / _pc_cgs              # pc
-        sigma_sol[mask] = se_cgs / 1.0e5           # km/s
+        P_weight[mask] = wtot / _kbol_cgs  # k_B K cm^-3
+        H_gas[mask] = H_cgs / _pc_cgs  # pc
+        sigma_sol[mask] = se_cgs / 1.0e5  # km/s
 
         # Predicted SFR
         sfr_cgs = get_sfr(wtot, Z=Z, Ytot=yield_model)
@@ -500,6 +563,7 @@ def run_prfm(
     t["Sigma_SFR_pred"].description = "PRFM-predicted SFR surface density"
 
     return t
+
 
 def get_weights(
     table: Table,
@@ -531,11 +595,11 @@ def get_weights(
     """
     from prfm.prfm import get_weight_contribution
 
-    sg  = np.asarray(table["Sigma_gas"],    dtype=float) * _surf_cgs
-    ss  = np.asarray(table["Sigma_star"],   dtype=float) * _surf_cgs
-    od  = np.asarray(table["Omega_d"],      dtype=float) * _kms_kpc_cgs
-    hs  = np.asarray(table["H_star"],       dtype=float) * _pc_cgs
-    se  = np.asarray(table["sigma_eff_sol"],dtype=float) * 1e5   # km/s → cm/s
+    sg = np.asarray(table["Sigma_gas"], dtype=float) * _surf_cgs
+    ss = np.asarray(table["Sigma_star"], dtype=float) * _surf_cgs
+    od = np.asarray(table["Omega_d"], dtype=float) * _kms_kpc_cgs
+    hs = np.asarray(table["H_star"], dtype=float) * _pc_cgs
+    se = np.asarray(table["sigma_eff_sol"], dtype=float) * 1e5  # km/s → cm/s
 
     if variation is not None:
         if "Omega_d" in variation:
