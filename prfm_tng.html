@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Comparison with Observations of Nearby Galaxies (PHANGS)" href="prfm_phangs.html" />
-    <link rel="prev" title="High-resolution Simulation Results and PRFM Theory" href="prfm_sims.html" />
+    <link rel="prev" title="Effective Equation of State from TIGRESS-classic and TIGRESS-NCR" href="eos_sims.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -186,6 +186,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="prfm.html">Toy Galaxy Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_sims.html">High-resolution Simulation Results and PRFM Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eos_sims.html">Effective Equation of State from TIGRESS-classic and TIGRESS-NCR</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Post-processing TNG50 Cosmological Simulations with the PRFM Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prfm_phangs.html">Comparison with Observations of Nearby Galaxies (PHANGS)</a></li>
 </ul>
@@ -680,13 +681,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2486/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2490/1728527402.py:8: RuntimeWarning: invalid value encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
-/tmp/ipykernel_2486/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
+/tmp/ipykernel_2490/1728527402.py:8: RuntimeWarning: divide by zero encountered in log10
   ax[i, j].imshow(np.log10(df[col_names[1:][ind]].iloc[gal_ind]))
 </pre></div>
 </div>
-<img alt="_images/5d5e46f406e2af7ac92e5ffef59b60c65fb849dea22d4e5744c852123322444f.png" src="_images/5d5e46f406e2af7ac92e5ffef59b60c65fb849dea22d4e5744c852123322444f.png" />
+<img alt="_images/f0e483c8ce12f14da8556ab66245b555bbd66d7f32556100a6061c1a7fca891f.png" src="_images/f0e483c8ce12f14da8556ab66245b555bbd66d7f32556100a6061c1a7fca891f.png" />
 </div>
 </div>
 </section>
@@ -760,7 +761,7 @@ document.write(`
 9 8.269903682361322e-07
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2486/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_2490/129665065.py:49: RuntimeWarning: divide by zero encountered in divide
   t_dep_TNG50 = Sigma_g / Sigma_SFR * 1e-9  # depletion time from TNG50 in Gyr
 </pre></div>
 </div>
@@ -839,7 +840,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/446896497abb18811e878783f516c193563fcc2e20ff6409cd6d1dec80ca4889.png" src="_images/446896497abb18811e878783f516c193563fcc2e20ff6409cd6d1dec80ca4889.png" />
+<img alt="_images/c84c06674639deb7c0d619b249f49743c6e076cbebc58d5993ba73aea7cd208d.png" src="_images/c84c06674639deb7c0d619b249f49743c6e076cbebc58d5993ba73aea7cd208d.png" />
 </div>
 </div>
 </section>
@@ -972,7 +973,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d1d3991f6dd93ae3459a2d9038af452b523cc3360122f881558549884ecd7321.png" src="_images/d1d3991f6dd93ae3459a2d9038af452b523cc3360122f881558549884ecd7321.png" />
+<img alt="_images/5b4e89ad77db8e79b9722ebde9ca31a8e4f6b3fb06bbc3814a88273c3ec5be1d.png" src="_images/5b4e89ad77db8e79b9722ebde9ca31a8e4f6b3fb06bbc3814a88273c3ec5be1d.png" />
 </div>
 </div>
 </section>
@@ -1026,7 +1027,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/124017608137545817124d19a86ad834df8053d7f44fd1323cc15cc2ef141ccd.png" src="_images/124017608137545817124d19a86ad834df8053d7f44fd1323cc15cc2ef141ccd.png" />
+<img alt="_images/16aa7957c67b052ea4243f66caa082d41f4a25b1839e19cbb3de7b00c55c0eff.png" src="_images/16aa7957c67b052ea4243f66caa082d41f4a25b1839e19cbb3de7b00c55c0eff.png" />
 </div>
 </div>
 </section>
@@ -1139,7 +1140,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/e0f90bfe1b3279bb9d9fdd56312948d74fb8b7d587f18620b767ddba07994a13.png" src="_images/e0f90bfe1b3279bb9d9fdd56312948d74fb8b7d587f18620b767ddba07994a13.png" />
+<img alt="_images/fe845577ba4297fe557cfeb8d38d35c63fee65b271d5f0380638b10672eb8d2e.png" src="_images/fe845577ba4297fe557cfeb8d38d35c63fee65b271d5f0380638b10672eb8d2e.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1156,7 +1157,7 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/17abba927bc3d6b92b3c5da6ebb606160e15a4fccbea2bc8200b534c330dd402.png" src="_images/17abba927bc3d6b92b3c5da6ebb606160e15a4fccbea2bc8200b534c330dd402.png" />
+<img alt="_images/b6364759c4b8adfceae3e9e13275889debbdf557f4cc1f03c93c4a8a65783a89.png" src="_images/b6364759c4b8adfceae3e9e13275889debbdf557f4cc1f03c93c4a8a65783a89.png" />
 </div>
 </div>
 </section>
@@ -1193,12 +1194,12 @@ Calculating Sigma_SFR with the tigress-ncr-decomp feedback yield model
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="prfm_sims.html"
+       href="eos_sims.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">High-resolution Simulation Results and PRFM Theory</p>
+        <p class="prev-next-title">Effective Equation of State from TIGRESS-classic and TIGRESS-NCR</p>
       </div>
     </a>
     <a class="right-next"
