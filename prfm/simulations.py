@@ -309,8 +309,14 @@ def add_ncr_sim(data, xf="Ptot", yf="SFR", ms=5, legend=4):
 
 
 def add_PSFR_model_line(
-    Wmin=2, Wmax=8, Z=None, labels=True, model="tigress-classic",
-    log_x=True, log_y=True, **kwargs
+    Wmin=2,
+    Wmax=8,
+    Z=None,
+    labels=True,
+    model="tigress-classic",
+    log_x=True,
+    log_y=True,
+    **kwargs,
 ):
     """Overlay a single P_DE–SFR model line on the current axes.
 
@@ -924,7 +930,7 @@ def get_log_errorbars(log_mean, log_std, base=10):
     log_std = np.asarray(log_std)
 
     # 1. Transform back to linear space
-    y_center = base ** log_mean
+    y_center = base**log_mean
 
     # 2. Calculate the absolute bounds in linear space
     lower_bound = base ** (log_mean - log_std)

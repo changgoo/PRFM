@@ -40,28 +40,28 @@ NO_SUFFIX: set[str] = {
 # ---------------------------------------------------------------------------
 
 COLUMN_LABELS: dict[str, str] = {
-    "r_gal":               r"$r_\mathrm{gal}$ [kpc]",
-    "Sigma_mol":           r"$\Sigma_\mathrm{mol}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
-    "Sigma_atom":          r"$\Sigma_\mathrm{atom}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
-    "Sigma_gas":           r"$\Sigma_\mathrm{gas}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
-    "Sigma_star":          r"$\Sigma_\star$ [$M_\odot\,\mathrm{pc}^{-2}$]",
-    "rho_star_mp":         r"$\rho_\star$ [$M_\odot\,\mathrm{pc}^{-3}$]",
-    "H_star":              r"$H_\star$ [pc]",
-    "V_circ_CO21_URC":     r"$V_\mathrm{circ}$ [km s$^{-1}$]",
-    "Omega_d":             r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",
-    "Zprime":              r"$Z'$ [$Z_\odot$]",
+    "r_gal": r"$r_\mathrm{gal}$ [kpc]",
+    "Sigma_mol": r"$\Sigma_\mathrm{mol}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
+    "Sigma_atom": r"$\Sigma_\mathrm{atom}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
+    "Sigma_gas": r"$\Sigma_\mathrm{gas}$ [$M_\odot\,\mathrm{pc}^{-2}$]",
+    "Sigma_star": r"$\Sigma_\star$ [$M_\odot\,\mathrm{pc}^{-2}$]",
+    "rho_star_mp": r"$\rho_\star$ [$M_\odot\,\mathrm{pc}^{-3}$]",
+    "H_star": r"$H_\star$ [pc]",
+    "V_circ_CO21_URC": r"$V_\mathrm{circ}$ [km s$^{-1}$]",
+    "Omega_d": r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",
+    "Zprime": r"$Z'$ [$Z_\odot$]",
     "Sigma_SFR_HaW4recal": r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha+W4}$"
-                           r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
-    "Sigma_SFR_FUVW4recal":r"$\Sigma_\mathrm{SFR}^\mathrm{FUV+W4}$"
-                           r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
-    "Sigma_SFR_Hacorr":    r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha,corr}$"
-                           r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
-    "alpha_CO21_S20":      r"$\alpha_\mathrm{CO}$ [$M_\odot\,\mathrm{pc}^{-2}\,(\mathrm{K\,km\,s}^{-1})^{-1}$]",
-    "P_weight":            r"$P_\mathrm{DE}/k_B$ [K cm$^{-3}$]",
-    "H_gas":               r"$H_\mathrm{gas}$ [pc]",
-    "sigma_eff_sol":       r"$\sigma_\mathrm{eff}$ [km s$^{-1}$]",
-    "Sigma_SFR_pred":      r"$\Sigma_\mathrm{SFR}^\mathrm{pred}$"
-                           r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
+    r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
+    "Sigma_SFR_FUVW4recal": r"$\Sigma_\mathrm{SFR}^\mathrm{FUV+W4}$"
+    r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
+    "Sigma_SFR_Hacorr": r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha,corr}$"
+    r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
+    "alpha_CO21_S20": r"$\alpha_\mathrm{CO}$ [$M_\odot\,\mathrm{pc}^{-2}\,(\mathrm{K\,km\,s}^{-1})^{-1}$]",
+    "P_weight": r"$P_\mathrm{DE}/k_B$ [K cm$^{-3}$]",
+    "H_gas": r"$H_\mathrm{gas}$ [pc]",
+    "sigma_eff_sol": r"$\sigma_\mathrm{eff}$ [km s$^{-1}$]",
+    "Sigma_SFR_pred": r"$\Sigma_\mathrm{SFR}^\mathrm{pred}$"
+    r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
 }
 
 
@@ -395,14 +395,30 @@ def scatter_plot(
             xerr = None if ex is None else get_symmetric_log_errorbars(xm, ex[mask])
             yerr = None if ey is None else get_symmetric_log_errorbars(ym, ey[mask])
             ax.errorbar(
-                xm, ym,
-                xerr=xerr, yerr=yerr,
-                fmt="o", ms=np.sqrt(s), color=color, alpha=alpha,
-                elinewidth=0.5, capsize=0, zorder=zorder, rasterized=True,
+                xm,
+                ym,
+                xerr=xerr,
+                yerr=yerr,
+                fmt="o",
+                ms=np.sqrt(s),
+                color=color,
+                alpha=alpha,
+                elinewidth=0.5,
+                capsize=0,
+                zorder=zorder,
+                rasterized=True,
             )
         else:
-            ax.scatter(xm, ym, s=s, color=color, alpha=alpha,
-                       zorder=zorder, rasterized=True, linewidths=0)
+            ax.scatter(
+                xm,
+                ym,
+                s=s,
+                color=color,
+                alpha=alpha,
+                zorder=zorder,
+                rasterized=True,
+                linewidths=0,
+            )
 
     if log_x:
         ax.set_xscale("log")
@@ -527,14 +543,28 @@ def hist_plot(
     n_total = len(v_all)
 
     pdf_all = _pdf_step(v_all, edges, n_total, log=log)
-    ax.step(edges[:-1], pdf_all, where="post",
-            color=bg_color, alpha=bg_alpha, label="all", zorder=1)
+    ax.step(
+        edges[:-1],
+        pdf_all,
+        where="post",
+        color=bg_color,
+        alpha=bg_alpha,
+        label="all",
+        zorder=1,
+    )
 
     for i, (mask, color, label) in enumerate(slices):
         if mask.any():
             pdf_sel = _pdf_step(v[mask], edges, n_total, log=log)
-            ax.step(edges[:-1], pdf_sel, where="post",
-                    color=color, alpha=sel_alpha, zorder=2 + i, label=label)
+            ax.step(
+                edges[:-1],
+                pdf_sel,
+                where="post",
+                color=color,
+                alpha=sel_alpha,
+                zorder=2 + i,
+                label=label,
+            )
 
     if slices:
         ax.legend(fontsize="small")
@@ -589,11 +619,7 @@ def _parse_slices(
             else [float(raw_val)]
         )
         n = len(vals)
-        colors = (
-            [sel_color]
-            if n == 1
-            else [plt.cm.tab10(i / 10) for i in range(n)]
-        )
+        colors = [sel_color] if n == 1 else [plt.cm.tab10(i / 10) for i in range(n)]
         sym = COLUMN_LABELS.get(scol, scol).split("[")[0].strip()
         sv = np.asarray(table[scol], dtype=float)
         for val, color in zip(vals, colors):
@@ -604,6 +630,7 @@ def _parse_slices(
             results.append((mask, color, label))
         break  # one slice column supported
     return results
+
 
 def get_symmetric_log_errorbars(
     linear_mean: np.ndarray,
@@ -650,6 +677,7 @@ def get_symmetric_log_errorbars(
 
     return [yerr_lower, yerr_upper]
 
+
 def plot_weights(
     tbl: "Table",
     ax: "plt.Axes | None" = None,
@@ -680,28 +708,31 @@ def plot_weights(
     from prfm.phangs import get_weights
 
     f_gas, f_star, f_dm = get_weights(tbl, variation=variation)
-    P_DE = np.asarray(tbl["P_weight"], dtype=float)   # k_B K cm^-3
+    P_DE = np.asarray(tbl["P_weight"], dtype=float)  # k_B K cm^-3
 
     if ax is None:
         fig, ax = plt.subplots(figsize=(5, 3.5))
     else:
         fig = ax.figure
     kw = dict(s=2, alpha=0.5, rasterized=True, linewidths=0)
-    ax.scatter(P_DE, f_gas,  color="tab:blue",   **kw)
+    ax.scatter(P_DE, f_gas, color="tab:blue", **kw)
     ax.scatter(P_DE, f_star, color="tab:orange", **kw)
-    ax.scatter(P_DE, f_dm,   color="tab:green",  **kw)
+    ax.scatter(P_DE, f_dm, color="tab:green", **kw)
 
     # Binned means
-    P_edges = np.logspace(np.log10(np.nanpercentile(P_DE, 1)),
-                        np.log10(np.nanpercentile(P_DE, 99)), 20)
-    P_centers = np.sqrt(P_edges[:-1] * P_edges[1:])   # geometric mid-points
+    P_edges = np.logspace(
+        np.log10(np.nanpercentile(P_DE, 1)), np.log10(np.nanpercentile(P_DE, 99)), 20
+    )
+    P_centers = np.sqrt(P_edges[:-1] * P_edges[1:])  # geometric mid-points
     for f, color, label in [
-        (f_gas,  "tab:blue",   r"$f_\mathrm{gas}$"),
+        (f_gas, "tab:blue", r"$f_\mathrm{gas}$"),
         (f_star, "tab:orange", r"$f_\star$"),
-        (f_dm,   "tab:green",  r"$f_\mathrm{DM}$"),
+        (f_dm, "tab:green", r"$f_\mathrm{DM}$"),
     ]:
-        means = [np.nanmean(f[(P_DE >= lo) & (P_DE < hi)])
-                for lo, hi in zip(P_edges[:-1], P_edges[1:])]
+        means = [
+            np.nanmean(f[(P_DE >= lo) & (P_DE < hi)])
+            for lo, hi in zip(P_edges[:-1], P_edges[1:])
+        ]
         ax.plot(P_centers, means, color=color, lw=2, label=label)
 
     n_valid = np.isfinite(P_DE).sum()
@@ -710,7 +741,14 @@ def plot_weights(
     ax.set_ylabel(r"$\mathcal{W}_i\,/\,\mathcal{W}_\mathrm{tot}$")
     ax.set_ylim(0, 1)
     ax.legend(markerscale=5)
-    ax.annotate(f"N={n_valid}", xy=(0.97, 0.97), xycoords="axes fraction",
-                ha="right", va="top", fontsize="x-small", color="0.4")
+    ax.annotate(
+        f"N={n_valid}",
+        xy=(0.97, 0.97),
+        xycoords="axes fraction",
+        ha="right",
+        va="top",
+        fontsize="x-small",
+        color="0.4",
+    )
     fig.tight_layout()
     return fig

@@ -18,8 +18,12 @@ _kms_cgs = (1 * au.km / au.s).cgs.value
 _sigma_avg_min_default = 10
 _sigma_mid_min_default = 7
 _sigma_eff_models = dict()
-_sigma_eff_models["tigress-classic-mid"] = dict(sigma_0=9.8, expo=0.15, sigma_min=_sigma_mid_min_default)
-_sigma_eff_models["tigress-classic-avg"] = dict(sigma_0=12, expo=0.22, sigma_min=_sigma_avg_min_default)
+_sigma_eff_models["tigress-classic-mid"] = dict(
+    sigma_0=9.8, expo=0.15, sigma_min=_sigma_mid_min_default
+)
+_sigma_eff_models["tigress-classic-avg"] = dict(
+    sigma_0=12, expo=0.22, sigma_min=_sigma_avg_min_default
+)
 _sigma_eff_models["tigress-ncr-mid"] = dict(
     sigma_0=8.9, expo=0.08, expo_Z=-0.005, sigma_min=_sigma_mid_min_default
 )
@@ -28,8 +32,12 @@ _sigma_eff_models["tigress-ncr-avg"] = dict(
 )
 
 _sigma_eff_n_models = dict()
-_sigma_eff_n_models["tigress-classic-mid"] = dict(sigma_0=10.9, expo=0.2, sigma_min=_sigma_mid_min_default)
-_sigma_eff_n_models["tigress-classic-avg"] = dict(sigma_0=17, expo=0.4, sigma_min=_sigma_avg_min_default)
+_sigma_eff_n_models["tigress-classic-mid"] = dict(
+    sigma_0=10.9, expo=0.2, sigma_min=_sigma_mid_min_default
+)
+_sigma_eff_n_models["tigress-classic-avg"] = dict(
+    sigma_0=17, expo=0.4, sigma_min=_sigma_avg_min_default
+)
 _sigma_eff_n_models["tigress-ncr-mid"] = dict(
     sigma_0=9.2, expo=0.1, sigma_min=_sigma_mid_min_default
 )
@@ -250,24 +258,32 @@ def get_weights(
     w_star = Sigma_star is not None
     w_dm = Omega_d is not None
     H_gas = get_scale_height(
-        Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=zeta_d, method=method,
-        wgas=w_gas, wstar=w_star, wdm=w_dm,
+        Sigma_gas,
+        Sigma_star,
+        Omega_d,
+        H_star,
+        sigma_eff,
+        zeta_d=zeta_d,
+        method=method,
+        wgas=w_gas,
+        wstar=w_star,
+        wdm=w_dm,
     )
 
     if w_gas:
         W_gas = get_weight_gas(Sigma_gas)
     else:
-        W_gas = 0.
+        W_gas = 0.0
 
     if w_star:
         W_star = get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)
     else:
-        W_star = 0.
+        W_star = 0.0
 
     if w_dm:
         W_dm = get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d=zeta_d)
     else:
-        W_dm = 0.
+        W_dm = 0.0
 
     return H_gas, W_gas, W_star, W_dm
 
@@ -599,6 +615,7 @@ def get_sigma_eff(
         veld *= Z ** sigma_eff_model["expo_Z"]
     return np.clip(veld, sigma_min, None) * 1.0e5
 
+
 def get_sigma_eff_n(nH, Z=None, model="tigress-classic-mid"):
     """density-dependent velocity dispersion model"""
     sigma_eff_model = _sigma_eff_n_models[model]
@@ -606,24 +623,27 @@ def get_sigma_eff_n(nH, Z=None, model="tigress-classic-mid"):
     expo = sigma_eff_model["expo"]
     sigma_min = sigma_eff_model["sigma_min"]
 
-    veld = sigma_0 * nH ** expo
+    veld = sigma_0 * nH**expo
     if (Z is not None) and ("expo_Z" in sigma_eff_model):
         veld *= Z ** sigma_eff_model["expo_Z"]
     return np.clip(veld, sigma_min, None) * 1.0e5
+
 
 def get_Peff_n(nH, Z=None, model="tigress-classic-mid"):
     """effective equation of state"""
     eos_model = _eos_models[model]
     P0 = eos_model["P0"]
     expo = eos_model["expo"]
-    P = P0 * nH ** expo
-    return P*_kbol_cgs
+    P = P0 * nH**expo
+    return P * _kbol_cgs
+
 
 def get_Peff_sigma(nH, Z=None, model="tigress-classic-mid"):
     """effective equation of state"""
     sigma_eff = get_sigma_eff_n(nH, Z=Z, model=model)
     rho = nH * 1.4 * _mh_cgs
     return sigma_eff**2 * rho
+
 
 def get_feedback_yield(
     P: np.ndarray,
