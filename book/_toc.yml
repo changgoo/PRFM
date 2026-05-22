@@ -14,6 +14,7 @@ parts:
     chapters:
     - file: prfm
     - file: prfm_sims
+    - file: eos_sims
     - file: prfm_tng
     - file: prfm_phangs
   - caption: Code package

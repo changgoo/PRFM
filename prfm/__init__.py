@@ -14,6 +14,9 @@ from prfm.prfm import (
     get_pressure,
     get_self_consistent_solution,
     get_sigma_eff,
+    get_sigma_eff_n,
+    get_Peff_n,
+    get_Peff_sigma,
     PRFM,
 )
 
@@ -30,6 +33,9 @@ __all__ = [
     "get_pressure",
     "get_self_consistent_solution",
     "get_sigma_eff",
+    "get_sigma_eff_n",
+    "get_Peff_n",
+    "get_Peff_sigma",
     "PRFM",
     "simulations",
     "phangs",
