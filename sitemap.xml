@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://localhost:3000/sitemap_style.xsl" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://localhost:3000</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/vertical-de</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/feedback-yield</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/equation-of-state</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/reference</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/prfm</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/prfm-sims</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/eos-sims</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/prfm-tng</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/prfm-phangs</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/api</loc>
+  </url>
+</urlset>
