@@ -23,6 +23,7 @@ project:
       children:
         - file: book/prfm
         - file: book/prfm_sims
+        - file: book/eos_sims
         - file: book/prfm_tng
         - file: book/prfm_phangs
     - title: Code package

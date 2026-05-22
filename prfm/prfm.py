@@ -8,21 +8,40 @@ from scipy.optimize import brentq
 _Gconst_cgs = ac.G.cgs.value
 _pc_cgs = ac.pc.cgs.value
 _kbol_cgs = ac.k_B.cgs.value
+_mh_cgs = ac.m_p.cgs.value
 
 _surf_cgs = (ac.M_sun / ac.pc**2).cgs.value
 _rho_cgs = (ac.M_sun / ac.pc**3).cgs.value
 _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value
 _kms_cgs = (1 * au.km / au.s).cgs.value
 
+_sigma_avg_min_default = 10
+_sigma_mid_min_default = 7
 _sigma_eff_models = dict()
-_sigma_eff_models["tigress-classic-mid"] = dict(sigma_0=9.8, expo=0.15, sigma_min=5)
-_sigma_eff_models["tigress-classic-avg"] = dict(sigma_0=12, expo=0.22, sigma_min=5)
+_sigma_eff_models["tigress-classic-mid"] = dict(sigma_0=9.8, expo=0.15, sigma_min=_sigma_mid_min_default)
+_sigma_eff_models["tigress-classic-avg"] = dict(sigma_0=12, expo=0.22, sigma_min=_sigma_avg_min_default)
 _sigma_eff_models["tigress-ncr-mid"] = dict(
-    sigma_0=8.9, expo=0.08, expo_Z=-0.005, sigma_min=5
+    sigma_0=8.9, expo=0.08, expo_Z=-0.005, sigma_min=_sigma_mid_min_default
 )
 _sigma_eff_models["tigress-ncr-avg"] = dict(
-    sigma_0=11.7, expo=0.12, expo_Z=-0.03, sigma_min=5
+    sigma_0=11.7, expo=0.12, expo_Z=-0.03, sigma_min=_sigma_avg_min_default
 )
+
+_sigma_eff_n_models = dict()
+_sigma_eff_n_models["tigress-classic-mid"] = dict(sigma_0=10.9, expo=0.2, sigma_min=_sigma_mid_min_default)
+_sigma_eff_n_models["tigress-classic-avg"] = dict(sigma_0=17, expo=0.4, sigma_min=_sigma_avg_min_default)
+_sigma_eff_n_models["tigress-ncr-mid"] = dict(
+    sigma_0=9.2, expo=0.1, sigma_min=_sigma_mid_min_default
+)
+_sigma_eff_n_models["tigress-ncr-avg"] = dict(
+    sigma_0=13.4, expo=0.16, sigma_min=_sigma_avg_min_default
+)
+
+_eos_models = dict()
+_eos_models["tigress-classic-mid"] = dict(P0=2.0e4, expo=1.43)
+_eos_models["tigress-classic-avg"] = dict(P0=5.0e4, expo=1.8)
+_eos_models["tigress-ncr-mid"] = dict(P0=1.4e4, expo=1.2)
+_eos_models["tigress-ncr-avg"] = dict(P0=3.1e4, expo=1.3)
 
 _yield_models = dict()
 # TIGRESS-NCR: Ostriker & Kim 2022
@@ -580,6 +599,31 @@ def get_sigma_eff(
         veld *= Z ** sigma_eff_model["expo_Z"]
     return np.clip(veld, sigma_min, None) * 1.0e5
 
+def get_sigma_eff_n(nH, Z=None, model="tigress-classic-mid"):
+    """density-dependent velocity dispersion model"""
+    sigma_eff_model = _sigma_eff_n_models[model]
+    sigma_0 = sigma_eff_model["sigma_0"]
+    expo = sigma_eff_model["expo"]
+    sigma_min = sigma_eff_model["sigma_min"]
+
+    veld = sigma_0 * nH ** expo
+    if (Z is not None) and ("expo_Z" in sigma_eff_model):
+        veld *= Z ** sigma_eff_model["expo_Z"]
+    return np.clip(veld, sigma_min, None) * 1.0e5
+
+def get_Peff_n(nH, Z=None, model="tigress-classic-mid"):
+    """effective equation of state"""
+    eos_model = _eos_models[model]
+    P0 = eos_model["P0"]
+    expo = eos_model["expo"]
+    P = P0 * nH ** expo
+    return P*_kbol_cgs
+
+def get_Peff_sigma(nH, Z=None, model="tigress-classic-mid"):
+    """effective equation of state"""
+    sigma_eff = get_sigma_eff_n(nH, Z=Z, model=model)
+    rho = nH * 1.4 * _mh_cgs
+    return sigma_eff**2 * rho
 
 def get_feedback_yield(
     P: np.ndarray,
