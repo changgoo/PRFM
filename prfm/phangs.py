@@ -335,8 +335,10 @@ def compute_prfm_inputs(table):
         Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``
         [M_sun / pc^2].  Added only when both ``e_Sigma_mol`` and
         ``e_Sigma_atom`` are present.
-    ``Omega_d``
+    ``Omega``
         Angular velocity = ``V_circ_CO21_URC / r_gal`` [km / s / kpc].
+    ``qshear``
+        Dimensionless shear parameter = ``1 - beta_CO21_URC``.
     ``H_star``
         Stellar scale height = ``Sigma_star / (2 * rho_star_mp)`` [pc].
 
@@ -381,8 +383,19 @@ def compute_prfm_inputs(table):
 
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
     r_gal = t["r_gal"].to(au.kpc)
-    t["Omega_d"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
-    t["Omega_d"].description = "Angular velocity V_circ / r_gal"
+    t["Omega"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
+    t["Omega"].description = "Angular velocity V_circ / r_gal"
+    # Backward-compatible alias for PRFM routines and older notebooks.
+    t["Omega_d"] = t["Omega"]
+    t["Omega_d"].description = "Deprecated alias for Omega"
+
+    if "beta_CO21_URC" in t.colnames:
+        beta = np.asarray(t["beta_CO21_URC"], dtype=float)
+        t["qshear"] = 1.0 - beta
+        t["qshear"].description = "Shear parameter q = 1 - beta_CO21_URC"
+        if "e_beta_CO21_URC" in t.colnames:
+            t["e_qshear"] = np.asarray(t["e_beta_CO21_URC"], dtype=float)
+            t["e_qshear"].description = "Uncertainty on qshear from beta_CO21_URC"
 
     Sigma_star = t["Sigma_star"].to(au.M_sun / au.pc**2)
     rho_star = t["rho_star_mp"].to(au.M_sun / au.pc**3)
@@ -436,7 +449,7 @@ _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value  # M_sun/kpc²/yr → g/cm²
 
 def run_prfm(
     table: Table,
-    prfm_cols: Optional[str] = ["Sigma_gas", "Sigma_star", "Omega_d", "H_star"],
+    prfm_cols: Optional[str] = ["Sigma_gas", "Sigma_star", "Omega", "H_star"],
     sigma_eff_model: str = "tigress-ncr-avg",
     yield_model: str = "tigress-ncr-decomp-all",
     zprime_col: Optional[str] = "Zprime",
@@ -505,19 +518,21 @@ def run_prfm(
         # Extract valid rows and convert to CGS
         sg = np.asarray(t["Sigma_gas"][mask], dtype=float) * _surf_cgs
         ss = np.asarray(t["Sigma_star"][mask], dtype=float) * _surf_cgs
-        if "Omega_d" in prfm_cols:
-            od = np.asarray(t["Omega_d"][mask], dtype=float) * _kms_kpc_cgs
+        omega_col = "Omega" if "Omega" in prfm_cols else "Omega_d"
+        if omega_col in prfm_cols:
+            od = np.asarray(t[omega_col][mask], dtype=float) * _kms_kpc_cgs
         else:
             od = None
         hs = np.asarray(t["H_star"][mask], dtype=float) * _pc_cgs
 
         if variation is not None:
-            if "Omega_d" in variation:
-                print("Applying variation: setting Omega_d to", variation["Omega_d"])
-                if variation["Omega_d"] is None:
+            if "Omega" in variation or "Omega_d" in variation:
+                omega_variation = variation.get("Omega", variation.get("Omega_d"))
+                print("Applying variation: setting Omega to", omega_variation)
+                if omega_variation is None:
                     od = None
                 else:
-                    od *= variation["Omega_d"]
+                    od *= omega_variation
 
             if "Sigma_star" in variation:
                 print(
@@ -571,7 +586,7 @@ def get_weights(
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Return fractional weight contributions (f_gas, f_star, f_DM) for each row.
 
-    Requires ``Sigma_gas``, ``Sigma_star``, ``Omega_d``, ``H_star``, and
+    Requires ``Sigma_gas``, ``Sigma_star``, ``Omega``, ``H_star``, and
     ``sigma_eff_sol`` columns to be present (i.e. after calling
     :func:`compute_prfm_inputs` and :func:`run_prfm`).
 
@@ -581,7 +596,7 @@ def get_weights(
         PHANGS table with PRFM solution columns.
     variation : dict or None, optional
         Override dictionary applied before computing weights.  Supported keys:
-        ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by
+        ``"Omega"`` or ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by
         a scalar), ``"Sigma_star"`` (scale factor), ``"H_star"`` (scale factor).
 
     Returns
@@ -597,17 +612,19 @@ def get_weights(
 
     sg = np.asarray(table["Sigma_gas"], dtype=float) * _surf_cgs
     ss = np.asarray(table["Sigma_star"], dtype=float) * _surf_cgs
-    od = np.asarray(table["Omega_d"], dtype=float) * _kms_kpc_cgs
+    omega_col = "Omega" if "Omega" in table.colnames else "Omega_d"
+    od = np.asarray(table[omega_col], dtype=float) * _kms_kpc_cgs
     hs = np.asarray(table["H_star"], dtype=float) * _pc_cgs
     se = np.asarray(table["sigma_eff_sol"], dtype=float) * 1e5  # km/s → cm/s
 
     if variation is not None:
-        if "Omega_d" in variation:
-            print("Applying variation: setting Omega_d to", variation["Omega_d"])
-            if variation["Omega_d"] is None:
+        if "Omega" in variation or "Omega_d" in variation:
+            omega_variation = variation.get("Omega", variation.get("Omega_d"))
+            print("Applying variation: setting Omega to", omega_variation)
+            if omega_variation is None:
                 od = None
             else:
-                od *= variation["Omega_d"]
+                od *= omega_variation
 
         if "Sigma_star" in variation:
             print("Applying variation: scaling Sigma_star by", variation["Sigma_star"])

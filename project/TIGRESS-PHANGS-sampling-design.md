@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The sampling step defines which TIGRESS-NCR simulations should be run first. Its role is to turn the PHANGS aperture-level observations into a compact, physically valid, and inference-useful set of local ISM environments.
+The sampling step defines which TIGRESS-NCR simulations should be run first. Its role is to turn the PHANGS aperture-level observations into a compact, physically valid, and inference-useful set of local ISM environments. The goal is not to reproduce the PHANGS sample exactly. The goal is to define an informed prior over simulation input environments that respects the main observed correlations and avoids implausible combinations in a large parameter space.
 
 The design is motivated by the same logic as CAMELS: construct a structured simulation suite that spans physically relevant parameters, supports emulator and ILI training, and can be compared directly with observations. For this project, the target is not cosmological parameter inference, but local star-forming ISM inference: given observed PHANGS environments and observables, infer which TIGRESS/PRFM physical parameters reproduce the observed gas, star formation, pressure, and feedback statistics.
 
@@ -11,7 +11,7 @@ The design is motivated by the same logic as CAMELS: construct a structured simu
 Let each PHANGS aperture be represented by a vector
 
 ```text
-x = (Sigma_gas, Sigma_atom, Sigma_mol, Sigma_star, H_star, Omega_d, y)
+x = (Sigma_gas, Sigma_atom, Sigma_mol, Sigma_star, H_star, Omega, qshear, y)
 ```
 
 where `y` denotes one or more SFR tracers, for example
@@ -20,19 +20,19 @@ where `y` denotes one or more SFR tracers, for example
 y in {Sigma_SFR_HaW4recal, Sigma_SFR_FUVW4recal, Sigma_SFR_Hacorr}.
 ```
 
-The first sampling objective is conditional on total gas surface density:
+The first sampling objective is conditional on total gas surface density, but it should be interpreted as an informed-prior construction rather than exact observational resampling:
 
 ```text
 x ~ p(x | log10 Sigma_gas in [log10 Sigma_gas,target - Delta,
                               log10 Sigma_gas,target + Delta]).
 ```
 
-This isolates local environments at approximately fixed gas surface density, then samples the remaining environmental degrees of freedom that enter TIGRESS-NCR initial conditions.
+This isolates local environments at approximately fixed gas surface density, then samples the remaining environmental degrees of freedom that enter TIGRESS-NCR initial conditions. The sampler should preserve enough of the observed covariance structure to choose realistic simulation inputs, while still covering the parameter space broadly enough for emulator and ILI development.
 
 The main simulation-design environmental parameters are
 
 ```text
-theta_design = (Sigma_gas, Sigma_star, H_star, Omega_d).
+theta_design = (Sigma_gas, Sigma_star, H_star, Omega, qshear).
 ```
 
 Gas phase information is retained for validation through
@@ -47,8 +47,8 @@ For the current TIGRESS-NCR setup, `f_mol`, `Sigma_atom`, and `Sigma_mol` should
 The TIGRESS-NCR input mapping is approximately
 
 ```text
-(Sigma_gas, Sigma_star, H_star, Omega_d) ->
-(Sigma, Sigma_star, z_star, Omega, rho_dm),
+(Sigma_gas, Sigma_star, H_star, Omega, qshear) ->
+(Sigma, Sigma_star, z_star, Omega, rho_dm, qshear),
 ```
 
 where the precise mapping must be documented in the simulation setup layer.
@@ -60,7 +60,7 @@ The sampling workflow should distinguish between fields that define simulation i
 Simulation-design fields:
 
 ```text
-D = (Sigma_gas, Sigma_star, H_star, Omega_d).
+D = (Sigma_gas, Sigma_star, H_star, Omega, qshear).
 ```
 
 Validation fields:
@@ -127,16 +127,17 @@ Sigma_gas  > 0,
 Sigma_atom > 0,
 Sigma_star > 0,
 H_star     > 0,
-Omega_d    > 0.
+Omega      > 0,
+qshear     > 0.
 ```
 
-The selected reference set is
+The selected reference set defines the empirical support of the informed prior:
 
 ```text
 D_ref = {x_i : M_gas(i) and validity cuts are satisfied}.
 ```
 
-This reference set is the empirical PHANGS distribution against which samples are judged.
+This reference set is the empirical PHANGS distribution against which samples are judged, but fairness should not be interpreted as requiring exact reproduction of the observed sample. For simulation design, fairness is a diagnostic that the proposed prior has not lost important environmental ranges or correlations.
 
 ## Observed-Pixel Latin Hypercube Sampling
 
@@ -145,7 +146,7 @@ The most conservative sampling method selects actual PHANGS pixels. It preserves
 For selected fields
 
 ```text
-theta = (Sigma_star, H_star, Omega_d),
+theta = (Sigma_star, H_star, Omega, qshear),
 ```
 
 first transform each field to log space:
@@ -179,7 +180,7 @@ Advantages:
 - physically observed combinations only;
 - real SFR values are retained;
 - no generative-model assumptions;
-- useful as a baseline.
+- useful as a baseline for checking whether synthetic informed priors remain realistic.
 
 Limitations:
 
@@ -189,7 +190,7 @@ Limitations:
 
 ## Synthetic KDE-LHS Sampling
 
-The synthetic method fits an approximate continuous distribution to the reference pixels, then samples from it. The current backend is a log-space Gaussian KDE with LHS selection from an oversampled KDE candidate pool.
+The synthetic method fits an approximate continuous distribution to the reference pixels, then samples from it. In this project, the fitted distribution should be understood as an informed prior for simulation inputs, not as a claim that the PHANGS sample is measured without selection effects or should be reproduced exactly. The current backend is a log-space Gaussian KDE with LHS selection from an oversampled KDE candidate pool.
 
 Let the fitted vector be
 
@@ -198,7 +199,8 @@ w = (log10 Sigma_gas,
      logit10 f_mol,
      log10 Sigma_star,
      log10 H_star,
-     log10 Omega_d,
+     log10 Omega,
+     log10 qshear,
      log10 y)
 ```
 
@@ -225,6 +227,7 @@ Advantages:
 
 - can generate compact samples much smaller than the observed-pixel sample;
 - supports interpolation between observed environments;
+- tightens the simulation design to plausible correlated parameter combinations;
 - naturally produces emulator/ILI design points;
 - can include SFR or gas phase quantities in the joint fitted distribution for validation diagnostics.
 
@@ -235,10 +238,30 @@ Limitations:
 - complete-case filtering can change the effective target distribution;
 - if only one SFR tracer is fitted, that sampled SFR should not be assumed to represent all SFR tracers.
 
+## Expanded PHANGS-Informed Prior
+
+The simulation design should not treat the finite PHANGS distribution as a hard boundary. Low `Omega` cutoffs, high inferred `H_star`, or limited `qshear` support may reflect selection effects, modeling assumptions, or measurement completeness rather than physical impossibility. The expanded-prior sampler therefore keeps the same transformed KDE and LHS machinery, but broadens the candidate pool in controlled log-space directions.
+
+For example, after fitting the KDE to `w`, define acceptance bounds
+
+```text
+lo_j = Q_j(0.005) - epsilon_j^- ,
+hi_j = Q_j(0.995) + epsilon_j^+ .
+```
+
+The default expansion is asymmetric and deliberately focused on the suspected biased directions:
+
+```text
+epsilon^-_Omega  ~ 0.3 dex,
+epsilon^-_H_star ~ 0.25 dex,
+epsilon^-_qshear ~ 0.15 dex.
+```
+
+The KDE bandwidth can also be inflated modestly. This broadens support while retaining the observed covariance structure better than widening each marginal independently. The expanded sample should be diagnosed separately from the empirical PHANGS sample: disagreement with the observed marginal distribution is acceptable when it reflects an intentional design-prior extension, but unphysical or weakly motivated combinations should still be rejected.
 
 ## Proposed Synthetic Backends
 
-The current KDE-LHS implementation is a useful baseline, but the sampling class should support multiple synthetic backends. The goal is not to choose one method permanently, but to compare how backend assumptions affect the resulting TIGRESS simulation design.
+The current KDE-LHS implementation is a useful baseline, but the sampling class should support multiple synthetic backends. The goal is not to choose one method permanently, but to compare how backend assumptions affect the resulting TIGRESS simulation design and the implied informed prior over environmental parameters.
 
 ### Backend 1: Constrained Gaussian KDE
 
@@ -249,7 +272,8 @@ This is the current implementation. It fits a Gaussian KDE in transformed variab
  logit10 f_mol,
  log10 Sigma_star,
  log10 H_star,
- log10 Omega_d,
+ log10 Omega,
+ log10 qshear,
  log10 y).
 ```
 
@@ -310,7 +334,7 @@ where each `F_j` is an empirical or KDE-smoothed marginal CDF, followed by a mod
 A related option is a conditional SFR model:
 
 ```text
-p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega_d),
+p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega, qshear),
 ```
 
 combined with a separate sampler for the environmental variables. This is useful if the simulation design should sample environments first and treat SFR as an observed validation target rather than as a design coordinate.
@@ -347,7 +371,8 @@ w = (log10 Sigma_gas,
      logit10 f_mol,
      log10 Sigma_star,
      log10 H_star,
-     log10 Omega_d,
+     log10 Omega,
+     log10 qshear,
      log10 y).
 ```
 
@@ -378,22 +403,22 @@ Expected weaknesses:
 A normalizing flow is most attractive after the simpler backends have clarified the failure modes. It may be especially useful for a larger simulation-design stage with many `Sigma_gas` slices, additional environmental variables, or field-level summary statistics. For the current PHANGS sampling problem, a conditional flow may be more useful than an unconditional flow:
 
 ```text
-p(Sigma_star, H_star, Omega_d, f_mol, y | Sigma_gas)
+p(Sigma_star, H_star, Omega, qshear, f_mol, y | Sigma_gas)
 ```
 
 or
 
 ```text
-p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega_d).
+p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega, qshear).
 ```
 
 The first form supports validation-aware simulation-design sampling; the second form directly targets the SFR-bias problem. In both cases, the actual TIGRESS design coordinates should remain the simulation input fields unless the simulation setup changes.
 
 ### Backend Comparison Criteria
 
-Each backend should be evaluated with the same diagnostics:
+Each backend should be evaluated with the same diagnostics. These diagnostics measure whether the informed prior is plausible and useful for simulation design, not whether the finite design sample exactly reproduces PHANGS:
 
-- design-field quantile fairness for `Sigma_gas`, `Sigma_star`, `H_star`, and `Omega_d`;
+- design-field quantile fairness for `Sigma_gas`, `Sigma_star`, `H_star`, `Omega`, and `qshear`;
 - physical gas constraints are exactly satisfied for validation quantities;
 - validation-field fairness for `f_mol`, `Sigma_atom`, `Sigma_mol`, and SFR tracers;
 - SFR quantile fairness for one or multiple SFR tracers;
@@ -401,7 +426,8 @@ Each backend should be evaluated with the same diagnostics:
 - held-out likelihood or posterior-predictive checks where the backend supports density evaluation;
 - sensitivity to `Sigma_gas,target`, `Delta`, and completeness cuts;
 - stability under different random seeds;
-- ability to generate a compact but representative TIGRESS simulation design.
+- ability to generate a compact but representative TIGRESS simulation design;
+- ability to cover the intended simulation parameter volume without wasting runs on implausible environmental combinations.
 
 ## SFR Fields And Complete-Case Bias
 
@@ -489,7 +515,8 @@ For a synthetic point `s`, find nearby observed points using
  logit10 f_mol,
  log10 Sigma_star,
  log10 H_star,
- log10 Omega_d).
+ log10 Omega,
+ log10 qshear).
 ```
 
 Then draw an SFR value from the nearest observed neighbors with weights approximately
@@ -518,14 +545,14 @@ This is important when the sample appears biased. The bias may come from the KDE
 
 ## Recommended Workflow
 
-1. Choose `Sigma_gas,target` and `Delta`.
+1. Choose `Sigma_gas,target` and `Delta` to define the observationally informed prior support.
 2. Inspect the selected PHANGS pixels in the correlation matrix.
 3. Decide which SFR tracer, if any, defines the joint sampling target.
 4. Generate an observed-pixel LHS baseline.
-5. Generate a KDE-LHS synthetic sample.
-6. Verify design-field fairness in `Sigma_gas`, `Sigma_star`, `H_star`, and `Omega_d`.
+5. Generate a KDE-LHS synthetic sample as a candidate simulation-design prior.
+6. Verify design-field fairness in `Sigma_gas`, `Sigma_star`, `H_star`, `Omega`, and `qshear`.
 7. Verify gas phase and SFR validation distributions, paying attention to completeness masks.
-8. Decide whether the sample is intended for interpolation, extrapolation, or inference.
+8. Decide whether the sample is intended for interpolation, extrapolation, or inference, and whether it covers enough of the simulation input volume.
 9. Convert only the design fields into TIGRESS-NCR simulation parameters.
 10. Track validation fields separately from simulation input fields in the design table.
 

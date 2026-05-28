@@ -11,7 +11,7 @@ from astropy.table import Table
 from scipy.spatial import cKDTree
 from scipy.stats import gaussian_kde, qmc
 
-SynthesisMethod = Literal["kde_lhs", "observed_lhs"]
+SynthesisMethod = Literal["kde_lhs", "expanded_kde_lhs", "observed_lhs"]
 
 
 @dataclass
@@ -27,7 +27,7 @@ class SamplingConfig:
         default_factory=lambda: [8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256]
     )
     primary_fields: list[str] = dc_field(
-        default_factory=lambda: ["Sigma_star", "H_star", "Omega_d"]
+        default_factory=lambda: ["Sigma_star", "H_star", "Omega", "qshear"]
     )
     gas_fields: list[str] = dc_field(
         default_factory=lambda: ["Sigma_gas", "Sigma_atom", "Sigma_mol"]
@@ -54,6 +54,12 @@ class SamplingConfig:
     fraction_floor: float = 1.0e-4
     kde_oversample_factor: int = 80
     kde_boundary_quantiles: tuple[float, float] = (0.005, 0.995)
+    kde_bandwidth_factor: float = 1.0
+    expanded_kde_bandwidth_factor: float = 1.5
+    expanded_prior_lower_dex: dict[str, float] = dc_field(
+        default_factory=lambda: {"Omega": 0.3, "H_star": 0.25, "qshear": 0.15}
+    )
+    expanded_prior_upper_dex: dict[str, float] = dc_field(default_factory=dict)
     synthesis_method: SynthesisMethod = "kde_lhs"
 
     def __post_init__(self) -> None:
@@ -135,7 +141,8 @@ class PHANGSSamplingDesigner:
             ("Sigma_SFR_HaW4recal", True),
             ("Sigma_SFR_FUVW4recal", True),
             ("Sigma_SFR_Hacorr", True),
-            ("Omega_d", True),
+            ("Omega", True),
+            ("qshear", True),
             ("H_star", True),
         ]
 
@@ -168,7 +175,7 @@ class PHANGSSamplingDesigner:
         if delta_sigma_gas < 0:
             raise ValueError("delta_sigma_gas must be non-negative")
 
-        required = ["Sigma_gas", "Sigma_atom", "Omega_d", "H_star", "Sigma_star"]
+        required = ["Sigma_gas", "Sigma_atom", *self.config.primary_fields]
         missing = [field for field in required if field not in self.table.colnames]
         if missing:
             raise KeyError(f"Missing required sampling columns: {missing}")
@@ -521,12 +528,29 @@ class PHANGSSamplingDesigner:
         log_df: pd.DataFrame,
         n_candidates: int,
         seed: int,
+        *,
+        bandwidth_factor: float | None = None,
+        lower_padding_dex: dict[str, float] | None = None,
+        upper_padding_dex: dict[str, float] | None = None,
     ) -> pd.DataFrame:
         rng = np.random.default_rng(seed)
         data = log_df.to_numpy(dtype=float)
-        kde = gaussian_kde(data.T)
+        bandwidth_factor = (
+            self.config.kde_bandwidth_factor
+            if bandwidth_factor is None
+            else bandwidth_factor
+        )
+        kde = gaussian_kde(
+            data.T,
+            bw_method=lambda kde_obj: kde_obj.scotts_factor() * bandwidth_factor,
+        )
         lo = np.quantile(data, self.config.kde_boundary_quantiles[0], axis=0)
         hi = np.quantile(data, self.config.kde_boundary_quantiles[1], axis=0)
+        lower_padding_dex = lower_padding_dex or {}
+        upper_padding_dex = upper_padding_dex or {}
+        for j, field in enumerate(log_df.columns):
+            lo[j] -= lower_padding_dex.get(field, 0.0)
+            hi[j] += upper_padding_dex.get(field, 0.0)
 
         chunks = []
         attempts = 0
@@ -598,6 +622,72 @@ class PHANGSSamplingDesigner:
         sample = self._linearize_kde_sample(sample_log)
         sample.attrs["log10_sample"] = sample_log
         sample.attrs["log10_reference"] = reference_log
+        return sample
+
+    def synthesize_expanded_kde_lhs(
+        self,
+        reference: Table,
+        n_samples: int,
+        *,
+        fit_fields: list[str] | None = None,
+        lhs_fields: list[str] | None = None,
+        seed: int | None = None,
+        lower_padding_dex: dict[str, float] | None = None,
+        upper_padding_dex: dict[str, float] | None = None,
+        bandwidth_factor: float | None = None,
+    ) -> pd.DataFrame:
+        """Draw a broadened PHANGS-informed prior sample from a log-space KDE.
+
+        This is intended for simulation design rather than exact resampling of
+        PHANGS pixels. It preserves the fitted covariance structure but allows
+        controlled support expansion, for example toward lower ``Omega`` or
+        lower ``H_star`` where observational selection may truncate the data.
+        """
+        cfg = self.config
+        fit_fields = fit_fields or self.joint_fit_fields
+        lhs_fields = lhs_fields or cfg.primary_fields
+        seed = cfg.random_seed if seed is None else seed
+        lower_padding_dex = (
+            cfg.expanded_prior_lower_dex
+            if lower_padding_dex is None
+            else lower_padding_dex
+        )
+        upper_padding_dex = (
+            cfg.expanded_prior_upper_dex
+            if upper_padding_dex is None
+            else upper_padding_dex
+        )
+        bandwidth_factor = (
+            cfg.expanded_kde_bandwidth_factor
+            if bandwidth_factor is None
+            else bandwidth_factor
+        )
+
+        reference_log = self._kde_log_dataframe(reference, fit_fields)
+        if len(reference_log) < max(20, 2 * len(fit_fields)):
+            raise ValueError(
+                f"Only {len(reference_log)} complete rows for {fit_fields}; KDE is underconstrained"
+            )
+
+        n_candidates = max(cfg.kde_oversample_factor * n_samples, 2000)
+        candidates = self._kde_candidate_pool(
+            reference_log,
+            n_candidates,
+            seed,
+            bandwidth_factor=bandwidth_factor,
+            lower_padding_dex=lower_padding_dex,
+            upper_padding_dex=upper_padding_dex,
+        )
+        sample_log = self._lhs_select_log_candidates(
+            candidates, lhs_fields, n_samples, seed + 1
+        )
+        sample = self._linearize_kde_sample(sample_log)
+        sample.attrs["log10_sample"] = sample_log
+        sample.attrs["log10_reference"] = reference_log
+        sample.attrs["synthesis_method"] = "expanded_kde_lhs"
+        sample.attrs["expanded_prior_lower_dex"] = dict(lower_padding_dex)
+        sample.attrs["expanded_prior_upper_dex"] = dict(upper_padding_dex)
+        sample.attrs["kde_bandwidth_factor"] = bandwidth_factor
         return sample
 
     def _linearize_kde_sample(self, sample_log: pd.DataFrame) -> pd.DataFrame:
@@ -691,6 +781,14 @@ class PHANGSSamplingDesigner:
         method = method or self.config.synthesis_method
         if method == "kde_lhs":
             return self.synthesize_kde_lhs(
+                reference,
+                n_samples,
+                fit_fields=fit_fields,
+                lhs_fields=lhs_fields,
+                seed=seed,
+            )
+        if method == "expanded_kde_lhs":
+            return self.synthesize_expanded_kde_lhs(
                 reference,
                 n_samples,
                 fit_fields=fit_fields,
