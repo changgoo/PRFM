@@ -30,7 +30,9 @@ NO_SUFFIX: set[str] = {
     "alpha_CO21_S20",
     "rho_star_mp",
     "V_circ_CO21_URC",
+    "Omega",
     "Omega_d",
+    "qshear",
     "H_star",
     "Sigma_gas",  # derived by compute_prfm_inputs
 }
@@ -48,7 +50,10 @@ COLUMN_LABELS: dict[str, str] = {
     "rho_star_mp": r"$\rho_\star$ [$M_\odot\,\mathrm{pc}^{-3}$]",
     "H_star": r"$H_\star$ [pc]",
     "V_circ_CO21_URC": r"$V_\mathrm{circ}$ [km s$^{-1}$]",
+    "Omega": r"$\Omega$ [km s$^{-1}$ kpc$^{-1}$]",
     "Omega_d": r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",
+    "qshear": r"$q_\mathrm{shear}$",
+    "beta_CO21_URC": r"$\beta_\mathrm{CO21}$",
     "Zprime": r"$Z'$ [$Z_\odot$]",
     "Sigma_SFR_HaW4recal": r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha+W4}$"
     r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",

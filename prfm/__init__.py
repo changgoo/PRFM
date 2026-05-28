@@ -22,6 +22,7 @@ from prfm.prfm import (
 
 from prfm import simulations
 from prfm import phangs
+from prfm import phangs_sampling
 
 __all__ = [
     "get_scale_height",
@@ -39,4 +40,5 @@ __all__ = [
     "PRFM",
     "simulations",
     "phangs",
+    "phangs_sampling",
 ]
