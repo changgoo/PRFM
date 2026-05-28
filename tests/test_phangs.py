@@ -37,6 +37,8 @@ SYNTHETIC_ECSV = textwrap.dedent("""\
     # datatype:
     # - {name: r_gal, unit: kpc, datatype: float64}
     # - {name: V_circ_CO21_URC, unit: km / s, datatype: float64}
+    # - {name: beta_CO21_URC, datatype: float64}
+    # - {name: e_beta_CO21_URC, datatype: float64}
     # - {name: Sigma_mol, unit: solMass / pc2, datatype: float64}
     # - {name: Sigma_atom, unit: solMass / pc2, datatype: float64}
     # - {name: Sigma_star, unit: solMass / pc2, datatype: float64}
@@ -48,12 +50,12 @@ SYNTHETIC_ECSV = textwrap.dedent("""\
     #   DIST_MPC: 10.0
     #   R25_KPC: 5.0
     # schema: astropy-2.0
-    r_gal V_circ_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
-    1.0 150.0 10.0 5.0 200.0 0.1 0.01 1.0
-    2.0 180.0 8.0 4.0 150.0 0.08 0.008 0.9
-    3.0 200.0 5.0 3.0 100.0 0.05 0.005 0.8
-    4.0 210.0 3.0 2.0 50.0 0.02 0.002 0.7
-    5.0 220.0 1.0 1.5 20.0 0.008 0.001 0.6
+    r_gal V_circ_CO21_URC beta_CO21_URC e_beta_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
+    1.0 150.0 0.0 0.05 10.0 5.0 200.0 0.1 0.01 1.0
+    2.0 180.0 0.1 0.05 8.0 4.0 150.0 0.08 0.008 0.9
+    3.0 200.0 0.2 0.05 5.0 3.0 100.0 0.05 0.005 0.8
+    4.0 210.0 0.3 0.05 3.0 2.0 50.0 0.02 0.002 0.7
+    5.0 220.0 0.4 0.05 1.0 1.5 20.0 0.008 0.001 0.6
 """)
 
 
@@ -132,8 +134,15 @@ class TestLoadTable:
 
     def test_load_has_required_columns(self, synthetic_file):
         t = phangs.load(synthetic_file)
-        for col in ("r_gal", "Sigma_mol", "Sigma_atom", "Sigma_star",
-                    "rho_star_mp", "V_circ_CO21_URC", "Sigma_SFR_HaW4recal"):
+        for col in (
+            "r_gal",
+            "Sigma_mol",
+            "Sigma_atom",
+            "Sigma_star",
+            "rho_star_mp",
+            "V_circ_CO21_URC",
+            "Sigma_SFR_HaW4recal",
+        ):
             assert col in t.colnames, f"Missing column: {col}"
 
     def test_load_preserves_units(self, synthetic_file):
@@ -158,7 +167,7 @@ class TestLoadTable:
 class TestComputePRFMInputs:
     def test_returns_table_with_new_columns(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        for col in ("Sigma_gas", "Omega_d", "H_star"):
+        for col in ("Sigma_gas", "Omega", "Omega_d", "qshear", "H_star"):
             assert col in out.colnames, f"Missing derived column: {col}"
 
     def test_sigma_gas_equals_mol_plus_atom(self, synthetic_table):
@@ -166,25 +175,59 @@ class TestComputePRFMInputs:
         expected = synthetic_table["Sigma_mol"] + synthetic_table["Sigma_atom"]
         np.testing.assert_allclose(out["Sigma_gas"].value, expected.value)
 
-    def test_omega_d_formula(self, synthetic_table):
-        """Omega_d = V_circ / r_gal  (km/s/kpc)"""
+    def test_compute_inputs_accepts_aperture_specific_gas_and_sfr_columns(
+        self, synthetic_table
+    ):
+        t = synthetic_table.copy()
+        t["Sigma_mol_gauss"] = 2.0 * t["Sigma_mol"]
+        t["Sigma_atom_gauss"] = 3.0 * t["Sigma_atom"]
+        t["e_Sigma_mol_gauss"] = 0.1 * t["Sigma_mol_gauss"]
+        t["e_Sigma_atom_gauss"] = 0.1 * t["Sigma_atom_gauss"]
+        t["Sigma_SFR_HaW4recal_gauss"] = 4.0 * t["Sigma_SFR_HaW4recal"]
+
+        out = phangs.compute_prfm_inputs(
+            t,
+            sigma_mol_col="Sigma_mol_gauss",
+            sigma_atom_col="Sigma_atom_gauss",
+            sfr_suffix="_gauss",
+        )
+
+        expected = t["Sigma_mol_gauss"] + t["Sigma_atom_gauss"]
+        np.testing.assert_allclose(out["Sigma_gas"].value, expected.value)
+        np.testing.assert_allclose(out["Sigma_mol"].value, t["Sigma_mol_gauss"].value)
+        np.testing.assert_allclose(out["Sigma_atom"].value, t["Sigma_atom_gauss"].value)
+        np.testing.assert_allclose(
+            out["Sigma_SFR_HaW4recal"].value,
+            t["Sigma_SFR_HaW4recal_gauss"].value,
+        )
+
+    def test_omega_formula(self, synthetic_table):
+        """Omega = V_circ / r_gal  (km/s/kpc)."""
         out = phangs.compute_prfm_inputs(synthetic_table)
-        V = synthetic_table["V_circ_CO21_URC"].value   # km/s
-        r = synthetic_table["r_gal"].value              # kpc
+        V = synthetic_table["V_circ_CO21_URC"].value  # km/s
+        r = synthetic_table["r_gal"].value  # kpc
         expected = V / r
+        np.testing.assert_allclose(out["Omega"].value, expected, rtol=1e-10)
         np.testing.assert_allclose(out["Omega_d"].value, expected, rtol=1e-10)
+
+    def test_qshear_formula(self, synthetic_table):
+        """qshear = 1 - beta_CO21_URC."""
+        out = phangs.compute_prfm_inputs(synthetic_table)
+        expected = 1.0 - synthetic_table["beta_CO21_URC"]
+        np.testing.assert_allclose(out["qshear"], expected, rtol=1e-10)
 
     def test_h_star_formula(self, synthetic_table):
         """H_star = Sigma_star / (2 * rho_star_mp)  [pc]"""
         out = phangs.compute_prfm_inputs(synthetic_table)
-        Ss = synthetic_table["Sigma_star"].value   # M_sun/pc^2
+        Ss = synthetic_table["Sigma_star"].value  # M_sun/pc^2
         rs = synthetic_table["rho_star_mp"].value  # M_sun/pc^3
-        expected = Ss / (2.0 * rs)                 # pc
+        expected = Ss / (2.0 * rs)  # pc
         np.testing.assert_allclose(out["H_star"].value, expected, rtol=1e-10)
 
     def test_units_attached(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
         assert out["Sigma_gas"].unit is not None
+        assert out["Omega"].unit is not None
         assert out["Omega_d"].unit is not None
         assert out["H_star"].unit is not None
 
@@ -196,9 +239,9 @@ class TestComputePRFMInputs:
         out = phangs.compute_prfm_inputs(synthetic_table)
         assert np.all(out["H_star"].value > 0)
 
-    def test_omega_d_positive(self, synthetic_table):
+    def test_omega_positive(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        assert np.all(out["Omega_d"].value > 0)
+        assert np.all(out["Omega"].value > 0)
 
 
 # ---------------------------------------------------------------------------
@@ -208,26 +251,30 @@ class TestComputePRFMInputs:
 
 class TestFiltering:
     def test_valid_rows_removes_nans(self):
-        t = Table({
-            "Sigma_gas": [1.0, float("nan"), 3.0],
-            "Omega_d": [1.0, 2.0, float("nan")],
-            "H_star": [100.0, 200.0, 300.0],
-        })
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d", "H_star"])
+        t = Table(
+            {
+                "Sigma_gas": [1.0, float("nan"), 3.0],
+                "Omega": [1.0, 2.0, float("nan")],
+                "H_star": [100.0, 200.0, 300.0],
+            }
+        )
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == 1
         assert mask[0] is np.bool_(True)
 
     def test_valid_rows_removes_non_positive(self):
-        t = Table({
-            "Sigma_gas": [1.0, 0.0, -1.0, 5.0],
-            "Omega_d": [1.0, 2.0, 3.0, 4.0],
-        })
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d"])
+        t = Table(
+            {
+                "Sigma_gas": [1.0, 0.0, -1.0, 5.0],
+                "Omega": [1.0, 2.0, 3.0, 4.0],
+            }
+        )
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega"])
         assert mask.sum() == 2  # rows 0 and 3
 
     def test_valid_rows_all_good(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega_d", "H_star"])
+        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == len(out)
 
 
@@ -265,12 +312,14 @@ class TestRunPRFM:
     def test_invalid_rows_give_nan(self, synthetic_file, tmp_path):
         """Rows with NaN inputs should produce NaN outputs."""
         import textwrap
+
         ecsv_nan = textwrap.dedent("""\
             # %ECSV 1.0
             # ---
             # datatype:
             # - {name: r_gal, unit: kpc, datatype: float64}
             # - {name: V_circ_CO21_URC, unit: km / s, datatype: float64}
+            # - {name: beta_CO21_URC, datatype: float64}
             # - {name: Sigma_mol, unit: solMass / pc2, datatype: float64}
             # - {name: Sigma_atom, unit: solMass / pc2, datatype: float64}
             # - {name: Sigma_star, unit: solMass / pc2, datatype: float64}
@@ -280,15 +329,16 @@ class TestRunPRFM:
             # meta:
             #   GALAXY: TESTNAN
             # schema: astropy-2.0
-            r_gal V_circ_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
-            1.0 150.0 10.0 5.0 200.0 0.1 0.01 1.0
-            2.0 180.0 nan 4.0 150.0 0.08 0.008 0.9
-            3.0 200.0 nan nan 100.0 0.05 0.005 0.8
+            r_gal V_circ_CO21_URC beta_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp Sigma_SFR_HaW4recal Zprime
+            1.0 150.0 0.0 10.0 5.0 200.0 0.1 0.01 1.0
+            2.0 180.0 0.1 nan 4.0 150.0 0.08 0.008 0.9
+            3.0 200.0 0.2 nan nan 100.0 0.05 0.005 0.8
         """)
         f = tmp_path / "TESTNAN_annulus_0p5kpc.ecsv"
         f.write_text(ecsv_nan)
         t = phangs.load(f)
         import warnings
+
         with warnings.catch_warnings(record=True):
             out = phangs.run_prfm(t)
         assert np.isfinite(out["Sigma_SFR_pred"].value[0])
@@ -326,9 +376,9 @@ class TestRunPRFM:
         phangs.run_prfm(synthetic_table)
         assert list(synthetic_table.colnames) == cols_before
 
-    def test_variation_omega_d_none(self, synthetic_table):
-        """variation={'Omega_d': None} disables rotation term; output still finite."""
-        out = phangs.run_prfm(synthetic_table, variation={"Omega_d": None})
+    def test_variation_omega_none(self, synthetic_table):
+        """variation={'Omega': None} disables rotation term; output still finite."""
+        out = phangs.run_prfm(synthetic_table, variation={"Omega": None})
         assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
 
     def test_variation_sigma_star_scaling(self, synthetic_table):
@@ -345,8 +395,8 @@ class TestRunPRFM:
             out_scaled["P_weight"].value, out_default["P_weight"].value
         )
 
-    def test_prfm_cols_without_omega_d(self, synthetic_table):
-        """prfm_cols without Omega_d (gravity-only) produces finite outputs."""
+    def test_prfm_cols_without_omega(self, synthetic_table):
+        """prfm_cols without Omega (gravity-only) produces finite outputs."""
         out = phangs.run_prfm(
             synthetic_table,
             prfm_cols=["Sigma_gas", "Sigma_star", "H_star"],
