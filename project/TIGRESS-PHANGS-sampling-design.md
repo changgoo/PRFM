@@ -1,0 +1,350 @@
+# PHANGS-Informed Sampling Design For TIGRESS-PHANGS-ILI
+
+## Purpose
+
+The sampling step defines which TIGRESS-NCR simulations should be run first. Its role is to turn the PHANGS aperture-level observations into a compact, physically valid, and inference-useful set of local ISM environments.
+
+The design is motivated by the same logic as CAMELS: construct a structured simulation suite that spans physically relevant parameters, supports emulator and ILI training, and can be compared directly with observations. For this project, the target is not cosmological parameter inference, but local star-forming ISM inference: given observed PHANGS environments and observables, infer which TIGRESS/PRFM physical parameters reproduce the observed gas, star formation, pressure, and feedback statistics.
+
+## Statistical Target
+
+Let each PHANGS aperture be represented by a vector
+
+```text
+x = (Sigma_gas, Sigma_atom, Sigma_mol, Sigma_star, H_star, Omega_d, y)
+```
+
+where `y` denotes one or more SFR tracers, for example
+
+```text
+y in {Sigma_SFR_HaW4recal, Sigma_SFR_FUVW4recal, Sigma_SFR_Hacorr}.
+```
+
+The first sampling objective is conditional on total gas surface density:
+
+```text
+x ~ p(x | log10 Sigma_gas in [log10 Sigma_gas,target - Delta,
+                              log10 Sigma_gas,target + Delta]).
+```
+
+This isolates local environments at approximately fixed gas surface density, then samples the remaining environmental degrees of freedom that enter TIGRESS-NCR initial conditions.
+
+The main environmental parameters are
+
+```text
+theta_env = (Sigma_star, H_star, Omega_d)
+```
+
+with gas phase information retained through
+
+```text
+Sigma_gas = Sigma_atom + Sigma_mol.
+```
+
+The TIGRESS-NCR input mapping is approximately
+
+```text
+(Sigma_gas, Sigma_star, H_star, Omega_d) ->
+(Sigma, Sigma_star, z_star, Omega, rho_dm),
+```
+
+where the precise mapping must be documented in the simulation setup layer.
+
+## Physical Constraints
+
+Gas components must obey
+
+```text
+Sigma_atom >= 0,
+Sigma_mol  >= 0,
+Sigma_atom <= Sigma_gas,
+Sigma_mol  <= Sigma_gas,
+Sigma_atom + Sigma_mol = Sigma_gas.
+```
+
+A naive KDE over `(Sigma_gas, Sigma_atom, Sigma_mol)` can violate these constraints because the three quantities are sampled as correlated but independent coordinates. The current implementation avoids this by transforming the gas variables to
+
+```text
+Sigma_gas,
+f_mol = Sigma_mol / Sigma_gas,
+```
+
+with
+
+```text
+0 <= f_mol <= 1.
+```
+
+For KDE fitting, the molecular fraction is represented by a logit-like transform:
+
+```text
+u = log10(f_mol / (1 - f_mol)).
+```
+
+The inverse transform is
+
+```text
+f_mol = 10^u / (1 + 10^u),
+Sigma_mol  = f_mol Sigma_gas,
+Sigma_atom = Sigma_gas - Sigma_mol.
+```
+
+Small floors are used only for numerical stability when `f_mol` or `Sigma_mol` is zero. Floor values should not be interpreted as physical detections and are excluded from visualization when appropriate.
+
+## Selection Of Reference Pixels
+
+For a target gas surface density `Sigma_gas,target` and a half-width `Delta` in dex, define the mask
+
+```text
+M_gas = |log10 Sigma_gas - log10 Sigma_gas,target| <= Delta.
+```
+
+Additional validity requirements are imposed on the fields needed for sampling:
+
+```text
+Sigma_gas  > 0,
+Sigma_atom > 0,
+Sigma_star > 0,
+H_star     > 0,
+Omega_d    > 0.
+```
+
+The selected reference set is
+
+```text
+D_ref = {x_i : M_gas(i) and validity cuts are satisfied}.
+```
+
+This reference set is the empirical PHANGS distribution against which samples are judged.
+
+## Observed-Pixel Latin Hypercube Sampling
+
+The most conservative sampling method selects actual PHANGS pixels. It preserves observed correlations and attached quantities such as SFR, radius, galaxy identity, and any unmodeled observational systematics.
+
+For selected fields
+
+```text
+theta = (Sigma_star, H_star, Omega_d),
+```
+
+first transform each field to log space:
+
+```text
+z_j = log10 theta_j.
+```
+
+Then convert each dimension to empirical rank coordinates:
+
+```text
+r_ij = rank(z_ij) / N,
+```
+
+where `N` is the number of valid reference pixels. This maps the observed cloud into the unit cube `[0,1]^d` while preserving marginal ranks.
+
+A Latin hypercube design draws `n` target points
+
+```text
+u_k in [0,1]^d,  k = 1,...,n,
+```
+
+with stratification in each dimension. Each LHS point is matched to the nearest available observed point in rank space. The result is an observed-pixel sample
+
+```text
+S_obs subset D_ref.
+```
+
+Advantages:
+
+- physically observed combinations only;
+- real SFR values are retained;
+- no generative-model assumptions;
+- useful as a baseline.
+
+Limitations:
+
+- cannot create new environments between observed points;
+- may require large `n` for fair coverage;
+- rare regions and incomplete SFR tracers can dominate the fairness metric.
+
+## Synthetic KDE-LHS Sampling
+
+The synthetic method fits an approximate continuous distribution to the reference pixels, then samples from it. The current backend is a log-space Gaussian KDE with LHS selection from an oversampled KDE candidate pool.
+
+Let the fitted vector be
+
+```text
+w = (log10 Sigma_gas,
+     logit10 f_mol,
+     log10 Sigma_star,
+     log10 H_star,
+     log10 Omega_d,
+     log10 y)
+```
+
+where `y` is an optional SFR field used for joint sampling.
+
+The KDE model is
+
+```text
+p_hat(w) = (1/N) sum_i K_H(w - w_i),
+```
+
+where `K_H` is a multivariate Gaussian kernel with bandwidth matrix `H` selected by the KDE implementation.
+
+The algorithm is:
+
+1. Fit `p_hat(w)` to complete-case reference pixels.
+2. Draw a large candidate pool from the KDE.
+3. Convert selected LHS fields to empirical rank coordinates.
+4. Select candidates nearest to an LHS design.
+5. Transform back to physical variables.
+6. Reconstruct `Sigma_atom` and `Sigma_mol` from `Sigma_gas` and `f_mol`.
+
+Advantages:
+
+- can generate compact samples much smaller than the observed-pixel sample;
+- supports interpolation between observed environments;
+- naturally produces emulator/ILI design points;
+- can include SFR in the joint fitted distribution.
+
+Limitations:
+
+- KDE can smooth or bias sparse distributions;
+- high-dimensional KDE is data-hungry;
+- complete-case filtering can change the effective target distribution;
+- if only one SFR tracer is fitted, that sampled SFR should not be assumed to represent all SFR tracers.
+
+## SFR Fields And Complete-Case Bias
+
+SFR tracers have different validity masks. For example, the reference set may contain many valid `Sigma_SFR_FUVW4recal` values but far fewer valid `Sigma_SFR_Hacorr` values. A joint KDE fitted with all SFR fields targets
+
+```text
+p(x | all selected SFR fields are valid),
+```
+
+not
+
+```text
+p(x | each field is valid independently).
+```
+
+These distributions can differ substantially.
+
+To avoid an overly restrictive complete-case cut, the current workflow allows one SFR field to be used for joint KDE sampling:
+
+```text
+sfr_fields = "Sigma_SFR_Hacorr"
+```
+
+while comparing the sampled SFR distribution against multiple observed SFR tracers:
+
+```text
+comparison_sfr_fields = [
+    "Sigma_SFR_HaW4recal",
+    "Sigma_SFR_FUVW4recal",
+    "Sigma_SFR_Hacorr",
+]
+```
+
+This makes the interpretation explicit: the sample contains one synthetic SFR variable, and the plots ask whether that synthetic distribution resembles each observed tracer.
+
+## Fairness Metric
+
+Sampling fairness is currently evaluated using quantile mismatch in log space. For field `a`, define reference and sample log-values:
+
+```text
+A_ref = log10 a_ref,
+A_sam = log10 a_sam.
+```
+
+For quantiles
+
+```text
+q in {0.1, 0.2, ..., 0.9},
+```
+
+compute
+
+```text
+epsilon_a = max_q |Q_q(A_sam) - Q_q(A_ref)|.
+```
+
+For a set of fields `F`, the total mismatch is
+
+```text
+epsilon_F = max_{a in F} epsilon_a.
+```
+
+A sample is considered fair if
+
+```text
+epsilon_F <= epsilon_tol.
+```
+
+Typical tolerances explored so far are
+
+```text
+0.10 dex, 0.15 dex, 0.20 dex.
+```
+
+A tolerance of `0.1 dex` is strict: it corresponds to roughly 26 percent in linear space. For sparse SFR-complete samples, this can force sample sizes close to the full observed set. A tolerance of `0.15-0.20 dex` may be more practical for simulation design.
+
+## Direct SFR Assignment For Primary Samples
+
+If a sample is generated only in primary environmental space, it does not have an SFR value unless one is assigned afterward. The current helper assigns SFR using distance-weighted nearest neighbors in gas + primary space.
+
+For a synthetic point `s`, find nearby observed points using
+
+```text
+(log10 Sigma_gas,
+ logit10 f_mol,
+ log10 Sigma_star,
+ log10 H_star,
+ log10 Omega_d).
+```
+
+Then draw an SFR value from the nearest observed neighbors with weights approximately
+
+```text
+w_i proportional to 1 / d_i^2.
+```
+
+This is useful for diagnostics but should not be treated as a physical SFR model. If SFR is a target observable, the preferred route is joint sampling or a dedicated conditional SFR model.
+
+## Diagnostic Plots
+
+The sampling notebook uses three classes of diagnostic plots:
+
+1. Correlation matrix with selected `Sigma_gas` bands overplotted.
+2. Observed-vs-sample marginal distribution overlays.
+3. Observed-vs-sample pair distribution overlays.
+
+For KDE samples, the marginal overlay can also show the KDE model distribution itself. The visual comparison then separates three objects:
+
+- observed reference distribution;
+- actual finite sample selected from the design;
+- fitted KDE model distribution.
+
+This is important when the sample appears biased. The bias may come from the KDE fit, from the LHS selection step, from complete-case filtering, or from comparing against a different observed validity mask.
+
+## Recommended Workflow
+
+1. Choose `Sigma_gas,target` and `Delta`.
+2. Inspect the selected PHANGS pixels in the correlation matrix.
+3. Decide which SFR tracer, if any, defines the joint sampling target.
+4. Generate an observed-pixel LHS baseline.
+5. Generate a KDE-LHS synthetic sample.
+6. Verify gas constraints and primary-field fairness.
+7. Compare SFR distributions, paying attention to completeness masks.
+8. Decide whether the sample is intended for interpolation, extrapolation, or inference.
+9. Convert the selected sample into TIGRESS-NCR simulation parameters.
+10. Track every transformation and cut in the simulation design table.
+
+## Open Methodological Questions
+
+- Should the primary sampling space include radius or galaxy-level stratification?
+- Should SFR be part of the design space or only a validation observable?
+- Should KDE be replaced by a Gaussian mixture, normalizing flow, or copula model?
+- What tolerance is scientifically sufficient for simulation design?
+- How should nondetections be represented in a likelihood-free inference pipeline?
+- Should the first simulation suite prioritize broad PHANGS coverage or dense local coverage around a few representative environments?
