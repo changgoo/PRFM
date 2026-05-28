@@ -29,17 +29,20 @@ x ~ p(x | log10 Sigma_gas in [log10 Sigma_gas,target - Delta,
 
 This isolates local environments at approximately fixed gas surface density, then samples the remaining environmental degrees of freedom that enter TIGRESS-NCR initial conditions.
 
-The main environmental parameters are
+The main simulation-design environmental parameters are
 
 ```text
-theta_env = (Sigma_star, H_star, Omega_d)
+theta_design = (Sigma_gas, Sigma_star, H_star, Omega_d).
 ```
 
-with gas phase information retained through
+Gas phase information is retained for validation through
 
 ```text
-Sigma_gas = Sigma_atom + Sigma_mol.
+Sigma_gas = Sigma_atom + Sigma_mol,
+f_mol = Sigma_mol / Sigma_gas.
 ```
+
+For the current TIGRESS-NCR setup, `f_mol`, `Sigma_atom`, and `Sigma_mol` should not be treated as independent simulation input parameters. They are validation targets for the simulated phase balance.
 
 The TIGRESS-NCR input mapping is approximately
 
@@ -50,7 +53,25 @@ The TIGRESS-NCR input mapping is approximately
 
 where the precise mapping must be documented in the simulation setup layer.
 
-## Physical Constraints
+## Design Fields And Validation Fields
+
+The sampling workflow should distinguish between fields that define simulation inputs and fields used to validate simulation outputs.
+
+Simulation-design fields:
+
+```text
+D = (Sigma_gas, Sigma_star, H_star, Omega_d).
+```
+
+Validation fields:
+
+```text
+V = (Sigma_atom, Sigma_mol, f_mol, Sigma_SFR, P_DE, sigma_eff, feedback yields, ...).
+```
+
+The design fields determine which TIGRESS-NCR simulations are run. The validation fields determine whether those simulations reproduce PHANGS gas partitioning, star formation, and PRFM-related observables.
+
+## Physical Constraints For Validation Quantities
 
 Gas components must obey
 
@@ -62,7 +83,7 @@ Sigma_mol  <= Sigma_gas,
 Sigma_atom + Sigma_mol = Sigma_gas.
 ```
 
-A naive KDE over `(Sigma_gas, Sigma_atom, Sigma_mol)` can violate these constraints because the three quantities are sampled as correlated but independent coordinates. The current implementation avoids this by transforming the gas variables to
+A naive KDE over `(Sigma_gas, Sigma_atom, Sigma_mol)` can violate these constraints because the three quantities are sampled as correlated but independent coordinates. The current implementation avoids this by transforming gas validation variables to
 
 ```text
 Sigma_gas,
@@ -181,7 +202,7 @@ w = (log10 Sigma_gas,
      log10 y)
 ```
 
-where `y` is an optional SFR field used for joint sampling.
+where `y` is an optional SFR field used for joint validation-oriented sampling. For simulation-design sampling, the LHS coordinates should normally be restricted to the design fields rather than `f_mol` or SFR.
 
 The KDE model is
 
@@ -198,14 +219,14 @@ The algorithm is:
 3. Convert selected LHS fields to empirical rank coordinates.
 4. Select candidates nearest to an LHS design.
 5. Transform back to physical variables.
-6. Reconstruct `Sigma_atom` and `Sigma_mol` from `Sigma_gas` and `f_mol`.
+6. Reconstruct `Sigma_atom` and `Sigma_mol` from `Sigma_gas` and `f_mol` for validation plots and diagnostics.
 
 Advantages:
 
 - can generate compact samples much smaller than the observed-pixel sample;
 - supports interpolation between observed environments;
 - naturally produces emulator/ILI design points;
-- can include SFR in the joint fitted distribution.
+- can include SFR or gas phase quantities in the joint fitted distribution for validation diagnostics.
 
 Limitations:
 
@@ -366,14 +387,15 @@ or
 p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega_d).
 ```
 
-The first form supports simulation-design sampling; the second form directly targets the SFR-bias problem.
+The first form supports validation-aware simulation-design sampling; the second form directly targets the SFR-bias problem. In both cases, the actual TIGRESS design coordinates should remain the simulation input fields unless the simulation setup changes.
 
 ### Backend Comparison Criteria
 
 Each backend should be evaluated with the same diagnostics:
 
-- physical gas constraints are exactly satisfied;
-- primary-field quantile fairness;
+- design-field quantile fairness for `Sigma_gas`, `Sigma_star`, `H_star`, and `Omega_d`;
+- physical gas constraints are exactly satisfied for validation quantities;
+- validation-field fairness for `f_mol`, `Sigma_atom`, `Sigma_mol`, and SFR tracers;
 - SFR quantile fairness for one or multiple SFR tracers;
 - comparison of observed, fitted-model, and finite-sample distributions;
 - held-out likelihood or posterior-predictive checks where the backend supports density evaluation;
@@ -501,11 +523,11 @@ This is important when the sample appears biased. The bias may come from the KDE
 3. Decide which SFR tracer, if any, defines the joint sampling target.
 4. Generate an observed-pixel LHS baseline.
 5. Generate a KDE-LHS synthetic sample.
-6. Verify gas constraints and primary-field fairness.
-7. Compare SFR distributions, paying attention to completeness masks.
+6. Verify design-field fairness in `Sigma_gas`, `Sigma_star`, `H_star`, and `Omega_d`.
+7. Verify gas phase and SFR validation distributions, paying attention to completeness masks.
 8. Decide whether the sample is intended for interpolation, extrapolation, or inference.
-9. Convert the selected sample into TIGRESS-NCR simulation parameters.
-10. Track every transformation and cut in the simulation design table.
+9. Convert only the design fields into TIGRESS-NCR simulation parameters.
+10. Track validation fields separately from simulation input fields in the design table.
 
 ## Open Methodological Questions
 
