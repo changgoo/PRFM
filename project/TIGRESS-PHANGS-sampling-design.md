@@ -214,6 +214,173 @@ Limitations:
 - complete-case filtering can change the effective target distribution;
 - if only one SFR tracer is fitted, that sampled SFR should not be assumed to represent all SFR tracers.
 
+
+## Proposed Synthetic Backends
+
+The current KDE-LHS implementation is a useful baseline, but the sampling class should support multiple synthetic backends. The goal is not to choose one method permanently, but to compare how backend assumptions affect the resulting TIGRESS simulation design.
+
+### Backend 1: Constrained Gaussian KDE
+
+This is the current implementation. It fits a Gaussian KDE in transformed variables:
+
+```text
+(log10 Sigma_gas,
+ logit10 f_mol,
+ log10 Sigma_star,
+ log10 H_star,
+ log10 Omega_d,
+ log10 y).
+```
+
+It is simple, non-parametric, and easy to inspect. It is useful for first-pass interpolation inside the PHANGS distribution and for debugging the sampling workflow.
+
+Expected strengths:
+
+- quick to implement and run;
+- no need to choose the number of mixture components;
+- gives a smooth approximation to the observed distribution;
+- works naturally with the existing LHS candidate-selection step.
+
+Expected weaknesses:
+
+- high-dimensional KDE is noisy when the complete-case sample is small;
+- Gaussian kernels can oversmooth sharp edges and tails;
+- bandwidth selection can strongly affect SFR distributions;
+- complete-case filtering can make the fitted distribution differ from the marginal observed distribution.
+
+This backend should remain the baseline because it is transparent and provides a reference for more structured methods.
+
+### Backend 2: Gaussian Mixture Model With Physical Transforms
+
+A Gaussian mixture model (GMM) would fit the transformed variable vector as
+
+```text
+p(w) = sum_k pi_k N(w | mu_k, Sigma_k).
+```
+
+The same physical transforms should be used as in the KDE backend: log variables for positive quantities and `logit10 f_mol` for the gas partition. The number of mixture components can be selected with BIC, cross-validation, or posterior predictive diagnostics.
+
+Expected strengths:
+
+- can represent multimodal structure better than a single global KDE bandwidth;
+- can generate large candidate pools cheaply after fitting;
+- gives interpretable mixture components that may correspond to radial, galaxy, or phase regimes;
+- can regularize covariance matrices when the reference sample is small.
+
+Expected weaknesses:
+
+- requires choosing or validating the number of components;
+- Gaussian components can still generate unphysical tails unless transformed variables and clipping are handled carefully;
+- small SFR-complete samples may lead to unstable mixture fits;
+- component interpretation can be misleading if completeness effects dominate.
+
+This backend is attractive if PHANGS environments separate into recognizable clusters, for example atom-dominated and molecule-dominated regimes or inner- and outer-disk regimes.
+
+### Backend 3: Copula Or Conditional Model
+
+A copula-based backend separates marginal distributions from dependence structure. One possible construction is:
+
+```text
+u_j = F_j(w_j),
+```
+
+where each `F_j` is an empirical or KDE-smoothed marginal CDF, followed by a model for the joint distribution of `u` in the unit cube. This could use a Gaussian copula, vine copula, or another dependence model.
+
+A related option is a conditional SFR model:
+
+```text
+p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega_d),
+```
+
+combined with a separate sampler for the environmental variables. This is useful if the simulation design should sample environments first and treat SFR as an observed validation target rather than as a design coordinate.
+
+Expected strengths:
+
+- preserves observed one-dimensional marginals more directly than KDE or GMM;
+- can compare different assumptions about dependence separately from marginal completeness;
+- conditional modeling makes the role of SFR explicit;
+- can support multiple SFR tracers as alternative conditionals.
+
+Expected weaknesses:
+
+- more implementation complexity;
+- empirical CDFs need careful handling of missing values and nondetections;
+- copula assumptions may fail in sparse tails;
+- conditional SFR models require separate validation and may hide selection effects.
+
+This backend is likely the best long-term direction if the KDE and GMM backends show persistent marginal bias, especially in SFR tracers.
+
+### Backend 4: Normalizing Flow
+
+A normalizing flow would learn an invertible transformation between a simple latent distribution and the transformed PHANGS variables:
+
+```text
+z ~ N(0, I),
+w = f_phi(z),
+```
+
+where `w` is the physically transformed vector, for example
+
+```text
+w = (log10 Sigma_gas,
+     logit10 f_mol,
+     log10 Sigma_star,
+     log10 H_star,
+     log10 Omega_d,
+     log10 y).
+```
+
+The learned density is
+
+```text
+p(w) = p(z) |det d f_phi^{-1} / d w|.
+```
+
+Like the KDE and GMM backends, the flow should operate in transformed coordinates and then reconstruct physical gas components from `Sigma_gas` and `f_mol`. This keeps the generated samples physically valid while allowing a more flexible distribution than KDE or GMM.
+
+Expected strengths:
+
+- can represent nonlinear, non-Gaussian, and multimodal distributions;
+- can scale better than KDE in moderately high dimensions;
+- can generate large candidate pools efficiently after training;
+- can support conditional variants, for example `p(environment | Sigma_gas)` or `p(SFR | environment)`;
+- provides an explicit density that can be useful for ILI diagnostics and out-of-distribution checks.
+
+Expected weaknesses:
+
+- needs substantially more training and validation machinery;
+- can overfit small complete-case samples, especially for SFR fields;
+- generated marginals can look plausible while tails or conditional structure are wrong;
+- requires choices about architecture, regularization, training epochs, and validation metrics;
+- less transparent than KDE or GMM for early-stage debugging.
+
+A normalizing flow is most attractive after the simpler backends have clarified the failure modes. It may be especially useful for a larger simulation-design stage with many `Sigma_gas` slices, additional environmental variables, or field-level summary statistics. For the current PHANGS sampling problem, a conditional flow may be more useful than an unconditional flow:
+
+```text
+p(Sigma_star, H_star, Omega_d, f_mol, y | Sigma_gas)
+```
+
+or
+
+```text
+p(y | Sigma_gas, f_mol, Sigma_star, H_star, Omega_d).
+```
+
+The first form supports simulation-design sampling; the second form directly targets the SFR-bias problem.
+
+### Backend Comparison Criteria
+
+Each backend should be evaluated with the same diagnostics:
+
+- physical gas constraints are exactly satisfied;
+- primary-field quantile fairness;
+- SFR quantile fairness for one or multiple SFR tracers;
+- comparison of observed, fitted-model, and finite-sample distributions;
+- held-out likelihood or posterior-predictive checks where the backend supports density evaluation;
+- sensitivity to `Sigma_gas,target`, `Delta`, and completeness cuts;
+- stability under different random seeds;
+- ability to generate a compact but representative TIGRESS simulation design.
+
 ## SFR Fields And Complete-Case Bias
 
 SFR tracers have different validity masks. For example, the reference set may contain many valid `Sigma_SFR_FUVW4recal` values but far fewer valid `Sigma_SFR_Hacorr` values. A joint KDE fitted with all SFR fields targets
