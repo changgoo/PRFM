@@ -175,6 +175,32 @@ class TestComputePRFMInputs:
         expected = synthetic_table["Sigma_mol"] + synthetic_table["Sigma_atom"]
         np.testing.assert_allclose(out["Sigma_gas"].value, expected.value)
 
+    def test_compute_inputs_accepts_aperture_specific_gas_and_sfr_columns(
+        self, synthetic_table
+    ):
+        t = synthetic_table.copy()
+        t["Sigma_mol_gauss"] = 2.0 * t["Sigma_mol"]
+        t["Sigma_atom_gauss"] = 3.0 * t["Sigma_atom"]
+        t["e_Sigma_mol_gauss"] = 0.1 * t["Sigma_mol_gauss"]
+        t["e_Sigma_atom_gauss"] = 0.1 * t["Sigma_atom_gauss"]
+        t["Sigma_SFR_HaW4recal_gauss"] = 4.0 * t["Sigma_SFR_HaW4recal"]
+
+        out = phangs.compute_prfm_inputs(
+            t,
+            sigma_mol_col="Sigma_mol_gauss",
+            sigma_atom_col="Sigma_atom_gauss",
+            sfr_suffix="_gauss",
+        )
+
+        expected = t["Sigma_mol_gauss"] + t["Sigma_atom_gauss"]
+        np.testing.assert_allclose(out["Sigma_gas"].value, expected.value)
+        np.testing.assert_allclose(out["Sigma_mol"].value, t["Sigma_mol_gauss"].value)
+        np.testing.assert_allclose(out["Sigma_atom"].value, t["Sigma_atom_gauss"].value)
+        np.testing.assert_allclose(
+            out["Sigma_SFR_HaW4recal"].value,
+            t["Sigma_SFR_HaW4recal_gauss"].value,
+        )
+
     def test_omega_formula(self, synthetic_table):
         """Omega = V_circ / r_gal  (km/s/kpc)."""
         out = phangs.compute_prfm_inputs(synthetic_table)
@@ -228,11 +254,11 @@ class TestFiltering:
         t = Table(
             {
                 "Sigma_gas": [1.0, float("nan"), 3.0],
-                "Omega_d": [1.0, 2.0, float("nan")],
+                "Omega": [1.0, 2.0, float("nan")],
                 "H_star": [100.0, 200.0, 300.0],
             }
         )
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d", "H_star"])
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == 1
         assert mask[0] is np.bool_(True)
 
@@ -240,15 +266,15 @@ class TestFiltering:
         t = Table(
             {
                 "Sigma_gas": [1.0, 0.0, -1.0, 5.0],
-                "Omega_d": [1.0, 2.0, 3.0, 4.0],
+                "Omega": [1.0, 2.0, 3.0, 4.0],
             }
         )
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d"])
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega"])
         assert mask.sum() == 2  # rows 0 and 3
 
     def test_valid_rows_all_good(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega_d", "H_star"])
+        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == len(out)
 
 
@@ -350,9 +376,9 @@ class TestRunPRFM:
         phangs.run_prfm(synthetic_table)
         assert list(synthetic_table.colnames) == cols_before
 
-    def test_variation_omega_d_none(self, synthetic_table):
-        """variation={'Omega_d': None} disables rotation term; output still finite."""
-        out = phangs.run_prfm(synthetic_table, variation={"Omega_d": None})
+    def test_variation_omega_none(self, synthetic_table):
+        """variation={'Omega': None} disables rotation term; output still finite."""
+        out = phangs.run_prfm(synthetic_table, variation={"Omega": None})
         assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
 
     def test_variation_sigma_star_scaling(self, synthetic_table):
@@ -369,8 +395,8 @@ class TestRunPRFM:
             out_scaled["P_weight"].value, out_default["P_weight"].value
         )
 
-    def test_prfm_cols_without_omega_d(self, synthetic_table):
-        """prfm_cols without Omega_d (gravity-only) produces finite outputs."""
+    def test_prfm_cols_without_omega(self, synthetic_table):
+        """prfm_cols without Omega (gravity-only) produces finite outputs."""
         out = phangs.run_prfm(
             synthetic_table,
             prfm_cols=["Sigma_gas", "Sigma_star", "H_star"],

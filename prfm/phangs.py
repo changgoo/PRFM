@@ -323,13 +323,19 @@ def vstack_tables(tables: dict[str, Table]) -> Table:
 # ---------------------------------------------------------------------------
 
 
-def compute_prfm_inputs(table):
+def compute_prfm_inputs(
+    table,
+    *,
+    sigma_mol_col: str = "Sigma_mol",
+    sigma_atom_col: str = "Sigma_atom",
+    sfr_suffix: str | None = None,
+):
     """Add PRFM-relevant derived columns to a megatable.
 
     Derived columns added
     ---------------------
     ``Sigma_gas``
-        Total gas surface density = ``Sigma_mol + Sigma_atom``
+        Total gas surface density = ``sigma_mol_col + sigma_atom_col``
         [M_sun / pc^2].
     ``e_Sigma_gas``
         Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``
@@ -345,6 +351,12 @@ def compute_prfm_inputs(table):
     Parameters
     ----------
     table : `~astropy.table.Table`
+    sigma_mol_col, sigma_atom_col : str
+        Molecular and atomic gas columns used to compute ``Sigma_gas``.
+    sfr_suffix : str or None
+        If provided, copy Gaussian or other aperture-specific SFR columns such
+        as ``Sigma_SFR_HaW4recal_gauss`` into the canonical unsuffixed SFR
+        columns used by plotting and PRFM comparison code.
 
     Returns
     -------
@@ -353,8 +365,8 @@ def compute_prfm_inputs(table):
     """
     t = table.copy()
 
-    Sigma_mol = np.asarray(t["Sigma_mol"].to(au.M_sun / au.pc**2))
-    Sigma_atom = np.asarray(t["Sigma_atom"].to(au.M_sun / au.pc**2))
+    Sigma_mol = np.asarray(t[sigma_mol_col].to(au.M_sun / au.pc**2))
+    Sigma_atom = np.asarray(t[sigma_atom_col].to(au.M_sun / au.pc**2))
 
     # Treat non-detections as zero for each component, but only when the other
     # component is detected.  If both are NaN the sum stays NaN.
@@ -369,9 +381,21 @@ def compute_prfm_inputs(table):
         "Total gas surface density (mol + atom; non-detections filled with 0)"
     )
 
-    if "e_Sigma_mol" in t.colnames and "e_Sigma_atom" in t.colnames:
-        e_mol = np.asarray(t["e_Sigma_mol"].to(au.M_sun / au.pc**2))
-        e_atom = np.asarray(t["e_Sigma_atom"].to(au.M_sun / au.pc**2))
+    if sigma_mol_col != "Sigma_mol":
+        t["Sigma_mol"] = t[sigma_mol_col]
+    if sigma_atom_col != "Sigma_atom":
+        t["Sigma_atom"] = t[sigma_atom_col]
+
+    e_sigma_mol_col = f"e_{sigma_mol_col}"
+    e_sigma_atom_col = f"e_{sigma_atom_col}"
+    if e_sigma_mol_col in t.colnames and e_sigma_atom_col in t.colnames:
+        if e_sigma_mol_col != "e_Sigma_mol":
+            t["e_Sigma_mol"] = t[e_sigma_mol_col]
+        if e_sigma_atom_col != "e_Sigma_atom":
+            t["e_Sigma_atom"] = t[e_sigma_atom_col]
+
+        e_mol = np.asarray(t[e_sigma_mol_col].to(au.M_sun / au.pc**2))
+        e_atom = np.asarray(t[e_sigma_atom_col].to(au.M_sun / au.pc**2))
         # propagate only the errors that exist; treat missing component error as 0
         e_mol_filled = np.where(np.isfinite(e_mol), e_mol, 0.0)
         e_atom_filled = np.where(np.isfinite(e_atom), e_atom, 0.0)
@@ -381,11 +405,24 @@ def compute_prfm_inputs(table):
         t["e_Sigma_gas"] = e_gas * au.M_sun / au.pc**2
         t["e_Sigma_gas"].description = "Uncertainty on Sigma_gas (quadrature sum)"
 
+    if sfr_suffix:
+        for sfr_col in (
+            "Sigma_SFR_HaW4recal",
+            "Sigma_SFR_FUVW4recal",
+            "Sigma_SFR_Hacorr",
+        ):
+            source_col = f"{sfr_col}{sfr_suffix}"
+            if source_col in t.colnames:
+                t[sfr_col] = t[source_col]
+            source_err_col = f"e_{sfr_col}{sfr_suffix}"
+            if source_err_col in t.colnames:
+                t[f"e_{sfr_col}"] = t[source_err_col]
+
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
     r_gal = t["r_gal"].to(au.kpc)
     t["Omega"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
     t["Omega"].description = "Angular velocity V_circ / r_gal"
-    # Backward-compatible alias for PRFM routines and older notebooks.
+    # Backward-compatible alias for older notebooks and PRFM calls.
     t["Omega_d"] = t["Omega"]
     t["Omega_d"].description = "Deprecated alias for Omega"
 
