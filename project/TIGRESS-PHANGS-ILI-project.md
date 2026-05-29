@@ -24,6 +24,16 @@ The broader motivation follows the spirit of CAMELS: build a large, structured s
 
 The project should also help extract more information from existing and future surveys. Instead of comparing a small number of hand-picked simulations to a few summary plots, the simulation suite should be designed from the start as an inference-ready dataset: broad enough to cover the relevant environmental input volume, structured enough to train emulators, and constrained enough by PHANGS correlations to avoid wasting simulations on unrealistic parameter combinations.
 
+## Future Research Program Proposal
+
+I propose to build a TIGRESS-PHANGS simulation and inference program that turns resolved observations of nearby galaxies into a quantitative laboratory for star formation and feedback physics. The program will use PHANGS to define observationally informed priors over local galactic environments, run controlled TIGRESS-NCR simulations across those environments and uncertain physics parameters, and train simulation-based inference models that connect theory predictions directly to observable gas, star formation, pressure, and feedback diagnostics.
+
+The immediate scientific goal is to determine which combinations of local environment and feedback physics reproduce the resolved structure of the star-forming interstellar medium. Rather than compare a small number of simulations to selected observational scaling relations, the project will create an inference-ready simulation suite: broad enough to map the relevant parameter space, constrained enough by PHANGS to avoid unphysical inputs, and documented well enough to support reproducible comparison with present and future surveys. In this sense, the project extends the CAMELS philosophy from cosmological and galaxy-formation inference to the resolved, multiphase ISM.
+
+A central deliverable will be a public, community-facing dataset that links simulation inputs, TIGRESS outputs, synthetic observations, and PHANGS-matched summary statistics. This would give observers a physically interpretable framework for comparing multiwavelength maps with simulations, give theorists benchmark targets for feedback and phase-balance models, and give the broader astrostatistics community a realistic testbed for simulation-based inference in a regime where explicit likelihoods are unavailable. By releasing the sampling tools, priors, emulator products, validation diagnostics, and synthetic-observation pipeline, the project can lower the barrier for other groups to test ISM models against resolved galaxy surveys and to design follow-up simulations efficiently.
+
+The longer-term impact is to make local ISM theory more predictive and more reusable. As ALMA, JWST, VLT/MUSE, and future facilities expand the volume and dimensionality of resolved galaxy data, the field will need shared infrastructure that converts observations into simulation-design constraints and converts simulations back into survey-comparable observables. This project is designed to provide that infrastructure while addressing a core astrophysical question: how star formation and feedback self-regulate across the diverse environments found within galaxies.
+
 ## Data Products
 
 - PHANGS aperture-level tables with derived PRFM inputs.
