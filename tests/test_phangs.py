@@ -278,6 +278,91 @@ class TestFiltering:
         assert mask.sum() == len(out)
 
 
+class TestConfiguredLoading:
+    def test_load_configured_phangs_joins_apertures(self, tmp_path):
+        data_dir = tmp_path / "phangs_megatable"
+        data_dir.mkdir()
+        hex_file = data_dir / "TESTGAL_hexagon_1p5kpc.ecsv"
+        hex_file.write_text(
+            textwrap.dedent("""\
+                # %ECSV 1.0
+                # ---
+                # datatype:
+                # - {name: ID, datatype: int64}
+                # - {name: r_gal, unit: kpc, datatype: float64}
+                # - {name: RA, unit: deg, datatype: float64}
+                # - {name: DEC, unit: deg, datatype: float64}
+                # - {name: V_circ_CO21_URC, unit: km / s, datatype: float64}
+                # - {name: beta_CO21_URC, datatype: float64}
+                # - {name: Sigma_mol, unit: solMass / pc2, datatype: float64}
+                # - {name: Sigma_atom, unit: solMass / pc2, datatype: float64}
+                # - {name: Sigma_star, unit: solMass / pc2, datatype: float64}
+                # - {name: rho_star_mp, unit: solMass / pc3, datatype: float64}
+                # meta:
+                #   GALAXY: TESTGAL
+                # schema: astropy-2.0
+                ID r_gal RA DEC V_circ_CO21_URC beta_CO21_URC Sigma_mol Sigma_atom Sigma_star rho_star_mp
+                1 1.0 10.0 20.0 150.0 0.2 10.0 5.0 200.0 0.1
+            """)
+        )
+        gauss_file = data_dir / "TESTGAL_gauss_1p5kpc.ecsv"
+        gauss_file.write_text(
+            textwrap.dedent("""\
+                # %ECSV 1.0
+                # ---
+                # datatype:
+                # - {name: ID, datatype: int64}
+                # - {name: r_gal, unit: kpc, datatype: float64}
+                # - {name: Sigma_mol_gauss, unit: solMass / pc2, datatype: float64}
+                # - {name: e_Sigma_mol_gauss, unit: solMass / pc2, datatype: float64}
+                # - {name: Sigma_atom_gauss, unit: solMass / pc2, datatype: float64}
+                # - {name: e_Sigma_atom_gauss, unit: solMass / pc2, datatype: float64}
+                # - {name: Sigma_SFR_HaW4recal_gauss, unit: solMass / (kpc2 yr), datatype: float64}
+                # meta:
+                #   GALAXY: TESTGAL
+                # schema: astropy-2.0
+                ID r_gal Sigma_mol_gauss e_Sigma_mol_gauss Sigma_atom_gauss e_Sigma_atom_gauss Sigma_SFR_HaW4recal_gauss
+                1 1.0 20.0 2.0 7.0 0.7 0.03
+            """)
+        )
+        config_file = tmp_path / "phangs.yml"
+        config_file.write_text(
+            textwrap.dedent("""\
+                data_dir: phangs_megatable
+                apertures:
+                  context: hexagon
+                  canonical: gauss
+                join:
+                  keys: [GALAXY, ID]
+                  join_type: inner
+                  table_names: [hexagon, gauss]
+                  uniq_col_name: "{col_name}_{table_name}"
+                canonical:
+                  gas:
+                    sigma_mol_col: Sigma_mol_gauss
+                    sigma_atom_col: Sigma_atom_gauss
+                  sfr_suffix: _gauss
+                preserve_context_fields: [Sigma_mol, Sigma_atom]
+                geometry_fields: [RA, DEC, r_gal]
+                plot_aperture: gauss
+            """)
+        )
+
+        loaded = phangs.load_configured_phangs(config_file, base_dir=tmp_path)
+        out = loaded["table"]
+
+        assert loaded["apertures"] == ("hexagon", "gauss")
+        assert loaded["plot_aperture"] == "gauss"
+        assert len(out) == 1
+        np.testing.assert_allclose(out["Sigma_gas"].value, [27.0])
+        np.testing.assert_allclose(out["Sigma_mol"].value, [20.0])
+        np.testing.assert_allclose(out["Sigma_atom"].value, [7.0])
+        np.testing.assert_allclose(out["Sigma_mol_hexagon"].value, [10.0])
+        np.testing.assert_allclose(out["Sigma_SFR_HaW4recal"].value, [0.03])
+        np.testing.assert_allclose(out["Omega"].value, [150.0])
+        np.testing.assert_allclose(out["qshear"], [0.8])
+
+
 # ---------------------------------------------------------------------------
 # run_prfm
 # ---------------------------------------------------------------------------

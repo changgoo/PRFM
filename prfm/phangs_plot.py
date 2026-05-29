@@ -691,6 +691,7 @@ def plot_correlation_matrix(
     title: str | None = None,
     figsize_scale: float = 2.2,
     errorbars: bool = True,
+    overlay_masks: Sequence[tuple[np.ndarray, str, Any]] | None = None,
 ) -> tuple[plt.Figure, np.ndarray, list[tuple[str, str, bool]]]:
     """Plot a full pairwise correlation matrix for PHANGS-like table fields.
 
@@ -709,6 +710,8 @@ def plot_correlation_matrix(
         Size multiplier per matrix dimension.
     errorbars : bool, optional
         Whether to draw error bars in off-diagonal scatter panels.
+    overlay_masks : sequence of (mask, label, color) or None, optional
+        Boolean masks selecting rows to overplot on each panel.
 
     Returns
     -------
@@ -719,6 +722,7 @@ def plot_correlation_matrix(
     cols = resolve_columns(spec, table, aperture=aperture)
     col_names = [col for col, _, _ in cols]
     col_logs = {col: log for col, _, log in cols}
+    overlay_masks = overlay_masks or []
 
     n = len(col_names)
     fig, axes = plt.subplots(n, n, figsize=(n * figsize_scale, n * figsize_scale))
@@ -736,6 +740,33 @@ def plot_correlation_matrix(
                 )
                 if valid.any():
                     hist_plot(table, ycol, ax=ax, log=col_logs[ycol])
+                    for mask, label, color in overlay_masks:
+                        selected = values[np.asarray(mask, dtype=bool) & valid]
+                        if len(selected) == 0:
+                            continue
+                        if col_logs[ycol]:
+                            edges = np.logspace(
+                                np.log10(values[valid].min()),
+                                np.log10(values[valid].max()),
+                                41,
+                            )
+                            widths = np.diff(np.log10(edges))
+                        else:
+                            edges = np.linspace(
+                                values[valid].min(), values[valid].max(), 41
+                            )
+                            widths = np.diff(edges)
+                        counts, _ = np.histogram(selected, bins=edges)
+                        pdf = counts / len(selected) / widths
+                        ax.step(
+                            edges[:-1],
+                            pdf,
+                            where="post",
+                            color=color,
+                            linewidth=1.2,
+                            label=label,
+                            zorder=3,
+                        )
                     ax.set_ylabel("PDF")
                 else:
                     ax.set_axis_off()
@@ -758,8 +789,24 @@ def plot_correlation_matrix(
                         log_y=col_logs[ycol],
                         errorbars=errorbars,
                         s=2,
-                        bg_alpha=0.3,
+                        bg_alpha=0.18 if overlay_masks else 0.3,
                     )
+                    for mask, label, color in overlay_masks:
+                        overlay_valid = np.asarray(mask, dtype=bool) & valid
+                        if not overlay_valid.any():
+                            continue
+                        ax.scatter(
+                            x_values[overlay_valid],
+                            y_values[overlay_valid],
+                            s=12,
+                            color=color,
+                            alpha=0.9,
+                            edgecolors="black",
+                            linewidths=0.2,
+                            rasterized=True,
+                            label=label,
+                            zorder=3,
+                        )
                     if ycol.startswith("Sigma_SFR") and xcol.startswith("Sigma_SFR"):
                         sfr = np.logspace(-5, 0, 100)
                         ax.plot(sfr, sfr, color="black", linestyle="--", linewidth=1)
@@ -791,6 +838,17 @@ def plot_correlation_matrix(
     if title is None:
         title = f"PHANGS {aperture} aperture - correlation matrix ({len(table)} rows)"
     fig.suptitle(title, fontsize="large", y=1.002)
+    if overlay_masks:
+        handles, labels = axes[0, 0].get_legend_handles_labels()
+        unique = dict(zip(labels, handles))
+        if unique:
+            fig.legend(
+                unique.values(),
+                unique.keys(),
+                loc="upper right",
+                bbox_to_anchor=(1.0, 1.0),
+                fontsize="small",
+            )
     fig.tight_layout(h_pad=0.3, w_pad=0.3)
     return fig, axes, cols
 

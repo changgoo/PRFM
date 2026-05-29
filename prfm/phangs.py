@@ -16,7 +16,7 @@ from typing import Optional
 import astropy.constants as ac
 import astropy.units as au
 import numpy as np
-from astropy.table import Table, vstack
+from astropy.table import Table, join, vstack
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -318,6 +318,120 @@ def vstack_tables(tables: dict[str, Table]) -> Table:
     return vstack(tbl, metadata_conflicts="silent")
 
 
+def read_phangs_config(
+    config_path: str | Path, *, base_dir: str | Path | None = None
+) -> dict:
+    """Read a PHANGS loading YAML file and resolve its data directory.
+
+    Parameters
+    ----------
+    config_path : str or Path
+        YAML file containing PHANGS loading options.
+    base_dir : str or Path or None, optional
+        Base directory used to resolve relative paths.  When omitted, paths are
+        resolved relative to the config file's parent directory.
+
+    Returns
+    -------
+    dict
+        Parsed config with ``data_dir`` converted to an absolute-ish Path.
+    """
+    try:
+        import yaml
+    except ImportError as exc:  # pragma: no cover - dependency error path
+        raise ImportError(
+            "PyYAML is required to read PHANGS YAML config files"
+        ) from exc
+
+    config_path = Path(config_path)
+    with config_path.open() as fp:
+        config = yaml.safe_load(fp) or {}
+
+    root = Path(base_dir) if base_dir is not None else config_path.parent
+    data_dir = Path(config.get("data_dir", "data/phangs_megatable"))
+    if not data_dir.is_absolute():
+        data_dir = root / data_dir
+    config["data_dir"] = data_dir
+    return config
+
+
+def load_configured_phangs(
+    config_path: str | Path,
+    *,
+    base_dir: str | Path | None = None,
+) -> dict:
+    """Load, stack, join, and derive PHANGS tables from a YAML config.
+
+    The config controls aperture names, join keys, canonical gas/SFR columns,
+    context fields to preserve, geometry fields to restore, and plotting
+    aperture.  The returned dict is intended for notebooks and scripts that
+    need both the final derived table and the intermediate per-aperture tables.
+    """
+    config = read_phangs_config(config_path, base_dir=base_dir)
+
+    apertures = config.get("apertures", {})
+    context_aperture = apertures.get("context", "hexagon")
+    canonical_aperture = apertures.get("canonical", "gauss")
+    aperture_names = [context_aperture, canonical_aperture]
+
+    loaded_tables = {
+        aperture: load_all(config["data_dir"], aperture=aperture)
+        for aperture in aperture_names
+    }
+    stacked_tables = {
+        aperture: vstack_tables(tables) for aperture, tables in loaded_tables.items()
+    }
+
+    join_config = config.get("join", {})
+    table_names = join_config.get("table_names", aperture_names)
+    joined = join(
+        stacked_tables[context_aperture],
+        stacked_tables[canonical_aperture],
+        keys=join_config.get("keys", ["GALAXY", "ID"]),
+        join_type=join_config.get("join_type", "inner"),
+        table_names=table_names,
+        uniq_col_name=join_config.get("uniq_col_name", "{col_name}_{table_name}"),
+        metadata_conflicts="silent",
+    )
+
+    context_suffix = table_names[0]
+    canonical_suffix = table_names[1]
+    for col in config.get("preserve_context_fields", []):
+        context_col = f"{col}_{context_suffix}"
+        if col in joined.colnames and context_col not in joined.colnames:
+            joined[context_col] = joined[col]
+
+    for col in config.get("geometry_fields", ["RA", "DEC", "r_gal", "phi_gal"]):
+        context_col = f"{col}_{context_suffix}"
+        canonical_col = f"{col}_{canonical_suffix}"
+        if col not in joined.colnames:
+            if context_col in joined.colnames:
+                joined[col] = joined[context_col]
+            elif canonical_col in joined.colnames:
+                joined[col] = joined[canonical_col]
+
+    canonical = config.get("canonical", {})
+    gas = canonical.get("gas", {})
+    table = compute_prfm_inputs(
+        joined,
+        sigma_mol_col=gas.get("sigma_mol_col", "Sigma_mol"),
+        sigma_atom_col=gas.get("sigma_atom_col", "Sigma_atom"),
+        sfr_suffix=canonical.get("sfr_suffix"),
+    )
+
+    return {
+        "config": config,
+        "table": table,
+        "joined_table": joined,
+        "loaded_tables": loaded_tables,
+        "stacked_tables": stacked_tables,
+        "apertures": tuple(aperture_names),
+        "context_aperture": context_aperture,
+        "canonical_aperture": canonical_aperture,
+        "plot_aperture": config.get("plot_aperture", canonical_aperture),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Derived PRFM quantities
 # ---------------------------------------------------------------------------
@@ -436,7 +550,7 @@ def compute_prfm_inputs(
 
     Sigma_star = t["Sigma_star"].to(au.M_sun / au.pc**2)
     rho_star = t["rho_star_mp"].to(au.M_sun / au.pc**3)
-    t["H_star"] = (Sigma_star / (2.0 * rho_star)).to(au.pc)
+    t["H_star"] = (Sigma_star / (4.0 * rho_star)).to(au.pc)
     t["H_star"].description = "Stellar scale height Sigma_star / (2 * rho_star_mp)"
 
     return t

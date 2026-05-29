@@ -268,11 +268,9 @@ class PHANGSSamplingDesigner:
     ):
         """Plot the PHANGS correlation matrix with optional Sigma-gas-band overlays."""
         import matplotlib.pyplot as plt
-        from prfm.phangs_plot import col_label, hist_plot, scatter_plot
+        from prfm.phangs_plot import plot_correlation_matrix
 
         cols = cols or self.resolve_matrix_columns(aperture=aperture)
-        col_names = [col for col, _, _ in cols]
-        col_logs = {col: log for col, _, log in cols}
         targets = (
             []
             if targets is None
@@ -290,81 +288,11 @@ class PHANGSSamplingDesigner:
             )
             for target, color in zip(targets, colors)
         ]
+        overlay_masks = [
+            (mask, rf"$\Sigma_{{gas}}={target:g}$", color)
+            for target, mask, color in selections
+        ]
 
-        n = len(col_names)
-        fig, axes = plt.subplots(n, n, figsize=(n * figsize_scale, n * figsize_scale))
-        for i, ycol in enumerate(col_names):
-            for j, xcol in enumerate(col_names):
-                ax = axes[i, j]
-                if i == j:
-                    valid = np.isfinite(_column_values(self.table, ycol))
-                    hist_plot(self.table, ycol, ax=ax, log=col_logs[ycol])
-                    for target, mask, color in selections:
-                        self._plot_selected_hist(
-                            ax,
-                            mask,
-                            ycol,
-                            log=col_logs[ycol],
-                            color=color,
-                            label=rf"$\Sigma_{{gas}}={target:g}$",
-                        )
-                    ax.set_ylabel("PDF")
-                else:
-                    valid = np.isfinite(_column_values(self.table, xcol)) & np.isfinite(
-                        _column_values(self.table, ycol)
-                    )
-                    scatter_plot(
-                        self.table,
-                        xcol,
-                        ycol,
-                        ax=ax,
-                        log_x=col_logs[xcol],
-                        log_y=col_logs[ycol],
-                        errorbars=True,
-                        s=2,
-                        bg_alpha=0.18 if selections else 0.3,
-                    )
-                    for target, mask, color in selections:
-                        self._plot_selected_scatter(
-                            ax,
-                            mask,
-                            xcol,
-                            ycol,
-                            color=color,
-                            label=rf"$\Sigma_{{gas}}={target:g}$",
-                        )
-                    if ycol.startswith("Sigma_SFR") & xcol.startswith("Sigma_SFR"):
-                        sfr = np.logspace(-5, 0, 100)
-                        ax.plot(sfr, sfr, color="black", linestyle="--", linewidth=1)
-
-                ax.annotate(
-                    f"N={valid.sum()}",
-                    xy=(0.97, 0.97),
-                    xycoords="axes fraction",
-                    ha="right",
-                    va="top",
-                    fontsize="xx-small",
-                    color="0.4",
-                )
-                ax.tick_params(labelsize="x-small")
-                if i < n - 1:
-                    ax.set_xlabel("")
-                    ax.tick_params(labelbottom=False)
-                else:
-                    ax.set_xlabel(col_label(xcol))
-                if j > 0:
-                    ax.set_ylabel("")
-                    ax.tick_params(labelleft=False)
-
-        handles, labels = axes[0, 0].get_legend_handles_labels()
-        if handles:
-            fig.legend(
-                handles,
-                labels,
-                loc="upper right",
-                bbox_to_anchor=(1.0, 1.0),
-                fontsize="small",
-            )
         title = f"{table_label} {aperture} aperture"
         if targets:
             delta = (
@@ -375,76 +303,16 @@ class PHANGSSamplingDesigner:
             title += f" - Sigma_gas sampling (delta={delta:g} dex)"
         else:
             title += f" - correlation matrix ({len(self.table)} rows)"
-        fig.suptitle(title, fontsize="large", y=1.002)
-        fig.tight_layout(h_pad=0.3, w_pad=0.3)
+
+        fig, axes, _ = plot_correlation_matrix(
+            self.table,
+            [(col, log) for col, _, log in cols],
+            aperture=aperture,
+            title=title,
+            figsize_scale=figsize_scale,
+            overlay_masks=overlay_masks,
+        )
         return fig, axes, selections
-
-    def _plot_selected_hist(
-        self,
-        ax,
-        mask: np.ndarray,
-        col: str,
-        *,
-        log: bool = True,
-        color="tab:blue",
-        label: str | None = None,
-        n_bins: int = 40,
-    ) -> None:
-        all_vals = _column_values(self.table, col)
-        all_valid = (
-            np.isfinite(all_vals) & (all_vals > 0) if log else np.isfinite(all_vals)
-        )
-        selected = all_vals[mask & all_valid]
-        all_vals = all_vals[all_valid]
-        if len(selected) == 0 or len(all_vals) == 0:
-            return
-        if log:
-            edges = np.logspace(
-                np.log10(all_vals.min()), np.log10(all_vals.max()), n_bins + 1
-            )
-            widths = np.diff(np.log10(edges))
-        else:
-            edges = np.linspace(all_vals.min(), all_vals.max(), n_bins + 1)
-            widths = np.diff(edges)
-        counts, _ = np.histogram(selected, bins=edges)
-        pdf = counts / len(selected) / widths
-        ax.step(
-            edges[:-1],
-            pdf,
-            where="post",
-            color=color,
-            linewidth=1.2,
-            label=label,
-            zorder=3,
-        )
-
-    def _plot_selected_scatter(
-        self,
-        ax,
-        mask: np.ndarray,
-        xcol: str,
-        ycol: str,
-        *,
-        color="tab:blue",
-        label: str | None = None,
-        s: float = 12,
-    ) -> None:
-        x = _column_values(self.table, xcol)
-        y = _column_values(self.table, ycol)
-        valid = mask & np.isfinite(x) & np.isfinite(y) & (x > 0) & (y > 0)
-        if not valid.any():
-            return
-        ax.scatter(
-            x[valid],
-            y[valid],
-            s=s,
-            color=color,
-            alpha=0.85,
-            linewidths=0,
-            label=label,
-            rasterized=True,
-            zorder=5,
-        )
 
     def _log_dataframe(
         self,
