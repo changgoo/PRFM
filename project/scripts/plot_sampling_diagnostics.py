@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
+plt.style.use(ROOT / "project" / "scripts" / "prfm.mplstyle")
 sys.path.insert(0, str(ROOT))
 
 from prfm.phangs import load_configured_phangs

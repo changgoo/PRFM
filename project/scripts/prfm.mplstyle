@@ -1,0 +1,49 @@
+## prfm.mplstyle
+## Matplotlib style for PRFM / TIGRESS-PHANGS paper figures.
+## Based on paper.mplstyle (TIGRESS-CR).
+## Apply with: plt.style.use(Path(__file__).parent / "prfm.mplstyle")
+
+figure.figsize    : 8, 6
+figure.facecolor  : white
+figure.dpi        : 150
+
+savefig.dpi       : 150
+savefig.bbox      : tight
+savefig.facecolor : white
+savefig.edgecolor : white
+
+font.size         : 12
+font.weight       : 300
+mathtext.fontset  : cm
+
+axes.prop_cycle   : cycler('color', ['348abd', 'a60628', '467821', '7a68a6', 'd55e00', 'e69f00', '56b4e9'])
+axes.facecolor    : white
+axes.edgecolor    : black
+axes.linewidth    : 1
+axes.grid         : false
+
+grid.linestyle    : --
+grid.linewidth    : 0.5
+grid.color        : cbcbcb
+
+xtick.top           : True
+xtick.direction     : in
+xtick.minor.visible : True
+xtick.major.size    : 5
+xtick.minor.size    : 3
+xtick.major.width   : 1
+xtick.labelsize     : small
+
+ytick.right         : True
+ytick.direction     : in
+ytick.minor.visible : True
+ytick.major.size    : 5
+ytick.minor.size    : 3
+ytick.major.width   : 1
+ytick.labelsize     : small
+
+legend.fontsize   : small
+
+lines.linewidth   : 1.5
+
+image.origin      : lower
