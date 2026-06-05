@@ -1,0 +1,114 @@
+\section{Introduction}
+\label{sec:intro}
+
+Star formation in galaxies is a multi-scale, multi-physics process whose
+regulation has emerged as one of the central problems of galaxy evolution.
+Across a wide range of galactic environments, observations reveal tight
+correlations between local gas properties, dynamical equilibrium pressure,
+and the star formation rate (SFR) surface density
+\citep{2010ApJ...721..975O,2011ApJ...731...41O,2020ApJ...892..148S,2022ApJ...936..137O}.
+These correlations are now understood as a signature of self-regulation:
+energy and momentum injected by massive-star feedback---supernovae, stellar
+winds, and radiation pressure---maintain the interstellar medium (ISM) in
+an approximately steady state in which the vertical weight of the gas is
+supported against gravity by turbulent, thermal, and magnetic pressures.
+The resulting balance ties the local SFR to the local dynamical state of
+the disk, and reproduces the observed scaling between $\Ssfr$ and the
+dynamical equilibrium pressure $\PDE$ across more than four orders of
+magnitude in environment
+\citep{2020ApJ...892..148S,2023ApJ...945L..19S,2025ApJ...989...66V}.
+
+The pressure-regulated, feedback-modulated (\PRFM) framework
+\citep{2022ApJ...936..137O} provides a theoretical foundation for this
+self-regulation. In its compact form, vertical equilibrium fixes the
+midplane total pressure to the weight of the overlying gas, $\Ptot = \W$,
+where $\W$ is the integrated weight of the gas column in the combined
+gravitational potential of the gas, stars, and dark matter. The feedback
+yield $\Ytot \equiv \Ptot/\Ssfr$ then encapsulates how efficiently young
+stellar populations convert star formation into the pressure required to
+support the disk. Equating these two relations yields the prediction
+\begin{equation}
+  \Ssfr = \frac{\W}{\Ytot},
+  \label{eq:prfm}
+\end{equation}
+in which $\W$ is dictated by the local galactic environment and $\Ytot$ is
+set by feedback physics. The \TIGRESS\ simulation framework
+\citep{2024ApJ...972...67K} resolves the multiphase ISM in local
+shearing-box magnetohydrodynamic (MHD) simulations with explicit
+non-equilibrium cooling/heating, UV radiation transfer, cosmic-ray
+transport, and clustered supernova feedback, and delivers calibrated values
+of $\Ytot$ and its thermal, turbulent, and magnetic components across
+metallicities. \PRFM\ has been adopted as the star formation prescription
+in cosmological-volume simulations \citep{2024ApJ...975..151H} and
+isolated-galaxy simulations \citep{2024ApJ...975..113J}, where it provides
+a physically motivated alternative to empirical Kennicutt--Schmidt-type
+prescriptions.
+
+The observational counterpart to \TIGRESS\ is provided by the Physics at
+High Angular resolution in Nearby GalaxieS (\PHANGS) survey
+\citep{2021ApJS..255...19L,2023AJ....166..145L}, which delivers
+spatially resolved, multi-wavelength measurements of $\sim80$ nearby
+star-forming disk galaxies. \PHANGS\ aperture catalogs combine high-resolution
+CO mapping with matched \HI, stellar mass, and SFR tracers to produce
+joint constraints on gas, stars, and star formation at sub-kpc scales
+\citep{2022AJ....164...43S,2023ApJ...945L..19S}.
+Together with stellar dynamical modeling of the same galaxies
+\citep{2020ApJ...892..148S,2025ApJ...989...66V}, the survey defines an
+empirical envelope of local galactic environments---spanning more than two
+orders of magnitude in gas and stellar surface density, and the full range
+of orbital frequencies found in disk-dominated systems---against which any
+ISM theory must be tested.
+
+To date, however, comparisons between \TIGRESS-type simulations and
+\PHANGS-type observations have relied almost exclusively on a handful of
+representative simulations selected by hand at the solar neighborhood and a
+few extreme environments. No systematic survey has yet been carried out
+that spans the full \PHANGS\ parameter volume with controlled, calibrated
+simulations of the resolved multiphase ISM. An analogous gap in
+cosmology---between hand-picked hydrodynamic simulations and the
+high-dimensional space of cosmological and astrophysical parameters
+required for inference---was closed by the Cosmology and Astrophysics with
+MachinE Learning Simulations (\CAMELS) project
+\citep{2021ApJ...915...71V}. \CAMELS\ demonstrated that a structured
+simulation ensemble covering parameter space in a controlled way enables
+emulator construction, simulation-based inference, and systematic
+comparison with observations, even at the modest individual-simulation
+fidelity that suite-scale projects can afford. The same logic motivates a
+\CAMELS-style ensemble for the star-forming ISM.
+
+In this paper, the first in a series, we present the design of a
+\PHANGS-informed simulation suite for the star-forming ISM based on the
+\TIGRESS\ framework. We use the \PHANGS\ megatable
+\citep{2022AJ....164...43S} to construct an observational prior over the
+five environmental parameters that enter \TIGRESS\ as initial conditions:
+the gas surface density $\Sgas$, stellar surface density $\Sstar$,
+stellar scale height $\Hstar$, orbital frequency $\Omrot$, and shear
+parameter $\qshear$. We construct the simulation design by fitting a
+kernel density estimator (KDE) to the joint \PHANGS\ distribution of these
+five fields and mapping a scrambled Sobol quasi-random sequence through
+its marginal quantile functions. The Sobol construction allows the suite
+to be extended progressively---doubling the sample size without displacing
+or re-running earlier simulations---and yields low-discrepancy coverage of
+the \PHANGS\ environmental volume at every intermediate sample size. The
+molecular fraction $\fmol$ and SFR surface density $\Ssfr$ are
+deliberately excluded from the input design and reserved as validation
+quantities to be compared against emergent simulation outputs. In this
+first suite, all physics parameters (metallicity, dust-to-gas ratio,
+feedback prescription) are held at fiducial solar-neighborhood values;
+extension to physics-parameter variations and the use of this suite for
+simulation-based inference (\SBI) are the subjects of companion papers
+\CGK{(Paper~II, in prep.)}.
+
+The remainder of this paper is organized as follows. \autoref{sec:data}
+describes the \PHANGS\ megatable data, the aperture-level join, and the
+derivation of the five design fields and validation fields used throughout.
+\CGK{Section~3} presents the sampling design, including the KDE fit, the
+Sobol construction, and the fairness diagnostics used to assess marginal
+and joint coverage. \autoref{sec:tigress_mapping} describes the mapping
+from \PHANGS\ design fields to \TIGRESS\ initial conditions and the
+fiducial physics choices for the first suite. \autoref{sec:results}
+presents the resulting simulation design, an initial set of \TIGRESS\ runs,
+and validation against \PHANGS-observed $\fmol$, $\Ssfr$, $\PDE$, and
+$\seff$. \CGK{Section~6} discusses extensions to physics-parameter
+variations, the role of this suite in enabling \SBI\ on the resolved ISM,
+and connections to large-volume cosmological simulations adopting \PRFM.

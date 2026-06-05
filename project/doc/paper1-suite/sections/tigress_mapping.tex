@@ -1,0 +1,52 @@
+\section{TIGRESS-NCR Parameter Mapping}
+\label{sec:tigress_mapping}
+
+\subsection{TIGRESS-NCR Input Parameters}
+
+[SKELETON] The \TIGRESS\ framework \citep{2024ApJ...972...67K} solves the equations
+of ideal MHD with self-gravity and explicit thermochemistry in a local shearing-box
+geometry. The initial conditions are specified by the following parameters:
+\begin{itemize}
+  \item $\Sgas$: total gas surface density
+  \item $\Sstar$: stellar surface density
+  \item $\zstar$: stellar scale height
+  \item $\Omrot$: orbital frequency
+  \item $\rhodm$: dark matter volume density at the midplane
+  \item $\qshear$: shear parameter $q \equiv -d\log\Omrot/d\log R$
+\end{itemize}
+
+\subsection{Mapping from PHANGS to TIGRESS-NCR}
+
+[SKELETON] The PHANGS design fields map to TIGRESS-NCR inputs as follows:
+\begin{align}
+&(\Sgas,\, \Sstar,\, \Hstar,\, \Omrot,\, \qshear)_{\rm PHANGS} \nonumber\\
+&\quad\longrightarrow\;
+(\Sgas,\, \Sstar,\, \zstar,\, \Omrot,\, \rhodm,\, \qshear)_{\rm TIGRESS}
+\end{align}
+
+The stellar scale height $\Hstar$ is related to $\zstar$ by ... [MAPPING TO BE DOCUMENTED].
+
+The dark matter density $\rhodm$ is inferred from the circular velocity curve as ... [MAPPING TO BE DOCUMENTED].
+
+\begin{deluxetable*}{llll}
+\tablecaption{PHANGS design field to TIGRESS-NCR input mapping \label{tab:mapping}}
+\tablehead{
+  \colhead{PHANGS field} & \colhead{Unit} &
+  \colhead{TIGRESS parameter} & \colhead{Notes}
+}
+\startdata
+$\Sgas$   & $\Surf$ & $\Sgas$   & direct \\
+$\Sstar$  & $\Surf$ & $\Sstar$  & direct \\
+$\Hstar$  & pc      & $\zstar$  & [conversion TBD] \\
+$\Omrot$  & km/s/kpc & $\Omrot$ & direct \\
+$\qshear$ & ---     & $\qshear$ & direct, $0 < q \leq 1.5$ \\
+---       & ---     & $\rhodm$  & derived from rotation curve
+\enddata
+\end{deluxetable*}
+
+\subsection{Fiducial Physics Parameters}
+
+The first simulation suite holds all physics parameters at fiducial solar-neighborhood
+values: metallicity $\Zg = 1$, dust-to-gas ratio $\Zd = 1$, and standard feedback
+and population-synthesis assumptions. Extension to physics parameter variations is
+described in \autoref{sec:discussion}.

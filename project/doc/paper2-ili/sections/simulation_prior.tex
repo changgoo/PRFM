@@ -1,0 +1,30 @@
+\section{Simulation Suite as Prior and Simulator}
+\label{sec:simulation_prior}
+
+[SKELETON] The \TIGRESS-NCR\ simulation suite from Paper~I provides both the prior
+distribution over environmental parameters and the numerical simulator that maps
+parameters to observable outputs.
+
+\subsection{Simulation Inputs and Sampling}
+
+The environmental prior is the \PHANGS-informed KDE-Sobol design described in
+Paper~I. The suite spans $\thetaenv = (\Sgas, \Sstar, \Hstar, \Omrot, \qshear)$
+at fiducial metallicity $\Zg = 1$.
+
+\subsection{Observable Summary Statistics}
+
+For each simulation, we extract the following summary statistics that can be compared
+to \PHANGS\ aperture measurements:
+\begin{itemize}
+  \item $\Ssfr$: star formation rate surface density
+  \item $\fmol$: molecular fraction
+  \item $\PDE$: dynamical equilibrium pressure
+  \item $\seff$: effective ISM velocity dispersion
+  \item Feedback yields $\Ytot$, $\Yth$, $\Ynonth$
+\end{itemize}
+
+[SKELETON --- summary statistic extraction pipeline to be documented]
+
+\subsection{Mapping to PHANGS Observables}
+
+[SKELETON --- aperture convolution and observational noise model]

@@ -1,0 +1,258 @@
+
+%===============================================================
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    units
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\gram{\, {\rm g}}
+\newcommand\pcc{\,{\rm cm}^{-3}}
+\newcommand\Msun{\, M_{\odot}}
+\newcommand\kms{\, {\rm km}\,{\rm s}^{-1}}
+\newcommand\ergs{\, {\rm erg}\,{\rm s}^{-1}}
+\newcommand\erg{\, {\rm erg}}
+\newcommand\mh{\, m_{\rm H}}
+\newcommand\cm{\,{\rm cm}}
+\newcommand\nm{\,{\rm nm}}
+\newcommand\second{\,{\rm s}}
+\newcommand\yr{\, {\rm yr}}
+\newcommand\kyr{\,{\rm kyr}}
+\newcommand\Myr{\,{\rm Myr}}
+\newcommand\Gyr{\,{\rm Gyr}}
+\newcommand\pc{\,{\rm pc}}
+\newcommand\kpc{\,{\rm kpc}}
+\newcommand\momunit{\Msun \kms}
+\newcommand\sfrunit{\Msun \kpc^{-2} \yr^{-1}}
+\newcommand\Punit{\pcc\,{\rm K}}
+\newcommand\Surf{\Msun\,{\rm pc^{-2}}}
+\newcommand\rhounit{\Msun\,{\rm pc^{-3}}}
+\newcommand\Kel{\,{\rm K}}
+\newcommand\eV{\,{\rm eV}}
+\newcommand\mfluxunit{M_{\odot}/({\rm kpc}^{2} \yr^{1})}
+\newcommand\pfluxunit{(M_\odot \kms)/({\rm kpc}^{2} \yr^{1})}
+\newcommand\efluxunit{{\rm erg}/({\rm kpc}^{2} \yr^{1})}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    operators, brackets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\simgt{\lower.5ex\hbox{$\; \buildrel > \over \sim \;$}}
+\newcommand\simlt{\lower.5ex\hbox{$\; \buildrel < \over \sim \;$}}
+\newcommand\pderiv[2]{\frac{\partial {#1}}{\partial {#2}}}
+\newcommand\deriv[2]{\frac{d {#1}}{d {#2}}}
+\newcommand\advect[2][\vel]{{#1}\cdot \nabla {#2}}
+\newcommand\rbrackets[1]{\left({#1}\right)}
+\newcommand\sbrackets[1]{\left[{#1}\right]}
+\newcommand\cbrackets[1]{\left\{{#1}\right\}}
+\newcommand\abrackets[1]{\left\langle{#1}\right\rangle}
+\newcommand\divergence[2][\rbrackets]{\nabla \cdot #1{#2}}
+\newcommand\curl[2][\rbrackets]{\nabla \times #1{#2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    editing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\modified[1]{{\color{black}\bf #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    physical variables, vectors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\cs{c_s}
+\newcommand\vel{\bm{v}}
+\newcommand\Bvec{\bm{B}}
+\newcommand\Om{\bm{\Omega}}
+\newcommand\Phit{\Phi_{\rm t}}
+\newcommand\ekin{\frac{\rho v^2}{2}}
+\newcommand\dekin{\frac{\rho\delta v^2}{2}}
+\newcommand\dv{\delta\vel}
+\newcommand\mom{\rho\vel}
+\newcommand\dmom{\rho\dv}
+\newcommand\ekinb{\frac{\rho v_0^2}{2}}
+\newcommand\ekinc{\rho \vel_0\cdot\dv}
+\newcommand\xhat{\hat{\bm{x}} }
+\newcommand\yhat{\hat{\bm{y}} }
+\newcommand\zhat{\hat{\bm{z}} }
+\newcommand\rhat{\hat{\bm{r}} }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    specific parameters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\kbol{k_{\rm B}}
+\newcommand\vout{v_{\rm out}}
+\newcommand\vchar{v_{\rm char}}
+\newcommand\vB{v_{\mathcal{B}}}
+\newcommand\vBz{v_{\mathcal{B},z}}
+\newcommand\vBmax{v_{\mathcal{B}, \textrm{max}}}
+\newcommand{\tver}{t_{\rm osc}}
+\newcommand{\tdep}{t_{\rm dep}}
+\newcommand{\tdyn}{t_{\rm dyn}}
+\newcommand{\torb}{t_{\rm orb}}
+\newcommand{\tevol}{t_{\rm evol}}
+\newcommand{\tff}{t_{\rm ff}}
+\newcommand{\tSN}{t_{\rm SN}}
+\newcommand{\vpdf}{$v$PDF}
+\newcommand{\flux}{\mathcal{F}}
+\newcommand{\vesc}{v_{\rm esc}}
+\newcommand{\Ssfr}{\Sigma_{\rm SFR}}
+\newcommand{\Ssfrone}{\Sigma_{\rm SFR,0}}
+\newcommand{\szeff}{\sigma_{\rm z,eff}}
+\newcommand{\szmid}{\sigma_{\rm z,eff,mid}}
+\newcommand{\szavg}{\sigma_{\rm z,eff}}
+\newcommand{\szth}{\sigma_{\rm th}}
+\newcommand{\szturb}{\sigma_{\rm z,turb}}
+\newcommand{\szmag}{\sigma_{\rm z,mag}}
+
+\newcommand\loading[2]{\eta_{{#1},\textrm{#2}}}
+\newcommand\modelflux[2]{{\tilde{\eta}_{#1}^{\rm {#2}}}}
+\newcommand\fluxME{\mathcal{F}_{M\rightarrow E}}
+\newcommand{\mflux}{\mathcal{F}_M}
+\newcommand{\eflux}{\mathcal{F}_E}
+\newcommand{\pflux}{\mathcal{F}_p}
+\newcommand{\zflux}{\mathcal{F}_Z}
+\newcommand\ovB{\overline{v}_{\mathcal{B}}}
+\newcommand\vmean{v_{\rm out,0}}
+\newcommand\csmean{c_{\rm s,0}}
+\newcommand{\vBmean}{v_{\mathcal{B},0}}
+\newcommand{\Mach}{\mathcal{M}}
+\newcommand{\Machmean}{\mathcal{M}_0}
+\newcommand\model{\tilde{f}_{M}}
+\newcommand\Mref{M_{\rm ref}}
+\newcommand\pref{p_{\rm ref}}
+\newcommand\Eref{E_{\rm ref}}
+\newcommand\Zref{Z_{\rm ref}}
+\newcommand\cdf{{\rm CDF}}
+\newcommand\SFR{\dot{M}_*}
+
+\newcommand{\on}{\cellcolor{blue!50}ON}  %{0.9}
+\newcommand{\off}{\cellcolor{red!50}OFF}  %{0.9}
+
+% units
+\newcommand{\junits}{\ergs\cm^{-2}\,{\rm sr^{-1}}}
+% model name convention
+\newcommand{\full}{{\tt full}}
+\newcommand{\classic}{{\tt classic}}
+\newcommand{\UV}{{\tt UV}}
+\newcommand{\SN}{{\tt SN}}
+\newcommand{\bten}{{\tt b10}}
+\newcommand{\qzero}{{\tt no-sh}}
+\newcommand{\Omzero}{{\tt no-rot}}
+\newcommand{\hydro}{{\tt hydro}}
+\newcommand{\UVbten}{{\tt UV-b10}}
+
+\newcommand{\SHH}{\Sigma_{\rm H_2}}
+\newcommand{\SHI}{\Sigma_{\rm H}}
+\newcommand{\SHII}{\Sigma_{\rm H^+}}
+\newcommand{\SFUV}{S_{\rm FUV}}
+\newcommand{\SPE}{S_{\rm PE}}
+\newcommand{\SLW}{S_{\rm LW}}
+\newcommand{\SPH}{S_{\rm LyC}}
+
+\newcommand{\Sgas}{\Sigma_{\rm gas}}
+\newcommand{\Sgasinit}{\Sigma_{\rm gas,0}}
+\newcommand{\Sstar}{\Sigma_{\rm star}}
+\newcommand{\Sout}{\Sigma_{\rm out}}
+
+\newcommand{\xHI}{x_{\rm H^0}}
+\newcommand{\xHII}{x_{\rm H^+}}
+\newcommand{\xHH}{x_{\rm H_2}}
+\newcommand{\chiFUV}{\chi_{\rm FUV}}
+\newcommand{\frad}{\bm{f}_{\rm rad}}
+\newcommand{\erad}{\mathcal{E}_{\rm rad}}
+\newcommand{\Frad}{\bm{F}_{\rm rad}}
+\newcommand{\etot}{E_{\rm tot}}
+\newcommand{\nH}{n_{\rm mid}}
+\newcommand{\nHtwo}{n_{\rm mid,2p}}
+\newcommand{\muH}{\mu_{\rm H}}
+\newcommand{\HI}{\ion{H}{1}}
+\newcommand{\HII}{\ion{H}{2}}
+\newcommand{\HH}{\ensuremath{{\rm H}_2}}
+\newcommand{\Hp}{\ensuremath{{\rm H}^+}}
+\newcommand{\Hn}{\ensuremath{{\rm H}^0}}
+
+\newcommand{\ftau}{f_\tau}
+\newcommand{\ftausun}{f_{\tau,\odot}}
+\newcommand{\Ptot}{P_{\rm tot}}
+\newcommand{\Pth}{P_{\rm th}}
+\newcommand{\Pturb}{P_{\rm turb}}
+\newcommand{\Pimag}{\Pi_{\rm mag}}
+\newcommand{\dPimag}{\Pi_{\delta B}}
+\newcommand{\oPimag}{\Pi_{\overline{B}}}
+\newcommand{\PDE}{P_{\rm DE}}
+\newcommand{\PDEtwo}{P_{\rm DE,2p}}
+\newcommand{\Ptottwo}{P_{\rm tot,2p}}
+\newcommand{\Phot}{P_{\rm tot,hot}}
+\newcommand{\Pthtwo}{P_{\rm th,2p}}
+\newcommand{\Pturbtwo}{P_{\rm turb,2p}}
+\newcommand{\Pimagtwo}{\Pi_{\rm mag,2p}}
+\newcommand{\Wtwo}{\mathcal{W}_{\rm 2p}}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\Wsg}{\mathcal{W}_{\rm sg}}
+\newcommand{\Wext}{\mathcal{W}_{\rm ext}}
+\newcommand{\vturb}{v_{\rm trb}}
+\newcommand{\ovA}{\overline{v}_{A}}
+\newcommand{\dvA}{\delta{v}_{A}}
+
+\newcommand{\Ytot}{\Upsilon_{\rm tot}}
+\newcommand{\Yth}{\Upsilon_{\rm th}}
+\newcommand{\Yturb}{\Upsilon_{\rm turb}}
+\newcommand{\Ymag}{\Upsilon_{\rm mag}}
+\newcommand{\dYmag}{\Upsilon_{\delta B}}
+\newcommand{\oYmag}{\Upsilon_{\bar{B}}}
+\newcommand{\Ynonth}{\Upsilon_{\rm turb+mag}}
+
+\newcommand{\seffavg}{\sigma_{\rm eff,avg}}
+\newcommand{\seffmid}{\sigma_{\rm eff,mid}}
+\newcommand{\seff}{\sigma_{\rm eff}}
+\newcommand{\xicr}{\xi_{\rm cr}}
+\newcommand{\Zd}{Z_d'}
+\newcommand{\Zg}{Z_g'}
+\newcommand{\dxymax}{d_{\rm xy,max}}
+\newcommand{\zpp}{z_{\rm p\textnormal{-}p}}
+\newcommand{\epp}{\varepsilon_{\rm PP}}
+% phases
+\newcommand{\CMM}{{\tt CMM}}
+\newcommand{\CNM}{{\tt CNM}}
+\newcommand{\UNM}{{\tt UNM}}
+\newcommand{\WNM}{{\tt WNM}}
+\newcommand{\WPIM}{{\tt WPIM}}
+\newcommand{\WCIM}{{\tt WCIM}}
+\newcommand{\WIM}{{\tt WIM}}
+\newcommand{\UIM}{{\tt UIM}}
+\newcommand{\WHIM}{{\tt WHIM}}
+\newcommand{\HIM}{{\tt HIM}}
+\newcommand{\twop}{{\tt 2p}}
+\newcommand{\hot}{{\tt hot}}
+
+%===============================================================
+%  TIGRESS-PHANGS-ILI additions
+%===============================================================
+
+% Editorial comment macro (shows in red during drafting; remove before submission)
+\newcommand{\CGK}[1]{{\color{teal} CGK: #1}}
+
+% PHANGS-specific surface densities (reuse \Sgas, \Sstar, \Ssfr from above)
+\newcommand{\Satom}{\Sigma_{\rm atom}}
+\newcommand{\Smol}{\Sigma_{\rm mol}}
+
+% Molecular fraction and stellar scale height
+\newcommand{\fmol}{f_{\rm mol}}
+\newcommand{\Hstar}{H_\star}
+\newcommand{\zstar}{z_\star}
+
+% Orbital and structural parameters
+% Note: \Om is already defined as vector \bm{\Omega}; use \Omrot for scalar orbital frequency
+\newcommand{\Omrot}{\Omega}
+\newcommand{\qshear}{q}
+\newcommand{\rhodm}{\rho_{\rm dm}}
+
+% Sampling notation
+\newcommand{\thetaenv}{\boldsymbol{\theta}_{\rm env}}
+\newcommand{\thetaphys}{\boldsymbol{\theta}_{\rm phys}}
+\newcommand{\Dref}{\mathcal{D}_{\rm ref}}
+\newcommand{\logit}{{\rm logit}}
+\newcommand{\dex}{\,{\rm dex}}
+
+% Project acronyms
+\newcommand{\PHANGS}{PHANGS}
+\newcommand{\TIGRESS}{TIGRESS\nobreakdash-NCR}
+\newcommand{\PRFM}{PRFM}
+\newcommand{\CAMELS}{CAMELS}
+\newcommand{\ILI}{ILI}
+\newcommand{\SBI}{SBI}

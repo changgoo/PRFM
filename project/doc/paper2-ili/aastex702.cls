@@ -1,0 +1,1 @@
+../shared/aastex702.cls

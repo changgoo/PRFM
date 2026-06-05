@@ -1,0 +1,77 @@
+\documentclass[twocolumn,twocolappendix,linenumbers]{aastex702}
+
+\usepackage{amsmath}
+\usepackage{bbm,bm}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{../shared/preamble}
+\usepackage{hyperref}
+
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+\renewcommand{\figureautorefname}{Figure}
+\renewcommand{\tableautorefname}{Table}
+\renewcommand{\equationautorefname}{Equation}
+\renewcommand{\appendixautorefname}{Appendix}
+
+\renewcommand{\log}{{\rm log_{\small 10}}}
+
+\graphicspath{{./}{paper-figures/}{paper-tables/}{../../../../figures/phangs/}}
+
+\shorttitle{TIGRESS-PHANGS Simulation Suite}
+\shortauthors{Kim et al.}
+
+\begin{document}
+
+\title{A \PHANGS-Informed Simulation Suite for the Star-Forming Interstellar Medium:
+       Sampling Design and \TIGRESS\ Initial Conditions}
+
+\author[0000-0003-2896-3725]{Chang-Goo Kim}
+\affiliation{Department of Astrophysical Sciences, Princeton University,
+             4 Ivy Lane, Princeton, NJ 08544, USA}
+\email{cgkim@astro.princeton.edu}
+
+% Additional authors to be added
+
+\begin{abstract}
+We present the design of a \PHANGS-informed simulation suite for the star-forming
+interstellar medium (ISM), built on the \TIGRESS\ framework. Following the philosophy
+of the \CAMELS\ project in cosmology, we construct an observationally anchored
+simulation ensemble that spans the range of galactic environments found in nearby
+galaxies, enabling systematic comparison with observations and simulation-based
+parameter inference. The \PHANGS\ megatable survey provides aperture-level measurements
+of gas surface density, stellar surface density, orbital frequency, stellar scale height,
+and shear across $\sim$80 nearby galaxies. We use these as an informed prior over the
+five environmental parameters that enter \TIGRESS-NCR\ as initial conditions.
+The sampling method fits a kernel density estimator to the observed joint distribution
+of these five design fields and maps a scrambled Sobol quasi-random sequence through
+the marginal quantile functions to generate the simulation design. The Sobol approach
+enables progressive extension of the suite at any later stage without displacing earlier
+simulations. Molecular fraction and star formation rate tracers are excluded from the
+input design and reserved as validation quantities to be compared against emergent
+simulation outputs.
+[PLACEHOLDER: summary of simulation results and PHANGS validation to be added]
+\end{abstract}
+
+\keywords{Interstellar medium (847); Star formation (1569);
+          Stellar feedback (1602); Magnetohydrodynamical simulations (1966);
+          Methods: statistical (1361)}
+
+\input{sections/introduction}
+\input{sections/data}
+\input{sections/sampling}
+\input{sections/tigress_mapping}
+\input{sections/results}
+\input{sections/discussion}
+
+\begin{acknowledgments}
+The authors acknowledge the use of Claude Code (Anthropic) as an AI-assisted
+editing tool during the preparation of this manuscript. All scientific ideas,
+physical interpretations, mathematical formulations, and intellectual content
+are original contributions of the authors.
+\end{acknowledgments}
+
+\bibliography{../shared/references}
+
+\end{document}

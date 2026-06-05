@@ -1,0 +1,64 @@
+\documentclass[twocolumn,twocolappendix,linenumbers]{aastex702}
+
+\usepackage{amsmath}
+\usepackage{bbm,bm}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{../shared/preamble}
+\usepackage{hyperref}
+
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\subsubsectionautorefname}{Section}
+\renewcommand{\figureautorefname}{Figure}
+\renewcommand{\tableautorefname}{Table}
+\renewcommand{\equationautorefname}{Equation}
+\renewcommand{\appendixautorefname}{Appendix}
+
+\renewcommand{\log}{{\rm log_{\small 10}}}
+
+\graphicspath{{./}{paper-figures/}{paper-tables/}{../../../../figures/phangs/}}
+
+\shorttitle{SBI for the Star-Forming ISM}
+\shortauthors{Kim et al.}
+
+\begin{document}
+
+\title{Simulation-Based Inference for the Star-Forming Interstellar Medium:
+       Inferring Physical Parameters from \PHANGS\ Observations}
+
+\author[0000-0003-2896-3725]{Chang-Goo Kim}
+\affiliation{Department of Astrophysical Sciences, Princeton University,
+             4 Ivy Lane, Princeton, NJ 08544, USA}
+\email{cgkim@astro.princeton.edu}
+
+% Additional authors to be added
+
+\begin{abstract}
+\textbf{PLACEHOLDER:} Abstract to be written once the inference framework is
+implemented. Key points: ISM parameter inference problem, why explicit likelihoods
+are unavailable, SBI/ILI as solution, connection to Paper~I simulation suite,
+expected inference targets and posterior diagnostics.
+\end{abstract}
+
+\keywords{Interstellar medium (847); Star formation (1569);
+          Stellar feedback (1602); Magnetohydrodynamical simulations (1966);
+          Methods: statistical (1361)}
+
+\input{sections/introduction}
+\input{sections/data}
+\input{sections/simulation_prior}
+\input{sections/inference}
+\input{sections/results}
+\input{sections/conclusions}
+
+\begin{acknowledgments}
+The authors acknowledge the use of Claude Code (Anthropic) as an AI-assisted
+editing tool during the preparation of this manuscript. All scientific ideas,
+physical interpretations, mathematical formulations, and intellectual content
+are original contributions of the authors.
+\end{acknowledgments}
+
+\bibliography{../shared/references}
+
+\end{document}

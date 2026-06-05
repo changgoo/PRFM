@@ -1,0 +1,477 @@
+\section{Sampling Design}
+\label{sec:sampling}
+
+This section describes the construction of an observationally informed prior
+over the environmental parameters that enter \TIGRESS\ as initial conditions,
+and the quasi-random design that converts this prior into a concrete set of
+simulation inputs. The design fields, their identification with \PHANGS\
+aperture measurements, and the validation fields reserved for post-simulation
+comparison are defined in \autoref{sec:data}; the mapping to \TIGRESS\ initial
+conditions is detailed in \autoref{sec:tigress_mapping}.
+
+%-----------------------------------------------------------------
+\subsection{Statistical Goal}
+\label{sec:sampling:goal}
+%-----------------------------------------------------------------
+
+The objective of the sampling procedure is to construct an informed prior over
+the environmental design vector
+\begin{equation}
+\thetaenv \;=\; \rbrackets{\Sgas,\ \Sstar,\ \Hstar,\ \Omrot,\ \qshear},
+\label{eq:theta_env}
+\end{equation}
+conditioned on a target gas surface density band,
+\begin{equation}
+p\rbrackets{\thetaenv \,\big|\, \log\Sgas \in
+\sbrackets{\log\Sgas^{\rm tgt} \pm \Delta}}.
+\label{eq:prior_definition}
+\end{equation}
+This prior is \emph{not} an exact resampling of the \PHANGS\ aperture
+distribution. Exact resampling would inherit the survey's selection effects
+(e.g.\ inclination, distance, sensitivity, aperture footprint) and would tile
+parameter space inefficiently for emulator and simulation-based inference
+(\SBI) training. Instead, the goal is a compact set of simulation inputs that:
+(i) preserves the dominant observed correlations among the five design fields;
+(ii) covers the relevant parameter volume sufficiently densely for emulator
+training and posterior coverage tests; and (iii) excludes parameter
+combinations that are unphysical or implausible.
+
+We deliberately exclude the molecular gas fraction $\fmol$ and the star
+formation surface density $\Ssfr$ from the design vector. Neither is a
+\TIGRESS\ input parameter: in the \TIGRESS\ framework both are emergent
+outputs of the explicit thermochemistry and self-consistent star formation
+prescription \citep{2024ApJ...972...67K}.\CGK{Add a second TIGRESS-NCR reference here if desired (e.g.\ Kim et al.\ 2023 ApJS thermochemistry paper); the key 2023ApJS..264...10K is not yet in references.bib and should be verified in ADS before insertion.} Requiring valid
+$\fmol$ and $\Ssfr$ measurements in the reference set would furthermore bias
+the prior toward high-completeness environments in which CO and SFR tracers
+are simultaneously detected, suppressing the very low-$\fmol$ and
+low-$\Ssfr$ regions that the simulation suite must cover. These two fields
+are instead retained as \emph{validation quantities} to be compared against
+the corresponding emergent distributions from the completed simulation
+suite (\autoref{sec:results}).
+
+%-----------------------------------------------------------------
+\subsection{Design Fields and Validation Fields}
+\label{sec:sampling:fields}
+%-----------------------------------------------------------------
+
+We partition the relevant \PHANGS\ aperture-level quantities into two
+disjoint sets: design fields, which serve as \TIGRESS\ initial conditions
+and over which the prior is constructed, and validation fields, which are
+emergent in \TIGRESS\ and used only for post-simulation comparison.
+
+\paragraph{Design fields.}
+The five-dimensional design vector $\thetaenv$ (defined in
+\autoref{eq:theta_env}) contains the gas surface density $\Sgas$, the
+stellar surface density $\Sstar$, the stellar scale height $\Hstar$,
+the orbital frequency $\Omrot$, and the shear parameter
+$\qshear \equiv -d\ln\Omrot/d\ln R$.
+These five quantities are sufficient to specify the local shearing-box
+\TIGRESS\ initial conditions up to the dark matter midplane density
+$\rhodm$, which is derived from the rotation curve as described in
+\autoref{sec:tigress_mapping}.
+
+\paragraph{Validation fields.}
+The validation set comprises emergent quantities that are diagnostic of
+the multiphase ISM and star formation, but are not used to specify the
+simulations:
+\begin{equation}
+\thetaenv^{\rm val} = \rbrackets{\fmol,\ \Satom,\ \Smol,\ \Ssfr,\ \PDE,\ \seff}.
+\end{equation}
+Among these, $\PDE$ and $\seff$ are derived quantities in the \PRFM\
+framework \citep{2022ApJ...936..137O} that are computed from the design
+fields via the vertical equilibrium and feedback closure relations;
+their \PHANGS\ values therefore depend on the same five design fields
+plus the choice of \PRFM\ effective velocity dispersion model. We use
+the design-field/validation-field split exclusively to define which
+distributions are matched in the prior construction (design fields)
+versus checked in post-simulation comparison (validation fields).
+
+%-----------------------------------------------------------------
+\subsection{Reference Pixel Selection}
+\label{sec:sampling:reference}
+%-----------------------------------------------------------------
+
+The reference dataset $\Dref$ from which the prior is fit is the subset of
+\PHANGS\ apertures \citep{2022AJ....164...43S,2023ApJ...945L..19S} that
+satisfy a target $\Sgas$ band and basic physical validity. Specifically,
+a \PHANGS\ aperture $i$ is included in $\Dref$ if
+\begin{align}
+\bigl|\log\Sgas^{(i)} - \log\Sgas^{\rm tgt}\bigr| &\leq \Delta,
+\label{eq:sgas_band}\\
+\Sgas^{(i)},\ \Sstar^{(i)},\ \Hstar^{(i)},\ \Omrot^{(i)} &> 0,
+\label{eq:positivity}\\
+0 &< \qshear^{(i)} \leq 1.5.
+\label{eq:q_bound}
+\end{align}
+The band width $\Delta$ defines the local extent of $\Dref$ in $\log\Sgas$
+and is chosen to balance two competing requirements: $\Delta$ must be wide
+enough to provide a statistically meaningful sample for the kernel density
+estimator, yet narrow enough that the conditional joint distribution of the
+remaining design fields is well approximated as locally stationary in
+$\log\Sgas$. A fiducial choice $\Delta = 0.2\dex$ is adopted in this work
+and discussed further in \autoref{sec:results}.
+
+The upper bound on the shear parameter, $\qshear \leq 1.5$, follows from
+the definition $\qshear = -d\ln\Omrot/d\ln R$: $\qshear=0$ corresponds to
+solid-body rotation, $\qshear=1$ to a flat rotation curve, and
+$\qshear=1.5$ to Keplerian rotation around a point mass. Values
+$\qshear > 1.5$ would correspond to super-Keplerian rotation curves that
+cannot be produced by a positive enclosed mass distribution and are
+therefore excluded as unphysical. We similarly exclude $\qshear \leq 0$,
+which corresponds to rotation curves that increase faster than linearly
+with radius and is not a regime in which the local shearing-box
+approximation underlying \TIGRESS\ is expected to apply.
+
+Crucially, validity of $\fmol$, $\Ssfr$, or any other tracer-specific
+quantity is \emph{not} required for inclusion in $\Dref$. \CGK{This choice
+maximizes the number of usable reference pixels — particularly in the
+low-$\Sgas$, low-$\fmol$ outer-disk regime where CO is undetected and the
+PHANGS megatable returns upper limits on $\Smol$ — but should be verified
+against the megatable flag convention to ensure that apertures with all
+five design fields validly measured are retained.}
+
+%-----------------------------------------------------------------
+\subsection{Kernel Density Estimator Prior}
+\label{sec:sampling:kde}
+%-----------------------------------------------------------------
+
+We work throughout in log-transformed design space. Define the
+five-dimensional log-vector
+\begin{equation}
+\bm{w} \;\equiv\;
+\rbrackets{\log\Sgas,\ \log\Sstar,\ \log\Hstar,\ \log\Omrot,\ \log\qshear},
+\label{eq:w_def}
+\end{equation}
+so that the reference set in log-space is $\cbrackets{\bm{w}_i}_{i=1}^{N}$
+with $N = |\Dref|$. The log transformation is natural because each design
+field spans more than an order of magnitude across \PHANGS\ and is
+approximately log-normally distributed within fixed $\Sgas$ bands; it also
+makes the KDE bandwidth selection scale-invariant under multiplicative
+rescaling of any field.
+
+We fit a Gaussian kernel density estimator to the reference log-vectors,
+\begin{equation}
+\hat{p}(\bm{w}) \;=\; \frac{1}{N}\,\sum_{i=1}^{N}
+K_{\bm{H}}\rbrackets{\bm{w} - \bm{w}_i},
+\label{eq:kde}
+\end{equation}
+where $K_{\bm{H}}$ is the multivariate Gaussian kernel
+\begin{equation}
+K_{\bm{H}}(\bm{u}) \;=\;
+\rbrackets{2\pi}^{-5/2}\,\det(\bm{H})^{-1/2}\,
+\exp\!\sbrackets{-\tfrac{1}{2}\,\bm{u}^{\top}\bm{H}^{-1}\bm{u}},
+\label{eq:gaussian_kernel}
+\end{equation}
+and $\bm{H}$ is a symmetric positive-definite bandwidth matrix. We adopt
+the multivariate Scott's rule for the full bandwidth matrix,
+\begin{equation}
+\bm{H} \;=\; \left(\frac{4}{d+2}\right)^{\!\!2/(d+4)}
+\!\! N^{-2/(d+4)}\,\hat{\bm{\Sigma}},
+\label{eq:scott_rule}
+\end{equation}
+where $d = 5$ is the number of design dimensions,
+$N = |\Dref|$ is the reference sample size, and $\hat{\bm{\Sigma}}$ is
+the empirical covariance of the $N$ reference log-vectors; for $d=5$
+this gives $\bm{H} = (4/7)^{2/9} N^{-2/9} \hat{\bm{\Sigma}}$.
+Multiplying the full empirical covariance by a scalar factor ensures
+that $\bm{H}$ is positive definite and correctly encodes the observed
+correlations among all five log-fields. In practice we will compare
+against likelihood-based cross-validation to verify that this bandwidth
+does not oversmooth the joint distribution.
+Because all five design fields are strictly positive in $\Dref$ and
+their upper bounds (most importantly $\qshear \leq 1.5$) are handled
+by the post-mapping rejection step rather than by a boundary-corrected
+KDE, the KDE in log-space requires no special boundary treatment.
+This is in contrast to designs that include the molecular fraction
+$\fmol \in [0,1]$, where a logit transform is needed to avoid
+density leakage outside the physical support.
+
+From $\hat{p}(\bm{w})$ we draw a large auxiliary KDE sample of size
+$M \gg N$ (we use $M = 10^{5}$) and from this sample compute, for each
+design coordinate $j = 1,\ldots,5$, the marginal cumulative distribution
+function $F_j(w_j)$ and its inverse, the quantile function
+\begin{equation}
+Q_j(u) \;=\; F_j^{-1}(u), \qquad u \in (0,1).
+\label{eq:quantile_function}
+\end{equation}
+The quantile functions are tabulated on a dense grid in $u$ and used as
+look-up tables in the Sobol mapping (\autoref{sec:sampling:sobol}).
+We emphasize that $\hat{p}(\bm{w})$ retains the full multivariate
+correlation structure through the off-diagonal entries of $\bm{H}$,
+but the marginal quantile functions $\cbrackets{Q_j}$ encode only the
+one-dimensional marginals of $\hat{p}$. The dimension-wise
+inverse-CDF mapping in \autoref{eq:sobol_map} therefore produces a
+sample whose one-dimensional marginal distributions match those of
+$\hat{p}$ \emph{exactly}, while the joint distribution corresponds to
+an independence copula applied to these marginals. The joint
+correlation structure of $\hat{p}$ is thus reproduced only
+approximately, with fidelity depending on how well an independence
+copula approximates the true KDE joint. In practice this approximation
+is adequate when the pairwise correlations among the log design fields
+are moderate, as is typical within a fixed $\Sgas$ band; we assess the
+quality of the joint match quantitatively in \autoref{sec:results}.
+
+%-----------------------------------------------------------------
+\subsection{Sobol Sequence Design}
+\label{sec:sampling:sobol}
+%-----------------------------------------------------------------
+
+Having reduced the prior to its marginal quantile functions on a unit
+hypercube, we map a quasi-random low-discrepancy sequence through these
+functions to produce the simulation design. We adopt a scrambled Sobol
+sequence \citep{Sobol1967,Owen1998} rather than a pseudo-random or Latin
+Hypercube Sampling (LHS) design for two reasons. First, for any finite
+sample size $n$, Sobol sequences achieve a star-discrepancy of
+$O(n^{-1}(\log n)^{d})$ in $d$ dimensions, asymptotically smaller than
+the $O(n^{-1/2})$ scaling of pseudo-random samples and uniformly better
+than LHS in projections onto coordinate subspaces. Second, and more
+importantly for an incrementally grown simulation suite, the Sobol
+construction has a nested progressive property: the first $2^{k}$ points
+of the sequence form a balanced design at all $k$, so doubling the sample
+size from $2^{k}$ to $2^{k+1}$ adds new design points without displacing
+any of the original ones. LHS, by contrast, must in general be
+re-stratified — and therefore re-drawn from scratch — whenever the
+sample size changes.
+
+\paragraph{Sampling algorithm.}
+Given a target sample size $n$, the design is generated as follows.
+\begin{enumerate}
+\item Draw a scrambled Sobol sequence
+$\cbrackets{\bm{u}_k}_{k=1}^{n} \subset [0,1]^{5}$ using
+\texttt{scipy.stats.qmc.Sobol(d=5, scramble=True)} with a fixed random
+seed for reproducibility.
+\item Map each Sobol point through the marginal quantile functions of
+\autoref{eq:quantile_function} to obtain log-space design points,
+\begin{equation}
+w_{k,j} \;=\; Q_j\rbrackets{u_{k,j}},
+\qquad j = 1,\ldots,5.
+\label{eq:sobol_map}
+\end{equation}
+\item Convert to physical-space design points,
+\begin{equation}
+\theta_{k,j} \;=\; 10^{\,w_{k,j}},
+\label{eq:to_physical}
+\end{equation}
+yielding $\bm{\theta}_k = (\Sgas, \Sstar, \Hstar, \Omrot, \qshear)_k$.
+\item For each design point with $\qshear_k > 1.5$, draw the next
+un-used Sobol point from the sequence and repeat steps 2--3 until an
+accepted point is obtained. Let $n_{\rm extra}$ denote the total
+number of rejected-and-replaced draws. The accepted set of $n$ points
+is formed from the first $n + n_{\rm extra}$ Sobol indices, with the
+$n_{\rm extra}$ rejected indices recorded so that future extensions
+begin from index $n + n_{\rm extra} + 1$. This bookkeeping preserves
+the progressive nesting property (\autoref{sec:sampling:progressive}).
+\end{enumerate}
+The shear bound is the only post-mapping rejection criterion; positivity
+is automatically guaranteed by the log-space construction. Because the
+$\qshear$ marginal in $\Dref$ is already upper-truncated by
+\autoref{eq:q_bound}, the rejection fraction $n_{\rm extra}/n$ is
+expected to be small; we report the realized value in
+\autoref{sec:results}.
+
+Sample sizes that are powers of two, $n = 2^{m}$ with $m$ a non-negative
+integer, are preferred because the Sobol sequence's discrepancy bounds
+are sharp at these sizes and the construction is balanced in projections
+to dyadic subintervals. Arbitrary $n$ is permitted at the cost of a mild
+loss of projection uniformity.
+
+%-----------------------------------------------------------------
+\subsection{Progressive Extension of the Suite}
+\label{sec:sampling:progressive}
+%-----------------------------------------------------------------
+
+A central operational advantage of the Sobol-based design is that the
+suite is extensible at any later stage without re-drawing the existing
+simulations. Let $S(n)$ denote the set of accepted design points produced by the
+algorithm of \autoref{sec:sampling:sobol} at sample size $n$.
+The underlying Sobol sequence has the nesting property: the first
+$2^{k}$ sequence points are a subset of the first $2^{k+1}$ sequence
+points. Provided the same random seed and the same physical rejection
+criterion ($\qshear > 1.5$) are applied at every stage, the
+accepted-point sets inherit this property,
+\begin{equation}
+S(2^{k}) \;\subset\; S(2^{k+1}) \;\subset\; S(2^{k+2}) \;\subset\; \cdots,
+\label{eq:sobol_nesting}
+\end{equation}
+so that any simulation completed at stage $k$ is automatically a member
+of the design at every subsequent stage. In practice we generate
+$n + n_{\rm extra}$ Sobol points at each stage, accept the first $n$
+points that pass the rejection criterion, and record the consumed Sobol
+indices so that future extensions begin from the next un-used point in
+the same sequence. The first generation of the
+suite targets $n \in \{64, 128, 256\}$ ($m \in \{6, 7, 8\}$),
+corresponding to a sequence of doublings; this progression is set by the
+available computational allocation rather than any statistical
+threshold, and the discrepancy of the design improves monotonically
+along the sequence.
+
+At each stage, the new $2^{k}$ points fill the largest remaining gaps in
+the previous-stage coverage of the unit hypercube and, by the inverse-CDF
+mapping of \autoref{eq:sobol_map}, the largest remaining gaps in
+log-design space weighted by the KDE prior. This contrasts sharply with
+LHS-based designs, which must be re-stratified to add new points and
+therefore either displace the existing design or accept a strictly
+sub-optimal stratification on the enlarged design.
+
+This progressive structure is closely analogous to the staged extension
+strategy adopted by the \CAMELS\ project
+\citep{2021ApJ...915...71V}, in which cosmological hydrodynamic
+simulation suites have been incrementally enlarged as new scientific
+questions are identified. The Sobol nesting provides for the
+\PHANGS-informed \TIGRESS\ suite the same operational property that
+\CAMELS\ achieves through its explicit batch design: completed
+simulations are never invalidated by the addition of new ones.
+
+%-----------------------------------------------------------------
+\subsection{Block-Structured Extension to Physics Parameters}
+\label{sec:sampling:physics}
+%-----------------------------------------------------------------
+
+The first-generation suite holds all physics parameters fixed at fiducial
+solar-neighborhood values (\autoref{sec:tigress_mapping}). Subsequent
+generations will vary uncertain physics parameters such as the gas-phase
+metallicity $\Zg$, the dust-to-gas ratio $\Zd$, the cosmic-ray
+ionization rate $\xicr$, the assumed initial mass function, and
+parameters of the supernova feedback prescription. We collect these
+into a $d_{\rm phys}$-dimensional physics design vector $\thetaphys$.
+
+We adopt a block-structured Sobol design over $(\thetaenv, \thetaphys)$,
+defined as follows. Let
+\begin{equation}
+\cbrackets{\bm{u}^{\rm env}_k}_{k=1}^{n_{\rm env}}
+\;\subset\; [0,1]^{5},
+\qquad
+\cbrackets{\bm{u}^{\rm phys}_\ell}_{\ell=1}^{n_{\rm phys}}
+\;\subset\; [0,1]^{d_{\rm phys}}
+\label{eq:two_sobol}
+\end{equation}
+be two independent scrambled Sobol sequences, one over the environmental
+block and one over the physics block. The combined design is constructed by index-aligned pairing:
+simulation $k$ uses environmental point $\bm{u}^{\rm env}_k$ and
+physics point $\bm{u}^{\rm phys}_k$, so the total number of
+simulations equals $\min(n_{\rm env}, n_{\rm phys})$. Each block is
+mapped through its respective prior: $\bm{u}^{\rm env}_k$ through the
+KDE-based quantile functions of \autoref{eq:sobol_map}, and
+$\bm{u}^{\rm phys}_k$ through prior quantile functions appropriate to
+each physics parameter (e.g.\ log-uniform in $\Zg$ over a chosen range).
+When the two blocks differ in size, the smaller block is extended by
+drawing additional Sobol points before pairing.
+
+The block construction has two advantages. First, the two blocks may be
+extended independently: doubling $n_{\rm env}$ at fixed $n_{\rm phys}$
+yields a denser environmental sampling at the original set of physics
+points, while doubling $n_{\rm phys}$ at fixed $n_{\rm env}$ adds physics
+variations to the existing environmental design. Both extensions inherit
+the nesting property of \autoref{eq:sobol_nesting} within their
+respective blocks. Second, the two priors are kept manifestly
+independent, which is desirable when the physics-parameter prior is
+itself uncertain or under active revision: an update to $p(\thetaphys)$
+does not require re-drawing the environmental design.
+
+This block structure is analogous to the separation between
+``cosmological'' and ``astrophysical'' parameter suites in the \CAMELS\
+program \citep{2021ApJ...915...71V}, which treats the two parameter
+groups as independent design axes that can be extended along either axis
+without re-running the other.
+
+\paragraph{Option A: pre-allocated joint design.}
+If the full set of varied physics parameters and their priors are known
+\emph{a priori}, an alternative is to draw a single
+$(5+d_{\rm phys})$-dimensional Sobol sequence over the joint space and
+map each block through its respective prior. This yields the optimal
+joint discrepancy at all sample sizes and preserves the nesting property
+of \autoref{eq:sobol_nesting} in the joint space, but at the cost of
+fixing $d_{\rm phys}$ from the outset: adding a new physics parameter
+later requires re-drawing the design. We therefore prefer the
+block-structured construction for the staged suite considered here, and
+reserve the pre-allocated joint design for a future generation in which
+the physics-parameter list is finalized.
+
+%-----------------------------------------------------------------
+\subsection{Expanded Prior for Rare Environments}
+\label{sec:sampling:expanded}
+%-----------------------------------------------------------------
+
+The KDE prior of \autoref{sec:sampling:kde} faithfully reproduces the
+\PHANGS\ design-field distribution within the target $\Sgas$ band, but
+by construction it under-samples regions of parameter space that are
+under-represented in \PHANGS. Such regions include, for example, very
+low orbital frequencies $\Omrot$ characteristic of low-surface-brightness
+or outer-disk environments, large stellar scale heights $\Hstar$
+characteristic of thickened or perturbed disks, and shear parameters
+$\qshear$ near the rising-rotation-curve ($\qshear \to 0$) or Keplerian
+($\qshear \to 1.5$) extremes. For emulator and \SBI\ training it is
+desirable to extend coverage into these tails to guard against
+extrapolation in posterior inference.
+
+We implement such extension in two complementary ways. (i) Broadening
+the KDE bandwidth, $\bm{H} \to s\,\bm{H}$ with $s > 1$, inflates the
+prior in all directions while preserving the empirical mean and
+correlation structure; this is sufficient for modest extrapolation.
+(ii) Directional extension of the acceptance bounds in selected
+log-space directions, implemented by augmenting the quantile functions
+$Q_j(u)$ at the tails (i.e.\ extending $Q_j$ for $u$ near $0$ or $1$
+beyond the support of $\Dref$), supports targeted extension into rare
+regimes such as low-$\Omrot$ environments. Expanded-prior simulations
+are flagged at draw time and analyzed separately from the
+\PHANGS-prior simulations in the fairness diagnostics
+(\autoref{sec:sampling:fairness}) and downstream emulator validation.
+\CGK{The precise broadening factor $s$ and the directional extensions
+applied in the first-generation suite will be reported in
+\autoref{sec:results}; the choice of these is closely tied to which
+PHANGS-poor environments the inference program ultimately targets.}
+
+%-----------------------------------------------------------------
+\subsection{Sampling Fairness Diagnostic}
+\label{sec:sampling:fairness}
+%-----------------------------------------------------------------
+
+We define a quantitative diagnostic of how faithfully the simulation
+design reproduces the \PHANGS\ design-field distribution within the
+target $\Sgas$ band. For each design field $a \in \thetaenv$, let
+$\hat{q}^{\rm sample}_{a}(\tau)$ and $\hat{q}^{\rm ref}_{a}(\tau)$
+denote the empirical $\tau$-th quantile of $\log_{10} a$ in the
+simulation design and in $\Dref$, respectively (we use $\tau$ for
+quantile probability levels to distinguish from the KDE marginal
+quantile functions $Q_j$ of \autoref{eq:quantile_function}).
+The per-field quantile mismatch is
+\begin{equation}
+\varepsilon_a \;=\;
+\max_{\tau \in \cbrackets{0.1,\,0.2,\,\ldots,\,0.9}}
+\Bigl|\,\hat{q}^{\rm sample}_{a}(\tau)
+- \hat{q}^{\rm ref}_{a}(\tau)\,\Bigr|,
+\label{eq:eps_a}
+\end{equation}
+in units of dex, and the overall design fairness is the worst-field
+mismatch,
+\begin{equation}
+\varepsilon_{\rm env} \;=\;
+\max_{a \in \thetaenv}\,\varepsilon_a.
+\label{eq:eps_env}
+\end{equation}
+A design is considered \emph{fair} with respect to $\Dref$ if
+$\varepsilon_{\rm env} \leq \varepsilon_{\rm tol}$, where we adopt
+$\varepsilon_{\rm tol} = 0.10$--$0.20\dex$ as a fiducial tolerance.
+This range is motivated by the typical aperture-level measurement
+uncertainty in the underlying \PHANGS\ design fields, which is
+itself of order $\sim 0.1\dex$ for the surface densities and somewhat
+larger for $\Hstar$; a design that matches the reference marginal
+quantiles to better than the measurement uncertainty is not
+meaningfully distinguishable from the reference within $\Dref$.
+\CGK{The 0.10--0.20\,dex tolerance is a working choice; a
+quantitative justification from the PHANGS measurement-uncertainty
+budget should be added when those numbers are tabulated.}
+
+The diagnostic in \autoref{eq:eps_env} applies exclusively to the
+five \emph{design} fields. The validation fields $\fmol$, $\Satom$,
+$\Smol$, $\Ssfr$, $\PDE$, and $\seff$ are not used to define the
+prior, and they cannot be matched at design time because they are
+not \TIGRESS\ inputs. Instead, the simulation outputs for the
+validation fields will be compared against the corresponding
+\PHANGS\ distributions in \autoref{sec:results} using analogous
+quantile-mismatch metrics, providing a post-hoc verification that
+the simulated ISM populates the same emergent regime as the
+observed one. A successful program is one in which
+$\varepsilon_{\rm env} \leq \varepsilon_{\rm tol}$ by design and the
+corresponding validation-field mismatches are also small without
+having been tuned.

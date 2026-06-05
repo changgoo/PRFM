@@ -1,0 +1,190 @@
+\section{PHANGS Data and Derived Quantities}
+\label{sec:data}
+
+This section describes the observational dataset that anchors the
+simulation design. \autoref{sec:phangs_megatable} summarizes the \PHANGS\
+megatable survey and the aperture-level join used to construct a single
+matched table of gas, stellar, and SFR properties. \autoref{sec:derived}
+describes the derivation of the five \PRFM\ design fields from the
+\PHANGS\ aperture measurements and stellar/dynamical models.
+\autoref{sec:quality_cuts} states the quality cuts applied to define the
+reference set $\Dref$ that drives the sampling design in
+\CGK{Section~3}. \autoref{tab:fields} summarizes the design and validation
+fields with their units and roles.
+
+\subsection{PHANGS Megatable Survey}
+\label{sec:phangs_megatable}
+
+We use the publicly released \PHANGS\ megatable products, which compile
+spatially resolved measurements of cold gas, ionized gas, stellar mass,
+and SFR for a homogeneous sample of $\sim80$ nearby star-forming disk
+galaxies \citep{2021ApJS..255...19L,2022AJ....164...43S,2023AJ....166..145L}.
+The megatables tile each galaxy in matched apertures sampled on a regular
+grid in galactocentric coordinates, and provide for each aperture aperture
+photometry of CO(2--1) from \PHANGS-ALMA, \HI\ 21~cm from the \PHANGS-\HI\
+companion programs, stellar mass surface density from environmental masks
+of Spitzer/IRAC and WISE imaging, and multiple SFR tracers including
+H$\alpha$, far-UV (FUV)+WISE-4 (W4) combinations, and an extinction-corrected
+H$\alpha$+W4 estimator \citep{2022AJ....164...43S,2023ApJ...945L..19S}.
+
+The megatables are released in two complementary aperture definitions:
+hexagonal apertures, which provide a regular tessellation useful for
+mapping context and for visual inspection, and two-dimensional
+Gaussian-weighted apertures, which provide smoothly tapered measurements
+that mitigate edge effects in the aperture sum and are the canonical
+aperture for the \PHANGS\ pressure and SFR scaling analyses
+\citep{2020ApJ...892..148S,2023ApJ...945L..19S}. \CGK{We adopt the
+Gaussian-weighted apertures as canonical throughout this work and use the
+hexagonal apertures only for context plots --- please confirm.}
+
+For each galaxy, the gas, stellar, and SFR megatables are released as
+separate FITS tables indexed by galaxy and aperture. We perform an inner
+join on (galaxy, aperture) across the three tables, retaining only
+apertures with valid entries in all joined columns. This yields a single
+matched table of approximately $4.6\times10^{4}$ apertures across
+$\sim80$ \CGK{galaxies --- please verify the final number after quality
+cuts}, which serves as the starting point for the design-field and
+validation-field selections described below.
+
+\subsection{Derived Quantities}
+\label{sec:derived}
+
+The five environmental parameters that enter \TIGRESS\ as initial
+conditions form the design-field vector
+\begin{equation}
+  \thetaenv \;=\; \left(\Sgas,\, \Sstar,\, \Hstar,\, \Omrot,\, \qshear\right).
+  \label{eq:thetaenv}
+\end{equation}
+We construct each component as follows.
+
+\paragraph{Gas surface density.}
+The total neutral gas surface density is the sum of atomic and molecular
+contributions,
+\begin{equation}
+  \Sgas \;=\; \Satom + \Smol,
+\end{equation}
+where $\Satom$ is derived from the \HI\ 21~cm aperture photometry and
+$\Smol$ is derived from the \PHANGS-ALMA CO(2--1) aperture photometry
+assuming the metallicity-dependent CO-to-H$_2$ conversion factor adopted
+by \citet{2022AJ....164...43S}. Both components include the standard
+factor of 1.36 to account for helium. The molecular fraction
+$\fmol = \Smol/\Sgas$ is computed from the same components and is used
+only as a validation quantity (see below); it is not part of $\thetaenv$.
+
+\paragraph{Stellar surface density.}
+The stellar surface density $\Sstar$ is taken from the \PHANGS\ stellar
+mass maps based on Spitzer/IRAC 3.6~$\mu$m or WISE-1 3.4~$\mu$m imaging,
+calibrated to mass-to-light ratios using independent color information,
+following the procedure described in \citet{2021ApJS..255...19L} and
+\citet{2025ApJ...989...66V}.
+
+\paragraph{Orbital frequency.}
+The orbital angular frequency at each aperture is computed from the
+circular velocity of the host galaxy's rotation curve,
+\begin{equation}
+  \Omrot \;=\; \frac{V_{\rm circ}(R)}{R},
+\end{equation}
+where $R$ is the galactocentric radius of the aperture center and
+$V_{\rm circ}(R)$ is the smooth axisymmetric rotation curve adopted by the
+\PHANGS\ dynamical modeling pipeline \citep{2025ApJ...989...66V}.
+
+\paragraph{Stellar scale height.}
+The stellar scale height $\Hstar$ is not directly observed and must be
+inferred from a stellar dynamical model. We adopt the values tabulated by
+\citet{2025ApJ...989...66V}, who fit an axisymmetric stellar mass model
+constrained by the rotation curve and the observed stellar surface density
+profile, and report the implied vertical scale height under the assumption
+that the stellar disk is locally flattened with an axis ratio
+characteristic of nearby disk galaxies. \CGK{Please confirm whether
+the $\Hstar$ used here is the exponential scale height or the
+$\mathrm{sech}^{2}$ scale height in the \citet{2025ApJ...989...66V}
+convention; this matters for the mapping to $\zstar$ in
+\autoref{sec:tigress_mapping}.}
+
+\paragraph{Shear parameter.}
+The shear parameter quantifies the local logarithmic gradient of the
+rotation curve and is defined as
+\begin{equation}
+  \qshear \;\equiv\; -\frac{d\ln \Omrot}{d\ln R}
+        \;=\; 1 - \frac{d\ln V_{\rm circ}}{d\ln R}.
+  \label{eq:qshear}
+\end{equation}
+For a flat rotation curve $\qshear = 1$, for solid-body rotation
+$\qshear = 0$, and for Keplerian rotation $\qshear = 1.5$. We compute
+$\qshear$ aperture-by-aperture from the numerical derivative of the
+\PHANGS\ rotation curves at the galactocentric radius of each aperture.
+Disk-dominated galaxies are physically bounded by $0 < \qshear \leq 1.5$;
+this bound is imposed at the quality-cut stage (\autoref{sec:quality_cuts}).
+
+\subsection{Quality Cuts and Completeness}
+\label{sec:quality_cuts}
+
+The reference set $\Dref$ used for sampling is defined by validity cuts
+on the five design fields only:
+\begin{equation}
+  \Dref \;=\; \bigl\{\, \thetaenv \;\big|\;
+              \Sgas,\, \Sstar,\, \Hstar,\, \Omrot > 0;\;
+              0 < \qshear \leq 1.5 \,\bigr\}.
+  \label{eq:dref}
+\end{equation}
+The positivity requirements on $\Sgas$, $\Sstar$, $\Hstar$, and $\Omrot$
+remove apertures with missing or non-finite values in any of the four
+quantities. The upper bound $\qshear \leq 1.5$ excludes apertures whose
+locally fit rotation-curve derivative is super-Keplerian; such cases occur
+near rotation-curve transitions or in noisy outer-disk apertures and are
+unphysical for the smooth axisymmetric models that anchor the
+\TIGRESS\ initial conditions.
+
+Crucially, we do \emph{not} impose detection cuts on $\fmol$, on the
+\HI--CO partition $(\Satom,\Smol)$, or on any of the SFR tracers when
+defining $\Dref$. These quantities have their own, generally narrower,
+completeness masks: CO is undetected at the lowest gas surface densities,
+H$\alpha$ is suppressed in regions of low recent star formation, and W4
+saturates in the brightest disks. If validation-field completeness were
+imposed on the design selection, the \PHANGS\ prior would be biased toward
+high-detection environments---preferentially CO-bright, H$\alpha$-bright,
+inner-disk apertures---and the resulting simulation suite would
+under-sample the low-pressure, atomic-dominated outer disks that form a
+substantial fraction of the total \PHANGS\ disk area. By restricting the
+selection cuts to the design fields, the prior reflects the full
+disk-area-weighted distribution of galactic environments, and the
+validation quantities can be compared against \TIGRESS\ outputs without
+introducing a selection bias \CGK{(this argument should be verified against
+the actual \PHANGS\ completeness statistics --- please cross-check).}
+
+Validation against \PHANGS\ is performed using only those apertures that
+additionally pass the relevant validation-field completeness masks
+(detected CO for $\fmol$ and $\Smol$, detected SFR tracer for $\Ssfr$,
+and so forth). These masks are applied per-quantity at the validation
+stage and are not propagated back into $\Dref$. The full set of design
+and validation fields is summarized in \autoref{tab:fields}.
+
+\begin{deluxetable*}{lllp{0.45\textwidth}}
+\tablecaption{Design and validation fields used in this work.\label{tab:fields}}
+\tablehead{
+  \colhead{Field} & \colhead{Symbol} & \colhead{Unit} & \colhead{Role}
+}
+\startdata
+\multicolumn{4}{c}{\textit{Design fields} $\thetaenv$ (selection of $\Dref$)} \\
+\hline
+Gas surface density        & $\Sgas$  & $\Surf$              & TIGRESS input \\
+Stellar surface density    & $\Sstar$ & $\Surf$              & TIGRESS input \\
+Stellar scale height       & $\Hstar$ & $\pc$                & TIGRESS input (mapped to $\zstar$) \\
+Orbital frequency          & $\Omrot$ & $\kms\,\kpc^{-1}$    & TIGRESS input \\
+Shear parameter            & $\qshear$ & dimensionless, $0<\qshear\leq 1.5$ & TIGRESS input \\
+\hline
+\multicolumn{4}{c}{\textit{Validation fields} (not used for selection of $\Dref$)} \\
+\hline
+Molecular fraction         & $\fmol$  & dimensionless, $0\leq \fmol \leq 1$ & gas-partition validation \\
+Atomic surface density     & $\Satom$ & $\Surf$              & gas-partition validation \\
+Molecular surface density  & $\Smol$  & $\Surf$              & gas-partition validation \\
+SFR surface density        & $\Ssfr$  & $\sfrunit$           & SFR validation \\
+Dynamical equilibrium pressure & $\PDE$ & $\Punit$           & \PRFM\ validation \\
+Effective velocity dispersion & $\seff$ & $\kms$             & \PRFM\ validation \\
+\enddata
+\tablecomments{Design fields are subject only to the validity cuts in
+\autoref{eq:dref} and define the reference set $\Dref$ used by the
+sampling design. Validation fields carry separate per-quantity
+completeness masks and are compared against emergent \TIGRESS\ outputs
+in \autoref{sec:validation}.}
+\end{deluxetable*}

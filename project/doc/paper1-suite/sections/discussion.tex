@@ -1,0 +1,201 @@
+\section{Discussion and Future Directions}
+\label{sec:discussion}
+
+The simulation design presented in this paper is the first stage of a
+broader program: an observationally anchored, progressively extensible
+ensemble of resolved multiphase ISM simulations that supports systematic
+comparison with \PHANGS\ and statistical inference of ISM physical
+parameters. In this section we recapitulate the sampling design
+(\autoref{sec:disc_summary}), outline how the block-structured Sobol
+construction will be extended to physics parameters
+(\autoref{sec:disc_phys}), describe the synthetic observation pipeline
+that will close the loop with resolved \PHANGS\ maps
+(\autoref{sec:disc_synth}), discuss summary statistics beyond one-point
+aperture quantities (\autoref{sec:disc_twopoint}), and frame the
+connection to the inference framework developed in the companion paper
+(\autoref{sec:disc_paperII}).
+
+\subsection{Summary of the Sampling Design}
+\label{sec:disc_summary}
+
+We have presented a \PHANGS-informed simulation design for the
+\TIGRESS\ framework. Five environmental parameters---the gas surface
+density $\Sgas$, stellar surface density $\Sstar$, stellar scale height
+$\Hstar$, orbital frequency $\Omrot$, and shear parameter
+$\qshear$---define the design vector $\thetaenv$ and enter \TIGRESS\
+as initial and boundary conditions. The sampling proceeds in two steps:
+a kernel density estimator (KDE) is fit to the joint \PHANGS\ aperture
+distribution of $\thetaenv$ and used to define the marginal quantile
+functions, and a scrambled Sobol quasi-random sequence is mapped through
+these quantile functions to generate the simulation design.
+
+Two features of this construction are essential for the program as a
+whole. First, because the Sobol sequence is deterministic and
+hierarchical, the suite can be extended progressively: doubling the
+sample size adds new low-discrepancy points without displacing or
+re-running any earlier simulation. Second, the molecular fraction
+$\fmol$ and SFR surface density $\Ssfr$ are deliberately excluded from
+the input design and reserved as validation quantities, to be compared
+against emergent \TIGRESS\ outputs.
+\CGK{This separation of design fields from validation fields is what
+allows the suite to be used both as a calibration set (for \PRFM\
+yields) and as a prior for simulation-based inference; flag for review
+that this framing is consistent with the abstract.}
+
+\subsection{Extension to Physics Parameter Variations}
+\label{sec:disc_phys}
+
+The first suite holds the physics parameters at fiducial
+solar-neighborhood values: solar metallicity ($\Zg = 1$), solar
+dust-to-gas ratio ($\Zd = 1$), a standard initial mass function (IMF),
+and the fiducial \TIGRESS-NCR\ feedback prescription. This choice
+isolates the environmental dependence of ISM properties from physics
+variations, but it also means that the inferred posteriors from this
+suite are conditioned on these fiducial physics assumptions. The
+natural next step is to relax this conditioning by introducing an
+independent block of simulations that varies a vector of physics
+parameters $\thetaphys$.
+
+We anticipate four parameters as the principal targets of this
+extension. First, the gas-phase metallicity $\Zg \in [0.1, 3]$ in solar
+units, motivated by the \TIGRESS-NCR\ metallicity suite of
+\citet{2024ApJ...972...67K}, who showed that $\Ssfr$ scales weakly with
+metallicity at fixed environment, approximately as $\Ssfr \propto
+\Zg^{0.3}$. \CGK{Verify the exponent and the sign; I am recalling this
+from the K24 abstract but please confirm against the paper before this
+text is finalized.} Second, the dust-to-gas ratio $\Zd$, which is
+strongly but not perfectly correlated with $\Zg$ in observed galaxies
+and which controls photoelectric heating, $\HH$ formation, and
+radiation transfer independently of gas-phase line cooling. Third, the
+upper-mass cutoff of the IMF, which sets the ionizing photon budget and
+the supernova rate per unit star formation. Fourth, an overall feedback
+yield normalization that re-weights the thermal versus turbulent
+partitioning of $\Ytot$ relative to its calibrated \TIGRESS-NCR\ value;
+this last parameter is included not because we expect the calibration
+to be wrong, but to allow the inference framework to detect
+inconsistencies between the simulated and observed yield decompositions.
+
+The block-structured Sobol construction makes this extension natural.
+Block~1 is the present environmental suite, a Sobol design of dimension
+$d_{\rm env} = 5$ over $\thetaenv$ at fiducial physics. Block~2 will be
+a Sobol design of dimension $d_{\rm phys}$ over $\thetaphys$, run at a
+representative subset of environmental anchor points selected from
+Block~1. The joint suite supports inference over the concatenated
+parameter vector $(\thetaenv, \thetaphys)$ by combining the marginal
+information from each block under an assumed factorization of the
+prior. This mirrors the multi-suite philosophy of the \CAMELS\ project
+\citep{2021ApJ...915...71V}, in which one-parameter variation suites,
+Latin-hypercube suites, and extension suites jointly cover the
+cosmology and astrophysics parameter space at controlled cost.
+\CGK{Verify that this is a faithful characterization of the CAMELS suite
+structure; the high-level analogy is correct but the suite labels and
+their exact roles should be checked.}
+
+\subsection{Synthetic Observation Pipeline}
+\label{sec:disc_synth}
+
+A direct comparison between \TIGRESS\ and \PHANGS\ at the level of
+integrated aperture quantities, as performed in
+\autoref{sec:results}, is a necessary but not sufficient test of the
+simulation suite. The same aperture-averaged $\Ssfr$, $\fmol$, $\PDE$,
+and $\seff$ can be produced by simulations that differ substantially in
+the spatial structure of their gas and young stellar populations. To
+test the simulations at the level of resolved morphology, and to
+construct simulated observables that can be ingested by the inference
+framework of the companion paper, we plan to develop a forward-modeling
+pipeline that converts \TIGRESS\ snapshots into mock multi-wavelength
+maps matched to the \PHANGS\ resolution and noise properties.
+
+The pipeline will produce five primary tracers. (i)~Mid-infrared dust
+emission, modeled from the \TIGRESS\ dust column and ambient radiation
+field to produce synthetic JWST/MIRI and \emph{Spitzer}/MIPS $24\,\mu$m
+maps. (ii)~Ionized-gas H$\alpha$ emission, computed from the \HII\
+region catalog of each \TIGRESS\ snapshot with extinction applied
+self-consistently from the simulated dust column. (iii)~Far-ultraviolet
+continuum, computed from the young stellar population with the same
+extinction treatment. (iv)~\HI\ 21\,cm column, derived from the neutral
+atomic phase of \TIGRESS-NCR. (v)~CO line emission, computed either
+from a calibrated CO-to-H$_2$ conversion as a function of metallicity
+and radiation field, or from direct radiative transfer post-processing
+of the \HH\ phase. \CGK{Decide which CO route to adopt; both have a
+literature trail and the choice will need to be justified explicitly.}
+Each tracer will then be convolved with the appropriate beam, projected
+into the observational aperture grid, and resampled to the \PHANGS\
+sensitivity and noise level.
+
+This synthetic observation pipeline serves three purposes. It allows
+direct comparison of \TIGRESS\ outputs to observed \PHANGS\ maps in the
+observed plane, removing the modeling assumptions implicit in
+converting observed maps to physical surface densities. It produces the
+maps required as inputs to field-level inference (\autoref{sec:disc_paperII}).
+And it provides a self-consistent training set for emulators that
+predict observable maps directly from $\thetaenv$, bypassing the
+intermediate step of physical-parameter estimation.
+
+\subsection{Beyond One-Point Statistics}
+\label{sec:disc_twopoint}
+
+The validation and inference targets used in this paper are one-point
+aperture summaries: the mean $\Ssfr$, $\fmol$, $\PDE$, $\seff$, and
+feedback yield $\Ytot$ within a fixed aperture. These quantities are
+informative about the pressure balance and the mean efficiency of
+feedback, but they discard the spatial coherence of star formation and
+gas distribution that is plausibly the most discriminating signature
+between feedback models with similar globally averaged behavior.
+
+A natural first extension is to two-point statistics: the angular power
+spectrum or two-point correlation function of $\Sgas$, $\Ssfr$, and
+$\PDE$ maps within each aperture or across each simulated patch.
+Two-point statistics constrain the spatial coherence length of star
+formation, the slope of the turbulent cascade in the cold gas, and the
+relative phasing of gas and SFR tracers. \CGK{Mention specific
+turbulent-cascade citations here if desired; I have left this generic
+because I do not have a high-confidence ADS key in hand for the most
+appropriate references.}
+
+A more powerful and increasingly mature class of statistics for
+non-Gaussian fields is the wavelet scattering transform
+\citep{CITATION_NEEDED_TBD}. Wavelet scattering coefficients are
+translation-equivariant, rotationally invariant, multi-scale
+descriptors that capture the morphological content of a field at a
+hierarchy of spatial scales and orientation interactions. They are
+strictly more informative than two-point statistics for fields with
+non-Gaussian structure and have been used as field-level summary
+statistics in ISM, CMB, and galaxy-morphology inference contexts
+\citep{CITATION_NEEDED_TBD}. \CGK{Suggested references to fill in:
+Allys+19, Cheng+20, R\'egaldo-Saint Blancard+20/+23; please verify
+ADS keys and substitute.}
+
+In the long term, the goal is field-level inference: training a neural
+posterior estimator directly on simulated maps, with wavelet scattering
+coefficients (or learned summary statistics) serving as the
+intermediate representation. This program collapses the distinction
+between forward modeling and inference: each \TIGRESS\ snapshot
+produces, via the pipeline of \autoref{sec:disc_synth}, the same
+observables that \PHANGS\ measures, and the neural estimator learns the
+posterior over $\thetaenv$ (and eventually $\thetaphys$) directly from
+the resolved map. The companion paper takes the first step toward this
+goal using aperture-level summary statistics; the present suite is sized
+and structured so that the same simulations can be reused as the
+training set as field-level summaries are added.
+
+\subsection{Connection to the Companion Inference Paper}
+\label{sec:disc_paperII}
+
+The simulation suite presented here is designed from the outset to
+serve as the numerical prior and simulator for the simulation-based
+inference (\SBI) framework developed in the companion paper
+\CGK{(\citealt{CITATION_NEEDED_TBD}; Paper~II, in preparation)}. The
+sampling design of \autoref{sec:sampling}, mapped through the KDE of
+the \PHANGS\ joint distribution, defines the implicit prior $p(\thetaenv)$
+under which the inference is performed. Summary statistics extracted
+from each \TIGRESS\ snapshot---$\Ssfr$, $\fmol$, $\PDE$, $\seff$, and
+the decomposed feedback yields $\Yth$ and $\Ynonth$---constitute the
+simulated observables that are matched against \PHANGS\ aperture
+measurements. The progressive extensibility of the Sobol design ensures
+that the training set can be enlarged without invalidating any inference
+performed on earlier subsets, and the reservation of $\fmol$ and
+$\Ssfr$ as validation quantities means that the inferred posteriors can
+be cross-checked against quantities that did not enter the design. The
+present paper completes the construction of the simulator; the
+companion paper applies it.

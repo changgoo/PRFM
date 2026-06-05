@@ -1,0 +1,124 @@
+\section{Introduction}
+\label{sec:intro}
+
+Resolved multi-wavelength surveys of nearby star-forming galaxies, most
+prominently the Physics at High Angular resolution in Nearby GalaxieS
+(\PHANGS) survey \citep{2021ApJS..255...19L,2023AJ....166..145L},
+deliver aperture-level joint constraints on the cold gas, stellar, and
+star-forming components of the interstellar medium (ISM) across
+$\sim80$ galaxies and more than two orders of magnitude in environment.
+These observations have established empirical scaling relations between
+the local dynamical equilibrium pressure $\PDE$, the molecular gas
+fraction $\fmol$, and the star formation rate surface density $\Ssfr$
+\citep{2020ApJ...892..148S,2023ApJ...945L..19S,2025ApJ...989...66V},
+which are reproduced in physical terms by the pressure-regulated,
+feedback-modulated (\PRFM) framework \citep{2022ApJ...936..137O}.
+\PRFM\ replaces a single empirical Kennicutt--Schmidt-type prescription
+with a small set of physical parameters---feedback yields, effective
+velocity dispersion, phase fractions---that connect resolved ISM
+observables to the microphysics of feedback. The central inference
+problem this paper addresses is the inverse one: given a vector of
+\PHANGS\ aperture observables, what is the posterior distribution over
+the physical parameters that govern ISM behavior, jointly with the
+environmental parameters that describe the local galactic context?
+
+This inverse problem is hard for a reason that is structural rather
+than incidental. The forward map from environmental and physical
+parameters to observed aperture summaries is mediated by a fully
+nonlinear, multiphase, turbulent system whose snapshot realizations are
+stochastic. Even at exact input parameters, the observable output of an
+\TIGRESS-class simulation is a single draw from a distribution whose
+moments---let alone whose full likelihood---are not analytically
+accessible. The likelihood $p(\bm{x}_{\rm obs} \mid \bm{\theta})$
+required for Bayesian inference therefore has no closed form, and
+likelihood-based MCMC is not available. This is the canonical setting
+of \emph{simulation-based inference} (\SBI), also termed
+likelihood-free inference, in which the unknown likelihood is replaced
+by an implicit one defined by a stochastic simulator
+\citep{2020PNAS..11730055C}.
+
+Modern \SBI\ trains a neural density estimator to approximate either
+the posterior $p(\bm{\theta} \mid \bm{x}_{\rm obs})$ directly (neural
+posterior estimation), the likelihood $p(\bm{x}_{\rm obs} \mid
+\bm{\theta})$ (neural likelihood estimation), or the likelihood ratio
+between competing parameter values (neural ratio estimation), using
+$(\bm{\theta}, \bm{x}_{\rm sim})$ pairs drawn from the simulator
+\citep{2020PNAS..11730055C}. Once trained, the estimator amortizes the
+inference: posteriors can be evaluated at arbitrary observed data
+without re-running the simulator. \SBI\ has been applied at scale to
+cosmological parameter inference, galaxy-formation physics, and
+gravitational-wave parameter estimation \CGK{(citations to add: Alsing+19,
+Cranmer+20, Dax+21, Hahn+22 SimBIG, Villaescusa-Navarro+23 CAMELS-SBI;
+verify ADS keys before inserting).} In each case, the strategy
+succeeds when a structured simulation ensemble covers the parameter
+volume densely enough to train the estimator, and when the summary
+statistics chosen preserve the information that distinguishes
+parameter values. Applications of \SBI\ to the resolved, multiphase,
+star-forming ISM have so far been limited; this paper, to our
+knowledge, is the first to deploy \SBI\ on \PHANGS\ aperture
+observables using a structured \TIGRESS\ simulation suite as the
+simulator. \CGK{Verify the novelty claim; soften to "among the first"
+if a closely comparable effort exists.}
+
+The simulation suite required for this program is the subject of the
+companion paper \CGK{(\citealt{CITATION_NEEDED_TBD}; Paper~I, hereafter
+\citetalias{CITATION_NEEDED_TBD}).} \citetalias{CITATION_NEEDED_TBD}
+constructs a \PHANGS-informed simulation design for the \TIGRESS-NCR\
+framework \citep{2024ApJ...972...67K}: a kernel density estimator is
+fit to the joint \PHANGS\ aperture distribution of five environmental
+parameters---the gas surface density $\Sgas$, stellar surface density
+$\Sstar$, stellar scale height $\Hstar$, orbital frequency $\Omrot$,
+and shear parameter $\qshear$---and a scrambled Sobol quasi-random
+sequence is mapped through its marginal quantile functions to generate
+the design. From each simulation we extract summary statistics that
+correspond directly to \PHANGS\ aperture observables: $\Ssfr$, $\fmol$,
+$\PDE$, the effective vertical velocity dispersion $\seff$, and the
+thermal and non-thermal feedback yields $\Yth$ and $\Ynonth$. The
+target of inference in this first paper is the posterior
+$p(\thetaenv \mid \bm{x}_{\rm obs})$ over the five-dimensional
+environmental parameter vector, conditioned on fiducial physics
+($\Zg = 1$, $\Zd = 1$, standard IMF, calibrated \TIGRESS-NCR\
+feedback). The framework is designed so that the physics parameter
+vector $\thetaphys$ can be appended once the physics-extension block
+described in \citetalias{CITATION_NEEDED_TBD} is run.
+
+The scope of this paper is the construction, validation, and first
+application of the inference framework. We present (i)~the choice of
+summary statistics and the architecture of the neural posterior
+estimator; (ii)~training on the environmental simulation suite of
+\citetalias{CITATION_NEEDED_TBD}; (iii)~posterior recovery and coverage
+diagnostics on held-out simulations and on mock observations drawn
+from the simulator; and (iv)~application to \PHANGS\ aperture
+measurements to infer $\thetaenv$ posteriors for each aperture and to
+test the consistency of inferred parameters across galaxies and
+across radial bins. Two extensions are deliberately deferred to future
+work. The first is joint inference over $\thetaenv$ and $\thetaphys$,
+which requires the physics-variation block of the suite. The second is
+field-level inference using resolved \PHANGS\ maps, which requires the
+synthetic observation pipeline outlined in
+\citetalias{CITATION_NEEDED_TBD} together with non-Gaussian summary
+statistics such as wavelet scattering coefficients
+\citep{CITATION_NEEDED_TBD}. Both extensions are designed to slot into the
+present framework without architectural changes.
+\CGK{Confirm this is the intended scope for Paper~II; in particular,
+whether posterior recovery on mock data and the \PHANGS\ application
+are both in scope for this paper or whether the \PHANGS\ application
+is itself deferred.}
+
+The remainder of this paper is organized as follows.
+\CGK{\autoref{sec:data}} describes the \PHANGS\ aperture observables
+used as inference targets and the joining procedure between the
+megatable and matched ancillary catalogs. \CGK{\autoref{sec:simulation_prior}}
+summarizes the \TIGRESS-NCR\ simulation suite of
+\citetalias{CITATION_NEEDED_TBD} as it is used here---the implicit prior
+$p(\thetaenv)$, the simulator $p(\bm{x}_{\rm sim} \mid \thetaenv)$, and
+the choice of summary statistics. \CGK{\autoref{sec:inference}}
+presents the inference framework: the neural posterior estimator, the
+training procedure, and the coverage and calibration diagnostics used
+to validate it. \CGK{\autoref{sec:results}} presents the inferred
+posteriors on held-out simulations and on \PHANGS\ apertures, and
+discusses the implications for ISM physical parameters. We conclude
+in \CGK{\autoref{sec:conclusions}.}
+\CGK{Section labels assumed from the existing sections/ directory
+listing (data, simulation\_prior, inference, results, conclusions);
+adjust if the final structure differs.}
