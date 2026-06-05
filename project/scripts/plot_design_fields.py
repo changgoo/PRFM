@@ -33,11 +33,11 @@ CONFIG_PATH = ROOT / "config" / "phangs_prfm.yml"
 FIGURE_DIR  = ROOT / "figures" / "phangs" / "sobol"
 
 FIELD_LABELS = {
-    "Sigma_gas":  r"$\Sigma_{\rm gas}$"  + "\n" + r"[$M_\odot\,{\rm pc}^{-2}$]",
-    "Sigma_star": r"$\Sigma_\star$"       + "\n" + r"[$M_\odot\,{\rm pc}^{-2}$]",
-    "H_star":     r"$H_\star$"            + "\n" + r"[pc]",
-    "Omega":      r"$\Omega$"             + "\n" + r"[km s$^{-1}$ kpc$^{-1}$]",
-    "qshear":     r"$q$",
+    "Sigma_gas":  r"$\log\,\Sigma_{\rm gas}$"  + "\n" + r"[$M_\odot\,{\rm pc}^{-2}$]",
+    "Sigma_star": r"$\log\,\Sigma_\star$"       + "\n" + r"[$M_\odot\,{\rm pc}^{-2}$]",
+    "H_star":     r"$\log\,H_\star$"            + "\n" + r"[pc]",
+    "Omega":      r"$\log\,\Omega$"             + "\n" + r"[km s$^{-1}$ kpc$^{-1}$]",
+    "qshear":     r"$\log\,q$",
 }
 
 # Colors: gray=all PHANGS, blue=selected band, orange/green=samples
@@ -86,10 +86,12 @@ def _axis_range(log_vals: np.ndarray,
 
 
 def _corner_axes(fields: list[str],
-                 size: float = 2.5) -> tuple[plt.Figure, np.ndarray]:
+                 size: float = 2.2) -> tuple[plt.Figure, np.ndarray]:
     n = len(fields)
-    fig, axes = plt.subplots(n, n, figsize=(size * n, size * n))
-    fig.subplots_adjust(hspace=0.04, wspace=0.04)
+    fig, axes = plt.subplots(n, n, figsize=(size * n, size * n),
+                             constrained_layout=False)
+    fig.subplots_adjust(hspace=0.08, wspace=0.08,
+                        left=0.12, bottom=0.10, right=0.98, top=0.95)
     return fig, axes
 
 
@@ -102,14 +104,14 @@ def _decorate_corner(axes: np.ndarray, fields: list[str]) -> None:
             if col > row:
                 ax.set_visible(False)
                 continue
-            ax.tick_params(labelsize=7)
+            ax.tick_params(labelsize="small")
             if row == n - 1:
-                ax.set_xlabel(FIELD_LABELS[fields[col]], fontsize="x-small")
+                ax.set_xlabel(FIELD_LABELS[fields[col]], fontsize="small")
                 ax.xaxis.set_major_locator(ticker.MaxNLocator(3, prune="both"))
             else:
                 ax.tick_params(labelbottom=False)
             if col == 0 and row > 0:
-                ax.set_ylabel(FIELD_LABELS[fields[row]], fontsize="x-small")
+                ax.set_ylabel(FIELD_LABELS[fields[row]], fontsize="small")
                 ax.yaxis.set_major_locator(ticker.MaxNLocator(3, prune="both"))
             else:
                 ax.tick_params(labelleft=False)
@@ -176,13 +178,13 @@ def plot_selection(
                label=(rf"$|\log\Sigma_{{\rm gas}}-\log{sigma_gas_target:.0f}|"
                       rf"\leq{delta}\,\rm dex$ ({len(reference):,})")),
     ]
-    axes[0, 0].legend(handles=handles, fontsize="x-small",
+    axes[0, 0].legend(handles=handles, fontsize="small",
                       loc="upper right", framealpha=0.85)
 
     fig.suptitle(
         rf"Design-field distribution, "
         rf"$\Sigma_{{\rm gas}}={sigma_gas_target:.0f}\,M_\odot\,{{\rm pc}}^{{-2}}$",
-        fontsize="small", y=1.005,
+        fontsize="medium", y=0.99,
     )
     save(fig, out_dir / "design_fields_selection.png", dpi)
 
@@ -242,11 +244,11 @@ def plot_corner(
             ax.set_xlim(xlo, xhi)
 
     _decorate_corner(axes, fields)
-    axes[0, 0].legend(fontsize="x-small", loc="upper right", framealpha=0.85)
+    axes[0, 0].legend(fontsize="small", loc="upper right", framealpha=0.85)
     fig.suptitle(
         rf"KDE-Sobol design, "
         rf"$\Sigma_{{\rm gas}}={sigma_gas_target:.0f}\,M_\odot\,{{\rm pc}}^{{-2}}$",
-        fontsize="small", y=1.005,
+        fontsize="medium", y=0.99,
     )
     save(fig, out_dir / fname, dpi)
 
@@ -291,21 +293,21 @@ def plot_distributions(
                     linestyle="--",
                     label=rf"$n={n_expanded}$ (expanded)")
 
-        ax.set_xlabel(FIELD_LABELS[f], fontsize="small")
-        ax.set_ylabel("PDF", fontsize="small")
-        ax.tick_params(labelsize="x-small")
+        ax.set_xlabel(FIELD_LABELS[f], fontsize="medium")
+        ax.set_ylabel("PDF", fontsize="medium")
+        ax.tick_params(labelsize="small")
         ax.set_xlim(xlo, xhi)
 
     for ax in list(axes.flat)[len(fields):]:
         ax.set_visible(False)
 
     handles, labels = list(axes.flat)[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower right", fontsize="small",
+    fig.legend(handles, labels, loc="lower right", fontsize="medium",
                framealpha=0.85, bbox_to_anchor=(1.0, 0.02))
     fig.suptitle(
         rf"Marginal distributions, "
         rf"$\Sigma_{{\rm gas}}={sigma_gas_target:.0f}\,M_\odot\,{{\rm pc}}^{{-2}}$",
-        fontsize="medium",
+        fontsize="large",
     )
     fig.tight_layout()
     save(fig, out_dir / "design_fields_distributions.png", dpi)
