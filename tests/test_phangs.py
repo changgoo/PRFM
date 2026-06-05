@@ -560,6 +560,53 @@ class TestSamplingConfig:
         assert SamplingConfig().kde_aux_sample_size == 100_000
 
 
+class TestMarginalQuantiles:
+    """Unit test for _compute_marginal_quantiles — uses synthetic DataFrame."""
+
+    def _make_designer(self):
+        from prfm.phangs_sampling import PHANGSSamplingDesigner, SamplingConfig
+        from astropy.table import Table
+        import numpy as np
+
+        rng = np.random.default_rng(0)
+        n = 200
+        t = Table({
+            "Sigma_gas":  rng.lognormal(np.log(10.0), 0.3, n),
+            "Sigma_star": rng.lognormal(np.log(50.0), 0.5, n),
+            "H_star":     rng.lognormal(np.log(300.0), 0.4, n),
+            "Omega":      rng.lognormal(np.log(30.0), 0.4, n),
+            "qshear":     rng.uniform(0.5, 1.4, n),
+        })
+        cfg = SamplingConfig(kde_aux_sample_size=5_000)
+        return PHANGSSamplingDesigner(t, config=cfg)
+
+    def test_returns_dict_with_five_callables(self):
+        import numpy as np
+        d = self._make_designer()
+        ref = d.table
+        fields = d.config.design_fields
+        qfns = d._compute_marginal_quantiles(ref, fields)
+        assert set(qfns.keys()) == set(fields)
+        for fn in qfns.values():
+            assert callable(fn)
+
+    def test_quantile_fn_maps_zero_to_min(self):
+        import numpy as np
+        d = self._make_designer()
+        qfns = d._compute_marginal_quantiles(d.table, d.config.design_fields)
+        q0 = qfns["Sigma_gas"](np.array([0.01]))
+        q1 = qfns["Sigma_gas"](np.array([0.99]))
+        assert q0 < q1
+
+    def test_quantile_fn_output_in_log_space(self):
+        """Q_j maps [0,1] -> log10 values; log10(Sigma_gas~10) should be near 1."""
+        import numpy as np
+        d = self._make_designer()
+        qfns = d._compute_marginal_quantiles(d.table, d.config.design_fields)
+        median_log = qfns["Sigma_gas"](np.array([0.5]))[0]
+        assert 0.5 < median_log < 1.5  # log10(10) = 1
+
+
 @integration
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):

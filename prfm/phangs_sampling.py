@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field as dc_field
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd
@@ -442,6 +442,57 @@ class PHANGSSamplingDesigner:
         if not chunks or sum(len(chunk) for chunk in chunks) < n_candidates:
             raise RuntimeError("KDE candidate generation failed")
         return pd.DataFrame(np.vstack(chunks)[:n_candidates], columns=log_df.columns)
+
+    def _compute_marginal_quantiles(
+        self,
+        reference: Table,
+        fields: list[str],
+        seed: int | None = None,
+    ) -> dict[str, Any]:
+        """Fit a KDE on log10(fields) and return marginal quantile functions.
+
+        Each returned callable maps an array of probabilities in (0,1) to
+        log10-space values via linear interpolation of the KDE auxiliary sample.
+        All fields must be strictly positive in the reference table.
+        """
+        import scipy.stats
+        from scipy.interpolate import interp1d
+
+        # Build log10 data matrix; drop rows with non-positive or non-finite values
+        log_data: dict[str, np.ndarray] = {}
+        for f in fields:
+            vals = np.asarray(reference[f], dtype=float)
+            log_data[f] = np.log10(vals)
+
+        df = pd.DataFrame(log_data).replace([np.inf, -np.inf], np.nan).dropna()
+        if len(df) < 10:
+            raise ValueError(
+                f"Only {len(df)} valid rows for KDE fit on fields {fields}."
+            )
+
+        kde = scipy.stats.gaussian_kde(
+            df.values.T,
+            bw_method=lambda k: k.scotts_factor() * self.config.kde_bandwidth_factor,
+        )
+
+        rng = np.random.default_rng(
+            seed if seed is not None else self.config.random_seed
+        )
+        aux = kde.resample(self.config.kde_aux_sample_size, seed=rng)
+        # aux shape: (d, M)
+
+        quantile_fns: dict[str, Any] = {}
+        for j, f in enumerate(fields):
+            sorted_vals = np.sort(aux[j])
+            n = len(sorted_vals)
+            probs = (np.arange(n) + 0.5) / n
+            quantile_fns[f] = interp1d(
+                probs, sorted_vals,
+                kind="linear",
+                bounds_error=False,
+                fill_value=(sorted_vals[0], sorted_vals[-1]),
+            )
+        return quantile_fns
 
     def _lhs_select_log_candidates(
         self,
