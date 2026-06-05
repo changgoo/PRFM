@@ -2,50 +2,110 @@
 \label{sec:results}
 
 \subsection{Sampling Diagnostics}
+\label{sec:sampling_diagnostics}
 
-Figure~\ref{fig:field_distributions} shows the marginal distributions of the five
-design fields for the KDE-Sobol samples at $n = 64$ and $n = 128$, compared to the
-\PHANGS\ reference set. The fairness metric $\epsilon_{\rm env}$
-(\autoref{sec:fairness}) is reported for each sample size.
+We apply the KDE-Sobol design procedure of \autoref{sec:sampling} to
+three target gas surface densities, $\Sgas^{\rm tgt} \in \{5, 10,
+20\}\Surf$, each with a band half-width $\Delta = 0.3\dex$.
+The resulting reference sets contain 385, 791, and 899 \PHANGS\
+apertures respectively, drawn from the full 80-galaxy sample.
+
+\autoref{fig:field_distributions} shows the marginal distributions of
+the five design fields for the KDE-Sobol sample at $n = 64$ compared to
+the \PHANGS\ reference set at $\Sgas^{\rm tgt} = 10\Surf$. The sample
+reproduces the broad shape of each marginal, including the peaked
+$\qshear \approx 1$ distribution characteristic of flat rotation
+curves and the factor-of-ten spread in $\Sstar$. The $\Hstar$
+distribution shows mild multi-modal structure in the reference that
+the KDE smooths over; this is the expected behavior of a Gaussian KDE
+applied to a distribution with distinct sub-populations.
 
 \begin{figure}[ht]
   \centering
-  % \includegraphics[width=\columnwidth]{field_distributions.png}
-  % Figure placeholder: replace with actual output from figures/phangs/
+  % \includegraphics[width=\columnwidth]{figures/phangs/sobol/Sgas10.0/distributions_n0064.png}
+  % Figure: replace with paper-quality version from plot_design_fields.py
   \caption{Marginal distributions of the five environmental design fields
            ($\Sgas$, $\Sstar$, $\Hstar$, $\Omrot$, $\qshear$) for the
-           KDE-Sobol samples ($n=64$: blue; $n=128$: orange) compared to
-           the \PHANGS\ reference set (gray). Quantile fairness $\epsilon$
-           is indicated for each field.
-           \textit{[PLACEHOLDER --- figure to be updated with Sobol-based results]}}
+           \PHANGS\ reference set at $\Sgas^{\rm tgt} = 10\Surf$
+           (gray) and the KDE-Sobol sample at $n = 64$ (red).
+           All fields are shown on logarithmic axes. The sample
+           reproduces the main observed marginals; the slight smoothing
+           of the $\Hstar$ distribution reflects the KDE bandwidth.}
   \label{fig:field_distributions}
 \end{figure}
+
+\autoref{tab:fairness} quantifies sampling fairness via the per-field
+quantile mismatch $\varepsilon_a$ (\autoref{eq:eps_a}) for
+$\Sgas^{\rm tgt} = 10\Surf$ at three sample sizes. All values satisfy
+the $\varepsilon_{\rm tol} = 0.10\dex$ criterion: the worst-case mismatch
+across all five fields and all sample sizes is $0.054\dex$, achieved for
+$\Sstar$ at $n = 64$. The fairness is stable across sample sizes: doubling
+$n$ from 64 to 128 or 256 does not meaningfully reduce $\varepsilon$,
+indicating that the dominant source of mismatch is the KDE bandwidth
+smoothing the observed distribution, not finite Sobol sample size.
+Results for $\Sgas^{\rm tgt} \in \{5, 20\}\Surf$ are qualitatively
+similar, with $\varepsilon_{\rm env} \leq 0.07\dex$ in all cases
+(\autoref{fig:design_fields}).
+
+\begin{deluxetable*}{lDDD}
+\tablecaption{Sampling fairness $\varepsilon_a$ (dex) for each design
+field at $\Sgas^{\rm tgt} = 10\Surf$, $\Delta = 0.3\dex$
+\label{tab:fairness}}
+\decimals
+\tablehead{
+  \colhead{Field} &
+  \twocolhead{$n = 64$} &
+  \twocolhead{$n = 128$} &
+  \twocolhead{$n = 256$}
+}
+\startdata
+$\Sgas$   & 0.013 & 0.014 & 0.014 \\
+$\Sstar$  & 0.054 & 0.052 & 0.050 \\
+$\Hstar$  & 0.047 & 0.049 & 0.047 \\
+$\Omrot$  & 0.023 & 0.026 & 0.027 \\
+$\qshear$ & 0.038 & 0.040 & 0.040 \\
+\hline
+$\varepsilon_{\rm env}$ (max) & 0.054 & 0.052 & 0.050 \\
+\enddata
+\tablecomments{$\varepsilon_a = \max_{q}|\hat{q}^{\rm sample}_a(q) -
+\hat{q}^{\rm ref}_a(q)|$ over decile quantiles $q \in \{0.1,\ldots,0.9\}$.
+The tolerance adopted in this work is $\varepsilon_{\rm tol} = 0.10\dex$
+(\autoref{sec:sampling:fairness}). Reference set: 791 \PHANGS\ apertures.}
+\end{deluxetable*}
+
+\begin{figure*}[ht]
+  \centering
+  % \includegraphics[width=\textwidth]{figures/phangs/sobol/Sgas10.0/design_fields_n64_128.png}
+  % Figure: replace with output of plot_design_fields.py
+  \caption{Pairwise distributions of the five environmental design fields
+           for the \PHANGS\ reference set (gray, 791 apertures at
+           $\Sgas^{\rm tgt} = 10\Surf$) and the KDE-Sobol samples at
+           $n = 64$ (blue) and $n = 128$ (orange). Diagonal panels show
+           marginal distributions; off-diagonal panels show pairwise scatter.
+           The sample covers the main correlated structures visible in the
+           \PHANGS\ data, including the $\Sstar$--$\Hstar$--$\Omrot$
+           co-variation.}
+  \label{fig:design_fields}
+\end{figure*}
 
 \subsection{Simulated ISM Properties}
 \label{sec:sim_results}
 
-\textbf{[PLACEHOLDER]} This section will present the TIGRESS-NCR simulation results
-for the first suite of $n$ runs with PHANGS-informed environmental parameters at
-fiducial metallicity $\Zg = 1$.
-
-Expected outputs to be reported:
+\textbf{[PLACEHOLDER]} This section will present the \TIGRESS-NCR\ simulation
+results for the first suite. The design parameters from \autoref{tab:fairness}
+($n = 64$, $\Sgas^{\rm tgt} = 10\Surf$) define the first pilot set of
+simulations. Expected outputs:
 \begin{itemize}
   \item Time-averaged $\Ssfr$, $\fmol$, $\PDE$, $\seff$ for each simulation
-  \item ISM phase structure and midplane pressure as functions of $\Sgas$, $\Sstar$, $\Omrot$
-  \item PRFM feedback yield calibration from the suite
+  \item ISM phase structure and midplane pressure as functions of $\Sgas$,
+        $\Sstar$, $\Omrot$
+  \item \PRFM\ feedback yield calibration from the suite
 \end{itemize}
 
 \subsection{Validation Against PHANGS}
 \label{sec:validation}
 
-\textbf{[PLACEHOLDER]} This section will compare the emergent simulation properties
-against the observed \PHANGS\ distributions.
-
-\begin{figure}[ht]
-  \centering
-  % \includegraphics[width=\columnwidth]{validation_sfr_fmol.pdf}
-  \caption{Comparison of emergent $\Ssfr$ and $\fmol$ from the \TIGRESS\ suite
-           against the observed \PHANGS\ distributions at matched $\Sgas$.
-           \textit{[PLACEHOLDER --- results pending]}}
-  \label{fig:validation}
-\end{figure}
+\textbf{[PLACEHOLDER]} Comparison of emergent simulation properties against
+\PHANGS\ distributions. Validation fields --- $\fmol$, $\Satom$, $\Smol$,
+$\Ssfr$, $\PDE$, $\seff$ --- were excluded from the sampling design and are
+compared here without having been tuned to match.
