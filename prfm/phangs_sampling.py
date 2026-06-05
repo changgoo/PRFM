@@ -658,6 +658,11 @@ class PHANGSSamplingDesigner:
     ) -> pd.DataFrame | Table:
         """Sample with the configured or requested synthesis method."""
         method = method or self.config.synthesis_method
+        if method in ("kde_sobol", "expanded_kde_sobol"):
+            raise NotImplementedError(
+                f"{method!r} is not yet implemented. "
+                "Use method='kde_lhs' for now, or wait for synthesize_kde_sobol()."
+            )
         if method == "kde_lhs":
             return self.synthesize_kde_lhs(
                 reference,
