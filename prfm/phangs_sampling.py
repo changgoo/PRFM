@@ -11,7 +11,10 @@ from astropy.table import Table
 from scipy.spatial import cKDTree
 from scipy.stats import gaussian_kde, qmc
 
-SynthesisMethod = Literal["kde_lhs", "expanded_kde_lhs", "observed_lhs"]
+SynthesisMethod = Literal[
+    "kde_sobol", "expanded_kde_sobol",
+    "kde_lhs", "expanded_kde_lhs", "observed_lhs",
+]
 
 
 @dataclass
@@ -60,7 +63,15 @@ class SamplingConfig:
         default_factory=lambda: {"Omega": 0.3, "H_star": 0.25, "qshear": 0.15}
     )
     expanded_prior_upper_dex: dict[str, float] = dc_field(default_factory=dict)
-    synthesis_method: SynthesisMethod = "kde_lhs"
+    synthesis_method: SynthesisMethod = "kde_sobol"
+    design_fields: list[str] = dc_field(
+        default_factory=lambda: [
+            "Sigma_gas", "Sigma_star", "H_star", "Omega", "qshear"
+        ]
+    )
+    qshear_max: float = 1.5
+    sobol_seed: int = 42
+    kde_aux_sample_size: int = 100_000
 
     def __post_init__(self) -> None:
         if isinstance(self.sfr_fields, str):

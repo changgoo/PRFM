@@ -534,6 +534,32 @@ class TestIntegrationLoad:
         assert "Sigma_gas" in out.colnames
 
 
+class TestSamplingConfig:
+    def test_default_synthesis_method_is_kde_sobol(self):
+        from prfm.phangs_sampling import SamplingConfig
+        cfg = SamplingConfig()
+        assert cfg.synthesis_method == "kde_sobol"
+
+    def test_design_fields_are_five(self):
+        from prfm.phangs_sampling import SamplingConfig
+        cfg = SamplingConfig()
+        assert cfg.design_fields == [
+            "Sigma_gas", "Sigma_star", "H_star", "Omega", "qshear"
+        ]
+
+    def test_qshear_max_default(self):
+        from prfm.phangs_sampling import SamplingConfig
+        assert SamplingConfig().qshear_max == 1.5
+
+    def test_sobol_seed_default(self):
+        from prfm.phangs_sampling import SamplingConfig
+        assert SamplingConfig().sobol_seed == 42
+
+    def test_kde_aux_sample_size_default(self):
+        from prfm.phangs_sampling import SamplingConfig
+        assert SamplingConfig().kde_aux_sample_size == 100_000
+
+
 @integration
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):
