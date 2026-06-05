@@ -494,6 +494,106 @@ class PHANGSSamplingDesigner:
             )
         return quantile_fns
 
+    def synthesize_kde_sobol(
+        self,
+        reference: Table,
+        n_samples: int,
+        design_fields: list[str] | None = None,
+        seed: int | None = None,
+    ) -> pd.DataFrame:
+        """Generate a simulation design via KDE-marginal-quantile Sobol mapping.
+
+        Fits a Gaussian KDE on log10(design_fields) from *reference*, extracts
+        marginal quantile functions from a large auxiliary KDE draw, and maps a
+        scrambled Sobol sequence through those functions to produce physical-space
+        design points.
+
+        The Sobol sequence is generated with the same seed at every call, so
+        S(2^k) ⊂ S(2^{k+1}) (nesting property) holds provided the same seed
+        and qshear_max are used and the rejection fraction is small.
+
+        Points with qshear > config.qshear_max are rejected and replaced by the
+        next sequential Sobol point; n_extra tracks the number of replacements.
+
+        Returns:
+            DataFrame with columns = design_fields, length = n_samples.
+            .attrs["n_extra"] records how many Sobol points were rejected.
+        """
+        import math
+        from scipy.stats.qmc import Sobol
+
+        if design_fields is None:
+            design_fields = self.config.design_fields
+        sobol_seed = seed if seed is not None else self.config.sobol_seed
+        d = len(design_fields)
+        qshear_max = self.config.qshear_max
+        qshear_idx = (
+            design_fields.index("qshear") if "qshear" in design_fields else None
+        )
+
+        # Step 1: KDE marginal quantile functions in log10 space
+        quantile_fns = self._compute_marginal_quantiles(
+            reference, design_fields, seed=self.config.random_seed
+        )
+
+        # Step 2: Generate Sobol sequence.
+        # Use random_base2(m) when n is a power of 2 for optimal uniformity;
+        # this also ensures S(2^k) ⊂ S(2^{k+1}) nesting.
+        sampler = Sobol(d=d, scramble=True, seed=sobol_seed)
+        log2_n = math.log2(n_samples)
+        if log2_n == int(log2_n):
+            m = int(log2_n)
+            # Generate 2*n_samples so we have a rejection buffer
+            u_all = sampler.random_base2(m + 1)
+        else:
+            u_all = sampler.random(n_samples + max(50, n_samples // 5))
+
+        # Step 3: Map through marginal quantile functions -> log10 space -> physical
+        w_all = np.column_stack([
+            quantile_fns[f](u_all[:, j]) for j, f in enumerate(design_fields)
+        ])
+        theta_all = 10.0 ** w_all
+
+        # Step 4: Apply qshear physical bound with sequential replacement.
+        # Generate more Sobol points on demand if the buffer runs out.
+        if qshear_idx is not None:
+            valid_mask = theta_all[:, qshear_idx] <= qshear_max
+        else:
+            valid_mask = np.ones(len(theta_all), dtype=bool)
+
+        accepted_rows: list[np.ndarray] = []
+        n_extra = 0
+
+        i = 0  # index into theta_all / valid_mask
+        while len(accepted_rows) < n_samples:
+            if i >= len(theta_all):
+                # Extend buffer
+                extra_u = sampler.random(100)
+                extra_w = np.column_stack([
+                    quantile_fns[f](extra_u[:, j])
+                    for j, f in enumerate(design_fields)
+                ])
+                extra_theta = 10.0 ** extra_w
+                if qshear_idx is not None:
+                    extra_valid = extra_theta[:, qshear_idx] <= qshear_max
+                else:
+                    extra_valid = np.ones(len(extra_theta), dtype=bool)
+                theta_all = np.vstack([theta_all, extra_theta])
+                valid_mask = np.concatenate([valid_mask, extra_valid])
+
+            if valid_mask[i]:
+                accepted_rows.append(theta_all[i])
+            else:
+                n_extra += 1
+            i += 1
+
+        result = pd.DataFrame(accepted_rows, columns=design_fields)
+        result.attrs["n_extra"] = n_extra
+        result.attrs["design_fields"] = list(design_fields)
+        result.attrs["n_samples"] = n_samples
+        result.attrs["sobol_seed"] = sobol_seed
+        return result
+
     def _lhs_select_log_candidates(
         self,
         candidates: pd.DataFrame,

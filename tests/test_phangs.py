@@ -607,6 +607,81 @@ class TestMarginalQuantiles:
         assert 0.5 < median_log < 1.5  # log10(10) = 1
 
 
+class TestKdeSobol:
+    """Unit tests for synthesize_kde_sobol — no real PHANGS data needed."""
+
+    @pytest.fixture
+    def designer_and_reference(self):
+        from prfm.phangs_sampling import PHANGSSamplingDesigner, SamplingConfig
+        from astropy.table import Table
+        import numpy as np
+
+        rng = np.random.default_rng(7)
+        n = 500
+        qshear_vals = rng.uniform(0.3, 1.4, n)
+        t = Table({
+            "Sigma_gas":  rng.lognormal(np.log(10.0), 0.3, n),
+            "Sigma_star": rng.lognormal(np.log(50.0), 0.5, n),
+            "H_star":     rng.lognormal(np.log(300.0), 0.4, n),
+            "Omega":      rng.lognormal(np.log(30.0), 0.4, n),
+            "qshear":     qshear_vals,
+            # validation fields — not used in KDE fit
+            "Sigma_mol":  rng.lognormal(np.log(5.0), 0.5, n),
+            "Sigma_atom": rng.lognormal(np.log(5.0), 0.5, n),
+        })
+        cfg = SamplingConfig(kde_aux_sample_size=5_000, sobol_seed=42)
+        return PHANGSSamplingDesigner(t, config=cfg), t
+
+    def test_returns_dataframe_with_correct_shape(self, designer_and_reference):
+        import pandas as pd
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        assert isinstance(result, pd.DataFrame)
+        assert len(result) == 64
+
+    def test_design_fields_present(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        for f in ["Sigma_gas", "Sigma_star", "H_star", "Omega", "qshear"]:
+            assert f in result.columns
+
+    def test_all_values_positive(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        for f in d.config.design_fields:
+            assert (result[f] > 0).all(), f"{f} has non-positive values"
+
+    def test_qshear_bounded(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        assert (result["qshear"] <= 1.5).all()
+
+    def test_nesting_property_64_subset_of_128(self, designer_and_reference):
+        """First 64 rows of n=128 must equal the n=64 design."""
+        import pandas as pd
+        d, ref = designer_and_reference
+        s64 = d.synthesize_kde_sobol(ref, n_samples=64)
+        s128 = d.synthesize_kde_sobol(ref, n_samples=128)
+        pd.testing.assert_frame_equal(
+            s64.reset_index(drop=True),
+            s128.iloc[:64].reset_index(drop=True),
+            check_like=False,
+        )
+
+    def test_validation_fields_not_in_output(self, designer_and_reference):
+        """f_mol and SFR should not appear in the Sobol sample output."""
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        for f in ["Sigma_mol", "Sigma_atom", "Sigma_SFR_HaW4recal"]:
+            assert f not in result.columns
+
+    def test_attrs_stores_n_extra(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.synthesize_kde_sobol(ref, n_samples=64)
+        assert "n_extra" in result.attrs
+        assert result.attrs["n_extra"] >= 0
+
+
 @integration
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):
