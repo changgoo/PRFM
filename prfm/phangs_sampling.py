@@ -594,6 +594,46 @@ class PHANGSSamplingDesigner:
         result.attrs["sobol_seed"] = sobol_seed
         return result
 
+    def synthesize_expanded_kde_sobol(
+        self,
+        reference: Table,
+        n_samples: int,
+        design_fields: list[str] | None = None,
+        bandwidth_factor: float | None = None,
+        seed: int | None = None,
+    ) -> pd.DataFrame:
+        """KDE-Sobol with broadened bandwidth for expanded prior coverage.
+
+        Identical to synthesize_kde_sobol except the KDE bandwidth is scaled by
+        bandwidth_factor (default config.expanded_kde_bandwidth_factor = 1.5),
+        which broadens the prior in all directions while retaining the observed
+        covariance structure.
+
+        Args:
+            bandwidth_factor: KDE bandwidth multiplier. Defaults to
+                config.expanded_kde_bandwidth_factor (1.5).
+        """
+        import dataclasses
+
+        if bandwidth_factor is None:
+            bandwidth_factor = self.config.expanded_kde_bandwidth_factor
+
+        # Temporarily widen the bandwidth
+        original_cfg = self.config
+        self.config = dataclasses.replace(
+            self.config, kde_bandwidth_factor=bandwidth_factor
+        )
+        try:
+            result = self.synthesize_kde_sobol(
+                reference, n_samples, design_fields=design_fields, seed=seed
+            )
+        finally:
+            self.config = original_cfg
+
+        result.attrs["expanded"] = True
+        result.attrs["bandwidth_factor"] = bandwidth_factor
+        return result
+
     def _lhs_select_log_candidates(
         self,
         candidates: pd.DataFrame,
@@ -809,10 +849,13 @@ class PHANGSSamplingDesigner:
     ) -> pd.DataFrame | Table:
         """Sample with the configured or requested synthesis method."""
         method = method or self.config.synthesis_method
-        if method in ("kde_sobol", "expanded_kde_sobol"):
-            raise NotImplementedError(
-                f"{method!r} is not yet implemented. "
-                "Use method='kde_lhs' for now, or wait for synthesize_kde_sobol()."
+        if method == "kde_sobol":
+            return self.synthesize_kde_sobol(
+                reference, n_samples, design_fields=fit_fields, seed=seed
+            )
+        if method == "expanded_kde_sobol":
+            return self.synthesize_expanded_kde_sobol(
+                reference, n_samples, design_fields=fit_fields, seed=seed
             )
         if method == "kde_lhs":
             return self.synthesize_kde_lhs(

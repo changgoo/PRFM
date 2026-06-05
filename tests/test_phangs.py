@@ -682,6 +682,50 @@ class TestKdeSobol:
         assert result.attrs["n_extra"] >= 0
 
 
+class TestExpandedKdeSobol:
+    @pytest.fixture
+    def designer_and_reference(self):
+        from prfm.phangs_sampling import PHANGSSamplingDesigner, SamplingConfig
+        from astropy.table import Table
+        import numpy as np
+
+        rng = np.random.default_rng(99)
+        n = 400
+        t = Table({
+            "Sigma_gas":  rng.lognormal(np.log(10.0), 0.3, n),
+            "Sigma_star": rng.lognormal(np.log(50.0), 0.5, n),
+            "H_star":     rng.lognormal(np.log(300.0), 0.4, n),
+            "Omega":      rng.lognormal(np.log(30.0), 0.4, n),
+            "qshear":     rng.uniform(0.4, 1.3, n),
+        })
+        cfg = SamplingConfig(kde_aux_sample_size=5_000)
+        return PHANGSSamplingDesigner(t, config=cfg), t
+
+    def test_expanded_sobol_has_correct_shape(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.synthesize_expanded_kde_sobol(ref, n_samples=32)
+        assert len(result) == 32
+        assert set(d.config.design_fields).issubset(result.columns)
+
+    def test_sample_dispatch_kde_sobol(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.sample(ref, n_samples=32, method="kde_sobol")
+        assert len(result) == 32
+
+    def test_sample_dispatch_expanded(self, designer_and_reference):
+        d, ref = designer_and_reference
+        result = d.sample(ref, n_samples=32, method="expanded_kde_sobol")
+        assert len(result) == 32
+
+    def test_sample_uses_default_method(self, designer_and_reference):
+        """Default method is now kde_sobol."""
+        import pandas as pd
+        d, ref = designer_and_reference
+        result = d.sample(ref, n_samples=32)
+        assert isinstance(result, pd.DataFrame)
+        assert len(result) == 32
+
+
 @integration
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):
