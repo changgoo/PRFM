@@ -3,50 +3,91 @@
 
 \subsection{TIGRESS-NCR Input Parameters}
 
-[SKELETON] The \TIGRESS\ framework \citep{2024ApJ...972...67K} solves the equations
-of ideal MHD with self-gravity and explicit thermochemistry in a local shearing-box
-geometry. The initial conditions are specified by the following parameters:
-\begin{itemize}
-  \item $\Sgas$: total gas surface density
-  \item $\Sstar$: stellar surface density
-  \item $\zstar$: stellar scale height
-  \item $\Omrot$: orbital frequency
-  \item $\rhodm$: dark matter volume density at the midplane
-  \item $\qshear$: shear parameter $q \equiv -d\log\Omrot/d\log R$
-\end{itemize}
+The \TIGRESS\ framework \citep{2024ApJ...972...67K} solves the equations of
+ideal MHD with self-gravity and explicit non-equilibrium thermo-chemistry in a
+local shearing-box geometry. The initial conditions are specified by six
+parameters:
+\begin{enumerate}
+  \item $\Sgas$: total gas surface density [$\Surf$]
+  \item $\Sstar$: stellar surface density [$\Surf$]
+  \item $\zstar$: stellar scale height [pc]
+  \item $\Omrot$: orbital frequency [km\,s$^{-1}$\,kpc$^{-1}$]
+  \item $\qshear$: shear parameter $q \equiv -d\ln\Omrot/d\ln R$ [dimensionless]
+  \item $\rhodm$: dark-matter volume density at the midplane [$\rhounit$]
+\end{enumerate}
 
-\subsection{Mapping from PHANGS to TIGRESS-NCR}
+\subsection{Mapping from PHANGS Design Fields to TIGRESS-NCR}
 
-[SKELETON] The PHANGS design fields map to TIGRESS-NCR inputs as follows:
+Four of the five \PHANGS\ design fields map directly to \TIGRESS\ inputs with
+no conversion required:
 \begin{align}
-&(\Sgas,\, \Sstar,\, \Hstar,\, \Omrot,\, \qshear)_{\rm PHANGS} \nonumber\\
-&\quad\longrightarrow\;
-(\Sgas,\, \Sstar,\, \zstar,\, \Omrot,\, \rhodm,\, \qshear)_{\rm TIGRESS}
+(\Sgas,\, \Sstar,\, \Hstar,\, \Omrot,\, \qshear)_{\rm PHANGS}
+&\nonumber\\
+\longrightarrow\;
+(\Sgas,\, \Sstar,\, \zstar,&\, \Omrot,\, \rhodm,\, \qshear)_{\rm TIGRESS}
 \end{align}
 
-The stellar scale height $\Hstar$ is related to $\zstar$ by ... [MAPPING TO BE DOCUMENTED].
+\paragraph{Stellar scale height.}
+The \PHANGS\ stellar scale height $\Hstar$ is derived as
+\begin{equation}
+  \Hstar \;=\; \frac{\Sstar}{4\,\rho_{\star,\rm mid}},
+  \label{eq:hstar}
+\end{equation}
+where $\rho_{\star,\rm mid}$ is the stellar midplane volume density from the
+axisymmetric mass model of \citet{2025ApJ...989...66V}. This is directly
+equivalent to the \TIGRESS\ stellar scale height parameter:
+\begin{equation}
+  \zstar \;=\; \Hstar.
+\end{equation}
+No additional conversion is required.
 
-The dark matter density $\rhodm$ is inferred from the circular velocity curve as ... [MAPPING TO BE DOCUMENTED].
+\paragraph{Dark matter density.}
+The dark-matter midplane density $\rhodm$ is not directly available from the
+\PHANGS\ megatables and cannot be reliably derived aperture-by-aperture at the
+$\sim$kpc resolution of this survey. For the first simulation suite we therefore
+hold $\rhodm$ fixed at the fiducial value used in the \TIGRESS\ R8 model, which
+corresponds to the solar-neighborhood environment at $\Sgas \approx 10\Surf$:
+\begin{equation}
+  \rhodm \;=\; 0.0064\rhounit.
+  \label{eq:rhodm_fiducial}
+\end{equation}
+This value is consistent with the local dark-matter density inferred from the
+Milky Way rotation curve in the vicinity of the solar circle
+\citep{2024ApJ...972...67K}. Treating $\rhodm$ as a fixed parameter is a
+reasonable first approximation because $\rhodm$ enters the vertical equilibrium
+primarily through its contribution to the total gravitational weight at large
+$|z|$; for the gas surface densities and disk environments sampled here,
+variations in $\rhodm$ of order a factor of two have a subdominant effect on
+$\Ssfr$ and $\PDE$ compared to variations in $\Sgas$ and $\Sstar$.
+
+\subsection{Summary of Parameter Mapping}
 
 \begin{deluxetable*}{llll}
-\tablecaption{PHANGS design field to TIGRESS-NCR input mapping \label{tab:mapping}}
+\tablecaption{PHANGS design field to \TIGRESS-NCR\ input mapping
+\label{tab:mapping}}
 \tablehead{
   \colhead{PHANGS field} & \colhead{Unit} &
   \colhead{TIGRESS parameter} & \colhead{Notes}
 }
 \startdata
-$\Sgas$   & $\Surf$ & $\Sgas$   & direct \\
-$\Sstar$  & $\Surf$ & $\Sstar$  & direct \\
-$\Hstar$  & pc      & $\zstar$  & [conversion TBD] \\
-$\Omrot$  & km/s/kpc & $\Omrot$ & direct \\
-$\qshear$ & ---     & $\qshear$ & direct, $0 < q \leq 1.5$ \\
----       & ---     & $\rhodm$  & derived from rotation curve
+$\Sgas$   & $\Surf$                   & $\Sgas$   & direct \\
+$\Sstar$  & $\Surf$                   & $\Sstar$  & direct \\
+$\Hstar$  & pc                        & $\zstar$  & direct; $\Hstar = \Sstar/(4\,\rho_{\star,\rm mid})$ \\
+$\Omrot$  & km\,s$^{-1}$\,kpc$^{-1}$ & $\Omrot$  & direct \\
+$\qshear$ & ---                       & $\qshear$ & direct; $0 < q \leq 1.5$ \\
+---       & ---                       & $\rhodm$  & fixed at $0.0064\rhounit$ (R8 fiducial)
 \enddata
+\tablecomments{The stellar scale height $\Hstar$ computed from \PHANGS\ is
+  identical in definition to the \TIGRESS\ parameter $\zstar$ and requires no
+  conversion. The dark-matter density $\rhodm$ is not available from \PHANGS\
+  at aperture level; it is held fixed at the solar-neighborhood R8 value for
+  the first simulation suite (\autoref{eq:rhodm_fiducial}).}
 \end{deluxetable*}
 
 \subsection{Fiducial Physics Parameters}
 
-The first simulation suite holds all physics parameters at fiducial solar-neighborhood
-values: metallicity $\Zg = 1$, dust-to-gas ratio $\Zd = 1$, and standard feedback
-and population-synthesis assumptions. Extension to physics parameter variations is
-described in \autoref{sec:discussion}.
+The first simulation suite holds all physics parameters at fiducial values:
+metallicity $\Zg = 1$ (solar), dust-to-gas ratio $\Zd = 1$, and standard
+TIGRESS-NCR feedback and population-synthesis prescriptions
+\citep{2024ApJ...972...67K}. Extension to physics parameter variations
+(metallicity, IMF, feedback yield) is described in \autoref{sec:discussion}.
