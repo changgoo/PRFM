@@ -1,0 +1,264 @@
+suite:
+  run_base: /scratch/gpfs/changgoo/TIGRESS-PHANGS
+  source_csv: project/output/design_Sgas10.0_n0032.csv
+fixed_overrides:
+  problem/rhodm: 0.0064
+  problem/Zgas: 1.0
+  problem/Zdust: 1.0
+models:
+- base: R8_8pc
+  suffix: row0000
+  extra_overrides:
+    problem/surf: 11.0192
+    problem/SurfS: 148.4237
+    problem/zstar: 556.4261
+    problem/Omega: 17.943
+    problem/qshear: 0.8072
+- base: R8_8pc
+  suffix: row0001
+  extra_overrides:
+    problem/surf: 14.2106
+    problem/SurfS: 33.2941
+    problem/zstar: 199.6901
+    problem/Omega: 31.6103
+    problem/qshear: 1.0916
+- base: R8_8pc
+  suffix: row0002
+  extra_overrides:
+    problem/surf: 17.1694
+    problem/SurfS: 87.8684
+    problem/zstar: 426.6622
+    problem/Omega: 25.6893
+    problem/qshear: 0.9562
+- base: R8_8pc
+  suffix: row0003
+  extra_overrides:
+    problem/surf: 7.0317
+    problem/SurfS: 56.5731
+    problem/zstar: 323.2692
+    problem/Omega: 41.7754
+    problem/qshear: 0.5145
+- base: R8_8pc
+  suffix: row0004
+  extra_overrides:
+    problem/surf: 8.7272
+    problem/SurfS: 102.7354
+    problem/zstar: 285.6089
+    problem/Omega: 77.6804
+    problem/qshear: 0.7551
+- base: R8_8pc
+  suffix: row0005
+  extra_overrides:
+    problem/surf: 21.6121
+    problem/SurfS: 48.3281
+    problem/zstar: 830.6625
+    problem/Omega: 26.9118
+    problem/qshear: 0.961
+- base: R8_8pc
+  suffix: row0006
+  extra_overrides:
+    problem/surf: 12.5216
+    problem/SurfS: 210.1535
+    problem/zstar: 343.972
+    problem/Omega: 35.464
+    problem/qshear: 1.1243
+- base: R8_8pc
+  suffix: row0007
+  extra_overrides:
+    problem/surf: 9.5947
+    problem/SurfS: 23.8706
+    problem/zstar: 464.5226
+    problem/Omega: 22.3222
+    problem/qshear: 0.8829
+- base: R8_8pc
+  suffix: row0008
+  extra_overrides:
+    problem/surf: 9.7591
+    problem/SurfS: 77.445
+    problem/zstar: 369.5878
+    problem/Omega: 28.8414
+    problem/qshear: 1.0425
+- base: R8_8pc
+  suffix: row0009
+  extra_overrides:
+    problem/surf: 12.7377
+    problem/SurfS: 62.6126
+    problem/zstar: 499.319
+    problem/Omega: 55.5786
+    problem/qshear: 0.8447
+- base: R8_8pc
+  suffix: row0010
+  extra_overrides:
+    problem/surf: 18.6169
+    problem/SurfS: 132.3462
+    problem/zstar: 263.6483
+    problem/Omega: 21.9563
+    problem/qshear: 0.6569
+- base: R8_8pc
+  suffix: row0011
+  extra_overrides:
+    problem/surf: 7.5813
+    problem/SurfS: 37.5295
+    problem/zstar: 657.9203
+    problem/Omega: 36.2141
+    problem/qshear: 0.9257
+- base: R8_8pc
+  suffix: row0012
+  extra_overrides:
+    problem/surf: 5.2074
+    problem/SurfS: 277.3513
+    problem/zstar: 395.2856
+    problem/Omega: 31.1135
+    problem/qshear: 0.9945
+- base: R8_8pc
+  suffix: row0013
+  extra_overrides:
+    problem/surf: 15.8199
+    problem/SurfS: 19.429
+    problem/zstar: 300.0189
+    problem/Omega: 18.6205
+    problem/qshear: 0.6951
+- base: R8_8pc
+  suffix: row0014
+  extra_overrides:
+    problem/surf: 14.4882
+    problem/SurfS: 116.0562
+    problem/zstar: 602.6508
+    problem/Omega: 49.9804
+    problem/qshear: 0.8497
+- base: R8_8pc
+  suffix: row0015
+  extra_overrides:
+    problem/surf: 11.1623
+    problem/SurfS: 42.2285
+    problem/zstar: 236.5924
+    problem/Omega: 23.9046
+    problem/qshear: 1.2336
+- base: R8_8pc
+  suffix: row0016
+  extra_overrides:
+    problem/surf: 11.6938
+    problem/SurfS: 108.7444
+    problem/zstar: 523.0478
+    problem/Omega: 33.451
+    problem/qshear: 0.4417
+- base: R8_8pc
+  suffix: row0017
+  extra_overrides:
+    problem/surf: 15.2593
+    problem/SurfS: 44.3237
+    problem/zstar: 379.7325
+    problem/Omega: 23.3054
+    problem/qshear: 0.9364
+- base: R8_8pc
+  suffix: row0018
+  extra_overrides:
+    problem/surf: 16.1443
+    problem/SurfS: 784.998
+    problem/zstar: 608.1614
+    problem/Omega: 69.7487
+    problem/qshear: 1.0772
+- base: R8_8pc
+  suffix: row0019
+  extra_overrides:
+    problem/surf: 5.6138
+    problem/SurfS: 8.4923
+    problem/zstar: 260.3437
+    problem/Omega: 27.2221
+    problem/qshear: 0.7811
+- base: R8_8pc
+  suffix: row0020
+  extra_overrides:
+    problem/surf: 7.7668
+    problem/SurfS: 136.7022
+    problem/zstar: 307.1841
+    problem/Omega: 25.2086
+    problem/qshear: 0.9042
+- base: R8_8pc
+  suffix: row0021
+  extra_overrides:
+    problem/surf: 19.1768
+    problem/SurfS: 37.0582
+    problem/zstar: 419.2002
+    problem/Omega: 42.6011
+    problem/qshear: 1.1394
+- base: R8_8pc
+  suffix: row0022
+  extra_overrides:
+    problem/surf: 13.3699
+    problem/SurfS: 71.155
+    problem/zstar: 232.0262
+    problem/Omega: 11.9223
+    problem/qshear: 0.9841
+- base: R8_8pc
+  suffix: row0023
+  extra_overrides:
+    problem/surf: 10.2708
+    problem/SurfS: 67.7746
+    problem/zstar: 567.4991
+    problem/Omega: 33.1013
+    problem/qshear: 0.7641
+- base: R8_8pc
+  suffix: row0024
+  extra_overrides:
+    problem/surf: 9.0671
+    problem/SurfS: 222.6461
+    problem/zstar: 176.9754
+    problem/Omega: 47.3618
+    problem/qshear: 0.9065
+- base: R8_8pc
+  suffix: row0025
+  extra_overrides:
+    problem/surf: 11.8967
+    problem/SurfS: 23.2422
+    problem/zstar: 533.087
+    problem/Omega: 24.1308
+    problem/qshear: 0.6317
+- base: R8_8pc
+  suffix: row0026
+  extra_overrides:
+    problem/surf: 20.55
+    problem/SurfS: 93.7219
+    problem/zstar: 327.9766
+    problem/Omega: 29.5673
+    problem/qshear: 0.8216
+- base: R8_8pc
+  suffix: row0027
+  extra_overrides:
+    problem/surf: 8.5508
+    problem/SurfS: 52.6946
+    problem/zstar: 455.003
+    problem/Omega: 20.008
+    problem/qshear: 1.0326
+- base: R8_8pc
+  suffix: row0028
+  extra_overrides:
+    problem/surf: 6.8032
+    problem/SurfS: 83.0529
+    problem/zstar: 685.6162
+    problem/Omega: 20.7385
+    problem/qshear: 1.2771
+- base: R8_8pc
+  suffix: row0029
+  extra_overrides:
+    problem/surf: 16.8163
+    problem/SurfS: 59.0416
+    problem/zstar: 279.939
+    problem/Omega: 38.7434
+    problem/qshear: 0.873
+- base: R8_8pc
+  suffix: row0030
+  extra_overrides:
+    problem/surf: 13.5093
+    problem/SurfS: 182.0643
+    problem/zstar: 491.6919
+    problem/Omega: 28.3475
+    problem/qshear: 0.7087
+- base: R8_8pc
+  suffix: row0031
+  extra_overrides:
+    problem/surf: 10.5174
+    problem/SurfS: 27.6464
+    problem/zstar: 349.8258
+    problem/Omega: 58.0406
+    problem/qshear: 1.0201
