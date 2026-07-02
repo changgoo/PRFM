@@ -54,9 +54,22 @@ FIELD_LABELS = {
     "qshear":     r"$\log\,q$",
 }
 
+# TIGRESS-NCR R8 fiducial parameters, converted from
+# Athena-TIGRESS/athinput/TIGRESS-NCR/athinput.R8_8pc into PHANGS units.
+# In TIGRESS code units (M_sun, pc, km/s), Omega has units of km/s/pc, so
+# the athinput value 0.028 corresponds to 0.028 * 1000 = 28.0 km/s/kpc.
+R8_FIDUCIAL = {
+    "Sigma_gas":  12.0,   # M_sun/pc^2
+    "Sigma_star": 42.0,   # M_sun/pc^2
+    "H_star":     245.0,  # pc
+    "Omega":      28.0,   # km/s/kpc (athinput: 0.028 km/s/pc)
+    "qshear":     1.0,
+}
+
 COLOR_ALL    = "0.78"
 COLOR_REF    = "#3a86ff"
 COLOR_DESIGN = "#e63946"
+COLOR_R8     = "#ffb000"   # amber
 
 
 def parse_args() -> argparse.Namespace:
@@ -127,6 +140,32 @@ def _save(fig, path: Path, dpi: int) -> None:
     print(f"  saved -> {path}")
 
 
+def _r8_log(field: str) -> float:
+    """Log10 of the R8 fiducial value for a given field."""
+    return float(np.log10(R8_FIDUCIAL[field]))
+
+
+def _plot_r8_star(ax, xf: str, yf: str | None,
+                  markersize: int = 14, zorder: int = 10) -> None:
+    """Plot the R8 fiducial as a star. If yf is None, plot on 1-D marginal
+    (vertical line + star at top)."""
+    x = _r8_log(xf)
+    if yf is None:
+        ax.axvline(x, color=COLOR_R8, linewidth=1.0, linestyle="--",
+                   alpha=0.8, zorder=zorder - 1)
+        # Star at the top of the axis
+        ymin, ymax = ax.get_ylim()
+        ax.plot(x, ymax * 0.95, marker="*", color=COLOR_R8,
+                markersize=markersize, markeredgecolor="black",
+                markeredgewidth=0.7, zorder=zorder,
+                clip_on=False)
+    else:
+        y = _r8_log(yf)
+        ax.plot(x, y, marker="*", color=COLOR_R8,
+                markersize=markersize, markeredgecolor="black",
+                markeredgewidth=0.7, zorder=zorder)
+
+
 def _title(sigma_gas: float, delta: float, n: int) -> str:
     return (rf"$\Sigma_{{\rm gas}}={sigma_gas:.0f}\,M_\odot\,{{\rm pc}}^{{-2}}$"
             rf" ($\Delta={delta}\,$dex, $n={n}$)")
@@ -158,6 +197,7 @@ def plot_selection(full_table, reference, design: pd.DataFrame,
                 ax.hist(log_des[xf], bins=bins_x, density=True,
                         histtype="step", color=COLOR_DESIGN, linewidth=1.5)
                 ax.set_yticks([])
+                _plot_r8_star(ax, xf, None)
             else:
                 ylo, yhi = ranges[yf]
                 ax.scatter(log_full[xf], log_full[yf],
@@ -167,6 +207,7 @@ def plot_selection(full_table, reference, design: pd.DataFrame,
                 ax.scatter(log_des[xf], log_des[yf],
                            s=18, c=COLOR_DESIGN, edgecolor="white", linewidth=0.4,
                            zorder=3)
+                _plot_r8_star(ax, xf, yf)
                 ax.set_ylim(ylo, yhi)
             ax.set_xlim(xlo, xhi)
 
@@ -179,6 +220,9 @@ def plot_selection(full_table, reference, design: pd.DataFrame,
         Line2D([0], [0], color=COLOR_DESIGN, marker="o", linestyle="none",
                markersize=6, markeredgecolor="white",
                label=f"design ({len(design):,})"),
+        Line2D([0], [0], color=COLOR_R8, marker="*", linestyle="none",
+               markersize=10, markeredgecolor="black", markeredgewidth=0.7,
+               label="R8 fiducial"),
     ]
     axes[0, 0].legend(handles=handles, fontsize="small",
                       loc="upper right", framealpha=0.85)
@@ -210,6 +254,7 @@ def plot_corner(reference, design: pd.DataFrame,
                 ax.hist(log_des[xf], bins=bins_x, density=True,
                         histtype="step", color=COLOR_DESIGN, linewidth=1.5)
                 ax.set_yticks([])
+                _plot_r8_star(ax, xf, None)
             else:
                 ylo, yhi = ranges[yf]
                 ax.scatter(log_ref[xf], log_ref[yf],
@@ -217,6 +262,7 @@ def plot_corner(reference, design: pd.DataFrame,
                 ax.scatter(log_des[xf], log_des[yf],
                            s=22, c=COLOR_DESIGN, edgecolor="white",
                            linewidth=0.5, zorder=2)
+                _plot_r8_star(ax, xf, yf)
                 ax.set_ylim(ylo, yhi)
             ax.set_xlim(xlo, xhi)
 
@@ -226,6 +272,9 @@ def plot_corner(reference, design: pd.DataFrame,
         Line2D([0], [0], color=COLOR_DESIGN, marker="o", linestyle="none",
                markersize=6, markeredgecolor="white",
                label=f"design ({len(design):,})"),
+        Line2D([0], [0], color=COLOR_R8, marker="*", linestyle="none",
+               markersize=10, markeredgecolor="black", markeredgewidth=0.7,
+               label="R8 fiducial"),
     ]
     axes[0, 0].legend(handles=handles, fontsize="small",
                       loc="upper right", framealpha=0.85)
@@ -253,9 +302,17 @@ def plot_marginals(reference, design: pd.DataFrame,
         ax.hist(log_des, bins=bins, density=True,
                 histtype="step", color=COLOR_DESIGN,
                 linewidth=1.5, label="design")
+        # R8 fiducial as dashed line + star at top
+        r8_x = _r8_log(f)
+        ax.axvline(r8_x, color=COLOR_R8, linewidth=1.0, linestyle="--",
+                   alpha=0.8, label="R8 fiducial")
         ax.set_xlabel(FIELD_LABELS[f], fontsize="medium")
         ax.set_ylabel("PDF", fontsize="medium")
         ax.set_xlim(xlo, xhi)
+        ymin, ymax = ax.get_ylim()
+        ax.plot(r8_x, ymax * 0.95, marker="*", color=COLOR_R8,
+                markersize=14, markeredgecolor="black", markeredgewidth=0.7,
+                clip_on=False, zorder=10)
 
     for ax in list(axes.flat)[len(DESIGN_FIELDS):]:
         ax.set_visible(False)
