@@ -19,7 +19,7 @@ Options (all optional, sensible defaults):
 | `-d DELTA`      | Band half-width in dex               | `0.3` |
 | `-n N`          | Sample size (powers of 2 preferred)  | `32` |
 | `-b BASE`       | TIGRESS-NCR base model               | `R8_8pc` |
-| `-m MACHINE_DIR`| Machine YAML directory               | `project/suites/machines/stellar` |
+| `-m MACHINE_DIR`| Machine YAML directory               | `$ATHENA_TIGRESS_DIR/scripts/stellar` |
 | `-q QUEUE`      | Queue name within machine dir        | `standard` |
 | `-r RUN_BASE`   | Scratch root for RUNDIR              | value from machine YAML |
 | `-t STEPS`      | Steps to run (see below)             | `all` |
@@ -154,21 +154,29 @@ point.
 
 ## Machine YAML layout
 
-`generate_slurm.py` expects `<machine>/<queue>.yml`:
+Machine profiles live in the `Athena-TIGRESS` repo, not this one:
 
 ```
-project/suites/machines/
+$ATHENA_TIGRESS_DIR/scripts/
   stellar/
+    debug.yml
+    short.yml
     standard.yml
-    # gpu.yml         (add as needed)
+  anvil/
+    debug.yml
+    highmem.yml
+    standard.yml
 ```
 
 Each queue file supplies scheduler/environment defaults (nodes, tasks_per_node,
-walltime, modules, run_base, mail_user). Suite YAML values from step 3 take
-precedence for anything both files set.
+walltime, modules, mail_user). Suite YAML values from step 3 take precedence for
+anything both files set — including `suite.run_base`, which
+`csv_to_slurm_yaml.py` sets to `/scratch/gpfs/changgoo/TIGRESS-PHANGS` and
+therefore overrides any `TIGRESS-NCR`-style default from the machine YAML.
 
-Add a new machine by creating `project/suites/machines/<name>/<queue>.yml`
-following the Stellar template.
+Add a new machine or queue by creating a file in the corresponding
+`Athena-TIGRESS/scripts/` subdirectory. To point the workflow at a
+non-canonical machine dir, pass `-m /path/to/custom`.
 
 ## Submitting jobs
 
@@ -214,7 +222,7 @@ project/scripts/run_workflow.sh -s 10 -n 32 -b R8s_4pc
 
 **Different cluster:**
 ```bash
-project/scripts/run_workflow.sh -m project/suites/machines/anvil -q standard
+project/scripts/run_workflow.sh -m $ATHENA_TIGRESS_DIR/scripts/anvil -q standard
 ```
 
 ## Related documents

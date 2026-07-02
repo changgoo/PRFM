@@ -11,7 +11,7 @@
 #   -d DELTA       Band half-width (dex)                      [default: 0.3]
 #   -n N           Sample size (rows in the design)           [default: 32]
 #   -b BASE        TIGRESS-NCR base model                     [default: R8_8pc]
-#   -m MACHINE_DIR Machine YAML directory                     [default: project/suites/machines/stellar]
+#   -m MACHINE_DIR Machine YAML directory                     [default: $ATHENA_TIGRESS_DIR/scripts/stellar]
 #   -q QUEUE       Queue name within machine dir              [default: standard]
 #   -r RUN_BASE    Scratch root for RUNDIR (overrides YAML)   [default: unchanged]
 #   -t STEPS       Steps to run (comma-separated or 'all')    [default: all]
@@ -38,7 +38,7 @@ SIGMA_GAS=10
 DELTA=0.3
 N_SAMPLES=32
 BASE=R8_8pc
-MACHINE_DIR=project/suites/machines/stellar
+MACHINE_DIR=""            # if empty, set to $ATHENA_DIR/scripts/stellar below
 QUEUE=standard
 RUN_BASE=""
 STEPS="all"
@@ -102,9 +102,20 @@ cd "$PROJECT_ROOT"
 ATHENA_DIR="${ATHENA_TIGRESS_DIR:-$HOME/Sources/Athena-TIGRESS}"
 GENERATE_SLURM="$ATHENA_DIR/scripts/generate_slurm.py"
 
+# Default machine dir lives alongside generate_slurm.py in Athena-TIGRESS.
+if [[ -z "$MACHINE_DIR" ]]; then
+    MACHINE_DIR="$ATHENA_DIR/scripts/stellar"
+fi
+
 if has_step "slurm" && [[ ! -f "$GENERATE_SLURM" ]]; then
     echo "ERROR: generate_slurm.py not found at $GENERATE_SLURM" >&2
     echo "       Set ATHENA_TIGRESS_DIR to override the location." >&2
+    exit 1
+fi
+
+if has_step "slurm" && [[ ! -d "$MACHINE_DIR" ]]; then
+    echo "ERROR: machine directory not found: $MACHINE_DIR" >&2
+    echo "       Pass -m <dir> to override, or set ATHENA_TIGRESS_DIR." >&2
     exit 1
 fi
 
