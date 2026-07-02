@@ -22,6 +22,30 @@ Options (all optional, sensible defaults):
 | `-m MACHINE_DIR`| Machine YAML directory               | `project/suites/machines/stellar` |
 | `-q QUEUE`      | Queue name within machine dir        | `standard` |
 | `-r RUN_BASE`   | Scratch root for RUNDIR              | value from machine YAML |
+| `-t STEPS`      | Steps to run (see below)             | `all` |
+
+### Running individual steps
+
+Use `-t STEPS` to run one or more steps. Valid step names:
+`sample`, `plot`, `yaml`, `slurm`. Comma-separate to run several, or use
+`all` (the default) for the full pipeline.
+
+```bash
+# Only re-plot (CSV already exists)
+project/scripts/run_workflow.sh -t plot
+
+# Regenerate YAML + SLURM after tweaking csv_to_slurm_yaml.py
+project/scripts/run_workflow.sh -t yaml,slurm
+
+# Only regenerate SLURM scripts (e.g. after editing the machine YAML)
+project/scripts/run_workflow.sh -t slurm
+
+# Sample and plot only, skip YAML/SLURM
+project/scripts/run_workflow.sh -t sample,plot
+```
+
+Each downstream step verifies its input exists (CSV for `plot`/`yaml`,
+YAML for `slurm`) and exits with an actionable error if not.
 
 Environment: set `ATHENA_TIGRESS_DIR` if `Athena-TIGRESS` is not at
 `$HOME/Sources/Athena-TIGRESS`.
