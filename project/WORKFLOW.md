@@ -21,7 +21,6 @@ Options (all optional, sensible defaults):
 | `-b BASE`       | TIGRESS-NCR base model               | `R8_8pc` |
 | `-m MACHINE_DIR`| Machine YAML directory               | `$ATHENA_TIGRESS_DIR/scripts/stellar` |
 | `-q QUEUE`      | Queue name within machine dir        | `standard` |
-| `-r RUN_BASE`   | Scratch root for RUNDIR              | value from machine YAML |
 | `-t STEPS`      | Steps to run (see below)             | `all` |
 
 ### Running individual steps
@@ -169,10 +168,11 @@ $ATHENA_TIGRESS_DIR/scripts/
 ```
 
 Each queue file supplies scheduler/environment defaults (nodes, tasks_per_node,
-walltime, modules, mail_user). Suite YAML values from step 3 take precedence for
-anything both files set — including `suite.run_base`, which
-`csv_to_slurm_yaml.py` sets to `/scratch/gpfs/changgoo/TIGRESS-PHANGS` and
-therefore overrides any `TIGRESS-NCR`-style default from the machine YAML.
+walltime, modules, mail_user, run_base). Suite YAML values from step 3 take
+precedence for anything both files set — but the suite YAML now only carries
+`domain`, `fixed_overrides`, and `models`, so scheduler/scratch-path defaults
+come entirely from the machine YAML. Point `suite.run_base` in the machine
+YAML at your PHANGS scratch directory.
 
 Add a new machine or queue by creating a file in the corresponding
 `Athena-TIGRESS/scripts/` subdirectory. To point the workflow at a

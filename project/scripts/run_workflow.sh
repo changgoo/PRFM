@@ -13,7 +13,6 @@
 #   -b BASE        TIGRESS-NCR base model                     [default: R8_8pc]
 #   -m MACHINE_DIR Machine YAML directory                     [default: $ATHENA_TIGRESS_DIR/scripts/stellar]
 #   -q QUEUE       Queue name within machine dir              [default: standard]
-#   -r RUN_BASE    Scratch root for RUNDIR (overrides YAML)   [default: unchanged]
 #   -t STEPS       Steps to run (comma-separated or 'all')    [default: all]
 #                  Valid steps: sample, plot, yaml, slurm
 #                  Example: -t plot,yaml   (skip sampling, skip slurm)
@@ -40,12 +39,11 @@ N_SAMPLES=32
 BASE=R8_8pc
 MACHINE_DIR=""            # if empty, set to $ATHENA_DIR/scripts/stellar below
 QUEUE=standard
-RUN_BASE=""
 STEPS="all"
 
 usage() { sed -n '2,35p' "$0"; exit 0; }
 
-while getopts ":s:d:n:b:m:q:r:t:h" opt; do
+while getopts ":s:d:n:b:m:q:t:h" opt; do
     case "$opt" in
         s) SIGMA_GAS=$OPTARG ;;
         d) DELTA=$OPTARG ;;
@@ -53,7 +51,6 @@ while getopts ":s:d:n:b:m:q:r:t:h" opt; do
         b) BASE=$OPTARG ;;
         m) MACHINE_DIR=$OPTARG ;;
         q) QUEUE=$OPTARG ;;
-        r) RUN_BASE=$OPTARG ;;
         t) STEPS=$OPTARG ;;
         h) usage ;;
         \?) echo "Unknown option: -$OPTARG" >&2; exit 2 ;;
@@ -187,20 +184,6 @@ if has_step "yaml"; then
         "$CSV_PATH" \
         --base   "$BASE" \
         --output "$YAML_PATH"
-
-    if [[ -n "$RUN_BASE" ]]; then
-        python - <<PY
-import yaml
-path = "$YAML_PATH"
-with open(path) as f:
-    cfg = yaml.safe_load(f)
-cfg.setdefault("suite", {})["run_base"] = "$RUN_BASE"
-with open(path, "w") as f:
-    yaml.safe_dump(cfg, f, sort_keys=False, default_flow_style=False,
-                   width=100, indent=2)
-print(f"  overrode suite.run_base -> $RUN_BASE")
-PY
-    fi
 fi
 
 # ── step: slurm ─────────────────────────────────────────────────────────────

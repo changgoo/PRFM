@@ -121,13 +121,7 @@ def build_config(csv_path: Path, base: str, decimals: int,
             "extra_overrides": varying,
         })
 
-    config: dict = {
-        "suite": {
-            "run_base": "/scratch/gpfs/changgoo/TIGRESS-PHANGS",
-            "source_csv": str(csv_path.relative_to(ROOT))
-                          if csv_path.is_absolute() else str(csv_path),
-        },
-    }
+    config: dict = {}
     if base in DOMAIN_DEFAULTS:
         config["domain"] = dict(DOMAIN_DEFAULTS[base])
     config["fixed_overrides"] = dict(FIXED_PARAMS)
