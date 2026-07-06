@@ -34,12 +34,36 @@ PARAM_MAP: dict[str, str] = {
     "qshear":     "problem/qshear",
 }
 
-# Fixed parameters applied to every model (see project/doc/paper1-suite/sections/tigress_mapping.tex)
-FIXED_PARAMS: dict[str, float] = {
-    "problem/rhodm":  0.0064,   # Msun/pc^3, R8 fiducial
-    "problem/Zgas":   1.0,      # solar metallicity
-    "problem/Zdust":  1.0,      # solar dust-to-gas ratio
+# Per-base domain defaults (matching athinput.<base> boxes/resolution).
+# `dx` in pc; `box_size` in pc; `grid_size` = ranks per axis (subdomain layout).
+DOMAIN_DEFAULTS: dict[str, dict] = {
+    "R8_8pc":    {"dx": 8,  "box_size": [1024, 1024, 4096], "grid_size": [32, 32, 32]},
+    "R8s_4pc":   {"dx": 4,  "box_size": [1024, 1024, 4096], "grid_size": [64, 64, 64]},
+    "LGR4_4pc":  {"dx": 4,  "box_size": [512,  512,  4096], "grid_size": [32, 32, 32]},
+    "LGR8_8pc":  {"dx": 8,  "box_size": [1024, 1024, 4096], "grid_size": [32, 32, 32]},
 }
+
+# Fixed parameters applied to every model. See project/doc/paper1-suite/sections/tigress_mapping.tex
+# for the physical mapping (rhodm, Z_gas, Z_dust). The other keys are R8_8pc
+# TIGRESS-PHANGS-suite defaults matching Kim et al. runs.
+FIXED_PARAMS: dict = {
+    # Physics defaults
+    "problem/beta":       10,       # plasma beta
+    "problem/rhodm":      0.0064,   # M_sun/pc^3, R8 fiducial
+    "problem/Z_gas":      1.0,      # solar metallicity
+    "problem/Z_dust":     1.0,      # solar dust-to-gas
+    # Radiation-pressure defaults
+    "radps/eps_extinct":  1.0e-8,
+    "radps/xymaxPP":      1024,
+    # Output cadence
+    "output2/dt":         10.0,
+    "output4/dt":         50.0,
+}
+
+# Omega in the CSV is in km/s/kpc (PHANGS convention). TIGRESS-NCR uses
+# code units where Omega has units of km/s/pc (i.e., velocity/length with
+# length in pc). Convert by dividing by 1000.
+OMEGA_KMS_PC_PER_KPC = 1.0e-3
 
 
 def parse_args() -> argparse.Namespace:
@@ -77,18 +101,20 @@ def build_config(csv_path: Path, base: str, decimals: int,
     n_rows = len(df)
     row_width = max(4, len(str(n_rows - 1)))  # 0000..NNNN
 
-    # Per-row varying parameters go in `params` (contribute to jobid).
-    # Row index (suffix) makes each jobid unique — no need to embed every
-    # varying number in the directory name, which produces unwieldy paths.
-    # We therefore keep only the row-index suffix in the naming and put the
-    # varying params in extra_overrides so the sim still receives them but the
-    # jobid stays compact.
+    # Per-row varying parameters go in `extra_overrides`. Row index (suffix)
+    # keeps job IDs compact (`_row0000` … `_rowNNNN`) so the varying numbers
+    # don't clutter the SLURM script names or run directories.
     models = []
     for i, row in df.iterrows():
-        varying: dict[str, float] = {
-            PARAM_MAP[col]: _round(row[col], decimals)
-            for col in PARAM_MAP
-        }
+        varying: dict = {}
+        for col, key in PARAM_MAP.items():
+            val = float(row[col])
+            if col == "Omega":
+                # CSV: km/s/kpc (PHANGS convention); code: km/s/pc.
+                val *= OMEGA_KMS_PC_PER_KPC
+                varying[key] = _round(val, decimals + 3)  # extra digits post-shift
+            else:
+                varying[key] = _round(val, decimals)
         models.append({
             "base":            base,
             "suffix":          f"row{i:0{row_width}d}",
@@ -101,9 +127,11 @@ def build_config(csv_path: Path, base: str, decimals: int,
             "source_csv": str(csv_path.relative_to(ROOT))
                           if csv_path.is_absolute() else str(csv_path),
         },
-        "fixed_overrides": dict(FIXED_PARAMS),
-        "models": models,
     }
+    if base in DOMAIN_DEFAULTS:
+        config["domain"] = dict(DOMAIN_DEFAULTS[base])
+    config["fixed_overrides"] = dict(FIXED_PARAMS)
+    config["models"] = models
 
     if machine_yaml is not None:
         with open(machine_yaml) as f:
@@ -140,6 +168,24 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     config = build_config(args.csv, args.base, args.decimals, args.machine)
+
+    # Custom dumper: keep top-level mappings block-style but render
+    # short numeric lists (box_size, grid_size) in flow style so the file
+    # matches the hand-authored convention.
+    class _FlowList(list):
+        pass
+
+    def _flow_list_representer(dumper, data):
+        return dumper.represent_sequence("tag:yaml.org,2002:seq",
+                                         data, flow_style=True)
+
+    yaml.SafeDumper.add_representer(_FlowList, _flow_list_representer)
+
+    if "domain" in config:
+        d = config["domain"]
+        for k in ("box_size", "grid_size"):
+            if k in d and isinstance(d[k], list):
+                d[k] = _FlowList(d[k])
 
     with open(out_path, "w") as f:
         yaml.safe_dump(config, f, sort_keys=False, default_flow_style=False,
