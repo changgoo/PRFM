@@ -460,7 +460,8 @@ def compute_prfm_inputs(
     ``qshear``
         Dimensionless shear parameter = ``1 - beta_CO21_URC``.
     ``H_star``
-        Stellar scale height = ``Sigma_star / (2 * rho_star_mp)`` [pc].
+        Stellar scale height = ``Sigma_star / (4 * rho_star_mp)`` [pc]
+        (sech^2 scale height: Sigma_star = 4 * rho_star_mp * H_star).
 
     Parameters
     ----------
@@ -551,7 +552,7 @@ def compute_prfm_inputs(
     Sigma_star = t["Sigma_star"].to(au.M_sun / au.pc**2)
     rho_star = t["rho_star_mp"].to(au.M_sun / au.pc**3)
     t["H_star"] = (Sigma_star / (4.0 * rho_star)).to(au.pc)
-    t["H_star"].description = "Stellar scale height Sigma_star / (2 * rho_star_mp)"
+    t["H_star"].description = "Stellar scale height Sigma_star / (4 * rho_star_mp)"
 
     return t
 

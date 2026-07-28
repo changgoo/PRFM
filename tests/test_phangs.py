@@ -217,11 +217,16 @@ class TestComputePRFMInputs:
         np.testing.assert_allclose(out["qshear"], expected, rtol=1e-10)
 
     def test_h_star_formula(self, synthetic_table):
-        """H_star = Sigma_star / (2 * rho_star_mp)  [pc]"""
+        """H_star = Sigma_star / (4 * rho_star_mp)  [pc].
+
+        The factor of 4 corresponds to H_star being the sech^2 scale height
+        (rho ~ sech^2(z / (2 H_star)), so Sigma_star = 4 rho_star_mp H_star),
+        matching the TIGRESS `zstar` convention that H_star maps onto.
+        """
         out = phangs.compute_prfm_inputs(synthetic_table)
         Ss = synthetic_table["Sigma_star"].value  # M_sun/pc^2
         rs = synthetic_table["rho_star_mp"].value  # M_sun/pc^3
-        expected = Ss / (2.0 * rs)  # pc
+        expected = Ss / (4.0 * rs)  # pc
         np.testing.assert_allclose(out["H_star"].value, expected, rtol=1e-10)
 
     def test_units_attached(self, synthetic_table):
@@ -581,7 +586,6 @@ class TestMarginalQuantiles:
         return PHANGSSamplingDesigner(t, config=cfg)
 
     def test_returns_dict_with_five_callables(self):
-        import numpy as np
         d = self._make_designer()
         ref = d.table
         fields = d.config.design_fields
