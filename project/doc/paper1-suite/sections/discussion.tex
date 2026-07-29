@@ -91,6 +91,22 @@ cosmology and astrophysics parameter space at controlled cost.
 structure; the high-level analogy is correct but the suite labels and
 their exact roles should be checked.}
 
+The first realization of Block~2 varies three physics parameters --- the
+gas-phase metallicity $\Zg$, the dust-to-metal ratio $\fdtm \equiv \Zd/\Zg$,
+and the CR ionization-rate amplitude $\xicramp$ --- each over the sub-solar
+decade $[0.1, 1]$ under independent log-uniform priors, with the mapping to
+\TIGRESS-NCR\ inputs given in \autoref{sec:physics_params}. Parameterizing the
+dust through $\fdtm$ enforces $\Zd \le \Zg$, and adding $\xicramp$ probes the CR
+contribution to ionization and heating that regulates the cold-gas phase
+independently of metallicity. This first block is a one-at-a-time ablation about
+the fiducial $(1,1,1)$ point at a representative set of environmental anchors
+selected from Block~1, so the existing fiducial runs supply the reference point
+of each ablation curve at no additional cost; because the physics parameters are
+drawn from the same priors, these runs also fold directly into the eventual
+joint design. The IMF and feedback-yield parameters discussed above, together
+with extension of the metallicity range above solar, remain targets for
+subsequent blocks.
+
 \subsection{Synthetic Observation Pipeline}
 \label{sec:disc_synth}
 

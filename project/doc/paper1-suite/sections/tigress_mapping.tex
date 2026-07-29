@@ -84,10 +84,63 @@ $\qshear$ & ---                       & $\qshear$ & direct; $0 < q \leq 1.5$ \\
   the first simulation suite (\autoref{eq:rhodm_fiducial}).}
 \end{deluxetable*}
 
-\subsection{Fiducial Physics Parameters}
+\subsection{Physics Parameters and Their Variation}
+\label{sec:physics_params}
 
-The first simulation suite holds all physics parameters at fiducial values:
-metallicity $\Zg = 1$ (solar), dust-to-gas ratio $\Zd = 1$, and standard
-TIGRESS-NCR feedback and population-synthesis prescriptions
-\citep{2024ApJ...972...67K}. Extension to physics parameter variations
-(metallicity, IMF, feedback yield) is described in \autoref{sec:discussion}.
+Beyond the environmental initial conditions, \TIGRESS-NCR\ takes a set of
+physics parameters controlling the thermodynamics and feedback of the ISM. The
+base simulation suite holds these at fiducial values: gas-phase metallicity
+$\Zg = 1$ (solar), dust abundance $\Zd = 1$, and the fiducial cosmic-ray (CR)
+ionization-rate amplitude $\xicramp = 1$, together with the standard
+\TIGRESS-NCR\ feedback and population-synthesis prescriptions
+\citep{2024ApJ...972...67K}.
+
+To characterize the sensitivity of the star-forming ISM to these parameters, we
+extend the suite to vary three of them over a decade below solar,
+\begin{equation}
+  \Zg \in [0.1, 1], \quad
+  \fdtm \equiv \Zd/\Zg \in [0.1, 1], \quad
+  \xicramp \in [0.1, 1],
+  \label{eq:physics_ranges}
+\end{equation}
+taking the dust-to-metal ratio $\fdtm$ as the free parameter so that the
+physical constraint $\Zd \le \Zg$ holds automatically, with $\Zd = \fdtm\,\Zg$.
+\autoref{tab:physics} lists the three parameters and their \TIGRESS-NCR\ inputs.
+
+Unlike the five environmental fields (\autoref{sec:sampling}), which are drawn
+from the observed \PHANGS\ joint distribution, the physics parameters are
+sampled from \emph{independent, log-uniform priors}. Gas-phase metallicity is
+measured in \PHANGS, but at $\Sgas \approx 10\Surf$ the observed apertures are
+almost exclusively near-solar, so the observed distribution does not reach the
+sub-solar regime we wish to probe; an independent prior is required to cover
+$\Zg \sim 0.1$. The dust-to-metal ratio and the CR amplitude have no direct
+observational constraint at aperture level. All three span a decade and are
+sampled uniformly in $\log$.
+
+We adopt a \emph{product} design: the five-dimensional environmental design is
+retained unchanged, and the three physics parameters are appended as an
+independent low-discrepancy block. This preserves the environmental suite
+exactly---the fiducial runs, all at $(\Zg, \fdtm, \xicramp) = (1, 1, 1)$, form
+the reference slice---while yielding flat, decoupled physics marginals suitable
+for parameter inference. The first realization is a one-at-a-time ablation about
+the fiducial values at a set of environmental anchor points; its folding into
+the joint simulation-based-inference prior is described in
+\autoref{sec:disc_phys}.
+
+\begin{deluxetable}{lccl}
+\tablecaption{Physics parameters varied in the suite extension
+\label{tab:physics}}
+\tablehead{
+  \colhead{Parameter} & \colhead{Range} &
+  \colhead{TIGRESS input} & \colhead{Notes}
+}
+\startdata
+$\Zg$      & $[0.1, 1]$ & \texttt{problem/Z\_gas}      & gas metallicity (solar) \\
+$\fdtm$    & $[0.1, 1]$ & \texttt{problem/Z\_dust}     & $\Zd = \fdtm\,\Zg$ \\
+$\xicramp$ & $[0.1, 1]$ & \texttt{problem/xi\_CR\_amp} & CR ionization amplitude
+\enddata
+\tablecomments{All three parameters are dimensionless and solar-normalized, and
+are sampled from independent log-uniform priors. The base suite sits at
+$(\Zg, \fdtm, \xicramp) = (1, 1, 1)$; the dust abundance $\Zd$ is set through the
+dust-to-metal ratio $\fdtm$ (\autoref{eq:physics_ranges}).}
+\end{deluxetable}
