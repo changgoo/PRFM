@@ -63,6 +63,10 @@ class SamplingConfig:
         default_factory=lambda: {"Omega": 0.3, "H_star": 0.25, "qshear": 0.15}
     )
     expanded_prior_upper_dex: dict[str, float] = dc_field(default_factory=dict)
+    # Per-field symmetric augmentation for the Sobol design (dex per tail).
+    # Applied by synthesize_kde_sobol to broaden only the named marginals,
+    # leaving the others matched to PHANGS. Empty = no augmentation.
+    augment_prior_dex: dict[str, float] = dc_field(default_factory=dict)
     synthesis_method: SynthesisMethod = "kde_sobol"
     design_fields: list[str] = dc_field(
         default_factory=lambda: [
@@ -82,6 +86,29 @@ class SamplingConfig:
 
 def _column_values(table: Table, col: str) -> np.ndarray:
     return np.asarray(table[col], dtype=float)
+
+
+def _stretch_quantile_fn(quantile_fn, delta_dex: float, q_lo: float, q_hi: float):
+    """Broaden a marginal quantile function by ~``delta_dex`` on each tail.
+
+    The distribution is stretched about its log-median (which is preserved),
+    with the lower and upper halves scaled independently so that the
+    ``q_lo``/``q_hi`` boundary quantiles each move outward by ``delta_dex``.
+    ``quantile_fn`` maps probabilities in (0, 1) to log10-space values.
+    """
+    m = float(quantile_fn(0.5))
+    lo = float(quantile_fn(q_lo))
+    hi = float(quantile_fn(q_hi))
+    up = hi - m
+    dn = m - lo
+    a_hi = 1.0 + delta_dex / up if up > 0 else 1.0
+    a_lo = 1.0 + delta_dex / dn if dn > 0 else 1.0
+
+    def stretched(u):
+        w = np.asarray(quantile_fn(u), dtype=float)
+        return np.where(w >= m, m + a_hi * (w - m), m + a_lo * (w - m))
+
+    return stretched
 
 
 def _rank_coordinates(values: np.ndarray) -> np.ndarray:
@@ -500,6 +527,7 @@ class PHANGSSamplingDesigner:
         n_samples: int,
         design_fields: list[str] | None = None,
         seed: int | None = None,
+        augment_dex: dict[str, float] | None = None,
     ) -> pd.DataFrame:
         """Generate a simulation design via KDE-marginal-quantile Sobol mapping.
 
@@ -507,6 +535,13 @@ class PHANGSSamplingDesigner:
         marginal quantile functions from a large auxiliary KDE draw, and maps a
         scrambled Sobol sequence through those functions to produce physical-space
         design points.
+
+        ``augment_dex`` (falling back to ``config.augment_prior_dex``) optionally
+        broadens selected marginals beyond the observed PHANGS support: each
+        named field's quantile function is stretched about its log-median so the
+        tails extend by ~that many dex on each side (e.g. ``{"H_star": 0.3,
+        "Omega": 0.3}`` for ~x2 coverage). Unlisted fields are unchanged, so the
+        Sigma_gas band and the qshear bound are preserved.
 
         The Sobol sequence is generated with the same seed at every call, so
         S(2^k) ⊂ S(2^{k+1}) (nesting property) holds provided the same seed
@@ -535,6 +570,18 @@ class PHANGSSamplingDesigner:
         quantile_fns = self._compute_marginal_quantiles(
             reference, design_fields, seed=self.config.random_seed
         )
+
+        # Step 1b: optionally broaden selected marginals beyond the observed
+        # PHANGS support (e.g. ~x2 in H_star and Omega). Only the named fields
+        # are stretched; the rest stay matched to the reference distribution.
+        if augment_dex is None:
+            augment_dex = self.config.augment_prior_dex
+        q_lo, q_hi = self.config.kde_boundary_quantiles
+        for f, delta in (augment_dex or {}).items():
+            if f in quantile_fns and delta:
+                quantile_fns[f] = _stretch_quantile_fn(
+                    quantile_fns[f], float(delta), q_lo, q_hi
+                )
 
         # Step 2: Generate Sobol sequence.
         # Use random_base2(m) when n is a power of 2 for optimal uniformity;
@@ -592,6 +639,7 @@ class PHANGSSamplingDesigner:
         result.attrs["design_fields"] = list(design_fields)
         result.attrs["n_samples"] = n_samples
         result.attrs["sobol_seed"] = sobol_seed
+        result.attrs["augment_dex"] = dict(augment_dex or {})
         return result
 
     def synthesize_expanded_kde_sobol(

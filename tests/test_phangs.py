@@ -730,6 +730,85 @@ class TestExpandedKdeSobol:
         assert len(result) == 32
 
 
+class TestAugmentedPrior:
+    """Per-field marginal augmentation of the KDE-Sobol design."""
+
+    @pytest.fixture
+    def designer_and_reference(self):
+        from prfm.phangs_sampling import PHANGSSamplingDesigner, SamplingConfig
+        from astropy.table import Table
+        import numpy as np
+
+        rng = np.random.default_rng(3)
+        n = 500
+        t = Table({
+            "Sigma_gas":  rng.lognormal(np.log(10.0), 0.3, n),
+            "Sigma_star": rng.lognormal(np.log(50.0), 0.5, n),
+            "H_star":     rng.lognormal(np.log(300.0), 0.4, n),
+            "Omega":      rng.lognormal(np.log(30.0), 0.4, n),
+            "qshear":     rng.uniform(0.4, 1.3, n),
+        })
+        cfg = SamplingConfig(kde_aux_sample_size=5_000, sobol_seed=42)
+        return PHANGSSamplingDesigner(t, config=cfg), t
+
+    @staticmethod
+    def _log_span(series):
+        import numpy as np
+        lv = np.log10(np.asarray(series, dtype=float))
+        return float(np.percentile(lv, 99) - np.percentile(lv, 1))
+
+    def test_augment_broadens_named_fields(self, designer_and_reference):
+        d, ref = designer_and_reference
+        base = d.synthesize_kde_sobol(ref, n_samples=128, seed=1)
+        aug = d.synthesize_kde_sobol(
+            ref, n_samples=128, seed=1,
+            augment_dex={"H_star": 0.3, "Omega": 0.3},
+        )
+        # Each tail extends ~0.3 dex, so the 1-99 pct span grows by > 0.3 dex.
+        assert self._log_span(aug["H_star"]) > self._log_span(base["H_star"]) + 0.3
+        assert self._log_span(aug["Omega"]) > self._log_span(base["Omega"]) + 0.3
+
+    def test_augment_leaves_other_fields_identical(self, designer_and_reference):
+        import numpy as np
+        d, ref = designer_and_reference
+        base = d.synthesize_kde_sobol(ref, n_samples=128, seed=1)
+        aug = d.synthesize_kde_sobol(
+            ref, n_samples=128, seed=1, augment_dex={"H_star": 0.3},
+        )
+        # Same Sobol points + unchanged marginals -> untouched columns identical.
+        for f in ["Sigma_gas", "Sigma_star", "Omega", "qshear"]:
+            np.testing.assert_allclose(aug[f].to_numpy(), base[f].to_numpy())
+
+    def test_augment_preserves_median(self, designer_and_reference):
+        import numpy as np
+        d, ref = designer_and_reference
+        base = d.synthesize_kde_sobol(ref, n_samples=256, seed=1)
+        aug = d.synthesize_kde_sobol(
+            ref, n_samples=256, seed=1, augment_dex={"H_star": 0.3},
+        )
+        mb = np.median(np.log10(base["H_star"].to_numpy()))
+        ma = np.median(np.log10(aug["H_star"].to_numpy()))
+        assert abs(ma - mb) < 0.08  # stretch is about the median
+
+    def test_augment_via_config(self, designer_and_reference):
+        import dataclasses
+        from prfm.phangs_sampling import PHANGSSamplingDesigner
+        d, ref = designer_and_reference
+        cfg2 = dataclasses.replace(d.config, augment_prior_dex={"H_star": 0.3})
+        d2 = PHANGSSamplingDesigner(ref, config=cfg2)
+        base = d.synthesize_kde_sobol(ref, n_samples=128, seed=1)
+        aug = d2.synthesize_kde_sobol(ref, n_samples=128, seed=1)
+        assert self._log_span(aug["H_star"]) > self._log_span(base["H_star"]) + 0.3
+        assert aug.attrs["augment_dex"] == {"H_star": 0.3}
+
+    def test_no_augment_reproduces_baseline(self, designer_and_reference):
+        import pandas as pd
+        d, ref = designer_and_reference
+        a = d.synthesize_kde_sobol(ref, n_samples=64, seed=1)
+        b = d.synthesize_kde_sobol(ref, n_samples=64, seed=1, augment_dex={})
+        pd.testing.assert_frame_equal(a, b)
+
+
 @integration
 class TestIntegrationLoadAll:
     def test_load_all_returns_stacked_table(self):
