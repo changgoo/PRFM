@@ -8,31 +8,11 @@ We apply the KDE-Sobol design procedure of \autoref{sec:sampling} to
 three target gas surface densities, $\Sgas^{\rm tgt} \in \{5, 10,
 20\}\Surf$, each with a band half-width $\Delta = 0.3\dex$.
 The resulting reference sets contain 385, 791, and 899 \PHANGS\
-apertures respectively, drawn from the full 80-galaxy sample.
-
-\autoref{fig:field_distributions} shows the marginal distributions of
-the five design fields for the KDE-Sobol sample at $n = 64$ compared to
-the \PHANGS\ reference set at $\Sgas^{\rm tgt} = 10\Surf$. The sample
-reproduces the broad shape of each marginal, including the peaked
-$\qshear \approx 1$ distribution characteristic of flat rotation
-curves and the factor-of-ten spread in $\Sstar$. The $\Hstar$
-distribution shows mild multi-modal structure in the reference that
-the KDE smooths over; this is the expected behavior of a Gaussian KDE
-applied to a distribution with distinct sub-populations.
-
-\begin{figure}[ht]
-  \centering
-  % \includegraphics[width=\columnwidth]{figures/phangs/sobol/Sgas10.0/distributions_n0064.png}
-  % Figure: replace with paper-quality version from plot_design_fields.py
-  \caption{Marginal distributions of the five environmental design fields
-           ($\Sgas$, $\Sstar$, $\Hstar$, $\Omrot$, $\qshear$) for the
-           \PHANGS\ reference set at $\Sgas^{\rm tgt} = 10\Surf$
-           (gray) and the KDE-Sobol sample at $n = 64$ (red).
-           All fields are shown on logarithmic axes. The sample
-           reproduces the main observed marginals; the slight smoothing
-           of the $\Hstar$ distribution reflects the KDE bandwidth.}
-  \label{fig:field_distributions}
-\end{figure}
+apertures respectively, drawn from the full 80-galaxy sample. The
+marginal distributions of the five design fields for the initial
+$n = 32$ suite, compared to the \PHANGS\ reference set at
+$\Sgas^{\rm tgt} = 10\Surf$, are shown in
+\autoref{fig:field_distributions}.
 
 \autoref{tab:fairness} quantifies sampling fairness via the per-field
 quantile mismatch $\varepsilon_a$ (\autoref{eq:eps_a}) for
