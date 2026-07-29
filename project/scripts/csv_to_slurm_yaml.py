@@ -8,7 +8,16 @@ are mapped to TIGRESS-NCR athinput parameters
 and rho_dm is held fixed at the R8 fiducial (0.0064 Msun/pc^3).
 
 Each CSV row becomes one entry in the `models:` list in the output YAML, with
-`suffix` = "rowNNNN" so the resulting job IDs are unique.
+`suffix` = "rowNNNN" so the resulting job IDs are unique. If the CSV has a
+`suffix` column, its values are used verbatim instead (useful for ablation
+grids whose job IDs encode the anchor / swept parameter / level).
+
+Optional per-row physics columns are also supported: `Z_gas`, `Z_dust`, and
+`xi_CR_amp` (all dimensionless, solar-normalized; see
+project/doc/physics-parameter-extension.md). Any of these present in the CSV
+is written to `extra_overrides` per row and dropped from the fixed block; if
+absent, the fixed default applies (Z_gas = Z_dust = 1; xi_CR_amp = athinput
+default). This keeps the original 5-column physical CSVs byte-identical.
 
 The 2-D projection PDF bin geometry (output8 = x-y face-on, output9 = x-z
 edge-on) is derived from the domain box so it stays correct across bases, and
@@ -31,13 +40,23 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# CSV column → TIGRESS-NCR athinput key
+# CSV column → TIGRESS-NCR athinput key (physical design fields; required)
 PARAM_MAP: dict[str, str] = {
     "Sigma_gas": "problem/surf",
     "Sigma_star": "problem/SurfS",
     "H_star": "problem/zstar",
     "Omega": "problem/Omega",
     "qshear": "problem/qshear",
+}
+
+# Optional per-row physics columns. If present in the CSV a column is treated
+# as varying (written to extra_overrides per row) and its fixed default (below)
+# is dropped; if absent, the fixed default applies. All are dimensionless and
+# solar-normalized, so no unit conversion is applied.
+OPTIONAL_PARAM_MAP: dict[str, str] = {
+    "Z_gas": "problem/Z_gas",
+    "Z_dust": "problem/Z_dust",
+    "xi_CR_amp": "problem/xi_CR_amp",
 }
 
 # Per-base domain defaults (matching athinput.<base> boxes/resolution).
@@ -149,12 +168,19 @@ def build_config(
     if missing:
         raise ValueError(f"CSV missing required columns: {missing}")
 
+    # Optional physics columns actually present in the CSV vary per row.
+    varying_optional = {
+        col: key for col, key in OPTIONAL_PARAM_MAP.items() if col in df.columns
+    }
+    has_suffix_col = "suffix" in df.columns
+
     n_rows = len(df)
     row_width = max(4, len(str(n_rows - 1)))  # 0000..NNNN
 
-    # Per-row varying parameters go in `extra_overrides`. Row index (suffix)
+    # Per-row varying parameters go in `extra_overrides`. The row index (suffix)
     # keeps job IDs compact (`_row0000` … `_rowNNNN`) so the varying numbers
-    # don't clutter the SLURM script names or run directories.
+    # don't clutter the SLURM script names — unless the CSV supplies its own
+    # `suffix` column (e.g. an ablation grid with descriptive IDs).
     models = []
     for i, row in df.iterrows():
         varying: dict = {}
@@ -166,10 +192,13 @@ def build_config(
                 varying[key] = _round(val, decimals + 3)  # extra digits post-shift
             else:
                 varying[key] = _round(val, decimals)
+        for col, key in varying_optional.items():
+            varying[key] = _round(float(row[col]), decimals)
+        suffix = str(row["suffix"]) if has_suffix_col else f"row{i:0{row_width}d}"
         models.append(
             {
                 "base": base,
-                "suffix": f"row{i:0{row_width}d}",
+                "suffix": suffix,
                 "extra_overrides": varying,
             }
         )
@@ -181,11 +210,16 @@ def build_config(
         config["domain"] = domain
         pdf2d = build_pdf2d_overrides(domain)
 
+    # Drop fixed defaults for any physics parameter that now varies per row.
+    fixed = dict(FIXED_PARAMS)
+    for key in varying_optional.values():
+        fixed.pop(key, None)
+
     # pdf2d keys first (mirrors the hand-authored anchor merge), then the
     # scalar physics/output defaults. On restart, athinput can otherwise fall
     # back to placeholder bin defaults, so the same geometry is repeated in
     # restart_overrides.
-    config["fixed_overrides"] = {**pdf2d, **FIXED_PARAMS}
+    config["fixed_overrides"] = {**pdf2d, **fixed}
     if pdf2d:
         config["restart_overrides"] = dict(pdf2d)
     config["models"] = models
