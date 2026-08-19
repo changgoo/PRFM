@@ -416,10 +416,36 @@ regimes such as low-$\Omrot$ environments. Expanded-prior simulations
 are flagged at draw time and analyzed separately from the
 \PHANGS-prior simulations in the fairness diagnostics
 (\autoref{sec:sampling:fairness}) and downstream emulator validation.
-\CGK{The precise broadening factor $s$ and the directional extensions
-applied in the first-generation suite will be reported in
-\autoref{sec:results}; the choice of these is closely tied to which
-PHANGS-poor environments the inference program ultimately targets.}
+
+For the first-generation suite we apply directional extension (method~ii) to
+the two fields most truncated by the \PHANGS\ selection at
+$\Sgas \approx 10\Surf$, drawing an augmentation block that broadens the
+$\Hstar$ and $\Omrot$ marginals by $\pm0.3\dex$ per tail (a factor of
+$\sim$2). \autoref{fig:augment_coverage} shows the resulting coverage: the
+block extends well beyond the observed \PHANGS\ support in $\Hstar$ and
+$\Omrot$, while $\Sgas$, $\Sstar$, and $\qshear$ remain matched to the
+reference distribution. Because the augmentation acts only on the marginal
+quantile functions of the selected fields, it leaves the $\Sgas$ band and the
+$\qshear \le 1.5$ bound intact, and the block is appended to the narrow-prior
+core so that the latter's simulations remain valid.
+\CGK{The directional extensions applied here ($\Hstar$, $\Omrot$ by
+$0.3\dex$) are tied to which PHANGS-poor environments the inference program
+ultimately targets; revisit once the target list is finalized.}
+
+\begin{figure*}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{augmentation_coverage.png}
+  \caption{Directional prior extension for the two most \PHANGS-truncated
+           fields. Marginal distributions of the five design fields for the
+           \PHANGS\ reference band (gray), the narrow-prior core design (blue),
+           and the augmentation block (red), with the \TIGRESS\ R8 fiducial
+           (gold dashed). The block broadens $\Hstar$ and $\Omrot$ by
+           $\pm0.3\dex$ per tail (panels labeled ``augmented''), extending
+           coverage beyond the observed \PHANGS\ support, while $\Sgas$,
+           $\Sstar$, and $\qshear$ stay matched to the reference. Axes span the
+           full design range so the broadened tails remain visible.}
+  \label{fig:augment_coverage}
+\end{figure*}
 
 %-----------------------------------------------------------------
 \subsection{Sampling Fairness Diagnostic}

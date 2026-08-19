@@ -30,4 +30,7 @@ project:
       children:
         - file: book/api
 site:
-  template: book-theme
+  template: article-theme
+  options:
+    favicon: https://www.princeton.edu/favicon.ico
+  #   logo: site_logo.png
