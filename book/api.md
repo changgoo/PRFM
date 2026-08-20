@@ -7,6 +7,7 @@ The main computation module. All physical quantities use CGS units internally.
 ### `PRFM` class
 
 Object-oriented wrapper around the functional layer with automatic unit conversion (CGS ↔ astronomical).
+When initializing from a spherical-component density via `rho_dm`, `a_d` sets the conversion `Omega_d**2 = 2*pi*G*a_d*rho_dm`; the default `a_d=2` preserves the flat-rotation-curve convention.
 
 ```python
 from prfm import PRFM
@@ -26,7 +27,7 @@ result = model.get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_st
 | `get_scale_height_thin(Sigma_gas, Sigma_star, sigma_eff)` | Approximate solution for H★ ≪ H_gas |
 | `get_scale_height_gas_only(...)` | Analytic limit: gas self-gravity only |
 | `get_scale_height_star_only(...)` | Analytic limit: stellar gravity only |
-| `get_scale_height_dm_only(...)` | Analytic limit: dark matter gravity only |
+| `get_scale_height_dm_only(...)` | Analytic limit: spherical-component gravity only |
 | `get_scale_height_star_gas(...)` | Analytic solution neglecting dark matter |
 | `get_scale_height_dm_gas(...)` | Analytic solution neglecting stars |
 
@@ -37,7 +38,9 @@ result = model.get_self_consistent_solution(Sigma_gas, Sigma_star, Omega_d, H_st
 | `get_weight_gas(Sigma_gas)` | Gas self-gravity weight: π G Σ²/2 |
 | `get_weight_star(Sigma_gas, H_gas, Sigma_star, H_star)` | Stellar gravity weight |
 | `get_weight_star_gaussian(Sigma_gas, H_gas, Sigma_star, H_star)` | Stellar weight assuming Gaussian profiles |
-| `get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d)` | Dark matter gravity weight |
+| `get_weight_dm(Sigma_gas, H_gas, Omega_d, zeta_d)` | Spherical-component gravity weight |
+| `get_omega_spherical_from_density(rho, a_d)` | Convert spherical-component density to vertical harmonic frequency |
+| `get_density_from_omega_spherical(Omega_sph, a_d)` | Convert vertical harmonic frequency to spherical-component density |
 | `get_pressure(Sigma_gas, H_gas, sigma_eff)` | Midplane pressure P = σ² Σ / (2 H) |
 | `get_weights(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, ...)` | Compute H_gas and all three weight terms |
 | `get_weight_contribution(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, ...)` | Return fractional weight contributions (f_gas, f_star, f_dm) |

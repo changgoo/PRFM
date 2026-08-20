@@ -165,7 +165,7 @@ def get_weight_dm(
     Omega_d: np.ndarray,
     zeta_d: float = 1 / 3.0,
 ) -> np.ndarray:
-    """Dark matter gravity weight.
+    """Spherical-component gravity weight.
 
     Parameters
     ----------
@@ -174,9 +174,9 @@ def get_weight_dm(
     H_gas : array-like
         Gas scale height [cm].
     Omega_d : array-like
-        Galactic angular velocity (rotation speed / galactocentric radius) [s⁻¹].
+        Vertical harmonic frequency of the spherical component [s⁻¹].
     zeta_d : float, optional
-        Geometric factor relating the DM density to Omega_d²; default 1/3.
+        Geometric factor for the gas distribution; default 1/3.
 
     Returns
     -------
@@ -184,6 +184,58 @@ def get_weight_dm(
         Weight per unit area [dyn cm⁻²].
     """
     return zeta_d * Sigma_gas * H_gas * Omega_d**2
+
+
+def get_omega_spherical_from_density(
+    rho: np.ndarray,
+    a_d: float = 2.0,
+) -> np.ndarray:
+    """Convert spherical-component density to vertical harmonic frequency.
+
+    The convention is ``Omega_sph**2 = 2 pi G a_d rho``. The default
+    ``a_d=2`` preserves the flat-rotation-curve relation
+    ``Omega_sph**2 = 4 pi G rho``. Useful alternatives are ``a_d=1`` for an
+    NFW-like halo inside the scale radius and ``a_d=2/3`` for a
+    Hernquist-bulge normalization adopted by Jeffreson et al. (2026).
+
+    Parameters
+    ----------
+    rho : array-like
+        Spherical-component volume density [g cm⁻³].
+    a_d : float, optional
+        Dimensionless coefficient in the spherical vertical frequency. Use
+        ``a_d=2/3`` for a Hernquist bulge, ``a_d=1`` for an NFW-like halo,
+        and ``a_d=2`` for the flat-rotation-curve convention.
+
+    Returns
+    -------
+    Omega_sph : array-like
+        Vertical harmonic frequency [s⁻¹].
+    """
+    return np.sqrt(2.0 * np.pi * _Gconst_cgs * a_d * rho)
+
+
+def get_density_from_omega_spherical(
+    Omega_sph: np.ndarray,
+    a_d: float = 2.0,
+) -> np.ndarray:
+    """Convert spherical vertical harmonic frequency to density.
+
+    This is the inverse of :func:`get_omega_spherical_from_density`.
+
+    Parameters
+    ----------
+    Omega_sph : array-like
+        Vertical harmonic frequency [s⁻¹].
+    a_d : float, optional
+        Dimensionless coefficient in ``Omega_sph**2 = 2 pi G a_d rho``.
+
+    Returns
+    -------
+    rho : array-like
+        Spherical-component volume density [g cm⁻³].
+    """
+    return Omega_sph**2 / (2.0 * np.pi * _Gconst_cgs * a_d)
 
 
 def get_pressure(
@@ -228,7 +280,7 @@ def get_weights(
     Sigma_star: float or array-like
         stellar surface density
     Omega_d: float or array-like
-        galactic rotation speed
+        vertical harmonic frequency of the spherical component
     H_star: float or array-like
         stellar scale height
     sigma_eff: str or float or array-like
@@ -247,7 +299,7 @@ def get_weights(
     W_star: float or array-like
         weight by star
     W_dm: float or array-like
-        weight by dark matter
+        weight by the spherical component
 
     Example
     -------
@@ -437,7 +489,7 @@ def get_weight_contribution(
     Sigma_star: float or array-like
         stellar surface density
     Omega_d: float or array-like
-        galactic rotation speed
+        vertical harmonic frequency of the spherical component
     H_star: float or array-like
         stellar scale height
     sigma_eff: str or float or array-like
@@ -454,7 +506,7 @@ def get_weight_contribution(
     f_star: float or array-like
         weight by star/total weight
     f_dm: float or array-like
-        weight by dark matter/total weight
+        weight by spherical component/total weight
     """
     H, wgas, wstar, wdm = get_weights(
         Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff, zeta_d=zeta_d, method=method
@@ -501,7 +553,7 @@ def get_scale_height_star_only(*args, **kwargs) -> np.ndarray:
 
 
 def get_scale_height_dm_only(*args, **kwargs) -> np.ndarray:
-    """Analytic scale height considering dark matter gravity only.
+    """Analytic scale height considering spherical-component gravity only.
 
     All inputs must be in CGS units. Positional arguments follow the
     standard convention: ``(Sigma_gas, Sigma_star, Omega_d, H_star, sigma_eff)``.
@@ -849,7 +901,7 @@ def get_scale_height(
     Sigma_star : float or array-like
         stellar surface density
     Omega_d : float or array-like
-        galactic rotation speed
+        vertical harmonic frequency of the spherical component
     H_star : float or array-like
         stellar scale height
     sigma_eff : str or float or array-like
@@ -864,7 +916,7 @@ def get_scale_height(
     wstar : int [0 or 1]
         toggle weight term from stars
     wdm : int [0 or 1]
-        toggle weight term from dark matter
+        toggle weight term from the spherical component
 
     Returns
     -------
@@ -1046,7 +1098,7 @@ def get_self_consistent_solution(
     Sigma_star: float or array-like
         stellar surface density
     Omega_d: float or array-like
-        galactic rotation speed
+        vertical harmonic frequency of the spherical component
     H_star: float or array-like
         stellar scale height
     sigma_eff : float or str
@@ -1104,7 +1156,14 @@ class PRFM(object):
     Sigma_star : float, array-like
         stellar surface density
     Omega_d : float, array-like
-        galactic rotation speed
+        spherical vertical harmonic frequency
+    rho_dm : float, array-like
+        spherical-component volume density. Provide either ``Omega_d`` or
+        ``rho_dm``, not both.
+    a_d : float [2.0]
+        coefficient in ``Omega_d**2 = 2*pi*G*a_d*rho_dm``. The default
+        ``a_d=2`` preserves the flat-rotation-curve convention; use
+        ``a_d=1`` for an NFW-like halo and ``a_d=2/3`` for a Hernquist bulge.
     H_star : float, array-like
         stellar scale height
     sigma_eff : str, float, array-like
@@ -1123,6 +1182,7 @@ class PRFM(object):
         rho_star=None,
         Omega_d=None,
         rho_dm=None,
+        a_d=2.0,
         sigma_eff="tigress-classic-mid",
         Ytot="tigress-classic",
         astro_units=True,
@@ -1183,25 +1243,25 @@ class PRFM(object):
         if astro_units:
             self._astro_to_cgs()
 
-        # setting up dark matter
+        # setting up spherical dark matter / bulge contribution
+        self._a_d = a_d
+        self.a_d = a_d
         if (Omega_d is None) and (rho_dm is None):
             self._Omega_d = 0
             self._rho_dm = 0
             self._wdm = 0
         else:
             self._wdm = 1
-            # this conversion assumes flat rotation
-            _fourpiG = 4 * np.pi * ac.G.cgs.value
             if rho_dm is None:
                 # Omega_d is given
                 if astro_units:
                     Omega_d = Omega_d * self.units["Omega_d"].cgs.value
-                rho_dm = Omega_d**2 / _fourpiG
+                rho_dm = get_density_from_omega_spherical(Omega_d, a_d=a_d)
             elif Omega_d is None:
                 # rho_dm is given
                 if astro_units:
                     rho_dm = rho_dm * self.units["rho_dm"].cgs.value
-                Omega_d = np.sqrt(_fourpiG * rho_dm)
+                Omega_d = get_omega_spherical_from_density(rho_dm, a_d=a_d)
             else:
                 # both given
                 raise ArgumentError("cannot provide both Omega_d and rho_dm")
@@ -1328,6 +1388,7 @@ class PRFM(object):
             "rho_star",
             "Omega_d",
             "rho_dm",
+            "a_d",
             "H_star",
             "sigma_eff",
         ]:
