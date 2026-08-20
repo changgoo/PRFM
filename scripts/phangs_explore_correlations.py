@@ -37,7 +37,7 @@ _BASE_COLS: list[tuple[str, str, bool]] = [
     ("Sigma_atom",          r"$\Sigma_\mathrm{atom}$", True),
     ("Sigma_star",          r"$\Sigma_\star$",          True),
     ("H_star",              r"$H_\star$",               True),
-    ("Omega_d",             r"$\Omega_d$",              True),
+    ("Omega",               r"$\Omega$",                 True),
     ("Zprime",              r"$Z'$",                    False),
     ("Sigma_SFR_HaW4recal", r"$\Sigma_\mathrm{SFR}$",  True),
 ]

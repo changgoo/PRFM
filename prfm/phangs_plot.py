@@ -30,6 +30,7 @@ NO_SUFFIX: set[str] = {
     "alpha_CO21_S20",
     "rho_star_mp",
     "V_circ_CO21_URC",
+    "Omega",
     "Omega_d",
     "H_star",
     "Sigma_gas",  # derived by compute_prfm_inputs
@@ -48,6 +49,7 @@ COLUMN_LABELS: dict[str, str] = {
     "rho_star_mp": r"$\rho_\star$ [$M_\odot\,\mathrm{pc}^{-3}$]",
     "H_star": r"$H_\star$ [pc]",
     "V_circ_CO21_URC": r"$V_\mathrm{circ}$ [km s$^{-1}$]",
+    "Omega": r"$\Omega$ [km s$^{-1}$ kpc$^{-1}$]",
     "Omega_d": r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",
     "Zprime": r"$Z'$ [$Z_\odot$]",
     "Sigma_SFR_HaW4recal": r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha+W4}$"
@@ -682,6 +684,7 @@ def plot_weights(
     tbl: "Table",
     ax: "plt.Axes | None" = None,
     variation: dict | None = None,
+    omega_d_col: str | None = None,
 ) -> "plt.Figure":
     """Plot weight fractions (f_gas, f_star, f_DM) vs dynamical equilibrium pressure.
 
@@ -692,13 +695,17 @@ def plot_weights(
     ----------
     tbl : Table
         PHANGS table with ``P_weight``, ``Sigma_gas``, ``Sigma_star``,
-        ``Omega_d``, ``H_star``, and ``sigma_eff_sol`` columns.
+        ``H_star``, and ``sigma_eff_sol`` columns.
     ax : Axes or None, optional
         Existing Matplotlib axes to draw on. A new figure is created if
         ``None``.
     variation : dict or None, optional
         Passed directly to :func:`prfm.phangs.get_weights`; see that
         function for supported keys.
+    omega_d_col : str or None, optional
+        Column containing the dark-matter-only vertical harmonic frequency.
+        The default omits halo gravity; total ``"Omega"`` may be selected as
+        an explicit upper-bound approximation.
 
     Returns
     -------
@@ -707,28 +714,34 @@ def plot_weights(
     """
     from prfm.phangs import get_weights
 
-    f_gas, f_star, f_dm = get_weights(tbl, variation=variation)
+    f_gas, f_star, f_dm = get_weights(
+        tbl,
+        variation=variation,
+        omega_d_col=omega_d_col,
+    )
     P_DE = np.asarray(tbl["P_weight"], dtype=float)  # k_B K cm^-3
 
     if ax is None:
         fig, ax = plt.subplots(figsize=(5, 3.5))
     else:
         fig = ax.figure
+    components = [
+        (f_gas, "tab:blue", r"$f_\mathrm{gas}$"),
+        (f_star, "tab:orange", r"$f_\star$"),
+    ]
+    if omega_d_col is not None:
+        components.append((f_dm, "tab:green", r"$f_\mathrm{DM}$"))
+
     kw = dict(s=2, alpha=0.5, rasterized=True, linewidths=0)
-    ax.scatter(P_DE, f_gas, color="tab:blue", **kw)
-    ax.scatter(P_DE, f_star, color="tab:orange", **kw)
-    ax.scatter(P_DE, f_dm, color="tab:green", **kw)
+    for fraction, color, _ in components:
+        ax.scatter(P_DE, fraction, color=color, **kw)
 
     # Binned means
     P_edges = np.logspace(
         np.log10(np.nanpercentile(P_DE, 1)), np.log10(np.nanpercentile(P_DE, 99)), 20
     )
     P_centers = np.sqrt(P_edges[:-1] * P_edges[1:])  # geometric mid-points
-    for f, color, label in [
-        (f_gas, "tab:blue", r"$f_\mathrm{gas}$"),
-        (f_star, "tab:orange", r"$f_\star$"),
-        (f_dm, "tab:green", r"$f_\mathrm{DM}$"),
-    ]:
+    for f, color, label in components:
         means = [
             np.nanmean(f[(P_DE >= lo) & (P_DE < hi)])
             for lo, hi in zip(P_edges[:-1], P_edges[1:])

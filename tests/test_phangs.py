@@ -158,21 +158,22 @@ class TestLoadTable:
 class TestComputePRFMInputs:
     def test_returns_table_with_new_columns(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        for col in ("Sigma_gas", "Omega_d", "H_star"):
+        for col in ("Sigma_gas", "Omega", "H_star"):
             assert col in out.colnames, f"Missing derived column: {col}"
+        assert "Omega_d" not in out.colnames
 
     def test_sigma_gas_equals_mol_plus_atom(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
         expected = synthetic_table["Sigma_mol"] + synthetic_table["Sigma_atom"]
         np.testing.assert_allclose(out["Sigma_gas"].value, expected.value)
 
-    def test_omega_d_formula(self, synthetic_table):
-        """Omega_d = V_circ / r_gal  (km/s/kpc)"""
+    def test_omega_formula(self, synthetic_table):
+        """Total Omega = V_circ / r_gal (km/s/kpc)."""
         out = phangs.compute_prfm_inputs(synthetic_table)
         V = synthetic_table["V_circ_CO21_URC"].value   # km/s
         r = synthetic_table["r_gal"].value              # kpc
         expected = V / r
-        np.testing.assert_allclose(out["Omega_d"].value, expected, rtol=1e-10)
+        np.testing.assert_allclose(out["Omega"].value, expected, rtol=1e-10)
 
     def test_h_star_formula(self, synthetic_table):
         """H_star = Sigma_star / (2 * rho_star_mp)  [pc]"""
@@ -185,7 +186,7 @@ class TestComputePRFMInputs:
     def test_units_attached(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
         assert out["Sigma_gas"].unit is not None
-        assert out["Omega_d"].unit is not None
+        assert out["Omega"].unit is not None
         assert out["H_star"].unit is not None
 
     def test_sigma_gas_positive(self, synthetic_table):
@@ -196,9 +197,9 @@ class TestComputePRFMInputs:
         out = phangs.compute_prfm_inputs(synthetic_table)
         assert np.all(out["H_star"].value > 0)
 
-    def test_omega_d_positive(self, synthetic_table):
+    def test_omega_positive(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        assert np.all(out["Omega_d"].value > 0)
+        assert np.all(out["Omega"].value > 0)
 
 
 # ---------------------------------------------------------------------------
@@ -210,24 +211,24 @@ class TestFiltering:
     def test_valid_rows_removes_nans(self):
         t = Table({
             "Sigma_gas": [1.0, float("nan"), 3.0],
-            "Omega_d": [1.0, 2.0, float("nan")],
+            "Omega": [1.0, 2.0, float("nan")],
             "H_star": [100.0, 200.0, 300.0],
         })
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d", "H_star"])
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == 1
         assert mask[0] is np.bool_(True)
 
     def test_valid_rows_removes_non_positive(self):
         t = Table({
             "Sigma_gas": [1.0, 0.0, -1.0, 5.0],
-            "Omega_d": [1.0, 2.0, 3.0, 4.0],
+            "Omega": [1.0, 2.0, 3.0, 4.0],
         })
-        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega_d"])
+        mask = phangs.valid_rows(t, cols=["Sigma_gas", "Omega"])
         assert mask.sum() == 2  # rows 0 and 3
 
     def test_valid_rows_all_good(self, synthetic_table):
         out = phangs.compute_prfm_inputs(synthetic_table)
-        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega_d", "H_star"])
+        mask = phangs.valid_rows(out, cols=["Sigma_gas", "Omega", "H_star"])
         assert mask.sum() == len(out)
 
 
@@ -326,10 +327,29 @@ class TestRunPRFM:
         phangs.run_prfm(synthetic_table)
         assert list(synthetic_table.colnames) == cols_before
 
-    def test_variation_omega_d_none(self, synthetic_table):
-        """variation={'Omega_d': None} disables rotation term; output still finite."""
-        out = phangs.run_prfm(synthetic_table, variation={"Omega_d": None})
-        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+    def test_default_ignores_total_omega(self, synthetic_table):
+        """The total rotation curve is not used as halo gravity by default."""
+        baseline = phangs.run_prfm(synthetic_table)
+        faster_rotation = synthetic_table.copy()
+        faster_rotation["V_circ_CO21_URC"] *= 10.0
+        result = phangs.run_prfm(faster_rotation)
+        np.testing.assert_allclose(result["P_weight"], baseline["P_weight"])
+
+    def test_total_omega_upper_bound_is_opt_in(self, synthetic_table):
+        """Total Omega can be selected explicitly as a halo upper bound."""
+        baseline = phangs.run_prfm(synthetic_table)
+        upper = phangs.run_prfm(synthetic_table, omega_d_col="Omega")
+        assert np.all(upper["P_weight"] >= baseline["P_weight"])
+        assert np.any(upper["P_weight"] > baseline["P_weight"])
+
+    def test_variation_omega_d_none_disables_opt_in_halo(self, synthetic_table):
+        baseline = phangs.run_prfm(synthetic_table)
+        disabled = phangs.run_prfm(
+            synthetic_table,
+            omega_d_col="Omega",
+            variation={"Omega_d": None},
+        )
+        np.testing.assert_allclose(disabled["P_weight"], baseline["P_weight"])
 
     def test_variation_sigma_star_scaling(self, synthetic_table):
         """Scaling Sigma_star via variation changes P_weight relative to default."""
@@ -345,13 +365,15 @@ class TestRunPRFM:
             out_scaled["P_weight"].value, out_default["P_weight"].value
         )
 
-    def test_prfm_cols_without_omega_d(self, synthetic_table):
-        """prfm_cols without Omega_d (gravity-only) produces finite outputs."""
-        out = phangs.run_prfm(
-            synthetic_table,
-            prfm_cols=["Sigma_gas", "Sigma_star", "H_star"],
-        )
-        assert np.all(np.isfinite(out["Sigma_SFR_pred"].value))
+    def test_default_weight_fractions_exclude_dm(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table)
+        _, _, f_dm = phangs.get_weights(out)
+        np.testing.assert_allclose(f_dm, 0.0)
+
+    def test_upper_bound_weight_fractions_include_dm(self, synthetic_table):
+        out = phangs.run_prfm(synthetic_table, omega_d_col="Omega")
+        _, _, f_dm = phangs.get_weights(out, omega_d_col="Omega")
+        assert np.all(f_dm > 0)
 
     def test_invalid_rows_emit_warning(self, synthetic_table):
         """A warning is emitted when any input row is invalid."""
