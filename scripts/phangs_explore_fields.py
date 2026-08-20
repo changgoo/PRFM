@@ -46,7 +46,7 @@ _BASE_FIELDS: list[tuple[str, str, bool]] = [
     ("rho_star_mp",         r"$\rho_\star$ [$M_\odot$ pc$^{-3}$]",         True),
     ("H_star",              r"$H_\star$ [pc]",                              True),
     ("V_circ_CO21_URC",     r"$V_\mathrm{circ}$ [km s$^{-1}$]",            False),
-    ("Omega_d",             r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",        True),
+    ("Omega",               r"$\Omega$ [km s$^{-1}$ kpc$^{-1}$]",          True),
     ("Zprime",              r"$Z'$ [$Z_\odot$]",                            False),
     ("Sigma_SFR_HaW4recal", r"$\Sigma_\mathrm{SFR}^\mathrm{Ha+W4}$ [$M_\odot$ yr$^{-1}$ kpc$^{-2}$]", True),
     ("Sigma_SFR_FUVW4recal",r"$\Sigma_\mathrm{SFR}^\mathrm{FUV+W4}$ [$M_\odot$ yr$^{-1}$ kpc$^{-2}$]", True),

@@ -335,8 +335,9 @@ def compute_prfm_inputs(table):
         Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``
         [M_sun / pc^2].  Added only when both ``e_Sigma_mol`` and
         ``e_Sigma_atom`` are present.
-    ``Omega_d``
-        Angular velocity = ``V_circ_CO21_URC / r_gal`` [km / s / kpc].
+    ``Omega``
+        Total orbital angular frequency = ``V_circ_CO21_URC / r_gal``
+        [km / s / kpc]. This is not the dark-matter-only frequency.
     ``H_star``
         Stellar scale height = ``Sigma_star / (2 * rho_star_mp)`` [pc].
 
@@ -381,8 +382,8 @@ def compute_prfm_inputs(table):
 
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
     r_gal = t["r_gal"].to(au.kpc)
-    t["Omega_d"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
-    t["Omega_d"].description = "Angular velocity V_circ / r_gal"
+    t["Omega"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
+    t["Omega"].description = "Total orbital angular frequency V_circ / r_gal"
 
     Sigma_star = t["Sigma_star"].to(au.M_sun / au.pc**2)
     rho_star = t["rho_star_mp"].to(au.M_sun / au.pc**3)
@@ -436,17 +437,20 @@ _sfr_cgs = (ac.M_sun / ac.kpc**2 / au.yr).cgs.value  # M_sun/kpc²/yr → g/cm²
 
 def run_prfm(
     table: Table,
-    prfm_cols: Optional[str] = ["Sigma_gas", "Sigma_star", "Omega_d", "H_star"],
+    prfm_cols: Optional[list[str]] = None,
     sigma_eff_model: str = "tigress-ncr-avg",
     yield_model: str = "tigress-ncr-decomp-all",
     zprime_col: Optional[str] = "Zprime",
     variation: Optional[dict] = None,
+    omega_d_col: Optional[str] = None,
 ) -> Table:
     """Apply the PRFM model to every row of a PHANGS megatable.
 
     Runs :func:`compute_prfm_inputs` if ``Sigma_gas`` is not already present,
     then calls the self-consistent PRFM solver (vectorized over all rows).
     Invalid rows (NaN or non-positive PRFM inputs) receive ``NaN`` outputs.
+    By default, no dark matter halo term is included because the PHANGS
+    megatable provides total ``Omega``, not a halo-only frequency.
 
     Columns added
     -------------
@@ -464,6 +468,10 @@ def run_prfm(
     ----------
     table : `~astropy.table.Table`
         PHANGS megatable, optionally pre-processed by :func:`compute_prfm_inputs`.
+    prfm_cols : list of str or None
+        Columns required for a valid PRFM row. The default is
+        ``["Sigma_gas", "Sigma_star", "H_star"]``. The selected
+        ``omega_d_col`` is added automatically when halo gravity is enabled.
     sigma_eff_model : str
         Velocity dispersion model name (key in ``prfm._sigma_eff_models``).
     yield_model : str
@@ -471,6 +479,13 @@ def run_prfm(
     zprime_col : str or None
         Column name for metallicity (relative to solar).  Pass ``None`` to
         ignore metallicity dependence.
+    variation : dict or None
+        Optional systematic variations. ``{"Omega_d": None}`` disables an
+        explicitly selected halo term; a numeric value scales it.
+    omega_d_col : str or None
+        Column containing the dark-matter-only vertical harmonic frequency.
+        ``None`` (default) omits halo gravity. Passing the PHANGS total
+        ``"Omega"`` is allowed only as an explicit upper-bound approximation.
 
     Returns
     -------
@@ -485,8 +500,23 @@ def run_prfm(
     if "Sigma_gas" not in t.colnames:
         t = compute_prfm_inputs(t)
 
+    if prfm_cols is None:
+        prfm_cols = ["Sigma_gas", "Sigma_star", "H_star"]
+    else:
+        prfm_cols = list(prfm_cols)
+
+    omega_d_disabled = (
+        variation is not None
+        and "Omega_d" in variation
+        and variation["Omega_d"] is None
+    )
+    use_omega_d_col = None if omega_d_disabled else omega_d_col
+    valid_cols = list(prfm_cols)
+    if use_omega_d_col is not None and use_omega_d_col not in valid_cols:
+        valid_cols.append(use_omega_d_col)
+
     # Identify valid rows
-    mask = valid_rows(t, cols=prfm_cols)
+    mask = valid_rows(t, cols=valid_cols)
     n_invalid = (~mask).sum()
     if n_invalid > 0:
         warnings.warn(
@@ -505,8 +535,8 @@ def run_prfm(
         # Extract valid rows and convert to CGS
         sg = np.asarray(t["Sigma_gas"][mask], dtype=float) * _surf_cgs
         ss = np.asarray(t["Sigma_star"][mask], dtype=float) * _surf_cgs
-        if "Omega_d" in prfm_cols:
-            od = np.asarray(t["Omega_d"][mask], dtype=float) * _kms_kpc_cgs
+        if use_omega_d_col is not None:
+            od = np.asarray(t[use_omega_d_col][mask], dtype=float) * _kms_kpc_cgs
         else:
             od = None
         hs = np.asarray(t["H_star"][mask], dtype=float) * _pc_cgs
@@ -517,6 +547,10 @@ def run_prfm(
                 if variation["Omega_d"] is None:
                     od = None
                 else:
+                    if od is None:
+                        raise ValueError(
+                            "Cannot scale Omega_d without selecting omega_d_col."
+                        )
                     od *= variation["Omega_d"]
 
             if "Sigma_star" in variation:
@@ -568,12 +602,13 @@ def run_prfm(
 def get_weights(
     table: Table,
     variation: Optional[dict] = None,
+    omega_d_col: Optional[str] = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Return fractional weight contributions (f_gas, f_star, f_DM) for each row.
 
-    Requires ``Sigma_gas``, ``Sigma_star``, ``Omega_d``, ``H_star``, and
-    ``sigma_eff_sol`` columns to be present (i.e. after calling
-    :func:`compute_prfm_inputs` and :func:`run_prfm`).
+    Requires ``Sigma_gas``, ``Sigma_star``, ``H_star``, and ``sigma_eff_sol``
+    columns to be present (i.e. after calling :func:`compute_prfm_inputs` and
+    :func:`run_prfm`). By default, no dark matter halo term is included.
 
     Parameters
     ----------
@@ -583,6 +618,9 @@ def get_weights(
         Override dictionary applied before computing weights.  Supported keys:
         ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by
         a scalar), ``"Sigma_star"`` (scale factor), ``"H_star"`` (scale factor).
+    omega_d_col : str or None, optional
+        Column containing the dark-matter-only vertical harmonic frequency.
+        Passing total ``"Omega"`` gives an explicit upper-bound approximation.
 
     Returns
     -------
@@ -597,7 +635,10 @@ def get_weights(
 
     sg = np.asarray(table["Sigma_gas"], dtype=float) * _surf_cgs
     ss = np.asarray(table["Sigma_star"], dtype=float) * _surf_cgs
-    od = np.asarray(table["Omega_d"], dtype=float) * _kms_kpc_cgs
+    if omega_d_col is None:
+        od = None
+    else:
+        od = np.asarray(table[omega_d_col], dtype=float) * _kms_kpc_cgs
     hs = np.asarray(table["H_star"], dtype=float) * _pc_cgs
     se = np.asarray(table["sigma_eff_sol"], dtype=float) * 1e5  # km/s → cm/s
 
@@ -607,6 +648,10 @@ def get_weights(
             if variation["Omega_d"] is None:
                 od = None
             else:
+                if od is None:
+                    raise ValueError(
+                        "Cannot scale Omega_d without selecting omega_d_col."
+                    )
                 od *= variation["Omega_d"]
 
         if "Sigma_star" in variation:

@@ -17,10 +17,13 @@ from prfm.prfm import (
     _Gconst_cgs,
     _kbol_cgs,
     _pc_cgs,
+    _rho_cgs,
     _sfr_cgs,
     _surf_cgs,
+    get_density_from_omega_spherical,
     get_feedback_yield,
     get_feedback_yield_comp,
+    get_omega_spherical_from_density,
     get_pressure,
     get_sfr,
     get_sigma_eff,
@@ -104,7 +107,9 @@ class TestWeightFunctions:
 
     def test_weight_star_formula(self):
         """W_star = pi * G * Sigma_gas * Sigma_star * H_gas / (H_gas + H_star)"""
-        expected = np.pi * _Gconst_cgs * self.Sg * self.Ss * self.Hg / (self.Hg + self.Hs)
+        expected = (
+            np.pi * _Gconst_cgs * self.Sg * self.Ss * self.Hg / (self.Hg + self.Hs)
+        )
         assert np.isclose(get_weight_star(self.Sg, self.Hg, self.Ss, self.Hs), expected)
 
     def test_weight_star_approaches_thin_limit(self):
@@ -119,6 +124,24 @@ class TestWeightFunctions:
         expected = zeta_d * self.Sg * self.Hg * self.Od**2
         assert np.isclose(get_weight_dm(self.Sg, self.Hg, self.Od), expected)
 
+    @pytest.mark.parametrize("a_d", [2.0, 1.0, 2.0 / 3.0])
+    def test_spherical_density_to_omega_uses_ad(self, a_d):
+        """Omega_sph^2 = 2*pi*G*a_d*rho."""
+        rho = np.array([0.01, 0.03]) * _rho_cgs
+        omega = get_omega_spherical_from_density(rho, a_d=a_d)
+        expected_omega_sq = 2.0 * np.pi * _Gconst_cgs * a_d * rho
+        np.testing.assert_allclose(omega**2, expected_omega_sq, rtol=1e-14)
+
+    @pytest.mark.parametrize("a_d", [2.0, 1.0, 2.0 / 3.0])
+    def test_spherical_omega_density_round_trip(self, a_d):
+        rho = np.array([0.01, 0.03]) * _rho_cgs
+        omega = get_omega_spherical_from_density(rho, a_d=a_d)
+        np.testing.assert_allclose(
+            get_density_from_omega_spherical(omega, a_d=a_d),
+            rho,
+            rtol=1e-14,
+        )
+
     def test_pressure_formula(self):
         """P = 0.5 * Sigma_gas / H_gas * sigma_eff^2"""
         expected = 0.5 * self.Sg / self.Hg * self.se**2
@@ -128,7 +151,22 @@ class TestWeightFunctions:
         """At equilibrium H, total pressure should equal total weight."""
         d = toy_model_cgs
         # Use PRFM class to find equilibrium H, then check P = W_tot
-        m = prfm.PRFM(**{k: v / (1e5 if k == "sigma_eff" else (_surf_cgs if "Sigma" in k else (_pc_cgs if "H" in k else _kms_kpc_cgs))) for k, v in d.items()}, astro_units=True)
+        m = prfm.PRFM(
+            **{
+                k: v
+                / (
+                    1e5
+                    if k == "sigma_eff"
+                    else (
+                        _surf_cgs
+                        if "Sigma" in k
+                        else (_pc_cgs if "H" in k else _kms_kpc_cgs)
+                    )
+                )
+                for k, v in d.items()
+            },
+            astro_units=True,
+        )
         m.calc_weights()
         P = get_pressure(d["Sigma_gas"], m._H_gas, d["sigma_eff"])
         np.testing.assert_allclose(P, m._Wtot, rtol=1e-5)
@@ -155,7 +193,9 @@ def test_analytic_numerical_scale_height_agreement(toy_model, wgas, wstar, wdm):
     m = prfm.PRFM(**toy_model, astro_units=True)
     H_ana = m.get_scale_height(method="analytic", wgas=wgas, wstar=wstar, wdm=wdm)
     H_num = m.get_scale_height(method="numerical", wgas=wgas, wstar=wstar, wdm=wdm)
-    np.testing.assert_allclose(H_ana, H_num, rtol=0.01, err_msg=f"wgas={wgas} wstar={wstar} wdm={wdm}")
+    np.testing.assert_allclose(
+        H_ana, H_num, rtol=0.01, err_msg=f"wgas={wgas} wstar={wstar} wdm={wdm}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -169,7 +209,9 @@ class TestPRFMWeights:
         m.calc_weights()
         for attr in ["H_gas", "Wgas", "Wstar", "Wdm", "Wtot"]:
             assert hasattr(m, attr), f"missing attribute {attr}"
-            assert np.all(np.isfinite(getattr(m, attr))), f"{attr} contains non-finite values"
+            assert np.all(
+                np.isfinite(getattr(m, attr))
+            ), f"{attr} contains non-finite values"
 
     def test_weight_contributions_sum_to_one(self, toy_model):
         m = prfm.PRFM(**toy_model, astro_units=True)
@@ -187,6 +229,28 @@ class TestPRFMWeights:
         m = prfm.PRFM(**toy_model, astro_units=True)
         m.calc_weights()
         np.testing.assert_allclose(m.Wgas + m.Wstar + m.Wdm, m.Wtot, rtol=1e-10)
+
+    def test_rho_dm_default_ad_matches_flat_rotation_curve(self, toy_model):
+        rho_dm = 0.01
+        m = prfm.PRFM(
+            **{**toy_model, "Omega_d": None, "rho_dm": rho_dm}, astro_units=True
+        )
+        rho_dm_cgs = rho_dm * m.units["rho_dm"].cgs.value
+        expected_omega = np.sqrt(4.0 * np.pi * _Gconst_cgs * rho_dm_cgs)
+        expected_omega /= m.units["Omega_d"].cgs.value
+        np.testing.assert_allclose(m.Omega_d, expected_omega, rtol=1e-14)
+
+    def test_rho_dm_ad_scales_omega_squared(self, toy_model):
+        rho_dm = 0.01
+        flat = prfm.PRFM(
+            **{**toy_model, "Omega_d": None, "rho_dm": rho_dm, "a_d": 2.0},
+            astro_units=True,
+        )
+        nfw = prfm.PRFM(
+            **{**toy_model, "Omega_d": None, "rho_dm": rho_dm, "a_d": 1.0},
+            astro_units=True,
+        )
+        np.testing.assert_allclose((nfw.Omega_d / flat.Omega_d) ** 2, 0.5, rtol=1e-14)
 
 
 # ---------------------------------------------------------------------------
@@ -253,7 +317,12 @@ class TestFeedbackYield:
 
     @pytest.mark.parametrize(
         "model",
-        ["tigress-classic", "tigress-classic-decomp", "tigress-ncr", "tigress-ncr-decomp"],
+        [
+            "tigress-classic",
+            "tigress-classic-decomp",
+            "tigress-ncr",
+            "tigress-ncr-decomp",
+        ],
     )
     def test_yield_model_returns_positive_array(self, model):
         P = self.P_ref * np.logspace(-1, 2, 20)
