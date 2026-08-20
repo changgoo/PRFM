@@ -35,7 +35,8 @@ $$
 The coefficient $a_\mathrm{d}$ captures the spherical mass profile: $a_\mathrm{d}=2$ recovers the flat-rotation-curve convention $\Omega_\mathrm{sph}^2=4\pi G\rho_\mathrm{sph}$, $a_\mathrm{d}=1$ represents an NFW-like halo normalization, and $a_\mathrm{d}=2/3$ represents the Hernquist-bulge normalization adopted for the spherical bulge term in {cite:t}`2026ApJ..1004..152J`.
 If dark matter and bulge components are modeled separately, their frequency-square contributions add linearly before entering ${\cal W}_\mathrm{sph}$.
 
-Given $\Sigma_{\rm gas}$, $\Sigma_*$, $H_*$, and $\Omega_\mathrm{sph}$, together with an assumption for $\sigma_{\rm eff}$, we solve for $H_{\rm gas}$.
+For the remainder of this discussion, we specialize the spherical component to a dark matter halo, as in {cite:t}`2024ApJ...975..151H`, and set $\rho_\mathrm{sph}=\rho_\mathrm{dm}$, $\Omega_\mathrm{sph}=\Omega_d$, and ${\cal W}_\mathrm{sph}={\cal W}_d$.
+Given $\Sigma_{\rm gas}$, $\Sigma_*$, $H_*$, and $\Omega_d$, together with an assumption for $\sigma_{\rm eff}$, we solve for $H_{\rm gas}$.
 We use a constant $\sigma_{\rm eff}$ or a model for $\sigma_{\rm eff}$ calibrated from numerical simulations.
 
 ## Constant velocity dispersion
@@ -48,7 +49,7 @@ $$
 and
 
 $$
-H_{\rm sph-only} = \frac{\sigma_{\rm eff}}{(2\zeta_d)^{1/2}\Omega_\mathrm{sph}},
+H_{\rm dm-only} = \frac{\sigma_{\rm eff}}{(2\zeta_d)^{1/2}\Omega_d},
 $$
 
 the dimensionless form of the equation can be written as
@@ -59,7 +60,7 @@ $$
 
 with
 $h = H_{\rm gas}/H_{\rm gas-only}$,
-$s_* = \Sigma_*/\Sigma_{\rm gas}$, $\eta_* = H_*/H_{\rm gas-only}$, and $\eta_d = H_{\rm sph-only}/H_{\rm gas-only}$.
+$s_* = \Sigma_*/\Sigma_{\rm gas}$, $\eta_* = H_*/H_{\rm gas-only}$, and $\eta_d = H_{\rm dm-only}/H_{\rm gas-only}$.
 The only positive real solution of the cubic equation is
 
 $$
@@ -121,7 +122,7 @@ In observations, a simplified weight formula has been widely used (e.g., {cite:t
 $$ {\cal W}_{\rm tot}\approx \frac{\pi G \Sigma_{\rm gas}^2}{2} + \Sigma_{\rm gas}\sigma_{\rm eff}\sqrt{2 G\rho_{\rm sd}}$$
 
 where $\rho_{\rm sd} = \rho_* + \rho_{\rm dm}$.
-The dark matter term in this expression implicitly assumes the flat-rotation-curve conversion $\Omega_\mathrm{sph}^2=4\pi G\rho_{\rm dm}$.
+The dark matter term in this expression implicitly assumes the flat-rotation-curve conversion $\Omega_d^2=4\pi G\rho_{\rm dm}$.
 More generally, the spherical component enters through $a_\mathrm{d}\rho_\mathrm{sph}$ rather than through a universal $\rho_{\rm dm}$ conversion.
 This is equivalent to the limit of $H_*\gg H_{\rm gas}$ with $\Sigma_*>\Sigma_{\rm gas}$ discussed above ($\sqrt{2}$ instead of $\sqrt{\pi}$ due to different assumptions in the vertical gas profiles, Gaussian vs exponential).
 
