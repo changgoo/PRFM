@@ -32,9 +32,9 @@ pre-commit run --all-files
 jupyter-book build book/
 ```
 
-**Run tests (unit only, no data required):**
+**Run tests (PHANGS data-dependent tests skip automatically if data is absent):**
 ```bash
-pytest tests/ -v -m "not integration"
+pytest tests/ -v
 ```
 
 **Run a single test file:**
@@ -46,6 +46,39 @@ pytest tests/test_prfm.py -v
 ```bash
 pytest tests/ -v
 ```
+
+Integration tests are gated by `HAS_DATA` in `tests/test_phangs.py` (a
+`skipif` on the presence of `data/phangs_megatable/`), not by a registered
+pytest marker. Therefore, `-m "not integration"` does not deselect them when
+the PHANGS data are present.
+
+**Download PHANGS megatable data (needed for integration tests + PHANGS notebooks):**
+```bash
+python scripts/download_phangs.py
+```
+
+**Run the TIGRESS-PHANGS simulation-suite workflow (this branch):**
+```bash
+project/scripts/run_workflow.sh -s 10 -n 32     # sample → plot → YAML → SLURM
+project/scripts/run_workflow.sh -h              # full option list
+```
+
+## Theory and Physical Background
+
+PRFM theory consists of vertical dynamical equilibrium and feedback yield,
+with an effective-equation-of-state calibration. The primer is under `book/`:
+
+- `book/vertical-de.md` -- vertical dynamical equilibrium
+- `book/feedback-yield.md` -- feedback yields
+- `book/equation_of_state.md` -- effective equation of state
+
+The vertical-equilibrium treatment follows three papers stored under
+`references/`: Ostriker & Kim (2022) for the thick-stellar-disk formulation,
+Hassan et al. (2024) for finite stellar-disk thickness, and Jeffreson et al.
+(2026) for the spherical-component generalization. Spherical density is
+converted to vertical harmonic frequency with
+`Omega_d**2 = 2*pi*G*a_d*rho_dm`: use `a_d=2` (default) for the flat-rotation
+convention, `a_d=1` for an NFW-like halo, and `a_d=2/3` for a Hernquist bulge.
 
 ## Architecture
 
@@ -66,7 +99,8 @@ Two embedded model dictionaries drive parameterized behavior:
 `PRFM` in `prfm/prfm.py` wraps the functional layer with:
 - Automatic unit conversion (CGS ↔ astronomical)
 - Multiple disk configurations: thin, thick, general
-- Flexible input modes for stellar (surface or volume density) and dark matter (rotation speed or density)
+- Flexible stellar inputs (surface or volume density) and spherical-component
+  inputs (vertical harmonic frequency or density, with configurable `a_d`)
 - Built-in model management
 
 ### Data handling (`prfm/simulations.py`)
