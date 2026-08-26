@@ -21,6 +21,7 @@ row-0000 projection sequence is corrupted.
 |---|---|---|
 | Does the suite reach the observed `Sigma_SFR` regime? | Yes. The simulated and PHANGS medians agree to about 0.02 dex, and their distributions overlap substantially. | High for coverage; moderate for a distributional match. |
 | What drives the simulated `Sigma_SFR` scatter? | Differences between environments dominate temporal fluctuations: 82.6% versus 17.4% of the model variance. | High within the sampled design and 400–600 Myr window. |
+| Which environmental axes show the clearest associations? | `Sigma_SFR` and density-PDF width primarily track the stellar-gravity axis; power-spectrum integral scale and anisotropy primarily track the rotation axis. No robust monotonic trend is detected for the fitted spectral slope or with `q` alone. | Moderate: these are bivariate associations in a covariant design. |
 | Is vertical dynamical equilibrium recovered? | Yes. The model-mean `P_tot,2p/W` has median 1.14 and range 0.98–1.71. | High. |
 | Is the PHANGS molecular fraction recovered? | No. The simulated median `f_mol` is lower by about 1.35 dex. | High for the discrepancy; low for interpreting it as a physical failure. |
 | Are column-density power spectra converged with box size? | Their angle-averaged shapes agree well over common resolved wavelengths; larger boxes mainly add longer-wavelength power. | High for the common-scale spectrum. |
@@ -65,6 +66,48 @@ environments and 41.6% temporal variation. That decomposition is useful for
 planning a resolution study, but the absolute normalization and the apparent
 agreement or disagreement of scatter should not be used for physical
 calibration until molecular-gas convergence is established.
+
+## Correlation synthesis
+
+Model-level Spearman rank tests make the principal trends more explicit:
+
+- `Sigma_SFR` increases most clearly with `rho_star`
+  (Spearman `rho_s = +0.44`, FDR-adjusted
+  `q = 0.047`). Its association with `Sigma_star` is
+  similar but marginal after multiple-testing correction
+  (`rho_s = +0.39`, `q = 0.071`). No supported monotonic
+  relation is found with `H_star`, `Omega`/`kappa`,
+  or `q` in the 32-model sample.
+- Both column-density PDF widths increase with `rho_star`
+  (`rho_s = +0.67` and `+0.72`) and
+  `Sigma_SFR` (both about `+0.55`). The linear-density
+  width also decreases moderately with `Omega`/`kappa`
+  (about `-0.42`).
+- The unrestricted power-spectrum integral scale decreases strongly with
+  `Omega`/`kappa` (about
+  `rho_s = -0.82`) and more moderately with
+  `rho_star` (`-0.44`). The fitted slope
+  `alpha` has no statistically supported monotonic association with
+  the tested environmental variables.
+- Global `A_2` increases with `Omega`
+  (`+0.67`) and `kappa` (`+0.58`) and
+  decreases with `Sigma_SFR` (`-0.63`). This is a
+  within-fixed-box association; its absolute normalization remains box-size
+  sensitive.
+- The resolution-limited `f_mol` diagnostic increases strongly with
+  `Omega` (`+0.79`) and `kappa`
+  (`+0.68`). This pattern is provisional and should not be given a
+  molecular-physics interpretation before a resolution study.
+
+These are not six independent parameter tests. In this design,
+`Sigma_star` and `rho_star` have
+`rho_s = 0.91`, while `Omega` and `kappa`
+have `rho_s = 0.97`. The current evidence therefore supports two
+broad response axes—stellar gravity and rotation—more strongly than it
+supports attribution to one member of either pair. Full coefficients,
+multiple-testing corrections, internal velocity correlations, and
+cross-diagnostic trends are recorded in
+[the correlation results](core-suite-correlations.md).
 
 ## Column-density structure
 
@@ -143,6 +186,8 @@ records below.
   [Sobol sampling workflow](../TIGRESS-PHANGS-sobol-sampling.md)
 - Observational comparison and variance decomposition:
   [validation diagnostics](validation-diagnostics.md)
+- Model-level environmental and cross-diagnostic associations:
+  [correlation results](core-suite-correlations.md)
 - Proposed design expansion: [prior augmentation](prior-augmentation.md)
 - Proposed physics experiments:
   [physics-parameter extension](physics-parameter-extension.md)
