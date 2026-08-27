@@ -1,6 +1,6 @@
 # TIGRESS–PHANGS core-suite analysis: current synthesis
 
-**Status:** core environmental suite complete; analysis summarized through 2026-08-26.
+**Status:** core environmental suite complete; analysis summarized through 2026-08-27.
 
 ## Scope
 
@@ -11,9 +11,10 @@ variables are `Sigma_star`, `H_star`, `Omega`, and `q`; `rho_star`
 and `kappa` are derived from them. The finite `Sigma_gas` width is retained
 in all multivariate interpretations.
 
-All 32 models are available for the history-based PRFM and observational
-validation analyses. Column-density statistics use 31 models because the
-row-0000 projection sequence is corrupted.
+All 32 models are available for the history-based PRFM, observational
+validation, and phase-resolved z-profile analyses. Projected total-gas, H I,
+and emission-measure statistics use 31 models because the row-0000 projection
+sequence is corrupted.
 
 ## Main conclusions
 
@@ -21,11 +22,13 @@ row-0000 projection sequence is corrupted.
 |---|---|---|
 | Does the suite reach the observed `Sigma_SFR` regime? | Yes. The simulated and PHANGS medians agree to about 0.02 dex, and their distributions overlap substantially. | High for coverage; moderate for a distributional match. |
 | What drives the simulated `Sigma_SFR` scatter? | Differences between environments dominate temporal fluctuations: 82.6% versus 17.4% of the model variance. | High within the sampled design and 400–600 Myr window. |
-| Which environmental axes show the clearest associations? | `Sigma_SFR` and density-PDF width primarily track the stellar-gravity axis; power-spectrum integral scale and anisotropy primarily track the rotation axis. No robust monotonic trend is detected for the fitted spectral slope or with `q` alone. | Moderate: these are bivariate associations in a covariant design. |
+| Which environmental axes show the clearest associations? | `Sigma_SFR`, density-PDF width, and phase scale heights primarily track the stellar-gravity axis; power-spectrum scale/anisotropy and phase magnetic speeds primarily track rotation. Phase velocity and effective-support speeds increase most consistently with `Sigma_SFR`. No robust monotonic trend is detected for the fitted spectral slope or with `q` alone. | Moderate: these are bivariate associations in a covariant design. |
 | Is vertical dynamical equilibrium recovered? | Yes. The model-mean `P_tot,2p/W` has median 1.14 and range 0.98–1.71. | High. |
 | Is the PHANGS molecular fraction recovered? | No. The simulated median `f_mol` is lower by about 1.35 dex. | High for the discrepancy; low for interpreting it as a physical failure. |
 | Are column-density power spectra converged with box size? | Their angle-averaged shapes agree well over common resolved wavelengths; larger boxes mainly add longer-wavelength power. | High for the common-scale spectrum. |
 | Are scalar power-spectrum summaries converged? | Only conditionally. Fixed-band moments are robust, while unrestricted integral scale, a single fitted slope, and global quadrupole amplitude retain box-size or resolution sensitivity. | High based on the box-size experiment. |
+| Do total gas, H I, and emission measure trace the same morphology? | Total gas and H I are tightly coupled across every measured PDF/spectrum diagnostic; EM is largely decoupled and emphasizes compact ionized structures. | High for the clean 31-model suite; H I log-width is low-column sensitive. |
+| What does the phase-resolved reduction show? | Neutral gas carries most of the mass, ionized gas most of the volume, and hotter phases are progressively thicker and faster. | High for the descriptive 400–600 Myr summaries; moderate for environmental attribution. |
 
 ## PRFM and star-formation response
 
@@ -141,9 +144,63 @@ converged. The strongest claims should be based on common-band spectral shape
 or fixed-band moments, with `alpha`, `L_in`, and global `A_2` reported as
 conditional diagnostics.
 
+## Projected H I and emission measure
+
+The same face-on PDF and shear-aware spectrum estimators have now been applied
+to total gas, H I, and emission measure (EM) for the 31 clean models. Total gas
+and H I are nearly rank-equivalent in linear and logarithmic PDF width
+(`rho_s = 0.975` and `0.969`), unrestricted integral scale (`0.914`), and
+global quadrupole amplitude (`0.992`); their fitted slopes remain substantially
+coupled (`0.752`). EM is much less correlated with either neutral tracer. Its
+gas-pair coefficients range from `-0.07` to `0.28`, and the largest EM pairing
+is only `rho_s = 0.48` for the H I--EM slope. This supports treating EM as a
+distinct compact-ionized-gas morphology rather than a substitute gas-column
+tracer.
+
+The H I logarithmic width requires a specific caveat. In a full-VTK check of a
+prominent low-column bump, removing cells with `x_HI < 0.01` eliminated the
+selected sightlines' tiny H I columns while removing only 0.097% of the global
+H I column. The linear width was unchanged, but the positive-column log width
+fell from 3.67 to 2.45. Production measurements remain uncensored for a common
+definition; future observational comparisons should report censored area and
+use an explicit H I column threshold or a robust conditional width.
+
+## Phase-resolved structure and dynamics
+
+The completed z-profile reduction tracks CNM+CMM, UNM, WNM, WIM, WHIM, and HIM
+without requiring full VTK snapshots. UIM is preserved as an explicit closure
+residual, and neutral, ionized, and true whole-gas aggregates are reconstructed
+before temporal statistics. The ensemble medians below are medians across the
+32 models of each model's 400–600 Myr temporal median:
+
+| Phase | Mass fraction | Volume fraction | Mass height (pc) | `sigma_3D` (km/s) | `sigma_eff,z` (km/s) |
+|---|---:|---:|---:|---:|---:|
+| CNM+CMM | 0.175 | 0.0016 | 77 | 8.1 | 5.8 |
+| UNM | 0.248 | 0.028 | 138 | 11.0 | 9.8 |
+| WNM | 0.408 | 0.147 | 249 | 14.8 | 15.0 |
+| WIM | 0.112 | 0.131 | 396 | 23.5 | 21.1 |
+| WHIM | 0.0045 | 0.164 | 811 | 61.9 | 60.7 |
+| HIM | 0.0018 | 0.482 | 1127 | 135.3 | 182.9 |
+
+The reduced neutral component has median mass fraction 0.867 but volume
+fraction 0.199; the ionized component has mass fraction 0.118 but volume
+fraction 0.784. Phase ordering therefore cleanly separates the mass-dominant
+neutral disk from the volume-filling ionized atmosphere.
+
+The strongest phase associations reinforce the two broad environmental axes.
+Neutral mass and volume scale heights decrease with `Sigma_star`
+(`rho_s = -0.927` and `-0.933`) and `rho_star` (`-0.845` and `-0.869`).
+Neutral effective vertical support increases with mean `Sigma_SFR`
+(`+0.831`), while whole-gas support correlates with both mean `Sigma_SFR`
+(`+0.744`) and stellar gravity (`+0.715` with `Sigma_star`, `+0.740` with
+`rho_star`). Mean-field Alfvén speed tracks rotation across phases; for the
+whole gas its coefficient with `Omega` is `+0.850`, while the ionized
+perturbed-field speed reaches `+0.887`. These unadjusted rank coefficients are
+exploratory, not independent causal tests.
+
 ## Overall assessment
 
-The core suite is already sufficient to support three conclusions:
+The core suite is already sufficient to support five conclusions:
 
 1. TIGRESS-NCR recovers the central PHANGS `Sigma_SFR` regime while
    maintaining vertical dynamical equilibrium.
@@ -152,10 +209,17 @@ The core suite is already sufficient to support three conclusions:
    model.
 3. Column-density structure can be compared systematically within the
    fixed-box suite, provided that common-band diagnostics are prioritized.
+4. Total-gas and H I fractional morphology are tightly coupled, whereas EM
+   provides a substantially different view of compact ionized structure.
+5. The phase-resolved products recover an ordered neutral-disk/ionized-halo
+   structure and expose distinct stellar-gravity, rotation, and SFR response
+   axes in phase thicknesses and characteristic speeds.
 
 It does **not** yet support a molecular-fraction calibration, a causal
 one-variable attribution of the observed scatter, or universal absolute
-values for box-sensitive power-spectrum summaries.
+values for box-sensitive power-spectrum summaries. It also does not make the
+native H I low-column tail directly observation-ready or turn the phase rank
+correlations into controlled one-parameter experiments.
 
 ## Priorities
 
@@ -165,15 +229,18 @@ values for box-sensitive power-spectrum summaries.
    environmental responses from design covariance.
 2. Carry the full temporal distributions into posterior-predictive comparisons
    rather than reducing each model to a median and percentile range.
-3. Promote common-band power-spectrum shape, fixed-band variance, and
+3. Include the tracer and phase summaries in the multivariate analysis, using
+   explicit censoring/selection models for H I and observation-matched
+   synthetic treatment for EM.
+4. Promote common-band power-spectrum shape, fixed-band variance, and
    fixed-band characteristic scale to the primary density diagnostics.
-4. Test molecular-gas convergence with higher spatial resolution and, if
+5. Test molecular-gas convergence with higher spatial resolution and, if
    needed, a synthetic observation/selection treatment before drawing
    conclusions from `f_mol`.
-5. Complete the planned prior augmentation in `H_star` and `Omega`, then add
+6. Complete the planned prior augmentation in `H_star` and `Omega`, then add
    controlled physics-parameter variations to separate environmental from
    microphysical effects.
-6. Repair or regenerate the row-0000 projection products if a complete
+7. Repair or regenerate the row-0000 projection products if a complete
    32-model column-density sample becomes important.
 
 ## Detailed records
@@ -200,3 +267,7 @@ records below.
   [tigress_ncr_tools power-spectrum analysis](https://github.com/changgoo/tigress_ncr_tools/blob/analysis/ncr-suite/docs/density_power_spectrum.md)
 - Box-size convergence and diagnostic alternatives:
   [tigress_ncr_tools box-size study](https://github.com/changgoo/tigress_ncr_tools/blob/analysis/ncr-suite/docs/box_size_density_power_spectrum.md)
+- H I/EM estimators, low-column test, and cross-tracer results:
+  [tigress_ncr_tools projected-species analysis](https://github.com/changgoo/tigress_ncr_tools/blob/analysis/ncr-suite/docs/projected_species_analysis.md)
+- Phase definitions, estimators, correlations, and products:
+  [tigress_ncr_tools phase-resolved analysis](https://github.com/changgoo/tigress_ncr_tools/blob/analysis/ncr-suite/docs/phase_resolved_analysis.md)
