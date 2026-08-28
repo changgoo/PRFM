@@ -65,6 +65,8 @@ This is the first CAMELS-like step: build a controlled simulation suite whose pa
 
 The design should explicitly track whether the suite is optimized for interpolation within the PHANGS-informed prior, extrapolation to rare environments, or parameter inference. These goals imply different sampling choices and different tolerance for mismatch with the observed marginal distributions.
 
+**Status:** The first environmental suite (core / Paper I) is **complete** — 32 models run at `Sigma_gas = 10`, `n = 32`, and analyzed with PRFM diagnostics. See [`doc/core-suite-completion.md`](doc/core-suite-completion.md) for the run location, design↔model mapping, analysis products, and key results.
+
 ### 2. Extend the simulation suite for physics parameter variations
 
 After the environmental suite is established, extend the design to uncertain physics parameters. This is the closer analog of CAMELS varying astrophysical subgrid parameters.
