@@ -73,7 +73,7 @@ The current 32-model, 400--600 Myr comparison gives:
 
 | Outcome | Suite median | PHANGS positive median | PHANGS scatter [dex] | Environment [dex] | Temporal [dex] | Combined suite [dex] | Suite/PHANGS variance |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `Sigma_SFR` | 0.00292 | 0.00280 | 0.271 | 0.376 | 0.172 | 0.414 | 2.33 |
+| `Sigma_SFR` | 0.00292 | 0.00280 | 0.271 | 0.378 | 0.173 | 0.415 | 2.35 |
 | `Sigma_mol / Sigma_gas` | 0.0212 | 0.480 | 0.263 | 0.260 | 0.219 | 0.339 | 1.67 |
 
 The SFR normalization is recovered very well, but the suite produces more log

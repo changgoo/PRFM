@@ -1,6 +1,6 @@
 # TIGRESS–PHANGS core-suite analysis: current synthesis
 
-**Status:** core environmental suite complete; analysis summarized through 2026-08-27.
+**Status:** core environmental suite complete; analysis summarized through 2026-08-28.
 
 ## Scope
 
@@ -12,9 +12,9 @@ and `kappa` are derived from them. The finite `Sigma_gas` width is retained
 in all multivariate interpretations.
 
 All 32 models are available for the history-based PRFM, observational
-validation, and phase-resolved z-profile analyses. Projected total-gas, H I,
-and emission-measure statistics use 31 models because the row-0000 projection
-sequence is corrupted.
+validation, phase-resolved z-profile, and projected-field analyses. The
+regenerated row0000 sequence provides 601 unique maps over 0–600 Myr and
+passes the total-gas and H I projection-quality checks.
 
 ## Main conclusions
 
@@ -27,7 +27,7 @@ sequence is corrupted.
 | Is the PHANGS molecular fraction recovered? | No. The simulated median `f_mol` is lower by about 1.35 dex. | High for the discrepancy; low for interpreting it as a physical failure. |
 | Are column-density power spectra converged with box size? | Their angle-averaged shapes agree well over common resolved wavelengths; larger boxes mainly add longer-wavelength power. | High for the common-scale spectrum. |
 | Are scalar power-spectrum summaries converged? | Only conditionally. Fixed-band moments are robust, while unrestricted integral scale, a single fitted slope, and global quadrupole amplitude retain box-size or resolution sensitivity. | High based on the box-size experiment. |
-| Do total gas, H I, and emission measure trace the same morphology? | Total gas and H I are tightly coupled across every measured PDF/spectrum diagnostic; EM is largely decoupled and emphasizes compact ionized structures. | High for the clean 31-model suite; H I log-width is low-column sensitive. |
+| Do total gas, H I, and emission measure trace the same morphology? | Total gas and H I are tightly coupled across every measured PDF/spectrum diagnostic; EM is largely decoupled and emphasizes compact ionized structures. | High for the complete 32-model suite; H I log-width is low-column sensitive. |
 | What does the phase-resolved reduction show? | Neutral gas carries most of the mass, ionized gas most of the volume, and hotter phases are progressively thicker and faster. | High for the descriptive 400–600 Myr summaries; moderate for environmental attribution. |
 
 ## PRFM and star-formation response
@@ -42,9 +42,9 @@ be read as a universal calibration.
 The PHANGS comparison is best described as successful **coverage**, not yet a
 complete distributional match. The simulated median `Sigma_SFR = 0.002919`
 is close to the PHANGS median 0.002801, but the combined suite scatter is
-0.414 dex compared with 0.271 dex in PHANGS. The between-environment scatter
-is 0.376 dex, whereas the typical temporal scatter within a model is
-0.172 dex. Thus environmental variation can readily produce the observed-order
+0.415 dex compared with 0.271 dex in PHANGS. The between-environment scatter
+is 0.378 dex, whereas the typical temporal scatter within a model is
+0.173 dex. Thus environmental variation can readily produce the observed-order
 scatter at fixed nominal `Sigma_gas`, and is more important than temporal
 variability in this suite. Some low-SFR environments broaden the model
 distribution, while the observed high-SFR tail is not fully reached.
@@ -75,25 +75,25 @@ calibration until molecular-gas convergence is established.
 Model-level Spearman rank tests make the principal trends more explicit:
 
 - `Sigma_SFR` increases most clearly with `rho_star`
-  (Spearman `rho_s = +0.44`, FDR-adjusted
-  `q = 0.047`). Its association with `Sigma_star` is
+  (Spearman `rho_s = +0.45`, FDR-adjusted
+  `q = 0.043`). Its association with `Sigma_star` is
   similar but marginal after multiple-testing correction
-  (`rho_s = +0.39`, `q = 0.071`). No supported monotonic
+  (`rho_s = +0.40`, `q = 0.071`). No supported monotonic
   relation is found with `H_star`, `Omega`/`kappa`,
   or `q` in the 32-model sample.
 - Both column-density PDF widths increase with `rho_star`
   (`rho_s = +0.67` and `+0.72`) and
-  `Sigma_SFR` (both about `+0.55`). The linear-density
+  `Sigma_SFR` (both about `+0.57`). The linear-density
   width also decreases moderately with `Omega`/`kappa`
-  (about `-0.42`).
+  (about `-0.46`).
 - The unrestricted power-spectrum integral scale decreases strongly with
   `Omega`/`kappa` (about
-  `rho_s = -0.82`) and more moderately with
-  `rho_star` (`-0.44`). The fitted slope
+  `rho_s = -0.79`) and more moderately with
+  `rho_star` (`-0.43`). The fitted slope
   `alpha` has no statistically supported monotonic association with
   the tested environmental variables.
 - Global `A_2` increases with `Omega`
-  (`+0.67`) and `kappa` (`+0.58`) and
+  (`+0.66`) and `kappa` (`+0.57`) and
   decreases with `Sigma_SFR` (`-0.63`). This is a
   within-fixed-box association; its absolute normalization remains box-size
   sensitive.
@@ -115,7 +115,7 @@ cross-diagnostic trends are recorded in
 ## Column-density structure
 
 The face-on density-PDF and shear-aware 2D power-spectrum pipelines now provide
-consistent measurements for the 31 clean projection sets. Because the main
+consistent measurements for all 32 projection sets. Because the main
 suite shares a box size, pixel scale, Fourier lattice, radial binning, and fit
 support, relative trends within this suite can represent real responses to
 changes in the TIGRESS-NCR environment. They should be described as suite
@@ -147,13 +147,13 @@ conditional diagnostics.
 ## Projected H I and emission measure
 
 The same face-on PDF and shear-aware spectrum estimators have now been applied
-to total gas, H I, and emission measure (EM) for the 31 clean models. Total gas
+to total gas, H I, and emission measure (EM) for all 32 models. Total gas
 and H I are nearly rank-equivalent in linear and logarithmic PDF width
-(`rho_s = 0.975` and `0.969`), unrestricted integral scale (`0.914`), and
+(`rho_s = 0.976` and `0.968`), unrestricted integral scale (`0.907`), and
 global quadrupole amplitude (`0.992`); their fitted slopes remain substantially
-coupled (`0.752`). EM is much less correlated with either neutral tracer. Its
-gas-pair coefficients range from `-0.07` to `0.28`, and the largest EM pairing
-is only `rho_s = 0.48` for the H I--EM slope. This supports treating EM as a
+coupled (`0.704`). EM is much less correlated with either neutral tracer. Its
+gas-pair coefficients range from `-0.07` to `0.27`, and the largest EM pairing
+is only `rho_s = 0.484` for the H I--EM slope. This supports treating EM as a
 distinct compact-ionized-gas morphology rather than a substitute gas-column
 tracer.
 
@@ -240,8 +240,6 @@ correlations into controlled one-parameter experiments.
 6. Complete the planned prior augmentation in `H_star` and `Omega`, then add
    controlled physics-parameter variations to separate environmental from
    microphysical effects.
-7. Repair or regenerate the row-0000 projection products if a complete
-   32-model column-density sample becomes important.
 
 ## Detailed records
 

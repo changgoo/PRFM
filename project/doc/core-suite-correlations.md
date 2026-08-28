@@ -1,6 +1,6 @@
 # Core-suite correlation results
 
-**Status:** model-level correlation audit through 2026-08-26.
+**Status:** model-level correlation audit through 2026-08-28.
 
 ## Purpose
 
@@ -9,8 +9,9 @@ This record quantifies the correlations summarized in
 association, not causal or independent parameter effects.
 
 The validation quantities use all 32 models and the 400–600 Myr history
-window. Density-PDF and power-spectrum quantities use the 31 clean projection
-sets and temporal medians over 200–600 Myr. Each table reports Spearman's rank
+window. Density-PDF and power-spectrum quantities now also use all 32 models,
+including the regenerated row0000 projections, and temporal medians over
+200–600 Myr. Each table reports Spearman's rank
 coefficient `rho_s`. The `q` values are
 Benjamini–Hochberg false-discovery-rate corrections across all entries in that
 table.
@@ -35,13 +36,13 @@ stellar-gravity or rotation axis, not a unique controlling variable.
 
 | Outcome | Predictor | rho_s | q |
 |---|---|---:|---:|
-| Sigma_SFR | Sigma_star | +0.387 | 0.071 |
-| Sigma_SFR | H_star | -0.042 | 0.893 |
-| Sigma_SFR | Omega | -0.257 | 0.310 |
-| Sigma_SFR | q | -0.076 | 0.816 |
-| Sigma_SFR | kappa | -0.210 | 0.409 |
-| Sigma_SFR | rho_star | +0.440 | 0.047 |
-| f_mol | Sigma_star | +0.085 | 0.816 |
+| Sigma_SFR | Sigma_star | +0.397 | 0.071 |
+| Sigma_SFR | H_star | -0.036 | 0.914 |
+| Sigma_SFR | Omega | -0.261 | 0.298 |
+| Sigma_SFR | q | -0.084 | 0.776 |
+| Sigma_SFR | kappa | -0.213 | 0.409 |
+| Sigma_SFR | rho_star | +0.445 | 0.043 |
+| f_mol | Sigma_star | +0.085 | 0.776 |
 | f_mol | H_star | +0.200 | 0.409 |
 | f_mol | Omega | +0.794 | ≤0.001 |
 | f_mol | q | +0.385 | 0.071 |
@@ -65,29 +66,30 @@ Source data and measurement definitions are in
 
 | Width | Predictor | rho_s | q |
 |---|---|---:|---:|
-| sigma_delta | kappa | -0.417 | 0.034 |
-| sigma_delta | rho_star | +0.670 | ≤0.001 |
-| sigma_delta | Sigma_SFR | +0.552 | 0.003 |
-| sigma_delta | Omega | -0.415 | 0.034 |
-| sigma_delta | q | +0.163 | 0.414 |
-| sigma_s | kappa | -0.328 | 0.094 |
-| sigma_s | rho_star | +0.717 | ≤0.001 |
-| sigma_s | Sigma_SFR | +0.557 | 0.003 |
-| sigma_s | Omega | -0.325 | 0.094 |
-| sigma_s | q | +0.152 | 0.414 |
+| sigma_delta | kappa | -0.457 | 0.014 |
+| sigma_delta | rho_star | +0.671 | ≤0.001 |
+| sigma_delta | Sigma_SFR | +0.571 | 0.002 |
+| sigma_delta | Omega | -0.462 | 0.014 |
+| sigma_delta | q | +0.114 | 0.534 |
+| sigma_s | kappa | -0.363 | 0.051 |
+| sigma_s | rho_star | +0.721 | ≤0.001 |
+| sigma_s | Sigma_SFR | +0.570 | 0.002 |
+| sigma_s | Omega | -0.364 | 0.051 |
+| sigma_s | q | +0.115 | 0.534 |
 
 Both width definitions show the same primary result: column density becomes
 more intermittent in higher-`rho_star`, higher-`Sigma_SFR`
 models. The linear-density width also narrows moderately along the rotation
-axis. Neither width shows a supported monotonic relation with `q`
-alone.
+axis; the log-width rotation trend is marginal after FDR correction
+(`q = 0.051`). Neither width shows a supported monotonic relation with
+`q` alone.
 
 The widths correlate very strongly with absolute velocity and thermal support:
-`rho_s = 0.79–0.93` for the three velocity-dispersion components,
+`rho_s = 0.80–0.93` for the three velocity-dispersion components,
 `0.87–0.90` for the three-dimensional velocity dispersion, and
 `0.89–0.91` for the thermal speed. By contrast, neither width
 correlates with the three-dimensional sonic Mach number
-(`rho_s = 0.09` and `0.02`). Within this suite, PDF
+(`rho_s = 0.13` and `0.04`). Within this suite, PDF
 broadening therefore tracks the amplitudes of the support variables more
 directly than sonic Mach number alone. These are co-variations, not evidence
 that thermal speed independently causes the broader PDFs.
@@ -99,21 +101,21 @@ Source data and definitions are in the
 
 | Measure | Predictor | rho_s | q |
 |---|---|---:|---:|
-| L_in | kappa | -0.808 | ≤0.001 |
-| L_in | rho_star | -0.439 | 0.034 |
-| L_in | Sigma_SFR | +0.208 | 0.355 |
-| L_in | Omega | -0.817 | ≤0.001 |
-| L_in | q | +0.052 | 0.839 |
-| alpha | kappa | +0.184 | 0.370 |
-| alpha | rho_star | -0.300 | 0.218 |
-| alpha | Sigma_SFR | -0.214 | 0.355 |
-| alpha | Omega | +0.222 | 0.355 |
-| alpha | q | +0.017 | 0.928 |
-| A_2 | kappa | +0.575 | 0.002 |
-| A_2 | rho_star | -0.199 | 0.355 |
-| A_2 | Sigma_SFR | -0.634 | ≤0.001 |
-| A_2 | Omega | +0.667 | ≤0.001 |
-| A_2 | q | +0.281 | 0.236 |
+| L_in | kappa | -0.785 | ≤0.001 |
+| L_in | rho_star | -0.429 | 0.036 |
+| L_in | Sigma_SFR | +0.207 | 0.403 |
+| L_in | Omega | -0.793 | ≤0.001 |
+| L_in | q | +0.039 | 0.891 |
+| alpha | kappa | +0.127 | 0.564 |
+| alpha | rho_star | -0.268 | 0.259 |
+| alpha | Sigma_SFR | -0.181 | 0.437 |
+| alpha | Omega | +0.158 | 0.486 |
+| alpha | q | -0.012 | 0.949 |
+| A_2 | kappa | +0.568 | 0.002 |
+| A_2 | rho_star | -0.202 | 0.403 |
+| A_2 | Sigma_SFR | -0.627 | ≤0.001 |
+| A_2 | Omega | +0.660 | ≤0.001 |
+| A_2 | q | +0.291 | 0.226 |
 
 The strongest power-spectrum result is a smaller unrestricted integral scale
 at faster rotation. The integral scale also decreases with stellar midplane
@@ -140,12 +142,12 @@ convergence limitations and alternatives are in the
 
 | PDF width | Power-spectrum measure | rho_s | q |
 |---|---|---:|---:|
-| sigma_delta | L_in | +0.254 | 0.201 |
-| sigma_delta | alpha | -0.473 | 0.011 |
-| sigma_delta | A_2 | -0.623 | 0.001 |
-| sigma_s | L_in | +0.192 | 0.301 |
-| sigma_s | alpha | -0.513 | 0.006 |
-| sigma_s | A_2 | -0.577 | 0.002 |
+| sigma_delta | L_in | +0.255 | 0.191 |
+| sigma_delta | alpha | -0.388 | 0.042 |
+| sigma_delta | A_2 | -0.608 | 0.001 |
+| sigma_s | L_in | +0.191 | 0.295 |
+| sigma_s | alpha | -0.440 | 0.024 |
+| sigma_s | A_2 | -0.559 | 0.003 |
 
 Models with broader column-density PDFs tend to have flatter fitted spectra
 (smaller `alpha`) and weaker global quadrupole anisotropy, while PDF
@@ -161,7 +163,7 @@ resolution and box-size qualifications of those measures.
 - `Sigma_star` versus `rho_star` and
   `Omega` versus `kappa` cannot be cleanly separated
   with this design.
-- The 31–32 model sample is sufficient to identify strong trends but gives
+- The 32-model sample is sufficient to identify strong trends but gives
   limited leverage for weak, nonlinear, or interaction effects.
 - Temporal percentile ranges are not independent model points and were not
   treated as extra samples in these tests.
