@@ -16,7 +16,7 @@ from typing import Optional
 import astropy.constants as ac
 import astropy.units as au
 import numpy as np
-from astropy.table import Table, vstack
+from astropy.table import Table, join, vstack
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -318,18 +318,138 @@ def vstack_tables(tables: dict[str, Table]) -> Table:
     return vstack(tbl, metadata_conflicts="silent")
 
 
+def read_phangs_config(
+    config_path: str | Path, *, base_dir: str | Path | None = None
+) -> dict:
+    """Read a PHANGS loading YAML file and resolve its data directory.
+
+    Parameters
+    ----------
+    config_path : str or Path
+        YAML file containing PHANGS loading options.
+    base_dir : str or Path or None, optional
+        Base directory used to resolve relative paths.  When omitted, paths are
+        resolved relative to the config file's parent directory.
+
+    Returns
+    -------
+    dict
+        Parsed config with ``data_dir`` converted to an absolute-ish Path.
+    """
+    try:
+        import yaml
+    except ImportError as exc:  # pragma: no cover - dependency error path
+        raise ImportError(
+            "PyYAML is required to read PHANGS YAML config files"
+        ) from exc
+
+    config_path = Path(config_path)
+    with config_path.open() as fp:
+        config = yaml.safe_load(fp) or {}
+
+    root = Path(base_dir) if base_dir is not None else config_path.parent
+    data_dir = Path(config.get("data_dir", "data/phangs_megatable"))
+    if not data_dir.is_absolute():
+        data_dir = root / data_dir
+    config["data_dir"] = data_dir
+    return config
+
+
+def load_configured_phangs(
+    config_path: str | Path,
+    *,
+    base_dir: str | Path | None = None,
+) -> dict:
+    """Load, stack, join, and derive PHANGS tables from a YAML config.
+
+    The config controls aperture names, join keys, canonical gas/SFR columns,
+    context fields to preserve, geometry fields to restore, and plotting
+    aperture.  The returned dict is intended for notebooks and scripts that
+    need both the final derived table and the intermediate per-aperture tables.
+    """
+    config = read_phangs_config(config_path, base_dir=base_dir)
+
+    apertures = config.get("apertures", {})
+    context_aperture = apertures.get("context", "hexagon")
+    canonical_aperture = apertures.get("canonical", "gauss")
+    aperture_names = [context_aperture, canonical_aperture]
+
+    loaded_tables = {
+        aperture: load_all(config["data_dir"], aperture=aperture)
+        for aperture in aperture_names
+    }
+    stacked_tables = {
+        aperture: vstack_tables(tables) for aperture, tables in loaded_tables.items()
+    }
+
+    join_config = config.get("join", {})
+    table_names = join_config.get("table_names", aperture_names)
+    joined = join(
+        stacked_tables[context_aperture],
+        stacked_tables[canonical_aperture],
+        keys=join_config.get("keys", ["GALAXY", "ID"]),
+        join_type=join_config.get("join_type", "inner"),
+        table_names=table_names,
+        uniq_col_name=join_config.get("uniq_col_name", "{col_name}_{table_name}"),
+        metadata_conflicts="silent",
+    )
+
+    context_suffix = table_names[0]
+    canonical_suffix = table_names[1]
+    for col in config.get("preserve_context_fields", []):
+        context_col = f"{col}_{context_suffix}"
+        if col in joined.colnames and context_col not in joined.colnames:
+            joined[context_col] = joined[col]
+
+    for col in config.get("geometry_fields", ["RA", "DEC", "r_gal", "phi_gal"]):
+        context_col = f"{col}_{context_suffix}"
+        canonical_col = f"{col}_{canonical_suffix}"
+        if col not in joined.colnames:
+            if context_col in joined.colnames:
+                joined[col] = joined[context_col]
+            elif canonical_col in joined.colnames:
+                joined[col] = joined[canonical_col]
+
+    canonical = config.get("canonical", {})
+    gas = canonical.get("gas", {})
+    table = compute_prfm_inputs(
+        joined,
+        sigma_mol_col=gas.get("sigma_mol_col", "Sigma_mol"),
+        sigma_atom_col=gas.get("sigma_atom_col", "Sigma_atom"),
+        sfr_suffix=canonical.get("sfr_suffix"),
+    )
+
+    return {
+        "config": config,
+        "table": table,
+        "joined_table": joined,
+        "loaded_tables": loaded_tables,
+        "stacked_tables": stacked_tables,
+        "apertures": tuple(aperture_names),
+        "context_aperture": context_aperture,
+        "canonical_aperture": canonical_aperture,
+        "plot_aperture": config.get("plot_aperture", canonical_aperture),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Derived PRFM quantities
 # ---------------------------------------------------------------------------
 
 
-def compute_prfm_inputs(table):
+def compute_prfm_inputs(
+    table,
+    *,
+    sigma_mol_col: str = "Sigma_mol",
+    sigma_atom_col: str = "Sigma_atom",
+    sfr_suffix: str | None = None,
+):
     """Add PRFM-relevant derived columns to a megatable.
 
     Derived columns added
     ---------------------
     ``Sigma_gas``
-        Total gas surface density = ``Sigma_mol + Sigma_atom``
+        Total gas surface density = ``sigma_mol_col + sigma_atom_col``
         [M_sun / pc^2].
     ``e_Sigma_gas``
         Uncertainty on ``Sigma_gas`` = ``sqrt(e_Sigma_mol^2 + e_Sigma_atom^2)``
@@ -338,12 +458,21 @@ def compute_prfm_inputs(table):
     ``Omega``
         Total orbital angular frequency = ``V_circ_CO21_URC / r_gal``
         [km / s / kpc]. This is not the dark-matter-only frequency.
+    ``qshear``
+        Dimensionless shear parameter = ``1 - beta_CO21_URC``.
     ``H_star``
-        Stellar scale height = ``Sigma_star / (2 * rho_star_mp)`` [pc].
+        Stellar scale height = ``Sigma_star / (4 * rho_star_mp)`` [pc]
+        (sech^2 scale height: Sigma_star = 4 * rho_star_mp * H_star).
 
     Parameters
     ----------
     table : `~astropy.table.Table`
+    sigma_mol_col, sigma_atom_col : str
+        Molecular and atomic gas columns used to compute ``Sigma_gas``.
+    sfr_suffix : str or None
+        If provided, copy Gaussian or other aperture-specific SFR columns such
+        as ``Sigma_SFR_HaW4recal_gauss`` into the canonical unsuffixed SFR
+        columns used by plotting and PRFM comparison code.
 
     Returns
     -------
@@ -352,8 +481,8 @@ def compute_prfm_inputs(table):
     """
     t = table.copy()
 
-    Sigma_mol = np.asarray(t["Sigma_mol"].to(au.M_sun / au.pc**2))
-    Sigma_atom = np.asarray(t["Sigma_atom"].to(au.M_sun / au.pc**2))
+    Sigma_mol = np.asarray(t[sigma_mol_col].to(au.M_sun / au.pc**2))
+    Sigma_atom = np.asarray(t[sigma_atom_col].to(au.M_sun / au.pc**2))
 
     # Treat non-detections as zero for each component, but only when the other
     # component is detected.  If both are NaN the sum stays NaN.
@@ -368,9 +497,21 @@ def compute_prfm_inputs(table):
         "Total gas surface density (mol + atom; non-detections filled with 0)"
     )
 
-    if "e_Sigma_mol" in t.colnames and "e_Sigma_atom" in t.colnames:
-        e_mol = np.asarray(t["e_Sigma_mol"].to(au.M_sun / au.pc**2))
-        e_atom = np.asarray(t["e_Sigma_atom"].to(au.M_sun / au.pc**2))
+    if sigma_mol_col != "Sigma_mol":
+        t["Sigma_mol"] = t[sigma_mol_col]
+    if sigma_atom_col != "Sigma_atom":
+        t["Sigma_atom"] = t[sigma_atom_col]
+
+    e_sigma_mol_col = f"e_{sigma_mol_col}"
+    e_sigma_atom_col = f"e_{sigma_atom_col}"
+    if e_sigma_mol_col in t.colnames and e_sigma_atom_col in t.colnames:
+        if e_sigma_mol_col != "e_Sigma_mol":
+            t["e_Sigma_mol"] = t[e_sigma_mol_col]
+        if e_sigma_atom_col != "e_Sigma_atom":
+            t["e_Sigma_atom"] = t[e_sigma_atom_col]
+
+        e_mol = np.asarray(t[e_sigma_mol_col].to(au.M_sun / au.pc**2))
+        e_atom = np.asarray(t[e_sigma_atom_col].to(au.M_sun / au.pc**2))
         # propagate only the errors that exist; treat missing component error as 0
         e_mol_filled = np.where(np.isfinite(e_mol), e_mol, 0.0)
         e_atom_filled = np.where(np.isfinite(e_atom), e_atom, 0.0)
@@ -380,15 +521,36 @@ def compute_prfm_inputs(table):
         t["e_Sigma_gas"] = e_gas * au.M_sun / au.pc**2
         t["e_Sigma_gas"].description = "Uncertainty on Sigma_gas (quadrature sum)"
 
+    if sfr_suffix:
+        for sfr_col in (
+            "Sigma_SFR_HaW4recal",
+            "Sigma_SFR_FUVW4recal",
+            "Sigma_SFR_Hacorr",
+        ):
+            source_col = f"{sfr_col}{sfr_suffix}"
+            if source_col in t.colnames:
+                t[sfr_col] = t[source_col]
+            source_err_col = f"e_{sfr_col}{sfr_suffix}"
+            if source_err_col in t.colnames:
+                t[f"e_{sfr_col}"] = t[source_err_col]
+
     V_circ = t["V_circ_CO21_URC"].to(au.km / au.s)
     r_gal = t["r_gal"].to(au.kpc)
     t["Omega"] = (V_circ / r_gal).to(au.km / au.s / au.kpc)
     t["Omega"].description = "Total orbital angular frequency V_circ / r_gal"
 
+    if "beta_CO21_URC" in t.colnames:
+        beta = np.asarray(t["beta_CO21_URC"], dtype=float)
+        t["qshear"] = 1.0 - beta
+        t["qshear"].description = "Shear parameter q = 1 - beta_CO21_URC"
+        if "e_beta_CO21_URC" in t.colnames:
+            t["e_qshear"] = np.asarray(t["e_beta_CO21_URC"], dtype=float)
+            t["e_qshear"].description = "Uncertainty on qshear from beta_CO21_URC"
+
     Sigma_star = t["Sigma_star"].to(au.M_sun / au.pc**2)
     rho_star = t["rho_star_mp"].to(au.M_sun / au.pc**3)
-    t["H_star"] = (Sigma_star / (2.0 * rho_star)).to(au.pc)
-    t["H_star"].description = "Stellar scale height Sigma_star / (2 * rho_star_mp)"
+    t["H_star"] = (Sigma_star / (4.0 * rho_star)).to(au.pc)
+    t["H_star"].description = "Stellar scale height Sigma_star / (4 * rho_star_mp)"
 
     return t
 
@@ -616,8 +778,8 @@ def get_weights(
         PHANGS table with PRFM solution columns.
     variation : dict or None, optional
         Override dictionary applied before computing weights.  Supported keys:
-        ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by
-        a scalar), ``"Sigma_star"`` (scale factor), ``"H_star"`` (scale factor).
+        ``"Omega_d"`` (set to ``None`` to disable DM term, or multiply by a
+        scalar), ``"Sigma_star"`` (scale factor), ``"H_star"`` (scale factor).
     omega_d_col : str or None, optional
         Column containing the dark-matter-only vertical harmonic frequency.
         Passing total ``"Omega"`` gives an explicit upper-bound approximation.
