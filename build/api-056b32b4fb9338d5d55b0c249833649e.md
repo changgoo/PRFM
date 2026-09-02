@@ -72,12 +72,14 @@ Tools for downloading, loading, and analysing the PHANGS megatable (Sun et al. 2
 | `download(data_dir, aperture, overwrite)` | Download PHANGS megatable files from CANFAR |
 | `load(fpath)` | Load a single ECSV file as an Astropy Table |
 | `load_all(data_dir, aperture)` | Load all ECSV files and vstack into one Table |
+| `read_phangs_config(path, base_dir)` | Load YAML aperture/join settings and resolve its data path |
+| `load_configured_phangs(path, base_dir)` | Join configured apertures and derive canonical PRFM inputs |
 
 ### PRFM input computation
 
 | Function | Description |
 |----------|-------------|
-| `compute_prfm_inputs(table)` | Derive Σ_gas, total Ω = V_circ/R, and H★ from raw megatable columns |
+| `compute_prfm_inputs(table, ...)` | Derive Σ_gas, total Ω = V_circ/R, shear, and H★ = Σ★/(4ρ★) from selectable aperture columns |
 | `valid_rows(table, cols, rel_error)` | Boolean mask selecting rows with finite, positive PRFM inputs |
 | `run_prfm(table, ..., omega_d_col=None)` | Apply PRFM with no halo term by default; select an explicit halo-frequency column with `omega_d_col` |
 | `get_weights(table, variation, omega_d_col=None)` | Return (f_gas, f_star, f_dm) using the same explicit halo-column convention |
@@ -88,6 +90,26 @@ Therefore, `run_prfm` and `get_weights` omit halo gravity unless
 `omega_d_col` is provided. Passing `omega_d_col="Omega"` treats the total
 frequency as a deliberately conservative upper bound, not as a physical dark
 matter decomposition.
+
+---
+
+## `prfm.phangs_sampling` — PHANGS-informed sampling
+
+Reusable tools for constructing deterministic, progressively extensible
+parameter designs from a PHANGS reference table. Project-specific target
+values, suite sizes, job generation, and paper figures belong in downstream
+projects rather than this package.
+
+| API | Description |
+|-----|-------------|
+| `SamplingConfig` | Sampling fields, bounds, seeds, KDE controls, and optional per-field prior augmentation |
+| `PHANGSSamplingDesigner.select_reference()` | Select a conditional PHANGS reference population |
+| `PHANGSSamplingDesigner.synthesize_kde_sobol()` | Map nested scrambled Sobol points through KDE-derived marginals |
+| `PHANGSSamplingDesigner.synthesize_expanded_kde_sobol()` | Build a broadened PHANGS-informed prior design |
+| `PHANGSSamplingDesigner.sample()` | Dispatch among supported KDE/Sobol and legacy sampling methods |
+
+The sampling API accepts in-memory tables and contains no site paths or fixed
+downstream-project suite selections.
 
 ---
 
