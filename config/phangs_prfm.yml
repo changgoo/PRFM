@@ -1,0 +1,34 @@
+# PHANGS loading configuration for book/prfm_phangs.ipynb
+# Paths are resolved relative to the repository root passed by the notebook.
+data_dir: data/phangs_megatable
+
+apertures:
+  context: hexagon
+  canonical: gauss
+
+join:
+  keys: [GALAXY, ID]
+  join_type: inner
+  table_names: [hexagon, gauss]
+  uniq_col_name: "{col_name}_{table_name}"
+
+canonical:
+  gas:
+    sigma_mol_col: Sigma_mol_gauss
+    sigma_atom_col: Sigma_atom_gauss
+  sfr_suffix: _gauss
+
+preserve_context_fields:
+  - Sigma_mol
+  - e_Sigma_mol
+  - Sigma_atom
+  - e_Sigma_atom
+  - Sigma_SFR_HaW4recal
+  - e_Sigma_SFR_HaW4recal
+  - Sigma_SFR_FUVW4recal
+  - e_Sigma_SFR_FUVW4recal
+  - Sigma_SFR_Hacorr
+  - e_Sigma_SFR_Hacorr
+
+geometry_fields: [RA, DEC, r_gal, phi_gal]
+plot_aperture: gauss

@@ -7,3 +7,4 @@ pandas
 xarray
 netcdf4
 cmasher
+pyyaml

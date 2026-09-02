@@ -32,6 +32,7 @@ NO_SUFFIX: set[str] = {
     "V_circ_CO21_URC",
     "Omega",
     "Omega_d",
+    "qshear",
     "H_star",
     "Sigma_gas",  # derived by compute_prfm_inputs
 }
@@ -51,6 +52,8 @@ COLUMN_LABELS: dict[str, str] = {
     "V_circ_CO21_URC": r"$V_\mathrm{circ}$ [km s$^{-1}$]",
     "Omega": r"$\Omega$ [km s$^{-1}$ kpc$^{-1}$]",
     "Omega_d": r"$\Omega_d$ [km s$^{-1}$ kpc$^{-1}$]",
+    "qshear": r"$q_\mathrm{shear}$",
+    "beta_CO21_URC": r"$\beta_\mathrm{CO21}$",
     "Zprime": r"$Z'$ [$Z_\odot$]",
     "Sigma_SFR_HaW4recal": r"$\Sigma_\mathrm{SFR}^\mathrm{H\alpha+W4}$"
     r" [$M_\odot\,\mathrm{yr}^{-1}\,\mathrm{kpc}^{-2}$]",
@@ -678,6 +681,176 @@ def get_symmetric_log_errorbars(
     yerr_upper = upper_bound - linear_mean
 
     return [yerr_lower, yerr_upper]
+
+
+def plot_correlation_matrix(
+    table: Table,
+    base_fields: list[tuple[str, bool]],
+    *,
+    aperture: str = "annulus",
+    title: str | None = None,
+    figsize_scale: float = 2.2,
+    errorbars: bool = True,
+    overlay_masks: Sequence[tuple[np.ndarray, str, Any]] | None = None,
+) -> tuple[plt.Figure, np.ndarray, list[tuple[str, str, bool]]]:
+    """Plot a full pairwise correlation matrix for PHANGS-like table fields.
+
+    Parameters
+    ----------
+    table : Table
+        PHANGS table with resolved or aperture-suffixed columns.
+    base_fields : list of (str, bool)
+        Base column names and log-scale flags. Names are resolved with
+        :func:`resolve_columns` for the requested aperture.
+    aperture : str, optional
+        Aperture suffix convention used to resolve base column names.
+    title : str or None, optional
+        Figure title. A default title is used when ``None``.
+    figsize_scale : float, optional
+        Size multiplier per matrix dimension.
+    errorbars : bool, optional
+        Whether to draw error bars in off-diagonal scatter panels.
+    overlay_masks : sequence of (mask, label, color) or None, optional
+        Boolean masks selecting rows to overplot on each panel.
+
+    Returns
+    -------
+    fig, axes, cols
+        Matplotlib figure, axes array, and resolved column specification.
+    """
+    spec = [(base, col_label(base), log) for base, log in base_fields]
+    cols = resolve_columns(spec, table, aperture=aperture)
+    col_names = [col for col, _, _ in cols]
+    col_logs = {col: log for col, _, log in cols}
+    overlay_masks = overlay_masks or []
+
+    n = len(col_names)
+    fig, axes = plt.subplots(n, n, figsize=(n * figsize_scale, n * figsize_scale))
+
+    for i, ycol in enumerate(col_names):
+        for j, xcol in enumerate(col_names):
+            ax = axes[i, j]
+
+            if i == j:
+                values = np.asarray(table[ycol], dtype=float)
+                valid = (
+                    np.isfinite(values) & (values > 0)
+                    if col_logs[ycol]
+                    else np.isfinite(values)
+                )
+                if valid.any():
+                    hist_plot(table, ycol, ax=ax, log=col_logs[ycol])
+                    for mask, label, color in overlay_masks:
+                        selected = values[np.asarray(mask, dtype=bool) & valid]
+                        if len(selected) == 0:
+                            continue
+                        if col_logs[ycol]:
+                            edges = np.logspace(
+                                np.log10(values[valid].min()),
+                                np.log10(values[valid].max()),
+                                41,
+                            )
+                            widths = np.diff(np.log10(edges))
+                        else:
+                            edges = np.linspace(
+                                values[valid].min(), values[valid].max(), 41
+                            )
+                            widths = np.diff(edges)
+                        counts, _ = np.histogram(selected, bins=edges)
+                        pdf = counts / len(selected) / widths
+                        ax.step(
+                            edges[:-1],
+                            pdf,
+                            where="post",
+                            color=color,
+                            linewidth=1.2,
+                            label=label,
+                            zorder=3,
+                        )
+                    ax.set_ylabel("PDF")
+                else:
+                    ax.set_axis_off()
+                    continue
+            else:
+                x_values = np.asarray(table[xcol], dtype=float)
+                y_values = np.asarray(table[ycol], dtype=float)
+                valid = np.isfinite(x_values) & np.isfinite(y_values)
+                if col_logs[xcol]:
+                    valid &= x_values > 0
+                if col_logs[ycol]:
+                    valid &= y_values > 0
+                if valid.any():
+                    scatter_plot(
+                        table,
+                        xcol,
+                        ycol,
+                        ax=ax,
+                        log_x=col_logs[xcol],
+                        log_y=col_logs[ycol],
+                        errorbars=errorbars,
+                        s=2,
+                        bg_alpha=0.18 if overlay_masks else 0.3,
+                    )
+                    for mask, label, color in overlay_masks:
+                        overlay_valid = np.asarray(mask, dtype=bool) & valid
+                        if not overlay_valid.any():
+                            continue
+                        ax.scatter(
+                            x_values[overlay_valid],
+                            y_values[overlay_valid],
+                            s=12,
+                            color=color,
+                            alpha=0.9,
+                            edgecolors="black",
+                            linewidths=0.2,
+                            rasterized=True,
+                            label=label,
+                            zorder=3,
+                        )
+                    if ycol.startswith("Sigma_SFR") and xcol.startswith("Sigma_SFR"):
+                        sfr = np.logspace(-5, 0, 100)
+                        ax.plot(sfr, sfr, color="black", linestyle="--", linewidth=1)
+                else:
+                    ax.set_axis_off()
+                    continue
+
+            ax.annotate(
+                f"N={valid.sum()}",
+                xy=(0.97, 0.97),
+                xycoords="axes fraction",
+                ha="right",
+                va="top",
+                fontsize="xx-small",
+                color="0.4",
+            )
+            ax.tick_params(labelsize="x-small")
+
+            if i < n - 1:
+                ax.set_xlabel("")
+                ax.tick_params(labelbottom=False)
+            else:
+                ax.set_xlabel(col_label(xcol))
+
+            if j > 0:
+                ax.set_ylabel("")
+                ax.tick_params(labelleft=False)
+
+    if title is None:
+        title = f"PHANGS {aperture} aperture - correlation matrix ({len(table)} rows)"
+    fig.suptitle(title, fontsize="large", y=1.002)
+    if overlay_masks:
+        handles, labels = axes[0, 0].get_legend_handles_labels()
+        unique = dict(zip(labels, handles))
+        if unique:
+            fig.legend(
+                unique.values(),
+                unique.keys(),
+                loc="upper right",
+                bbox_to_anchor=(1.0, 1.0),
+                fontsize="small",
+            )
+    fig.tight_layout(h_pad=0.3, w_pad=0.3)
+    return fig, axes, cols
 
 
 def plot_weights(
